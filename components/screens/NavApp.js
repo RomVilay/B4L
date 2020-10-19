@@ -1,12 +1,6 @@
 // Imports Modules
 import React from 'react'
 import { StyleSheet, SafeAreaView, Image, View, Text, TouchableHighlight } from 'react-native'
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-} from '@react-navigation/drawer';
 
 import Navigation_reverse from '../../assets/navigation_reverse'
                     /*<View style={[styles.logos], { width: '100%' }}>
@@ -23,9 +17,6 @@ import Navigation_reverse from '../../assets/navigation_reverse'
                          <Text style={styles.text}>Statistiques</Text>
                         </View>
                     </View>*/
-
-
-
 export default class NavApp extends React.Component {
     render() {
         return (
@@ -102,7 +93,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         flex: 1,
         width: '100%',
-        height: '2s0%',
+        height: '110%',
         resizeMode: 'cover',
         justifyContent: 'center'
     }
