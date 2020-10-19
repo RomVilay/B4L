@@ -8,11 +8,15 @@ import {
   DrawerItemList,
   DrawerItem
 } from '@react-navigation/drawer';
+
+
 import Accueil from '../screens/Accueil.js'
 import Termes from '../screens/Termes.js'
 import Parametres from '../screens/Parametres.js'
 
 import Navigation_reverse from '../../assets/navigation_reverse'
+
+
                     /*<View style={[styles.logos], { width: '100%' }}>
                         <View style={styles.item} onPress={() => this.props.navigation.navigate("Accueil")}>
                             <Image source={require('../../assets/home.png')} />
@@ -28,51 +32,10 @@ import Navigation_reverse from '../../assets/navigation_reverse'
                         </View>
                     </View>*/
 
-
-  function CustomDrawerContent(props) {
-    return (
-    <ImageBackground source={require('../../assets/fond.png')} style={{ flex:1, resizeMode: "cover", justifyContent: "center"}}>
-      <DrawerContentScrollView {...props}>
-      <Navigation_reverse
-                          onPress={() => this.props.navigation.goBack()}
-                          style={{ top: '2%', marginBottom:10}}
-                    ></Navigation_reverse>
-        <DrawerItemList {...props} />
-        <DrawerItem
-        label="Acceuil"
-        icon={() => <Icon color="#ffffff" name="home" type="material-icons"/>}
-        />
-      </DrawerContentScrollView>
-      </ImageBackground>
-    );
-  }
-
-  const Drawer = createDrawerNavigator();
-
-  function MyDrawer() {
-    return (
-      <Drawer.Navigator
-      drawerContent={props => <CustomDrawerContent {...props} />}
-      drawerStyle = {{
-        backgroundImage:""
-      }}
-
-      >
-        <Drawer.Screen name="Acceuil" component={Accueil}  style={styles.text}/>
-        <Drawer.Screen name="Paramètres" component={Parametres} style={styles.text}/>
-        <Drawer.Screen name="Conditions" component={Termes} style={styles.text}/>
-      </Drawer.Navigator>
-    );
-  }
 export default class NavApp extends React.Component {
+
     render() {
-    return(
-        <MyDrawer />
-    )
-
-
-
-      /*  return (
+   return (
             <SafeAreaView style={styles.container}>
                 <Image
                     style={styles.fond}
@@ -108,7 +71,7 @@ export default class NavApp extends React.Component {
                      </View>
                 </View>
             </SafeAreaView>
-        )*/
+        )
     }
 }
 
@@ -146,7 +109,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         flex: 1,
         width: '100%',
-        height: '2s0%',
+        height: '20%',
         resizeMode: 'cover',
         justifyContent: 'center'
     }
