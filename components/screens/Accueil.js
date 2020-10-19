@@ -7,6 +7,7 @@ import LogoMin from '../../assets/logoMin'
 import Go from '../../assets/go'
 import Cercle from '../../assets/cercle'
 import Navigation from '../../assets/navigation'
+import NavApp from '../screens/NavApp'
 
 // Imports Components
 import Battery from '../screens/Battery'
@@ -22,7 +23,12 @@ export default class Accueil extends React.Component {
         watts: '40000',
         avatar: avatar
     }
-
+    /*
+    <Navigation
+                            onPress={() => this.props.navigation.navigate("NavApp")}
+                            style={{ bottom: '5%' }}
+                        ></Navigation>
+    */
     render() {
         return (
             <SafeAreaView style={styles.container}>
@@ -70,10 +76,7 @@ export default class Accueil extends React.Component {
                         <Cercle></Cercle>
                         <Text style={styles.go} onPress={() => this.props.navigation.navigate("Defis")}>GO</Text>
                     </View>
-                    <Navigation
-                        onPress={() => this.props.navigation.navigate("NavApp")}
-                        style={{ bottom: '5%' }}
-                    ></Navigation>
+                    <NavApp navigation={this.props.navigation}></NavApp>
                 </View>
             </SafeAreaView>
         )
