@@ -73,7 +73,7 @@ export default class Parametres2 extends React.Component {
                         <TouchableHighlight onPress={() => this.props.navigation.navigate("Parametres3")}>
                             <Text style={styles.textTitle}>Suivant</Text>
                         </TouchableHighlight>
-                        <TouchableHighlight onPress={() => this.props.navigation.navigate("NavApp")}>
+                        <TouchableHighlight onPress={() => this.props.navigation.navigate("Accueil")}>
                             <Text style={styles.linesw}>cacher ces information</Text>
                         </TouchableHighlight>
                      </View>

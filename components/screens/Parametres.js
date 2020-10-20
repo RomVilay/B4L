@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Image, StyleSheet, Text, SafeAreaView, TextInput, TouchableHighlight } from 'react-native'
 import LogoMin from '../../assets/logoMin'
+import NavApp from '../screens/NavApp'
 
 var avatar = require('../../assets/avatar.png')
 var flecheG = require('../../assets/flecheG.png')
@@ -87,7 +88,7 @@ export default class Parametres extends React.Component {
                         <TouchableHighlight onPress={() => this.props.navigation.navigate("Parametres2")}>
                             <Text style={styles.textTitle}>Suivant</Text>
                         </TouchableHighlight>
-                        <TouchableHighlight onPress={() => this.props.navigation.navigate("NavApp")}>
+                        <TouchableHighlight onPress={() => this.props.navigation.navigate("Accueil")}>
                             <Text style={styles.linesw}>cacher ces information</Text>
                         </TouchableHighlight>
                      </View>

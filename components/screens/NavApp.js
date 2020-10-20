@@ -111,53 +111,14 @@ return (
         style={[styles.modal, styles.modal4]}
         position={"top"}
         backdropPressToClose={false}
-        backdropContent={BContent}>
+        backdropContent={BContent}
+        touchableOpacity={this.state.isOpen}
+        >
 
         </Modal>
 
       </View>
     );
-
-
-
-    /*
-   return (
-            <SafeAreaView style={styles.container}>
-                <Image
-                    style={styles.fond}
-                    source={require('../../assets/fond.png')}
-                />
-                <View style={[styles.container, { height: '100%', width: '100%' }]}>
-                    <Navigation_reverse
-                        onPress={() => this.props.navigation.goBack()}
-                        style={{ top: '2%', marginBottom:10}}
-                    ></Navigation_reverse>
-                    <View style={[styles.logos, { width: '100%' }]}>
-                        <View style={styles.item} >
-                            <TouchableHighlight
-                            onPress={() => this.props.navigation.navigate("Accueil")}>
-                                <Image source={require('../../assets/home.png')}/>
-                            </TouchableHighlight>
-                            <Text style={styles.text}>Accueil</Text>
-                        </View>
-                        <View style={styles.item} >
-                            <TouchableHighlight
-                            onPress={() => this.props.navigation.navigate("Parametres")}>
-                                <Image source={require('../../assets/settings.png')}/>
-                             </TouchableHighlight>
-                             <Text style={styles.text}>Paramètres</Text>
-                        </View>
-                        <View style={styles.item}>
-                        <TouchableHighlight
-                        onPress={() => this.props.navigation.navigate("Termes")}>
-                            <Image source={require('../../assets/i.png')}/>
-                         </TouchableHighlight>
-                            <Text style={styles.text}>Termes</Text>
-                        </View>
-                     </View>
-                </View>
-            </SafeAreaView>)
-*/
     }
 }
 
@@ -202,7 +163,7 @@ const styles = StyleSheet.create({
         flex:1,
         position:'absolute',
         bottom:0,
-        height:300,
+        height:'18%',
         width:500,
         zIndex:500
       },
@@ -213,7 +174,6 @@ const styles = StyleSheet.create({
       },
 
       modal4: {
-        height: 300,
         backgroundColor:'transparent',
         color:"white",
         flex:1,
