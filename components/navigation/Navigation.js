@@ -19,6 +19,7 @@ import Parametres from '../screens/Parametres'
 import Parametres2 from '../screens/Parametres2'
 import Parametres3 from '../screens/Parametres3'
 import Jumelage from '../screens/Jumelage'
+import Compteur from '../screens/Compteur'
 
 const Stack = createStackNavigator()
 
@@ -29,6 +30,7 @@ function HomeNavigator() {
             <Stack.Screen name="NavApp" component={NavApp} options={{ headerShown: false }} />
             <Stack.Screen name="Classements" component={Classements} options={{ headerShown: false }} />
             <Stack.Screen name="Defis" component={Defis} options={{ headerShown: false }} />
+            <Stack.Screen name="Compteur" component={Compteur} options={{ headerShown: false }} />
             <Stack.Screen name="Statistiques" component={Statistiques} options={{ headerShown: false }} />
             <Stack.Screen name="Parametres" component={Parametres} options={{ headerShown: false }} />
         </Stack.Navigator>
@@ -42,6 +44,7 @@ function HomeModalNavigator() {
             <Stack.Screen name="NavApp" component={NavApp} options={{ headerShown: false }} />
             <Stack.Screen name="Statistiques" component={Statistiques} options={{ title: 'Statistiques' }} />
             <Stack.Screen name="Parametres" component={Parametres} options={{ title: 'Parametres' }} />
+            <Stack.Screen name="Compteur" component={Compteur} options={{ headerShown: false }} />
         </Stack.Navigator>
     )
 }

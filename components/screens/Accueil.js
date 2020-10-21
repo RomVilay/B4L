@@ -23,12 +23,6 @@ export default class Accueil extends React.Component {
         watts: '40000',
         avatar: avatar
     }
-    /*
-    <Navigation
-                            onPress={() => this.props.navigation.navigate("NavApp")}
-                            style={{ bottom: '5%' }}
-                        ></Navigation>
-    */
     render() {
         return (
             <SafeAreaView style={styles.container}>
