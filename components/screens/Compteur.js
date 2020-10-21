@@ -40,8 +40,8 @@ export default class Compteur extends React.Component {
                     source={require('../../assets/fond.png')}
                 />
                 <View style={[styles.container, { height: '100%', width: '100%' }]}>
-                    <View style={[styles.header, { width: '100%' }]}>
-                        <View style={styles.item}>
+                    <View style={[styles.header, { width: '100%'}]}>
+                        <View style={[styles.item, {margin:0}]}>
                               <LogoMin></LogoMin>
                         </View>
                     </View>
@@ -51,10 +51,10 @@ export default class Compteur extends React.Component {
                             {this.state.isPaused ? <Text></Text> : <Text style={{color: '#5FCDFA', fontSize: 30}}>Pause</Text>}
                         </View>
                         <View style={styles.midMid}>
-                         <ImageBackground source={require('../../assets/compteur.png')} style={{width:'120%',height:'100%',right:'8%'}}>
+                         <ImageBackground source={require('../../assets/compteur.png')} style={{width:'120%',height:'100%',right:'6%'}}>
                              <Image source={require('../../assets/aiguille.png')} style={styles.aiguille}/>
-                             <Image source={require('../../assets/Ellipse3.png')} style={[styles.aiguille, {position:'absolute', left:'38%', bottom:'25%'}]} />
-                                <View style={[styles.midItem, {zIndex:200,  marginTop:40,paddingBottom:'0%' }]}>
+                             <Image source={require('../../assets/ellipseFond.png')} style={[styles.aiguille, {position:'absolute', left:'40%', bottom:'28%'}]} />
+                                <View style={[styles.midItem, {zIndex:200,  marginTop:'10%',paddingBottom:'0%' }]}>
                                     <View style={[styles.textbloc,{width:'20%',borderRadius:50}]}>
                                         <ImageBackground source={require('../../assets/fondBulle.png')} style={styles.fondBulle}>
                                             <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.rpm}</Text>
@@ -68,7 +68,7 @@ export default class Compteur extends React.Component {
                                         </ImageBackground>
                                     </View>
                                 </View>
-                             <View style={[styles.midItem, {zIndex:200, padding:'0%',}]}>
+                             <View style={[styles.midItem, {zIndex:200, padding:'0%',left:'11%'}]}>
                                  <FlecheG style={styles.flecheG}></FlecheG>
                                  <View style={[styles.textbloc, {margin:10}]}>
                                      <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kmh}</Text>
@@ -90,16 +90,16 @@ export default class Compteur extends React.Component {
                              </View>
                          </ImageBackground>
                         </View>
-                        <View style={styles.midBot}>
-                            <Text>-</Text>
+                        <View style={[styles.midBot, {flexDirection:'row'}]}>
+                            <Text style={[styles.midText,{ fontSize: 30}]}>-</Text>
                             <View style={styles.textbloc}>
                                 <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.watts}</Text>
                                 <Text style={[styles.midText2,{ fontSize: 30}]}>watts </Text>
                             </View>
-                            <Text>+</Text>
+                            <Text style={[styles.midText,{ fontSize: 30}]}>+</Text>
                         </View>
                     </View>
-                    <NavApp style={styles.footer} navigation={this.props.navigation}></NavApp>
+                        <NavApp style={styles.footer} navigation={this.props.navigation}></NavApp>
                 </View>
             </SafeAreaView>
         )
@@ -115,47 +115,45 @@ const styles = StyleSheet.create({
     },
 
     header: {
-        flex: 1,
         flexDirection: 'row',
         alignItems: 'flex-start',
         justifyContent: 'space-around',
+        height:'10%',
         zIndex: 100,
+        paddingBottom:0
 
     },
 
     item: {
-        top: '5%',
         width: 80,
-        height: 100,
+        height: 80,
         zIndex: 100,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginBottom:0
     },
 
     middle: {
         flex: 4,
         flexDirection: 'column',
         alignItems: 'center',
-        zIndex: 100
+        zIndex: 100,
 
     },
     midTop:{
-        flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
         zIndex: 100,
 
-
     },
     midMid: {
-        flex: 4,
+        height:'60%',
         width:'100%',
         flexDirection: 'column',
         alignItems: 'center',
         zIndex: 100,
         overflow:'visible',
-        paddingRight:'8%',
-        borderWidth: 3
+        paddingRight:'8%'
     },
 
     midItem: {
@@ -171,7 +169,7 @@ const styles = StyleSheet.create({
     },
 
     midBot: {
-        flex:1,
+        height:'10%',
         alignItems: 'center',
         zIndex: 100
     },
@@ -216,8 +214,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         zIndex:0,
         position:'absolute',
-        bottom:15,
-        left:80
+        bottom:'7%',
+        left:'23%'
     },
     fondBulle:{
         width:'120%',
@@ -228,12 +226,8 @@ const styles = StyleSheet.create({
 
     footer: {
         flex: 1,
-        flexDirection: 'row',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        zIndex: 100,
-
-
+        width:'100%',
+        zIndex: 100
     },
     flecheG:{
         transform: [{scale:2}],
@@ -242,13 +236,5 @@ const styles = StyleSheet.create({
     flecheD:{
         transform: [{scale:2}, {rotate:"180deg"}],
         marginLeft:'5%'
-    },
-    go: {
-        color: '#56ADCE',
-        fontSize: 130,
-        fontWeight:'bold',
-        position: 'absolute',
-        zIndex:100,
-        top: 10
     }
 })

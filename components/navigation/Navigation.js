@@ -42,6 +42,7 @@ function HomeModalNavigator() {
         <Stack.Navigator initialRouteName="Home" mode="modal">
             <Stack.Screen name="Home" component={HomeNavigator} options={{ headerShown: false }} />
             <Stack.Screen name="NavApp" component={NavApp} options={{ headerShown: false }} />
+            <Stack.Screen name="Classements" component={Classements} options={{ headerShown: false }} />
             <Stack.Screen name="Statistiques" component={Statistiques} options={{ title: 'Statistiques' }} />
             <Stack.Screen name="Parametres" component={Parametres} options={{ title: 'Parametres' }} />
             <Stack.Screen name="Compteur" component={Compteur} options={{ headerShown: false }} />

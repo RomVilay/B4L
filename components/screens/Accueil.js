@@ -4,9 +4,7 @@ import { View, StyleSheet, SafeAreaView, Image, Text, TouchableHighlight } from 
 
 // Imports Assets
 import LogoMin from '../../assets/logoMin'
-import Go from '../../assets/go'
 import Cercle from '../../assets/cercle'
-import Navigation from '../../assets/navigation'
 import NavApp from '../screens/NavApp'
 
 // Imports Components
@@ -35,11 +33,11 @@ export default class Accueil extends React.Component {
                         <View style={styles.item}>
                         </View>
                         <View style={styles.item}>
-                            <LogoMin></LogoMin>
+                            <LogoMin />
                         </View>
                         <View style={styles.item}>
-                            <Battery></Battery>
-                            <Horloge></Horloge>
+                            <Battery />
+                            <Horloge />
                         </View>
                     </View>
                     <View style={[styles.middle, { width: '100%' }]}>
@@ -48,7 +46,7 @@ export default class Accueil extends React.Component {
                         </View>
                         <View style={styles.midMid}>
                             <View style={[styles.midItem]}>
-                                <Text style={[styles.midText], { fontSize: 30, color: '#5FCDFA' }}>{this.state.kcal}</Text>
+                                <Text style={[styles.midText, { fontSize: 30, color: '#5FCDFA' }]}>{this.state.kcal}</Text>
                                 <Text style={[styles.midText]}>kcal cumulées</Text>
                             </View>
                             <View style={styles.midItem}>
@@ -57,20 +55,20 @@ export default class Accueil extends React.Component {
                                 </TouchableHighlight>
                             </View>
                             <View style={[styles.midItem]}>
-                                <Text style={[styles.midText], { fontSize: 30, color: '#5FCDFA' }}>{this.state.km}</Text>
+                                <Text style={[styles.midText, { fontSize: 30, color: '#5FCDFA' }]}>{this.state.km}</Text>
                                 <Text style={[styles.midText]}>km cumulés</Text>
                             </View>
                         </View>
                         <View style={styles.midBot}>
-                            <Text style={[styles.midText], { fontSize: 30, color: '#5FCDFA' }}>{this.state.watts}</Text>
+                            <Text style={[styles.midText, { fontSize: 30, color: '#5FCDFA' }]}>{this.state.watts}</Text>
                             <Text style={[styles.midText]}>wh produits</Text>
                         </View>
                     </View>
                     <View style={styles.footer}>
-                        <Cercle></Cercle>
+                        <Cercle />
                         <Text style={styles.go} onPress={() => this.props.navigation.navigate("Defis")}>GO</Text>
                     </View>
-                    <NavApp navigation={this.props.navigation}></NavApp>
+                    <NavApp navigation={this.props.navigation} />
                 </View>
             </SafeAreaView>
         )
@@ -159,5 +157,12 @@ const styles = StyleSheet.create({
         position: 'absolute',
         zIndex:100,
         top: 10
+    },
+    rank:{
+        width:'20%',
+        height:'10%',
+        position:'absolute',
+        bottom:20,
+        left: 50
     }
 })
