@@ -8,6 +8,7 @@ import NavApp from '../screens/NavApp'
 import Minuteur from'../objects/Minuteur'
 // Imports Components
 import SVGCompteurFond from '../../assets/compteurFond'
+import FlecheG from "../../assets/flecheG";
 
 export default class Compteur extends React.Component {
     state = {
@@ -50,38 +51,55 @@ export default class Compteur extends React.Component {
                             {this.state.isPaused ? <Text></Text> : <Text style={{color: '#5FCDFA', fontSize: 30}}>Pause</Text>}
                         </View>
                         <View style={styles.midMid}>
-                         <ImageBackground source={require('../../assets/compteur.png')} style={{flex:1, resizeMode:'cover'}}>
-                                <View style={[styles.midItem, {zIndex:200}]}>
-                                    <View style={styles.textbloc}>
-                                        <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.rpm}</Text>
-                                        <Text style={styles.midText2}>rpm</Text>
+                         <ImageBackground source={require('../../assets/compteur.png')} style={{width:'120%',height:'100%',right:'8%'}}>
+                             <Image source={require('../../assets/aiguille.png')} style={styles.aiguille}/>
+                             <Image source={require('../../assets/Ellipse3.png')} style={[styles.aiguille, {position:'absolute', left:'38%', bottom:'25%'}]} />
+                                <View style={[styles.midItem, {zIndex:200,  marginTop:40,paddingBottom:'0%' }]}>
+                                    <View style={[styles.textbloc,{width:'20%',borderRadius:50}]}>
+                                        <ImageBackground source={require('../../assets/fondBulle.png')} style={styles.fondBulle}>
+                                            <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.rpm}</Text>
+                                            <Text style={[styles.midText2]}>rpm</Text>
+                                        </ImageBackground>
                                     </View>
-                                    <View style={styles.textbloc}>
-                                        <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kcal}</Text><Text style={styles.midText2}>kcal</Text>
+                                    <View style={[styles.textbloc,{width:'20%',borderRadius:50}]}>
+                                        <ImageBackground source={require('../../assets/fondBulle.png')} style={styles.fondBulle}>
+                                        <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kcal}</Text>
+                                        <Text style={styles.midText2}>kcal</Text>
+                                        </ImageBackground>
                                     </View>
                                 </View>
-                             <View style={[styles.midItem, {zIndex:200}]}>
-                                 <Text>⬅️</Text>
-                                 <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kmh} km/h</Text>
-                                 <Text>➡️</Text>
-                             </View>
-                             <View style={[styles.midItem, {zIndex:200}]}>
-                                 <View style={styles.textbloc}>
-                                     <Text style={[styles.midText,{ fontSize: 10}]}>{this.state.kmp}</Text>
-                                     <Text style={[styles.midText2,{ fontSize: 10}]}>km parcourus </Text>
+                             <View style={[styles.midItem, {zIndex:200, padding:'0%',}]}>
+                                 <FlecheG style={styles.flecheG}></FlecheG>
+                                 <View style={[styles.textbloc, {margin:10}]}>
+                                     <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kmh}</Text>
+                                     <Text style={styles.midText2}> km/h</Text>
                                  </View>
+                                 <FlecheG style={styles.flecheD}></FlecheG>
+                             </View>
+                             <View style={[styles.midItem, {zIndex:200, paddingTop:'0%'}]}>
                                  <View style={styles.textbloc}>
-                                     <Text style={[styles.midText,{ fontSize: 10}]}>{this.state.kmc}</Text>
-                                     <Text style={[styles.midText2,{ fontSize: 10}]}>km cumulés</Text>
+                                     <View style={{flexDirection:'row'}}>
+                                         <Text style={[styles.midText,{ fontSize: 20}]}>{this.state.kmp}</Text>
+                                         <Text style={[styles.midText2,{ fontSize: 20}]}>km parcourus </Text>
+                                     </View>
+                                     <View style={{flexDirection:'row'}}>
+                                         <Text style={[styles.midText,{ fontSize: 20}]}>{this.state.kmc}</Text>
+                                         <Text style={[styles.midText2,{ fontSize: 20}]}>km cumulés</Text>
+                                     </View>
                                  </View>
                              </View>
                          </ImageBackground>
                         </View>
                         <View style={styles.midBot}>
-                            <Text style={[styles.midText,{ fontSize: 30}]}>- {this.state.watts} watts +</Text>
+                            <Text>-</Text>
+                            <View style={styles.textbloc}>
+                                <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.watts}</Text>
+                                <Text style={[styles.midText2,{ fontSize: 30}]}>watts </Text>
+                            </View>
+                            <Text>+</Text>
                         </View>
                     </View>
-                    <NavApp navigation={this.props.navigation}></NavApp>
+                    <NavApp style={styles.footer} navigation={this.props.navigation}></NavApp>
                 </View>
             </SafeAreaView>
         )
@@ -90,7 +108,7 @@ export default class Compteur extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 3,
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 100
@@ -102,6 +120,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         justifyContent: 'space-around',
         zIndex: 100,
+
     },
 
     item: {
@@ -117,25 +136,26 @@ const styles = StyleSheet.create({
         flex: 4,
         flexDirection: 'column',
         alignItems: 'center',
-        zIndex: 100,
-        bottom: '20%'
+        zIndex: 100
+
     },
     midTop:{
-        marginTop:'25%',
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
         zIndex: 100,
 
+
     },
     midMid: {
         flex: 4,
         width:'100%',
-        paddingTop:'2%',
         flexDirection: 'column',
         alignItems: 'center',
         zIndex: 100,
-        overflow:'visible'
+        overflow:'visible',
+        paddingRight:'8%',
+        borderWidth: 3
     },
 
     midItem: {
@@ -143,7 +163,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         zIndex: 100,
-        justifyContent:'center'
+        justifyContent:'center',
+        alignContent:'space-around',
+        left: '12.5%',
+        padding:'8%'
+
     },
 
     midBot: {
@@ -159,12 +183,13 @@ const styles = StyleSheet.create({
     },
     midText2:{
         color: '#5FCDFA',
-        fontSize: 30
+        fontSize: 20
     },
     textbloc:{
-      flex:1,
+
       flexDirection:'column',
-        alignItems:'center'
+      alignItems:'center',
+
     },
 
     fond: {
@@ -173,7 +198,8 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '110%',
         resizeMode: 'cover',
-        justifyContent: 'center'
+        justifyContent: 'center',
+
     },
     fondCompteur:{
         borderWidth:3,
@@ -184,6 +210,21 @@ const styles = StyleSheet.create({
         left:'-20%',
         width:50
     },
+    aiguille:{
+        flex: 1,
+        resizeMode: "cover",
+        justifyContent: "center",
+        zIndex:0,
+        position:'absolute',
+        bottom:15,
+        left:80
+    },
+    fondBulle:{
+        width:'120%',
+        resizeMode: "cover",
+        justifyContent: "center",
+        paddingLeft:20
+    },
 
     footer: {
         flex: 1,
@@ -191,7 +232,16 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         justifyContent: 'center',
         zIndex: 100,
-        bottom: '20%'
+
+
+    },
+    flecheG:{
+        transform: [{scale:2}],
+        marginRight:'5%'
+    },
+    flecheD:{
+        transform: [{scale:2}, {rotate:"180deg"}],
+        marginLeft:'5%'
     },
     go: {
         color: '#56ADCE',
