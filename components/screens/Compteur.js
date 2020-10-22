@@ -1,6 +1,6 @@
 // Imports Modules
 import React from 'react'
-import {View, StyleSheet, SafeAreaView, Image, Text, TouchableHighlight, ImageBackground, Button, Animated} from 'react-native'
+import {View, StyleSheet, SafeAreaView, Image, Text, ImageBackground, Button, Animated, Easing} from 'react-native'
 
 // Imports Assets
 import LogoMin from '../../assets/logoMin'
@@ -47,23 +47,24 @@ export default class Compteur extends React.Component {
     componentDidMount() {
         this.StartImageRotateFunction();
         setInterval( () => {
-            var nend = Math.floor(Math.random() * 20)
+            var nend = Math.floor(Math.random() * 50)
             var ang = `${nend}deg`
-            this.setState({start:this.state.end, end:nend , outputRange:[this.state.outputRange[1], ang]})
+            this.setState({startPosition:this.state.endPosition, endPosition:nend , outputRange:[this.state.outputRange[1], ang]})
             //this.setState({ :Math.random()*10})
-        }, 1000)
+        }, 6000)
     }
     StartImageRotateFunction() {
-        this.RotateValueHolder.setValue(this.state.start);
+        this.RotateValueHolder.setValue(this.state.startPosition);
         Animated.timing(this.RotateValueHolder, {
-            toValue: this.state.end,
+            toValue: this.state.endPosition,
+            Easing:'linear',
             duration: 3000
         }).start(() => this.StartImageRotateFunction());
     }
 
 
     render() {
-        const RotateData = this.RotateValueHolder.interpolate({
+        const rotation = this.RotateValueHolder.interpolate({
                 inputRange: [ 0, 10],
             outputRange:this.state.outputRange,
         });
@@ -93,7 +94,7 @@ export default class Compteur extends React.Component {
                         </View>
                         <View style={styles.midMid}>
                          <ImageBackground source={require('../../assets/compteur.png')} style={{width:'120%',height:'100%',right:'6%'}}>
-                             <Animated.Image source={require('../../assets/aiguille.png')} style={[styles.aiguille, { transform:[{rotate: RotateData}] }]}/>
+                             <Animated.Image source={require('../../assets/aiguille.png')} style={[styles.aiguille, {transform:[{rotate:rotation}]  }]}/>
                              <Image source={require('../../assets/ellipseFond.png')} style={[styles.aiguille, {position:'absolute', left:'40%', bottom:'28%'}]} />
                                 <View style={[styles.midItem, {zIndex:200,  marginTop:'10%',paddingBottom:'0%' }]}>
                                     <View style={[styles.textbloc,{width:'20%',borderRadius:50}]}>
@@ -133,13 +134,13 @@ export default class Compteur extends React.Component {
                         </View>
                         <View style={[styles.midBot,{flexDirection:'row'}]}>
 
-                                <Text style={[styles.midText,{ fontSize: 30}]}>-</Text>
+                                <Text style={[styles.midText,{ fontSize: 70, maginRight:'5%'}]}  onPress={() => {this.state.watts -= 5}}>-</Text>
                                 <View style={styles.textbloc}>
                                     <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.watts}</Text>
                                     <Text style={[styles.midText2,{ fontSize: 30}]}>watts </Text>
                                     <Button style={styles.midText2} title={"Pause"} onPress={() => this.toggleStopwatch()} />
                                 </View>
-                                <Text style={[styles.midText,{ fontSize: 30}]}>+</Text>
+                                <Text style={[styles.midText,{ fontSize: 70, marginRight:'5%'}]} onPress={() => {this.state.watts += 5}}>+</Text>
                         </View>
                     </View>
                         <NavApp style={styles.footer} navigation={this.props.navigation}></NavApp>

@@ -21,10 +21,10 @@ const Item = ({ item, selected, onPress }) => (
 export default class Defis extends React.Component {
         /* stockage de la liste des défis dans le state */
         state={
-            defis:[{id:0,nom:'m\'amuser / me dépenser',statut: false},
-                   {id:1,nom:'perdre du poids',statut:false},
-                   {id:2,nom:'faire des économies en produisant de l\'énergie',statut:false},
-                   {id:3,nom:'Réduire mon impact sur l\'environnement',statut:true}],
+            defis:[{id:'0',nom:'m\'amuser / me dépenser',statut: false},
+                   {id:'1',nom:'perdre du poids',statut:false},
+                   {id:'2',nom:'faire des économies en produisant de l\'énergie',statut:false},
+                   {id:'3',nom:'Réduire mon impact sur l\'environnement',statut:true}]
         }
 
         /* modification du statut du défis en cours d'intégration*/
