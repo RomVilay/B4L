@@ -1,6 +1,6 @@
 // Imports Modules
 import React from 'react'
-import {View, StyleSheet, SafeAreaView, Image, Text, TouchableHighlight, ImageBackground, Button} from 'react-native'
+import {View, StyleSheet, SafeAreaView, Image, Text, TouchableHighlight, ImageBackground, Button, Animated} from 'react-native'
 
 // Imports Assets
 import LogoMin from '../../assets/logoMin'
@@ -8,11 +8,12 @@ import NavApp from '../screens/NavApp'
 // Imports Components
 import FlecheG from "../../assets/flecheG";
 import {Stopwatch} from 'react-native-stopwatch-timer'
-import StopWatch from "react-native-stopwatch-timer/lib/stopwatch";
+
 
 export default class Compteur extends React.Component {
     constructor(props) {
         super(props);
+        this.RotateValueHolder = new Animated.Value(0);
         this.state = {
             kmp: 16.3,
             kmh: 20,
@@ -22,22 +23,51 @@ export default class Compteur extends React.Component {
             kcal:80,
             start:true,
             reset:false,
-            pause: ""
+            pause: "",
+            time:"",
+            startPosition:-3,
+            endPosition:2,
+            outputRange:['0deg','10deg']
         }
         this.toggleStopwatch = this.toggleStopwatch.bind(this);
         this.resetStopwatch = this.resetStopwatch.bind(this);
+
     }
     toggleStopwatch() {
-        this.setState({stopwatchStart: !this.state.stopwatchStart, stopwatchReset: false, pause:"Pause"});
+        this.setState({start: !this.state.start, reset: false});
+        this.state.pause == "" ? this.setState({pause:"Pause"}) : this.setState({pause:""})
     }
     resetStopwatch() {
-        this.setState({stopwatchStart: false, stopwatchReset: true});
+        this.setState({start: false, reset: true});
     }
     getFormattedTime(time) {
         this.currentTime = time;
-    };
+    }
+
+    componentDidMount() {
+        this.StartImageRotateFunction();
+        setInterval( () => {
+            var nend = Math.floor(Math.random() * 20)
+            var ang = `${nend}deg`
+            this.setState({start:this.state.end, end:nend , outputRange:[this.state.outputRange[1], ang]})
+            //this.setState({ :Math.random()*10})
+        }, 1000)
+    }
+    StartImageRotateFunction() {
+        this.RotateValueHolder.setValue(this.state.start);
+        Animated.timing(this.RotateValueHolder, {
+            toValue: this.state.end,
+            duration: 3000
+        }).start(() => this.StartImageRotateFunction());
+    }
+
 
     render() {
+        const RotateData = this.RotateValueHolder.interpolate({
+                inputRange: [ 0, 10],
+            outputRange:this.state.outputRange,
+        });
+
         return (
             <SafeAreaView style={styles.container}>
                 <Image
@@ -57,12 +87,13 @@ export default class Compteur extends React.Component {
                             reset={this.state.reset}
                             options={options}
                             getTime={this.getFormattedTime}
+                            msec={true}
                             />
                             <Text style={{color: '#5FCDFA', fontSize: 30}}>{this.state.pause}</Text>
                         </View>
                         <View style={styles.midMid}>
                          <ImageBackground source={require('../../assets/compteur.png')} style={{width:'120%',height:'100%',right:'6%'}}>
-                             <Image source={require('../../assets/aiguille.png')} style={styles.aiguille}/>
+                             <Animated.Image source={require('../../assets/aiguille.png')} style={[styles.aiguille, { transform:[{rotate: RotateData}] }]}/>
                              <Image source={require('../../assets/ellipseFond.png')} style={[styles.aiguille, {position:'absolute', left:'40%', bottom:'28%'}]} />
                                 <View style={[styles.midItem, {zIndex:200,  marginTop:'10%',paddingBottom:'0%' }]}>
                                     <View style={[styles.textbloc,{width:'20%',borderRadius:50}]}>
@@ -100,15 +131,16 @@ export default class Compteur extends React.Component {
                              </View>
                          </ImageBackground>
                         </View>
-                        <View style={[styles.midBot, {flexDirection:'row'}]}>
-                            <Text style={[styles.midText,{ fontSize: 30}]}>-</Text>
-                            <View style={styles.textbloc}>
-                                <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.watts}</Text>
-                                <Text style={[styles.midText2,{ fontSize: 30}]}>watts </Text>
-                            </View>
-                            <Text style={[styles.midText,{ fontSize: 30}]}>+</Text>
+                        <View style={[styles.midBot,{flexDirection:'row'}]}>
+
+                                <Text style={[styles.midText,{ fontSize: 30}]}>-</Text>
+                                <View style={styles.textbloc}>
+                                    <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.watts}</Text>
+                                    <Text style={[styles.midText2,{ fontSize: 30}]}>watts </Text>
+                                    <Button style={styles.midText2} title={"Pause"} onPress={() => this.toggleStopwatch()} />
+                                </View>
+                                <Text style={[styles.midText,{ fontSize: 30}]}>+</Text>
                         </View>
-                        <Button title={"Pause"} onPress={() => console.log("appuyé")} />
                     </View>
                         <NavApp style={styles.footer} navigation={this.props.navigation}></NavApp>
                 </View>
