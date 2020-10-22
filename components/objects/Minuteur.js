@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Text} from 'react'
 
 export default class Minuteur extends React.Component {
   constructor(props){
@@ -44,7 +44,7 @@ export default class Minuteur extends React.Component {
       null
     return(
       <div>
-        <h3>timer: {this.state.time.toLocaleTimeString()}</h3>
+        <h3><Text> timer: {this.state.time.toString()}</Text></h3>
       </div>
     )
   }

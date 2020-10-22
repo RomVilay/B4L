@@ -1,36 +1,41 @@
 // Imports Modules
 import React from 'react'
-import {View, StyleSheet, SafeAreaView, Image, Text, TouchableHighlight, ImageBackground} from 'react-native'
+import {View, StyleSheet, SafeAreaView, Image, Text, TouchableHighlight, ImageBackground, Button} from 'react-native'
 
 // Imports Assets
 import LogoMin from '../../assets/logoMin'
 import NavApp from '../screens/NavApp'
-import Minuteur from'../objects/Minuteur'
 // Imports Components
-import SVGCompteurFond from '../../assets/compteurFond'
 import FlecheG from "../../assets/flecheG";
+import {Stopwatch} from 'react-native-stopwatch-timer'
+import StopWatch from "react-native-stopwatch-timer/lib/stopwatch";
 
 export default class Compteur extends React.Component {
-    state = {
-        kmp: 16.3,
-        kmh: 20,
-        kmc: 234,
-        watts: 200,
-        rpm:15,
-        kcal:80,
-        timer: new Date(),
-        start: new Date(),
-        isPaused:false
+    constructor(props) {
+        super(props);
+        this.state = {
+            kmp: 16.3,
+            kmh: 20,
+            kmc: 234,
+            watts: 200,
+            rpm:15,
+            kcal:80,
+            start:true,
+            reset:false,
+            pause: ""
+        }
+        this.toggleStopwatch = this.toggleStopwatch.bind(this);
+        this.resetStopwatch = this.resetStopwatch.bind(this);
     }
-    /*componentDidMount() {
-        this.myInterval = setInterval(() => {
-            var time = new Date()
-            this.setState({timer: time - this.state.start})
-        })
+    toggleStopwatch() {
+        this.setState({stopwatchStart: !this.state.stopwatchStart, stopwatchReset: false, pause:"Pause"});
     }
-    componentWillUnmount(){
-        clearInterval(this.myInterval)
-    }*/
+    resetStopwatch() {
+        this.setState({stopwatchStart: false, stopwatchReset: true});
+    }
+    getFormattedTime(time) {
+        this.currentTime = time;
+    };
 
     render() {
         return (
@@ -47,8 +52,13 @@ export default class Compteur extends React.Component {
                     </View>
                     <View style={[styles.middle, { width: '100%' }]}>
                         <View style={styles.midTop}>
-                            <Text style={[styles.midText,{fontSize:30}]}>{this.state.timer.toLocaleTimeString()}</Text>
-                            {this.state.isPaused ? <Text></Text> : <Text style={{color: '#5FCDFA', fontSize: 30}}>Pause</Text>}
+                            <Stopwatch
+                            start={this.state.start}
+                            reset={this.state.reset}
+                            options={options}
+                            getTime={this.getFormattedTime}
+                            />
+                            <Text style={{color: '#5FCDFA', fontSize: 30}}>{this.state.pause}</Text>
                         </View>
                         <View style={styles.midMid}>
                          <ImageBackground source={require('../../assets/compteur.png')} style={{width:'120%',height:'100%',right:'6%'}}>
@@ -98,11 +108,22 @@ export default class Compteur extends React.Component {
                             </View>
                             <Text style={[styles.midText,{ fontSize: 30}]}>+</Text>
                         </View>
+                        <Button title={"Pause"} onPress={() => console.log("appuyé")} />
                     </View>
                         <NavApp style={styles.footer} navigation={this.props.navigation}></NavApp>
                 </View>
             </SafeAreaView>
         )
+    }
+}
+const options = {
+    container: {
+        width: 220,
+        marginLeft:'22%'
+    },
+    text: {
+        fontSize: 30,
+        color: 'white'
     }
 }
 
@@ -123,7 +144,13 @@ const styles = StyleSheet.create({
         paddingBottom:0
 
     },
-
+    stopwatch:{
+            backgroundColor:'transparent',
+            width:'25%',
+            color: 'white',
+            fontSize: 35,
+            textTransform: 'uppercase'
+        },
     item: {
         width: 80,
         height: 80,
@@ -214,8 +241,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         zIndex:0,
         position:'absolute',
-        bottom:'7%',
-        left:'23%'
+        bottom:'5%',
+        left:'20%'
     },
     fondBulle:{
         width:'120%',
