@@ -1,6 +1,6 @@
 // Imports Modules
 import React from 'react'
-import {View, StyleSheet, SafeAreaView, Image, Text, ImageBackground, Button, Animated, Easing} from 'react-native'
+import {View, StyleSheet, SafeAreaView, Image, Text, ImageBackground, Button, Animated} from 'react-native'
 
 // Imports Assets
 import LogoMin from '../../assets/logoMin'
@@ -43,13 +43,16 @@ export default class Compteur extends React.Component {
     getFormattedTime(time) {
         this.currentTime = time;
     }
+    
 
     componentDidMount() {
         this.StartImageRotateFunction();
         setInterval( () => {
-            var nend = Math.floor(Math.random() * 50)
-            var ang = `${nend}deg`
-            this.setState({startPosition:this.state.endPosition, endPosition:nend , outputRange:[this.state.outputRange[1], ang]})
+            const nend = Math.floor(Math.random() * 50)
+            const ang = `${nend}deg`
+            this.setState({startPosition:this.state.endPosition,
+                endPosition:nend ,
+                outputRange: this.state.outputRange[1]<ang ? [this.state.outputRange[1], ang] : [ang,this.state.outputRange[1]]})
             //this.setState({ :Math.random()*10})
         }, 6000)
     }
@@ -61,7 +64,6 @@ export default class Compteur extends React.Component {
             duration: 3000
         }).start(() => this.StartImageRotateFunction());
     }
-
 
     render() {
         const rotation = this.RotateValueHolder.interpolate({
