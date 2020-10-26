@@ -1,14 +1,16 @@
 import React from 'react'
-import { Image, Text, TextInput, View, StyleSheet, SafeAreaView } from 'react-native'
+import {Image, Text, TextInput, View, StyleSheet, SafeAreaView, Alert} from 'react-native'
 
 import LogoMed from '../../assets/logoMed'
 
-export default function Inscription({ navigation }) {
+export default class Inscription extends React.Component {
     state = {
+        username: '',
         email: '',
         password: '',
-        username: '',
+        password2:''
     }
+render() {
 
     return (
         <SafeAreaView style={styles.container}>
@@ -54,16 +56,16 @@ export default function Inscription({ navigation }) {
                     </View>
                     <View style={styles.inputContainer}>
                         <TextInput
-                            value={this.state.password}
+                            value={this.state.password2}
                             style={styles.input}
-                            onChangeText={password => this.setState({ password })}
+                            onChangeText={password2 => this.setState({ password2 })}
                             placeholder={'Validez votre mot de passe'}
                             secureTextEntry={true}
                             placeholderTextColor='#FFFFFF'
                         />
                     </View>
                     <Text
-                        onPress={() => navigation.navigate("Home")}
+                        onPress={() => this.state.password == this.state.password2 ? this.props.navigation.navigate("Home"): Alert.alert('inscription','veuillez saisir un mot de passe identique',[{text: "fermer"}])}
                         backgroundColor="transparent"
                         style={{
                             color: "#5FCDFA",
@@ -75,7 +77,6 @@ export default function Inscription({ navigation }) {
                     >Inscription</Text>
                 </View>
                 <Text
-                    onPress={() => navigation.navigate("Termes")}
                     backgroundColor="transparent"
                     style={{
                         color: "#53B4DC",
@@ -86,7 +87,7 @@ export default function Inscription({ navigation }) {
                     }}
                 >En vous inscrivant, vous acceptez nos</Text>
                 <Text
-                    onPress={() => navigation.navigate("Termes")}
+                    onPress={() => this.props.navigation.navigate("Termes")}
                     backgroundColor="transparent"
                     style={{
                         color: "#FFFFFF",
@@ -99,6 +100,7 @@ export default function Inscription({ navigation }) {
             </View>
         </SafeAreaView>
     )
+    }
 }
 
 const styles = StyleSheet.create({

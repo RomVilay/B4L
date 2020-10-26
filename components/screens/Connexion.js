@@ -57,7 +57,6 @@ export default class Connexion extends React.Component {
                         >Connexion</Text>
                     </View>
                     <Text
-                        onPress={() => this.props.navigation.navigate("Inscription")}
                         backgroundColor="transparent"
                         style={{
                             color: "white",
