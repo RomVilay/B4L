@@ -18,7 +18,7 @@ import LogoMin from '../../assets/logoMin'
 import Navigation from '../../assets/navigation'
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
-import NavApp from "./NavApp";
+import NavApp from "../navigation/NavApp";
 // Imports Components
 
 var qrcode = require('../../assets/qrcode.png')

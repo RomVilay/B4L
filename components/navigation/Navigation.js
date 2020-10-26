@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { StatusBar } from 'react-native'
 
 // Import Screens
-import NavApp from '../screens/NavApp'
+import NavApp from './NavApp'
 import Demarrage from '../screens/Demarrage'
 import Connexion from '../screens/Connexion'
 import Inscription from '../screens/Inscription'

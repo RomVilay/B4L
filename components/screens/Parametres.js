@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Image, StyleSheet, Text, SafeAreaView, TextInput, TouchableHighlight } from 'react-native'
 import LogoMin from '../../assets/logoMin'
-import NavApp from '../screens/NavApp'
+import NavApp from '../navigation/NavApp'
 
 var avatar = require('../../assets/avatar.png')
 var flecheG = require('../../assets/flecheG.png')

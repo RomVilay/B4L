@@ -4,7 +4,7 @@ import {View, StyleSheet, SafeAreaView, Image, Text, ImageBackground, Button, An
 
 // Imports Assets
 import LogoMin from '../../assets/logoMin'
-import NavApp from '../screens/NavApp'
+import NavApp from '../navigation/NavApp'
 // Imports Components
 import FlecheG from "../../assets/flecheG";
 import {Stopwatch} from 'react-native-stopwatch-timer'

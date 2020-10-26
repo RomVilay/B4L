@@ -10,7 +10,7 @@ const Item = ({ item, onPress }) => (
        disabled={false}
        value={item.statut}
        onPress={onPress}/>
-       <Text style={styles.whiteText}>{item.nom}</Text>
+       <Text style={styles.whiteText}>{item.descriptionDefis}</Text>
    </View>
 );
 
@@ -22,9 +22,11 @@ const render_item = ({ item }) => (
 
  );
 
-export default (ListeDefis = props => (
-  <FlatList data={props.data} renderItem={render_item}  keyExtractor={item => item.nom} extraData={props.onPress}/>
-))
+export default function  ListeDefis() {
+    render (
+        <FlatList data={props.data} renderItem={render_item}  keyExtractor={item => item.nom} extraData={props.onPress}/>
+    )
+}
 
 const styles = StyleSheet.create({
      listItem: {

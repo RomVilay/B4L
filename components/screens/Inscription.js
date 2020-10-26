@@ -68,35 +68,38 @@ render() {
                         onPress={() => this.state.password == this.state.password2 ? this.props.navigation.navigate("Home"): Alert.alert('inscription','veuillez saisir un mot de passe identique',[{text: "fermer"}])}
                         backgroundColor="transparent"
                         style={{
-                            color: "#5FCDFA",
+                            color: "#FFFFFF",
                             textTransform: 'uppercase',
                             fontSize: 25,
                             fontFamily: 'DIN Condensed',
                             top: '5%'
                         }}
                     >Inscription</Text>
+                    <Text
+                        backgroundColor="transparent"
+                        style={{
+                            color: "#53B4DC",
+                            textTransform: 'uppercase',
+                            fontSize: 20,
+                            fontFamily: 'DIN Condensed',
+                            top: '20%',
+                            margin:'5%'
+                        }}
+                    >En vous inscrivant, vous acceptez nos
+                        <Text
+                            onPress={() => this.props.navigation.navigate("Termes")}
+                            backgroundColor="transparent"
+                            style={{
+                                color: "#FFFFFF",
+                                textTransform: 'uppercase',
+                                fontSize: 20,
+                                fontFamily: 'DIN Condensed',
+                                top: '20%'
+                            }}
+                        > Termes et conditions</Text>
+                    </Text>
                 </View>
-                <Text
-                    backgroundColor="transparent"
-                    style={{
-                        color: "#53B4DC",
-                        textTransform: 'uppercase',
-                        fontSize: 20,
-                        fontFamily: 'DIN Condensed',
-                        top: '20%'
-                    }}
-                >En vous inscrivant, vous acceptez nos</Text>
-                <Text
-                    onPress={() => this.props.navigation.navigate("Termes")}
-                    backgroundColor="transparent"
-                    style={{
-                        color: "#FFFFFF",
-                        textTransform: 'uppercase',
-                        fontSize: 20,
-                        fontFamily: 'DIN Condensed',
-                        top: '20%'
-                    }}
-                >Termes et conditions</Text>
+
             </View>
         </SafeAreaView>
     )

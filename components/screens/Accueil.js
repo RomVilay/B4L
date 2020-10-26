@@ -5,7 +5,7 @@ import { View, StyleSheet, SafeAreaView, Image, Text, TouchableHighlight } from 
 // Imports Assets
 import LogoMin from '../../assets/logoMin'
 import Cercle from '../../assets/cercle'
-import NavApp from '../screens/NavApp'
+import NavApp from '../navigation/NavApp'
 
 // Imports Components
 import Battery from '../screens/Battery'
