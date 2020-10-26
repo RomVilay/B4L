@@ -1,0 +1,10 @@
+-page compteur:
+        animation aiguiller avec barres qui suivent la progression
+        changement d'élément mesuré avec les flèches
+        taille stopwatch
+        positionnement des éléments
+ pages paramètres:
+        vérifier le fonctionnement des champs
+page defi:
+    faire liste déroulante
+remplacer les polices manquantes

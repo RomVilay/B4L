@@ -66,7 +66,7 @@ export default class Accueil extends React.Component {
                     </View>
                     <View style={styles.footer}>
                         <Cercle />
-                        <Text style={styles.go} onPress={() => this.props.navigation.navigate("Defis")}>GO</Text>
+                        <Text style={styles.go} onPress={() => this.props.navigation.navigate("Jumelage")}>GO</Text>
                     </View>
                     <NavApp navigation={this.props.navigation} />
                 </View>

@@ -136,7 +136,7 @@ export default class Compteur extends React.Component {
                         </View>
                         <View style={[styles.midBot,{flexDirection:'row'}]}>
 
-                                <Text style={[styles.midText,{ fontSize: 70, maginRight:'5%'}]}  onPress={() => {this.state.watts -= 5}}>-</Text>
+                                <Text style={[styles.midText,{ fontSize: 70, marginRight:'5%'}]}  onPress={() => {this.state.watts -= 5}}>-</Text>
                                 <View style={styles.textbloc}>
                                     <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.watts}</Text>
                                     <Text style={[styles.midText2,{ fontSize: 30}]}>watts </Text>
