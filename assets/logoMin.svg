@@ -1,0 +1,25 @@
+<svg id="Groupe_7" data-name="Groupe 7" xmlns="http://www.w3.org/2000/svg" width="51.028" height="55.418" viewBox="0 0 51.028 55.418">
+  <g id="Groupe_5" data-name="Groupe 5">
+    <g id="Groupe_1" data-name="Groupe 1">
+      <path id="Tracé_1" data-name="Tracé 1" d="M465.583,165.6H467c3.449,0,4.953,1.444,4.953,4.982-.03,2.83-.8,4.215-2.594,4.746v.059c2.064.413,2.918,2.093,2.918,5.159,0,3.685-1.415,5.1-4.864,5.1h-1.828Zm2.211,9.462c2.358,0,3.36-1.5,3.36-4.422,0-3.154-1.15-4.333-4.186-4.333h-.619v8.755Zm-.531,9.875c3.066,0,4.215-1.149,4.215-4.48s-1.15-4.717-3.685-4.717h-1.445v9.2Z" transform="translate(-465.583 -165.604)" fill="#fff"/>
+      <path id="Tracé_2" data-name="Tracé 2" d="M466.349,290.511h5.159v.708h-5.925V271.173h.766Z" transform="translate(-465.583 -235.801)" fill="#fff"/>
+    </g>
+    <g id="Groupe_2" data-name="Groupe 2" transform="translate(16.38)">
+      <path id="Tracé_3" data-name="Tracé 3" d="M515.237,185.649h-.767V165.6h.767Z" transform="translate(-514.47 -165.604)" fill="#fff"/>
+      <path id="Tracé_4" data-name="Tracé 4" d="M515.237,291.219h-.767V271.173h.767Z" transform="translate(-514.47 -235.801)" fill="#fff"/>
+    </g>
+    <g id="Groupe_3" data-name="Groupe 3" transform="translate(28.32)">
+      <path id="Tracé_5" data-name="Tracé 5" d="M556.471,185.649l-5.6-10.2v10.2H550.1V165.6h.766v9.7l5.542-9.7h.8l-5.571,9.669,5.719,10.376Z" transform="translate(-550.104 -165.604)" fill="#fff"/>
+      <path id="Tracé_6" data-name="Tracé 6" d="M557.224,271.881H550.87l-.029,8.726h5.764v.708h-5.764l.029,9.9H550.1V271.173h7.12Z" transform="translate(-550.104 -235.801)" fill="#fff"/>
+    </g>
+    <g id="Groupe_4" data-name="Groupe 4" transform="translate(44.867)">
+      <path id="Tracé_7" data-name="Tracé 7" d="M599.49,165.6h6.161v.707h-5.394v8.726h4.628v.708h-4.628v9.2h5.394v.708H599.52Z" transform="translate(-599.49 -165.604)" fill="#fff"/>
+      <path id="Tracé_8" data-name="Tracé 8" d="M599.49,271.173h6.161v.708h-5.394v8.726h4.628v.708h-4.628v9.2h5.394v.708H599.52Z" transform="translate(-599.49 -235.801)" fill="#fff"/>
+    </g>
+  </g>
+  <g id="Groupe_6" data-name="Groupe 6" transform="translate(16.359 21.561)">
+    <path id="Tracé_9" data-name="Tracé 9" d="M517.651,230.921h-2.826l-.016,4.779h2.5v.387h-2.5l.016,5.425h-.42V230.533h3.245Z" transform="translate(-514.406 -230.339)" fill="#fff"/>
+    <path id="Tracé_10" data-name="Tracé 10" d="M535.548,238.56v-5.844c0-1.905.6-2.761,1.937-2.761h.049c1.34,0,1.937.856,1.937,2.761v5.844c0,1.905-.581,2.761-1.921,2.761h-.081C536.145,241.321,535.548,240.465,535.548,238.56Zm3.5-.048V232.7c0-1.647-.452-2.374-1.534-2.374s-1.55.727-1.55,2.374v5.812c0,1.679.468,2.438,1.55,2.438S539.052,240.191,539.052,238.512Z" transform="translate(-528.464 -229.955)" fill="#fff"/>
+    <path id="Tracé_11" data-name="Tracé 11" d="M563.9,241.512l-1.517-5.134h-1.372v5.134h-.42V230.533h1.065c1.841,0,2.648.824,2.648,2.906,0,1.808-.6,2.551-1.518,2.874l1.55,5.2Zm-1.986-5.522c1.4,0,1.954-.759,1.954-2.519,0-1.889-.678-2.551-2.18-2.551h-.678v5.069Z" transform="translate(-545.118 -230.339)" fill="#fff"/>
+  </g>
+</svg>
