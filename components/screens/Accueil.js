@@ -8,7 +8,6 @@ import {
   Text,
   TouchableHighlight,
 } from 'react-native';
-// Bonjour
 // Imports Assets
 import LogoMin from '../../assets/logoMin';
 import Cercle from '../../assets/cercle';
