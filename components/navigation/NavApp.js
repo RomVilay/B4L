@@ -40,22 +40,10 @@ export default class NavApp extends React.Component {
             this.state = {
               isOpen: false,
               isDisabled: false,
-              swipeToClose: true,
-              sliderValue: 0.3
+              swipeToClose: true
             };
           }
 
-          onClose() {
-            console.log('Modal just closed');
-          }
-
-          onOpen() {
-            console.log('Modal just opened');
-          }
-
-          onClosingState(state) {
-            console.log('the open/close of the swipeToClose just changed');
-          }
          /* toggleVisibility(){
             return this.state.isOpen ? visibility:false : visibility:true
 */
@@ -126,8 +114,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'flex-start',
-        zIndex: 100
+        zIndex: 100,
     },
 
     logos: {
@@ -184,7 +171,7 @@ const styles = StyleSheet.create({
         color: "white",
         position:'absolute',
         bottom:10,
-        left:100
+        left:'10%'
       },
 
       btnModal: {
