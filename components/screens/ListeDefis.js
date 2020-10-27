@@ -2,28 +2,46 @@ import React, {useState} from 'react'
 import {FlatList, Text, View, StyleSheet, Button, ImageBackground, Image} from 'react-native'
 import CheckBox from '@react-native-community/checkbox'
 import LogoMin from '../../assets/logoMin'
+import NavApp from "../navigation/NavApp";
 
-
-const Item = ({ item, onPress }) => (
-  <View style={styles.listItem}>
-      <CheckBox
+/*
+*  <CheckBox
        disabled={false}
        value={item.statut}
-       onPress={onPress}/>
-       <Text style={styles.whiteText}>{item.descriptionDefis}</Text>
+       onPress={onPress}/> */
+const Item = ({ item, onPress }) => (
+  <View style={styles.defi}>
+       <Text style={[styles.titreBlanc, { fontSize:70}]}>{item.descriptionDefis}</Text>
    </View>
 );
 
-const render_item = ({ item }) => (
-    <Item
-        item={item}
-        onPress={() => onPress(item.statut)}
-    />
+const render_item = ({ item }) =>{
+    const backgroundColor = (item) => { item.statut ? "RGBA(255,255,255,0.16)" : "transparent"}
+   return (
 
- );
+        <Item
+            item={item}
+            onPress={() => item.statut = !item.statut}
+            style={{backgroundColor}}
+        />
+
+    );
+}
+
 
 export default function  ListeDefis(props) {
-    const [listeDefs, setListeDefs]= useState([{descriptionDefis:"faire 50km", statut:false},{descriptionDefis:"faire 200km", statut:false}])
+    const [ListeDefs, setListeDefs]= useState([
+        {id:0,descriptionDefis:"faire 200km", statut:false},
+        {id:1,descriptionDefis:"faire 200km", statut:true},
+        {id:2,descriptionDefis:"faire 200km", statut:false},
+        {id:3,descriptionDefis:"faire 200km", statut:false},
+        {id:4,descriptionDefis:"faire 200km", statut:false},
+        {id:4,descriptionDefis:"faire 200km", statut:false},
+        {id:5,descriptionDefis:"faire 200km", statut:false},
+        {id:6,descriptionDefis:"faire 200km", statut:false},
+        ])
+    const [defisSelect,setDefiSelect] = useState([])
+    const sel = (item) => {setDefiSelect(defisSelect.push(item))}
     return (
         <View>
             <ImageBackground
@@ -35,10 +53,10 @@ export default function  ListeDefis(props) {
                     <Text style={styles.titreBlanc}>Le <Text style={styles.titreBleu}>défi</Text> pour cette session</Text>
                 </View>
                 <View style={styles.body}>
-                    <FlatList data={listedefs} renderItem={render_item} />
+                    <FlatList data={ListeDefs} renderItem={render_item} keyExtractor={(item) => {item.id}} extraData={defisSelect}/>
                 </View>
                 <View style={styles.footer}>
-
+                    <NavApp navigation={props.navigation}/>
                 </View>
             </ImageBackground>
         </View>
@@ -54,18 +72,21 @@ const styles = StyleSheet.create({
         padding:5
     },
     body:{
-
+        flex:2,
+        alignItems: 'center',
     },
     footer:{
-
+        flex:1
     },
-     listItem: {
+     defi: {
             flex: 1,
             flexDirection: 'row',
-            alignItems: 'center',
+            alignContent: 'center',
             zIndex: 100,
-            width: '93%',
-            marginBottom:'5%'
+            width: '100%',
+            marginBottom:'5%',
+            borderBottomColor:"#56ADCE",
+            borderBottomWidth:3
         },
      titreBlanc : {
             color: "white",
@@ -74,7 +95,7 @@ const styles = StyleSheet.create({
             fontFamily: 'DIN Condensed',
         },
     titreBleu : {
-        color: "white",
+        color: "#56ADCE",
         textTransform: 'uppercase',
         fontSize: 25,
         fontFamily: 'DIN Condensed',
