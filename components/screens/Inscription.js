@@ -65,7 +65,7 @@ render() {
                         />
                     </View>
                     <Text
-                        onPress={() => this.state.password == this.state.password2 ? this.props.navigation.navigate("Home"): Alert.alert('inscription','veuillez saisir un mot de passe identique',[{text: "fermer"}])}
+                        onPress={() => this.state.password == this.state.password2 ? this.props.navigation.navigate("Objectifs"): Alert.alert('inscription','veuillez saisir un mot de passe identique',[{text: "fermer"}])}
                         backgroundColor="transparent"
                         style={{
                             color: "#FFFFFF",
