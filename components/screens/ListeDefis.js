@@ -8,11 +8,7 @@ import NavApp from "../navigation/NavApp";
 *     */
 const Item = ({ item, onPress, style }) => (
   <TouchableOpacity onPress={onPress} style={[styles.defi, {style}]}>
-       <Text style={[styles.titreBlanc, { fontSize:70}]}>{item.descriptionDefis}</Text>
-      <CheckBox
-          disabled={false}
-          value={item.statut}
-          onPress={onPress}/>
+       <Text style={[styles.titreBlanc, { fontSize:50}]}>{item.descriptionDefis}</Text>
    </TouchableOpacity>
 );
 
@@ -31,7 +27,6 @@ export default function  ListeDefis(props) {
     //const sel = (item) => {setDefiSelect(defisSelect.push(item))}
 
     const render_item = ({ item }) =>{
-        const backgroundColor = item.id === defisSelect ? "green" : "transparent"
         return (
             <Item
                 item={item}
@@ -41,7 +36,6 @@ export default function  ListeDefis(props) {
                     item.statut ? i.push(item) : i.splice(i.indexOf(item),1)
                     setDefiSelect(i)
                 }}
-                style={{backgroundColor}}
             />
         );
     }
@@ -63,9 +57,11 @@ export default function  ListeDefis(props) {
                         extraData={defisSelect}/>
                 </View>
                 <View style={styles.footer}>
-                    <Button title={"suivant"} onPress={()=> props.navigation.navigate("Jumelage")} color={'white'}/>
-                    <NavApp navigation={props.navigation}/>
+                    <TouchableOpacity style={{margin:'auto'}} onPress={()=> props.navigation.navigate("Jumelage")} color={'white'}>
+                        <Text style={styles.titreBlanc}>appuyez pour continuer</Text>
+                    </TouchableOpacity>
                 </View>
+                <NavApp style={{Left:'20%'}} navigation={props.navigation}/>
             </ImageBackground>
         </SafeAreaView>
     )
@@ -82,9 +78,11 @@ const styles = StyleSheet.create({
     body:{
         flex:2,
         alignItems: 'center',
+        margin:'5%'
     },
     footer:{
-        flex:1
+        flex:1,
+        alignItems: 'center',
     },
      defi: {
             flex: 1,
