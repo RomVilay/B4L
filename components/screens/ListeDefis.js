@@ -8,7 +8,7 @@ import NavApp from "../navigation/NavApp";
 *  <CheckBox
        disabled={false}
        value={item.statut}
-       onPress={onPress}/>  bidule */
+       onPress={onPress}/>   */
 const Item = ({ item, onPress }) => (
   <View style={styles.defi}>
        <Text style={[styles.titreBlanc, { fontSize:70}]}>{item.descriptionDefis}</Text>
