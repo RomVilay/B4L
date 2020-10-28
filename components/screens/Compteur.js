@@ -1,5 +1,15 @@
 import React from 'react'
-import {View, StyleSheet, SafeAreaView, Image, Text, ImageBackground, Button, Animated} from 'react-native'
+import {
+    View,
+    StyleSheet,
+    SafeAreaView,
+    Image,
+    Text,
+    ImageBackground,
+    Button,
+    Animated,
+    TouchableOpacity
+} from 'react-native'
 
 // Imports Assets
 import LogoMin from '../../assets/logoMin'
@@ -128,7 +138,7 @@ export default class Compteur2 extends React.Component {
                             <View style={styles.textbloc}>
                                 <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.watts}</Text>
                                 <Text style={[styles.midText2,{ fontSize: 30}]}>watts </Text>
-                                <Button style={styles.midText2} title={"Pause"} onPress={() => this.toggleStopwatch()} color={"white"}/>
+                                <TouchableOpacity style={styles.midText2} onPress={() => this.toggleStopwatch()} color={"white"}><Text style={[styles.midText,{fontSize:30}]}>Pause</Text></TouchableOpacity>
                             </View>
                             <Text style={[styles.midText,{ fontSize: 70, marginRight:'5%'}]} onPress={() => {this.state.watts += 5}}>+</Text>
                         </View>
