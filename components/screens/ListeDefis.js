@@ -32,9 +32,9 @@ const render_item = ({ item }) =>{
 export default function  ListeDefis(props) {
     const [ListeDefs, setListeDefs]= useState([
         {id:0,descriptionDefis:"faire 200km", statut:false},
-        {id:1,descriptionDefis:"faire 200km", statut:true},
-        {id:2,descriptionDefis:"faire 200km", statut:false},
-        {id:3,descriptionDefis:"faire 200km", statut:false},
+        {id:1,descriptionDefis:"faire 300km", statut:true},
+        {id:2,descriptionDefis:"faire 50km", statut:false},
+        {id:3,descriptionDefis:"faire 100km", statut:false},
         {id:4,descriptionDefis:"faire 200km", statut:false},
         {id:4,descriptionDefis:"faire 200km", statut:false},
         {id:5,descriptionDefis:"faire 200km", statut:false},
@@ -49,7 +49,7 @@ export default function  ListeDefis(props) {
                 source={require('../../assets/fond.png')}
             >
                 <View style={styles.header}>
-                    <LogoMin />
+                    <LogoMin style={{marginBottom:'5%'}}/>
                     <Text style={styles.titreBlanc}>Le <Text style={styles.titreBleu}>défi</Text> pour cette session</Text>
                 </View>
                 <View style={styles.body}>
