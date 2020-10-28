@@ -1,24 +1,25 @@
 import React, {useState} from 'react'
-import {FlatList, Text, View, StyleSheet, Button, ImageBackground, Image} from 'react-native'
+import {FlatList, Text, View, StyleSheet, Button, ImageBackground, Image, TouchableOpacity, SafeAreaView} from 'react-native'
 import CheckBox from '@react-native-community/checkbox'
 import LogoMin from '../../assets/logoMin'
 import NavApp from "../navigation/NavApp";
 
 /*
-*  <CheckBox
-       disabled={false}
-       value={item.statut}
-       onPress={onPress}/>   */
-const Item = ({ item, onPress }) => (
-  <View style={styles.defi}>
+*     */
+const Item = ({ item, onPress, style }) => (
+  <TouchableOpacity onPress={onPress} style={[styles.defi, {style}]}>
        <Text style={[styles.titreBlanc, { fontSize:70}]}>{item.descriptionDefis}</Text>
-   </View>
+      <CheckBox
+          disabled={false}
+          value={item.statut}
+          onPress={onPress}/>
+   </TouchableOpacity>
 );
 
 export default function  ListeDefis(props) {
     const [ListeDefs, setListeDefs]= useState([
         {id:0,descriptionDefis:"faire 200km", statut:false},
-        {id:1,descriptionDefis:"faire 300km", statut:true},
+        {id:1,descriptionDefis:"faire 300km", statut:false},
         {id:2,descriptionDefis:"faire 50km", statut:false},
         {id:3,descriptionDefis:"faire 100km", statut:false},
         {id:4,descriptionDefis:"faire 200km", statut:false},
@@ -26,26 +27,36 @@ export default function  ListeDefis(props) {
         {id:5,descriptionDefis:"faire 200km", statut:false},
         {id:6,descriptionDefis:"faire 200km", statut:false},
         ])
-    const [defisSelect,setDefiSelect] = useState(null)
-    const sel = (item) => {setDefiSelect(defisSelect.push(item))}
+    const [defisSelect,setDefiSelect] = useState([])
+    //const sel = (item) => {setDefiSelect(defisSelect.push(item))}
 
     const render_item = ({ item }) =>{
-        const backgroundColor = item.id === defisSelect ? "RGBA(255,255,255,0.16)" : "transparent"
+        const backgroundColor = item.id === defisSelect ? "green" : "transparent"
         return (
-
             <Item
                 item={item}
                 onPress={() => {
-                    //setDefiSelect(item.id)
-                    console.log(item.descriptionDefis)
+                    item.statut = true
+                    let i = defisSelect
+                    i.push(item)
+                    setDefiSelect(i)
                 }}
                 style={{backgroundColor}}
             />
-
         );
     }
+    const selection = () => {
+        let sel = []
+        for (let i of ListeDefs){
+            if (i.statut == true){
+                sel.push(i)
+            }
+        }
+       // console.log(sel)
+        console.log(defisSelect)
+    }
     return (
-        <View>
+        <SafeAreaView>
             <ImageBackground
                 style={styles.fond}
                 source={require('../../assets/fond.png')}
@@ -62,11 +73,13 @@ export default function  ListeDefis(props) {
                         extraData={defisSelect}/>
                 </View>
                 <View style={styles.footer}>
-                    <Button title={"suivant"} onPress={()=> props.navigation.navigate("Jumelage")} />
+                    <Button title={"suivant"} onPress={()=> {selection()
+                    props.navigation.navigate("Jumelage")
+                    }} color={'white'}/>
                     <NavApp navigation={props.navigation}/>
                 </View>
             </ImageBackground>
-        </View>
+        </SafeAreaView>
     )
 }
 
