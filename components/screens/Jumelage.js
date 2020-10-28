@@ -28,7 +28,7 @@ export default class Jumelage extends React.Component {
         code: qrcode
     }
     onSuccess = e => {
-        this.props.navigation.navigate("Defis")
+        this.props.navigation.navigate("Compteur")
        /* Linking
             .openURL(e.data)
             .catch(err =>
@@ -47,39 +47,37 @@ export default class Jumelage extends React.Component {
      </View>
      <View style={styles.footer}>
      <Text style={[styles.midText]}>Scannez le qrcode pour associer l'appareil.</Text>
-     <Button title={'page suivante'} onPress={()=> {this.props.navigation.navigate("Defis")}} />
+     <Button title={'page suivante'} onPress={()=> {this.props.navigation.navigate("Objectifs")}} />
      <NavApp navigation={this.props.navigation} />
      </View>
+
+     <View style={{position:'absolute'}}><NavApp  navigation={this.props.navigation} /></View>
 
      * **/
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <ImageBackground
-                    style={styles.fond}
-                    source={require('../../assets/fond.png')}
-                >
-                <View style={[styles.container, {width: '100%' }]}>
-
-
+                <ImageBackground source={require('../../assets/fond.png')} style={{flex: 1,
+                    resizeMode: "cover",
+                    justifyContent: "center"}}>
                             <QRCodeScanner
                                     onRead={this.onSuccess.bind(this)}
                                     topContent={  <View style={styles.header}><LogoMin /><Text style={[styles.textTitle, {fontSize:30, marginTop:5}]}>Jumellage</Text>
                                         <Text style={[styles.midText,{marginBottom:20}]}>Commencez à pédaler pour allumer la machine, puis scannez le qrcode.</Text>
                                     </View>
                                         }
-                                    cameraStyle={{ borderWidth:3,
-                                        borderColor:'white'}}
-                                    bottomContent={ <View >
-                                        <Text style={[styles.midText,{borderWidth:3,
-                                            borderColor:'white', marginTop:0}]}>Scannez le qrcode pour associer l'appareil.</Text>
-                                        <View><NavApp  navigation={this.props.navigation} /></View>
-                                    </View>}
-                                    bottomViewStyle={{borderWidth:3,
-                                        borderColor:'white', padding:0, margin:0}}
+                                    topViewStyle={{flex:1}}
+                                    cameraStyle={{
+                                        height:'80%',
+                                        marginTop:'10%'}}
+                                    bottomContent={
+                                        <View>
+                                            <Text style={[styles.midText]}>Scannez le qrcode pour associer l'appareil.</Text>
+                                            <Text>Truc</Text>
+                                        </View>
+                                       }
+                                    bottomViewStyle={{flex:1,alignContent:'stretch',padding:0, margin:0}}
                                 />
-
-                </View>
                     <NavApp navigation={this.props.navigation} />
                 </ImageBackground>
             </SafeAreaView>
@@ -90,7 +88,6 @@ export default class Jumelage extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
         justifyContent: 'center',
         zIndex: 100
     },
@@ -101,7 +98,6 @@ const styles = StyleSheet.create({
          alignItems: 'center',
          justifyContent: 'center',
          zIndex: 100,
-        borderColor:'white',
         marginTop:50
     },
     textTitle: {
@@ -143,8 +139,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         zIndex: 100,
-        borderWidth:3,
-        borderColor:'white'
     },
     centerText: {
         flex: 1,

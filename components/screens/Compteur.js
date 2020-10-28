@@ -1,4 +1,3 @@
-// Imports Modules
 import React from 'react'
 import {View, StyleSheet, SafeAreaView, Image, Text, ImageBackground, Button, Animated} from 'react-native'
 
@@ -9,8 +8,7 @@ import NavApp from '../navigation/NavApp'
 import FlecheG from "../../assets/flecheG";
 import {Stopwatch} from 'react-native-stopwatch-timer'
 
-
-export default class Compteur extends React.Component {
+export default class Compteur2 extends React.Component {
     constructor(props) {
         super(props);
         this.RotateValueHolder = new Animated.Value(0);
@@ -43,7 +41,7 @@ export default class Compteur extends React.Component {
     getFormattedTime(time) {
         this.currentTime = time;
     }
-    
+
 
     componentDidMount() {
         this.StartImageRotateFunction();
@@ -67,86 +65,79 @@ export default class Compteur extends React.Component {
 
     render() {
         const rotation = this.RotateValueHolder.interpolate({
-                inputRange: [ 0, 10],
+            inputRange: [ 0, 10],
             outputRange:this.state.outputRange,
         });
 
         return (
             <SafeAreaView style={styles.container}>
-                <Image
-                    style={styles.fond}
-                    source={require('../../assets/fond.png')}
-                />
-                <View style={[styles.container, { height: '100%', width: '100%' }]}>
-                    <View style={[styles.header, { width: '100%'}]}>
-                        <View style={[styles.item, {margin:0}]}>
-                              <LogoMin></LogoMin>
-                        </View>
-                    </View>
-                    <View style={[styles.middle, { width: '100%' }]}>
-                        <View style={styles.midTop}>
-                            <Stopwatch
+                <ImageBackground source={require('../../assets/fond.png')} style={{flex: 1,
+                    resizeMode: "cover",
+                    justifyContent: "center"}}>
+                    <View style={styles.header} >
+                        <LogoMin></LogoMin>
+                        <Stopwatch
                             start={this.state.start}
                             reset={this.state.reset}
                             options={options}
                             getTime={this.getFormattedTime}
                             msec={true}
-                            />
-                            <Text style={{color: '#5FCDFA', fontSize: 30}}>{this.state.pause}</Text>
-                        </View>
-                        <View style={styles.midMid}>
-                         <ImageBackground source={require('../../assets/compteur.png')} style={{width:'120%',height:'100%',right:'6%'}}>
-                             <Animated.Image source={require('../../assets/aiguille.png')} style={[styles.aiguille, {transform:[{rotate:rotation}]  }]}/>
-                             <Image source={require('../../assets/ellipseFond.png')} style={[styles.aiguille, {position:'absolute', left:'40%', bottom:'28%'}]} />
-                                <View style={[styles.midItem, {zIndex:200,  marginTop:'10%',paddingBottom:'0%' }]}>
-                                    <View style={[styles.textbloc,{width:'20%',borderRadius:50}]}>
-                                        <ImageBackground source={require('../../assets/fondBulle.png')} style={styles.fondBulle}>
-                                            <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.rpm}</Text>
-                                            <Text style={[styles.midText2]}>rpm</Text>
-                                        </ImageBackground>
-                                    </View>
-                                    <View style={[styles.textbloc,{width:'20%',borderRadius:50}]}>
-                                        <ImageBackground source={require('../../assets/fondBulle.png')} style={styles.fondBulle}>
+                        />
+                        <Text style={{color: '#5FCDFA', fontSize: 30}}>{this.state.pause}</Text>
+                    </View>
+                    <View style={styles.middle} >
+                        <ImageBackground source={require('../../assets/compteur.png')} style={styles.aiguille}>
+                            <Animated.Image source={require('../../assets/Aig.png')} style={[{transform:[{rotate:rotation}], position:'absolute',resizeMode:"stretch" , left:'5%', zIndex:0  }]}/>
+                            <View style={styles.midTop}>
+                                <View style={[styles.textbloc,{width:'20%',borderRadius:50, marginLeft:'30%'}]}>
+                                    <ImageBackground source={require('../../assets/fondBulle.png')} style={styles.fondBulle}>
+                                        <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.rpm}</Text>
+                                        <Text style={[styles.midText2]}>rpm</Text>
+                                    </ImageBackground>
+                                </View>
+                                <View style={[styles.textbloc,{width:'20%',borderRadius:50}]}>
+                                    <ImageBackground source={require('../../assets/fondBulle.png')} style={styles.fondBulle}>
                                         <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kcal}</Text>
                                         <Text style={styles.midText2}>kcal</Text>
-                                        </ImageBackground>
+                                    </ImageBackground>
+                                </View>
+                            </View>
+                            <View style={styles.midMid} >
+                                <FlecheG style={styles.flecheG} />
+                                <View style={[styles.textbloc, {margin:10}]}>
+                                    <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kmh}</Text>
+                                    <Text style={styles.midText2}> km/h</Text>
+                                </View>
+                                <FlecheG style={styles.flecheD} />
+                            </View>
+                            <View style={styles.midBot} >
+                                <View style={styles.textbloc}>
+                                    <View style={{flexDirection:'row'}}>
+                                        <Text style={[styles.midText,{ fontSize: 20}]}>{this.state.kmp}</Text>
+                                        <Text style={[styles.midText2,{ fontSize: 20}]}>km parcourus </Text>
+                                    </View>
+                                    <View style={{flexDirection:'row'}}>
+                                        <Text style={[styles.midText,{ fontSize: 20}]}>{this.state.kmc}</Text>
+                                        <Text style={[styles.midText2,{ fontSize: 20}]}>km cumulés</Text>
                                     </View>
                                 </View>
-                             <View style={[styles.midItem, {zIndex:200, padding:'0%',left:'11%'}]}>
-                                 <FlecheG style={styles.flecheG}></FlecheG>
-                                 <View style={[styles.textbloc, {margin:10}]}>
-                                     <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kmh}</Text>
-                                     <Text style={styles.midText2}> km/h</Text>
-                                 </View>
-                                 <FlecheG style={styles.flecheD}></FlecheG>
-                             </View>
-                             <View style={[styles.midItem, {zIndex:200, paddingTop:'0%'}]}>
-                                 <View style={styles.textbloc}>
-                                     <View style={{flexDirection:'row'}}>
-                                         <Text style={[styles.midText,{ fontSize: 20}]}>{this.state.kmp}</Text>
-                                         <Text style={[styles.midText2,{ fontSize: 20}]}>km parcourus </Text>
-                                     </View>
-                                     <View style={{flexDirection:'row'}}>
-                                         <Text style={[styles.midText,{ fontSize: 20}]}>{this.state.kmc}</Text>
-                                         <Text style={[styles.midText2,{ fontSize: 20}]}>km cumulés</Text>
-                                     </View>
-                                 </View>
-                             </View>
-                         </ImageBackground>
+                            </View>
+                        </ImageBackground>
+                        <View style={[{flex:1, flexDirection:"row", marginLeft:'30%'}]}>
+                            <Text style={[styles.midText,{ fontSize: 70, marginRight:'5%'}]}  onPress={() => {this.state.watts -= 5}}>-</Text>
+                            <View style={styles.textbloc}>
+                                <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.watts}</Text>
+                                <Text style={[styles.midText2,{ fontSize: 30}]}>watts </Text>
+                                <Button style={styles.midText2} title={"Pause"} onPress={() => this.toggleStopwatch()} />
+                            </View>
+                            <Text style={[styles.midText,{ fontSize: 70, marginRight:'5%'}]} onPress={() => {this.state.watts += 5}}>+</Text>
                         </View>
-                        <View style={[styles.midBot,{flexDirection:'row'}]}>
 
-                                <Text style={[styles.midText,{ fontSize: 70, marginRight:'5%'}]}  onPress={() => {this.state.watts -= 5}}>-</Text>
-                                <View style={styles.textbloc}>
-                                    <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.watts}</Text>
-                                    <Text style={[styles.midText2,{ fontSize: 30}]}>watts </Text>
-                                    <Button style={styles.midText2} title={"Pause"} onPress={() => this.toggleStopwatch()} />
-                                </View>
-                                <Text style={[styles.midText,{ fontSize: 70, marginRight:'5%'}]} onPress={() => {this.state.watts += 5}}>+</Text>
-                        </View>
                     </View>
-                        <NavApp style={styles.footer} navigation={this.props.navigation}></NavApp>
-                </View>
+                    <View style={styles.footer}>
+                        <NavApp  navigation={this.props.navigation} />
+                    </View>
+                </ImageBackground>
             </SafeAreaView>
         )
     }
@@ -165,27 +156,75 @@ const options = {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
         zIndex: 100
     },
 
     header: {
-        flexDirection: 'row',
-        alignItems: 'flex-start',
-        justifyContent: 'space-around',
-        height:'10%',
+        flex:1,
+        flexDirection: 'column',
+        alignItems: 'center',
         zIndex: 100,
-        paddingBottom:0
-
+        padding:5
     },
     stopwatch:{
-            backgroundColor:'transparent',
-            width:'25%',
-            color: 'white',
-            fontSize: 35,
-            textTransform: 'uppercase'
-        },
+        backgroundColor:'transparent',
+        width:'25%',
+        color: 'white',
+        fontSize: 35,
+        textTransform: 'uppercase'
+    },
+    middle: {
+        flex: 4,
+        flexDirection: 'column',
+        zIndex: 100
+    },
+    aiguille:{
+        flex: 3,
+        resizeMode: "cover",
+        justifyContent: "center",
+        zIndex:0
+    },
+    midTop:{
+        flex:1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        zIndex: 100,
+        paddingBottom:0
+    },
+    fondBulle:{
+        width:'120%',
+        resizeMode: "cover",
+        justifyContent: "center",
+        paddingLeft:20
+    },
+    midMid: {
+        flex:1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        zIndex: 100,
+        paddingLeft: '30%',
+    },
+    flecheG:{
+        transform: [{scale:2}],
+        marginRight:'5%'
+    },
+    flecheD:{
+        transform: [{scale:2}, {rotate:"180deg"}],
+        marginLeft:'5%'
+    },
+    midBot: {
+        flex:1,
+        alignItems: 'center',
+        zIndex: 100
+    },
+    footer: {
+        flexDirection:'row',
+        alignItems:'stretch',
+        flex: 1,
+        width:'100%',
+        zIndex: 100
+    },
+
     item: {
         width: 80,
         height: 80,
@@ -195,46 +234,7 @@ const styles = StyleSheet.create({
         marginBottom:0
     },
 
-    middle: {
-        flex: 4,
-        flexDirection: 'column',
-        alignItems: 'center',
-        zIndex: 100,
 
-    },
-    midTop:{
-        flexDirection: 'column',
-        alignItems: 'center',
-        zIndex: 100,
-
-    },
-    midMid: {
-        height:'60%',
-        width:'100%',
-        flexDirection: 'column',
-        alignItems: 'center',
-        zIndex: 100,
-        overflow:'visible',
-        paddingRight:'8%'
-    },
-
-    midItem: {
-        width:'100%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        zIndex: 100,
-        justifyContent:'center',
-        alignContent:'space-around',
-        left: '12.5%',
-        padding:'8%'
-
-    },
-
-    midBot: {
-        height:'10%',
-        alignItems: 'center',
-        zIndex: 100
-    },
 
     midText: {
         color: 'white',
@@ -246,10 +246,8 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     textbloc:{
-
-      flexDirection:'column',
-      alignItems:'center',
-
+        flexDirection:'column',
+        alignItems:'center',
     },
 
     fond: {
@@ -270,33 +268,6 @@ const styles = StyleSheet.create({
         left:'-20%',
         width:50
     },
-    aiguille:{
-        flex: 1,
-        resizeMode: "cover",
-        justifyContent: "center",
-        zIndex:0,
-        position:'absolute',
-        bottom:'5%',
-        left:'20%'
-    },
-    fondBulle:{
-        width:'120%',
-        resizeMode: "cover",
-        justifyContent: "center",
-        paddingLeft:20
-    },
 
-    footer: {
-        flex: 1,
-        width:'100%',
-        zIndex: 100
-    },
-    flecheG:{
-        transform: [{scale:2}],
-        marginRight:'5%'
-    },
-    flecheD:{
-        transform: [{scale:2}, {rotate:"180deg"}],
-        marginLeft:'5%'
-    }
+
 })
