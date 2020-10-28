@@ -8,26 +8,12 @@ import NavApp from "../navigation/NavApp";
 *  <CheckBox
        disabled={false}
        value={item.statut}
-       onPress={onPress}/> */
+       onPress={onPress}/>  bidule */
 const Item = ({ item, onPress }) => (
   <View style={styles.defi}>
        <Text style={[styles.titreBlanc, { fontSize:70}]}>{item.descriptionDefis}</Text>
    </View>
 );
-
-const render_item = ({ item }) =>{
-    const backgroundColor = (item) => { item.statut ? "RGBA(255,255,255,0.16)" : "transparent"}
-   return (
-
-        <Item
-            item={item}
-            onPress={() => item.statut = !item.statut}
-            style={{backgroundColor}}
-        />
-
-    );
-}
-
 
 export default function  ListeDefis(props) {
     const [ListeDefs, setListeDefs]= useState([
@@ -40,8 +26,24 @@ export default function  ListeDefis(props) {
         {id:5,descriptionDefis:"faire 200km", statut:false},
         {id:6,descriptionDefis:"faire 200km", statut:false},
         ])
-    const [defisSelect,setDefiSelect] = useState([])
+    const [defisSelect,setDefiSelect] = useState(null)
     const sel = (item) => {setDefiSelect(defisSelect.push(item))}
+
+    const render_item = ({ item }) =>{
+        const backgroundColor = item.id === defisSelect ? "RGBA(255,255,255,0.16)" : "transparent"
+        return (
+
+            <Item
+                item={item}
+                onPress={() => {
+                    //setDefiSelect(item.id)
+                    console.log(item.descriptionDefis)
+                }}
+                style={{backgroundColor}}
+            />
+
+        );
+    }
     return (
         <View>
             <ImageBackground
@@ -53,9 +55,14 @@ export default function  ListeDefis(props) {
                     <Text style={styles.titreBlanc}>Le <Text style={styles.titreBleu}>défi</Text> pour cette session</Text>
                 </View>
                 <View style={styles.body}>
-                    <FlatList data={ListeDefs} renderItem={render_item} keyExtractor={(item) => {item.id}} extraData={defisSelect}/>
+                    <FlatList
+                        data={ListeDefs}
+                        renderItem={render_item}
+                        keyExtractor={(item) => {item.id}}
+                        extraData={defisSelect}/>
                 </View>
                 <View style={styles.footer}>
+                    <Button title={"suivant"} onPress={()=> props.navigation.navigate("Jumelage")} />
                     <NavApp navigation={props.navigation}/>
                 </View>
             </ImageBackground>
