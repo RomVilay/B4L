@@ -17,21 +17,6 @@ import Parametres from '../screens/Parametres.js'
 
 import Navigation_reverse from '../../assets/navigation_reverse'
 
-
-                    /*<View style={[styles.logos], { width: '100%' }}>
-                        <View style={styles.item} onPress={() => this.props.navigation.navigate("Accueil")}>
-                            <Image source={require('../../assets/home.png')} />
-                            <Text style={styles.text}>Accueil</Text>
-                        </View>
-                        <View style={styles.item} onPress={() => this.props.navigation.navigate("Parametres")}>
-                            <Image source={require('../../assets/settings.png')} />
-                            <Text style={styles.text}>Paramètres</Text>
-                        </View>
-                       <View style={styles.item}>
-                         <Image source={require('../../assets/i.png')} onPress={() => this.props.navigation.navigate("Statistiques")}/>
-                         <Text style={styles.text}>Statistiques</Text>
-                        </View>
-                    </View>*/
 var screen = Dimensions.get('window');
 export default class NavApp extends React.Component {
 
@@ -43,10 +28,6 @@ export default class NavApp extends React.Component {
               swipeToClose: true
             };
           }
-
-         /* toggleVisibility(){
-            return this.state.isOpen ? visibility:false : visibility:true
-*/
 
     render() {
         var BContent = (
@@ -68,7 +49,7 @@ return (
                               <Navigation_reverse
                                   onPress={() => this.setState({isOpen: false})}
                                   style={{ top: '2%', marginBottom:10}}
-                              ></Navigation_reverse>
+                              />
                               <View style={[styles.logos, { width: '100%' }]}>
                                   <View style={styles.item} >
                                       <TouchableHighlight

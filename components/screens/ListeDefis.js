@@ -36,24 +36,14 @@ export default function  ListeDefis(props) {
             <Item
                 item={item}
                 onPress={() => {
-                    item.statut = true
+                    item.statut = !item.statut
                     let i = defisSelect
-                    i.push(item)
+                    item.statut ? i.push(item) : i.splice(i.indexOf(item),1)
                     setDefiSelect(i)
                 }}
                 style={{backgroundColor}}
             />
         );
-    }
-    const selection = () => {
-        let sel = []
-        for (let i of ListeDefs){
-            if (i.statut == true){
-                sel.push(i)
-            }
-        }
-       // console.log(sel)
-        console.log(defisSelect)
     }
     return (
         <SafeAreaView>
@@ -73,9 +63,7 @@ export default function  ListeDefis(props) {
                         extraData={defisSelect}/>
                 </View>
                 <View style={styles.footer}>
-                    <Button title={"suivant"} onPress={()=> {selection()
-                    props.navigation.navigate("Jumelage")
-                    }} color={'white'}/>
+                    <Button title={"suivant"} onPress={()=> props.navigation.navigate("Jumelage")} color={'white'}/>
                     <NavApp navigation={props.navigation}/>
                 </View>
             </ImageBackground>

@@ -35,25 +35,6 @@ export default class Jumelage extends React.Component {
             console.error('An error occured', err)
         );*/
     }
-    /**
-     * <View style={[styles.header, { width: '100%' }]}>
-     <LogoMin></LogoMin>
-     <Text style={[styles.textTitle, {fontSize:30, marginTop:5}]}>Jumellage</Text>
-     <Text style={styles.midText}>Commencez à pédaler pour allumer la machine, puis scannez le qrcode.</Text>
-     </View>
-     <View style={[styles.middle, { width: '80%' }]}>
-
-
-     </View>
-     <View style={styles.footer}>
-     <Text style={[styles.midText]}>Scannez le qrcode pour associer l'appareil.</Text>
-     <Button title={'page suivante'} onPress={()=> {this.props.navigation.navigate("Objectifs")}} />
-     <NavApp navigation={this.props.navigation} />
-     </View>
-
-     <View style={{position:'absolute'}}><NavApp  navigation={this.props.navigation} /></View>
-
-     * **/
     render() {
         return (
             <SafeAreaView style={styles.container}>

@@ -1,30 +1,29 @@
 import React from 'react'
-import { View, Image, StyleSheet, Text, SafeAreaView, FlatList } from 'react-native'
+import {View, Image, StyleSheet, Text, SafeAreaView, FlatList, TouchableOpacity} from 'react-native'
 
 
 import LogoMin from '../../assets/logoMin'
-import ListeDefis from '../screens/ListeDefis'
 
 import CheckBox from '@react-native-community/checkbox'
 
 //élément de liste
-const Item = ({ item, selected, onPress }) => (
-  <View style={styles.listItem}>
+const Item = ({ item, onPress }) => (
+  <TouchableOpacity style={styles.listItem} onPress={onPress}>
       <CheckBox
-       disabled={false}
-       value={item.statut}
-       onValueChange={selected}/>
+          disabled={false}
+          value={item.statut}
+          onPress={onPress}/>
        <Text style={styles.whiteText}>{item.nom}</Text>
-   </View>
+   </TouchableOpacity>
 );
 
 export default class Objectifs extends React.Component {
-        /* stockage de la liste des défis dans le state */
         state={
             defis:[{id:'0',nom:'m\'amuser / me dépenser',statut: false},
                    {id:'1',nom:'perdre du poids',statut:false},
                    {id:'2',nom:'faire des économies en produisant de l\'énergie',statut:false},
-                   {id:'3',nom:'Réduire mon impact sur l\'environnement',statut:true}]
+                   {id:'3',nom:'Réduire mon impact sur l\'environnement',statut:false}],
+            selection:[]
         }
 
         /* modification du statut du défis en cours d'intégration*/
@@ -32,13 +31,14 @@ export default class Objectifs extends React.Component {
             return(
                     <Item
                         item={item}
-                        selected={()=> console.log(item.nom)}
+                        onPress={() => {
+                            item.statut = !item.statut
+                            let s = this.state.selection
+                            item.statut == true ? s.push(item) : s.splice(this.state.selection.indexOf(item),1)
+                            this.setState({selection:s})
+                        }}
                     />);
                     };
-
-        setSelected = () => {
-            console.log(this)
-        }
         /* fin de la partie en cours d'intégration */
     render() {
         return (
@@ -61,7 +61,6 @@ export default class Objectifs extends React.Component {
                               data={this.state.defis}
                               renderItem={this.render_item}
                               keyExtractor={item => item.id}
-                              extraData={this.state}
                            />
                         </View>
                     </View>
