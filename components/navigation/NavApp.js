@@ -32,7 +32,7 @@ export default class NavApp extends React.Component {
     render() {
         return (
       <View style={styles.wrapper}>
-        <Navigation onPress={() => this.refs.modal.open()} style={styles.btn} />
+        <Navigation onPress={() => {this.refs.modal.open()}} style={[styles.btn,{opacity:this.state.isOpen ? 100 : 0}]} />
         <Modal style={styles.modal} position={"bottom"} ref={"modal"}>
            <View style={styles.container}>
                <Navigation_reverse
@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor:'transparent',
-        color:"white",
         flex:1,
         flexDirection:'row'
     },

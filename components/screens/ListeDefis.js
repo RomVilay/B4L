@@ -19,9 +19,9 @@ export default function  ListeDefis(props) {
         {id:2,descriptionDefis:"faire 50km", statut:false},
         {id:3,descriptionDefis:"faire 100km", statut:false},
         {id:4,descriptionDefis:"faire 200km", statut:false},
-        {id:4,descriptionDefis:"faire 200km", statut:false},
         {id:5,descriptionDefis:"faire 200km", statut:false},
         {id:6,descriptionDefis:"faire 200km", statut:false},
+        {id:7,descriptionDefis:"faire 200km", statut:false},
         ])
     const [defisSelect,setDefiSelect] = useState([])
     const render_item = ({ item }) =>{
@@ -45,7 +45,9 @@ export default function  ListeDefis(props) {
             >
                 <View style={styles.header}>
                     <LogoMin style={{marginBottom:'5%'}}/>
-                    <Text style={styles.titreBlanc}>Le <Text style={styles.titreBleu}>défi</Text> pour cette session</Text>
+                    <Text  style={[styles.titreBleu, {fontSize:90, fontWeight:'normal'}]}>Défi</Text>
+                    <Text style={[styles.titreBlanc,{fontSize:20,position:'absolute',top:'63%', left:'38%'}]}>Le</Text>
+                    <Text style={[styles.titreBlanc, {position:'absolute',top:'93%'}]}>pour cette session</Text>
                 </View>
                 <View style={styles.body}>
                     <FlatList
@@ -56,7 +58,7 @@ export default function  ListeDefis(props) {
                 </View>
                 <View style={styles.footer}>
                     <TouchableOpacity style={{marginBottom:'10%'}} onPress={()=> props.navigation.navigate("Compteur")} color={'white'}>
-                        <Text style={styles.titreBlanc}>appuyez pour continuer</Text>
+                        <Text style={styles.titreBleu}>appuyez pour continuer</Text>
                     </TouchableOpacity>
                     <NavApp  navigation={props.navigation}/>
                 </View>
