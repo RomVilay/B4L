@@ -82,7 +82,7 @@ export default class Connexion extends React.Component {
               color: '#53B4DC',
               textTransform: 'uppercase',
               fontSize: 25,
-              fontFamily: 'DIN Condensed',
+              fontFamily: 'Gnuolane',
               top: '20%',
             }}>
             Créer un compte
