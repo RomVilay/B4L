@@ -55,7 +55,7 @@ export default function  ListeDefis(props) {
                         extraData={defisSelect}/>
                 </View>
                 <View style={styles.footer}>
-                    <TouchableOpacity style={{margin:'auto'}} onPress={()=> props.navigation.navigate("Jumelage")} color={'white'}>
+                    <TouchableOpacity style={{marginBottom:'10%'}} onPress={()=> props.navigation.navigate("Compteur")} color={'white'}>
                         <Text style={styles.titreBlanc}>appuyez pour continuer</Text>
                     </TouchableOpacity>
                     <NavApp  navigation={props.navigation}/>
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
     footer:{
         flex:1,
         alignItems: 'center',
+        justifyContent: 'center'
     },
      defi: {
             flex: 1,

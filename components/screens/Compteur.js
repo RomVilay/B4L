@@ -228,11 +228,9 @@ const styles = StyleSheet.create({
         zIndex: 100
     },
     footer: {
-        flexDirection:'row',
-        alignItems:'stretch',
-        flex: 1,
-        width:'100%',
-        zIndex: 100
+        flex:1,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
 
     item: {
