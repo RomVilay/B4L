@@ -5,7 +5,6 @@ import NavApp from '../navigation/NavApp'
 
 var avatar = require('../../assets/avatar.png')
 var flecheG = require('../../assets/flecheG.png')
-var flecheD = require('../../assets/flecheD.png')
 
 export default class Parametres extends React.Component {
 
@@ -16,8 +15,6 @@ export default class Parametres extends React.Component {
         age:'23',
         taille:'170',
         poids:'70',
-        flecheD:flecheD,
-        flecheG:flecheG,
         partieS:'Tenue',
         parties:['Visage','Coupe','Couleur','Tenue','Accessoire']
         }
@@ -40,9 +37,9 @@ export default class Parametres extends React.Component {
                     </View>
                     <View style={styles.middle}>
                         <View style={styles.midTop}>
-                            <Image source={this.state.flecheG} />
+                            <Image source={flecheG} />
                             <Image source={this.state.avatar} />
-                            <Image source={this.state.flecheD} />
+                            <Image source={flecheG} />
                         </View>
                         <View style={[styles.midMid,  {borderBottomWidth:1,borderColor:'white'}]}>
                             {
