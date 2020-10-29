@@ -24,8 +24,6 @@ export default function  ListeDefis(props) {
         {id:6,descriptionDefis:"faire 200km", statut:false},
         ])
     const [defisSelect,setDefiSelect] = useState([])
-    //const sel = (item) => {setDefiSelect(defisSelect.push(item))}
-
     const render_item = ({ item }) =>{
         return (
             <Item

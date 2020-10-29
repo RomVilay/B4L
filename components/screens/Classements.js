@@ -7,7 +7,7 @@ import LogoMin from '../../assets/logoMin'
 import P1 from '../../assets/p1'
 import P2 from '../../assets/p2'
 import P3 from '../../assets/p3'
-import NavApp from "./NavApp";
+import NavApp from "../navigation/NavApp";
 
 var avatar = require('../../assets/avatar.png')
 var scnd = require('../../assets/scnd.png')

@@ -18,7 +18,7 @@ import NavApp from '../navigation/NavApp'
 import FlecheG from "../../assets/flecheG";
 import {Stopwatch} from 'react-native-stopwatch-timer'
 
-export default class Compteur2 extends React.Component {
+export default class Compteur extends React.Component {
     constructor(props) {
         super(props);
         this.RotateValueHolder = new Animated.Value(0);
