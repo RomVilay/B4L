@@ -7,6 +7,7 @@ import LogoMin from '../../assets/logoMin'
 import P1 from '../../assets/p1'
 import P2 from '../../assets/p2'
 import P3 from '../../assets/p3'
+import NavApp from "./NavApp";
 
 var avatar = require('../../assets/avatar.png')
 var scnd = require('../../assets/scnd.png')
@@ -40,10 +41,6 @@ export default class Classements extends React.Component {
                     </View>
                     <View style={[styles.middle, { width: '100%'}]}>
                         <Text style={styles.inputContainer}>Catégorie</Text>
-                         {/*<View style={styles.midMid}>
-                         <Image source={this.state.avatar} />
-                            <Text >{this.state.name}</Text>
-                        </View>*/}
                         <View style={styles.midMid}>
                             <View style={styles.midItem}>
                                 <Image source={this.state.avatar} />
@@ -96,10 +93,7 @@ export default class Classements extends React.Component {
                              </View>
                         </View>
                     </View>
-                    <Navigation
-                        onPress={() => this.props.navigation.navigate("NavApp")}
-                        style={{ flex:1}}
-                    ></Navigation>
+                    <NavApp navigation={this.props.navigation}/>
                 </View>
             </SafeAreaView>
         )
