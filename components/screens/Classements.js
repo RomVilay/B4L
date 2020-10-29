@@ -181,7 +181,9 @@ const styles = StyleSheet.create({
         textAlign:'center'
                     },
     footer: {
-        flex: 1
+        flex:1,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     fond: {
             position: 'absolute',
