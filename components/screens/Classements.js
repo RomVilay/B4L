@@ -92,8 +92,11 @@ export default class Classements extends React.Component {
                                 <View><Text style={[styles.linesw, {fontSize: 20}]}>voir ses stats</Text></View>
                              </View>
                         </View>
+                        <View style={styles.footer} >
+                            <NavApp  navigation={this.props.navigation} />
+                        </View>
                     </View>
-                    <NavApp navigation={this.props.navigation}/>
+
                 </View>
             </SafeAreaView>
         )
@@ -178,12 +181,7 @@ const styles = StyleSheet.create({
         textAlign:'center'
                     },
     footer: {
-        flex: 2,
-        flexDirection: 'row',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        zIndex: 100,
-        borderWidth: 2
+        flex: 1
     },
     fond: {
             position: 'absolute',

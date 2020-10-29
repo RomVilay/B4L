@@ -58,8 +58,8 @@ export default function  ListeDefis(props) {
                     <TouchableOpacity style={{margin:'auto'}} onPress={()=> props.navigation.navigate("Jumelage")} color={'white'}>
                         <Text style={styles.titreBlanc}>appuyez pour continuer</Text>
                     </TouchableOpacity>
+                    <NavApp  navigation={props.navigation}/>
                 </View>
-                <NavApp style={{Left:'20%'}} navigation={props.navigation}/>
             </ImageBackground>
         </SafeAreaView>
     )

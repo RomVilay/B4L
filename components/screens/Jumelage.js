@@ -53,13 +53,12 @@ export default class Jumelage extends React.Component {
                                         marginTop:'10%'}}
                                     bottomContent={
                                         <View>
-                                            <Text style={[styles.midText]}>Scannez le qrcode pour associer l'appareil.</Text>
-                                            <Text>Truc</Text>
+                                            <Text style={[styles.midText, {marginBottom:'10%'}]}>Scannez le qrcode pour associer l'appareil.</Text>
+                                            <NavApp navigation={this.props.navigation} />
                                         </View>
                                        }
                                     bottomViewStyle={{flex:1,alignContent:'stretch',padding:0, margin:0}}
                                 />
-                    <NavApp navigation={this.props.navigation} />
                 </ImageBackground>
             </SafeAreaView>
         )

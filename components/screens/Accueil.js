@@ -31,7 +31,6 @@ export default class Accueil extends React.Component {
     return (
       <SafeAreaView style={styles.container}>
         <Image style={styles.fond} source={require('../../assets/fond.png')} />
-        <View style={[styles.container, {height: '100%', width: '100%'}]}>
           <View style={[styles.header, {width: '100%'}]}>
             <View style={styles.item}></View>
             <View style={styles.item}>
@@ -85,10 +84,7 @@ export default class Accueil extends React.Component {
               GO
             </Text>
           </View>
-          <View style={{left: -200}}>
-            <NavApp navigation={this.props.navigation} />
-          </View>
-        </View>
+          <NavApp style={{flex:1, justifyContent:'center'}}navigation={this.props.navigation} />
       </SafeAreaView>
     );
   }
@@ -164,7 +160,7 @@ const styles = StyleSheet.create({
   footer: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems:'flex-end',
     justifyContent: 'center',
     zIndex: 100,
     bottom: '20%',

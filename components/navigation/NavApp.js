@@ -23,75 +23,66 @@ export default class NavApp extends React.Component {
         constructor() {
             super();
             this.state = {
-              isOpen: false,
+              isOpen: true,
               isDisabled: false,
               swipeToClose: true
             };
           }
 
     render() {
-        var BContent = (
-              <View style={[styles.btn, styles.btnModal]}>
-                <Button title="X" color="white" onPress={() => this.setState({isOpen: false})}/>
-              </View>
-            );
-return (
+        return (
       <View style={styles.wrapper}>
-
-        <Navigation onPress={() => this.refs.modal4.open()} style={styles.btn}>
-                        </Navigation>
-
-
-
-        <Modal style={[styles.modal, styles.modal4]} position={"bottom"} ref={"modal4"}>
-
-           <View style={[styles.container, { height: '100%', width: '100%' }]}>
-                              <Navigation_reverse
+        <Navigation onPress={() => this.refs.modal.open()} style={styles.btn} />
+        <Modal style={styles.modal} position={"bottom"} ref={"modal"}>
+           <View style={styles.container}>
+               <Navigation_reverse
                                   onPress={() => this.setState({isOpen: false})}
                                   style={{ top: '2%', marginBottom:10}}
-                              />
-                              <View style={[styles.logos, { width: '100%' }]}>
-                                  <View style={styles.item} >
-                                      <TouchableHighlight
-                                      onPress={() => this.props.navigation.navigate("Accueil")}>
-                                          <Image source={require('../../assets/home.png')}/>
-                                      </TouchableHighlight>
-                                      <Text style={styles.text}>Accueil</Text>
-                                  </View>
-                                  <View style={styles.item} >
-                                      <TouchableHighlight
-                                      onPress={() => this.props.navigation.navigate("Parametres")}>
-                                          <Image source={require('../../assets/settings.png')}/>
-                                       </TouchableHighlight>
-                                       <Text style={styles.text}>Paramètres</Text>
-                                  </View>
-                                  <View style={styles.item}>
-                                  <TouchableHighlight
-                                  onPress={() => this.props.navigation.navigate("Termes")}>
-                                      <Image source={require('../../assets/i.png')}/>
-                                   </TouchableHighlight>
-                                      <Text style={styles.text}>Termes</Text>
-                                  </View>
-                               </View>
-                          </View>
+                />
+               <View style={[styles.logos, { width: '100%' }]}>
+                  <View style={styles.item} >
+                        <TouchableHighlight
+                               onPress={() => this.props.navigation.navigate("Accueil")}>
+                                   <Image source={require('../../assets/home.png')}/>
+                        </TouchableHighlight>
+                  </View>
+                  <View style={styles.item} >
+                      <TouchableHighlight
+                       onPress={() => this.props.navigation.navigate("Parametres")}>
+                          <Image source={require('../../assets/settings.png')}/>
+                      </TouchableHighlight>
+                  </View>
+                  <View style={styles.item}>
+                      <TouchableHighlight
+                          onPress={() => this.props.navigation.navigate("Termes")}>
+                          <Image source={require('../../assets/i.png')}/>
+                      </TouchableHighlight>
+                  </View>
+               </View>
+         </View>
         </Modal>
-        <Modal isOpen={this.state.isOpen}
-         onClosed={() => this.setState({isOpen: false})}
-        style={[styles.modal, styles.modal4]}
-        position={"top"}
-        backdropPressToClose={false}
-        backdropContent={BContent}
-        touchableOpacity={this.state.isOpen}
-        >
-
-        </Modal>
-
       </View>
     );
     }
 }
 
 const styles = StyleSheet.create({
+    wrapper: {
+        flex:1,
+        position:'absolute',
+        bottom:0,
+        height:'18%',
+        width:500,
+        zIndex:500
+    },
+    modal: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor:'transparent',
+        color:"white",
+        flex:1,
+        flexDirection:'row'
+    },
     container: {
         flex: 1,
         alignItems: 'center',
@@ -103,11 +94,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-start',
         justifyContent: 'space-around',
+        marginBottom:'5%',
         zIndex: 100
     },
 
     item: {
-        top: '10%',
         width: 80,
         height: 50,
         zIndex: 100,
@@ -127,32 +118,11 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
         justifyContent: 'center'
     },
-    wrapper: {
-        flex:1,
-        position:'absolute',
-        bottom:0,
-        height:'18%',
-        width:500,
-        zIndex:500
-      },
-
-      modal: {
-        justifyContent: 'center',
-        alignItems: 'center'
-      },
-
-      modal4: {
-        backgroundColor:'transparent',
-        color:"white",
-        flex:1,
-        flexDirection:'row'
-      },
-
       btn: {
         color: "white",
         position:'absolute',
         bottom:10,
-        left:'10%'
+        left:'20%'
       },
 
       btnModal: {
