@@ -58,9 +58,9 @@ export default class Connexion extends React.Component {
               backgroundColor="transparent"
               style={{
                 color: '#5FCDFA',
-                textTransform: 'uppercase',
-                fontSize: 25,
-                fontFamily: 'GeosansLight',
+                fontSize: 50,
+                textTransform:'uppercase',
+                fontFamily: 'TallFilms',
                 top: '5%',
               }}>
               Connexion {process.env.BASE_URL}

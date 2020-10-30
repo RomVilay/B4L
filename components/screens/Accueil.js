@@ -50,10 +50,10 @@ export default class Accueil extends React.Component {
             <View style={styles.midMid}>
               <View style={[styles.midItem]}>
                 <Text
-                  style={[styles.midText, {fontSize: 30, color: '#5FCDFA'}]}>
+                  style={styles.chiffres}>
                   {this.state.kcal}
                 </Text>
-                <Text style={[styles.midText]}>kcal cumulées</Text>
+                <Text style={[styles.midText]}>kcal <Text style={{color: '#5FCDFA'}}>cumulées</Text></Text>
               </View>
               <View style={styles.midItem}>
                 <TouchableHighlight
@@ -63,17 +63,17 @@ export default class Accueil extends React.Component {
               </View>
               <View style={[styles.midItem]}>
                 <Text
-                  style={[styles.midText, {fontSize: 30, color: '#5FCDFA'}]}>
+                  style={styles.chiffres}>
                   {this.state.km}
                 </Text>
-                <Text style={[styles.midText]}>km cumulés</Text>
+                <Text style={[styles.midText]}>km <Text style={{color: '#5FCDFA'}}>cumulés</Text></Text>
               </View>
             </View>
             <View style={styles.midBot}>
-              <Text style={[styles.midText, {fontSize: 30, color: '#5FCDFA'}]}>
+              <Text style={styles.chiffres}>
                 {this.state.watts}
               </Text>
-              <Text style={[styles.midText]}>wh produits</Text>
+              <Text style={[styles.midText]}>wh <Text style={{color: '#5FCDFA'}}>produits</Text></Text>
             </View>
           </View>
           <View style={styles.footer}>
@@ -144,7 +144,13 @@ const styles = StyleSheet.create({
 
   midText: {
     color: 'white',
-    fontSize: 12,
+    fontSize: 30,
+    textTransform: 'uppercase',
+    fontFamily:'TallFilms'
+  },
+  chiffres:{
+    color: 'white',
+    fontSize: 30,
     textTransform: 'uppercase',
     fontFamily:'GnuolaneRG-Regular'
   },

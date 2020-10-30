@@ -87,8 +87,8 @@ export default class Inscription extends React.Component {
               style={{
                 color: '#53B4DC',
                 textTransform: 'uppercase',
-                fontSize: 25,
-                fontFamily: 'DIN Condensed',
+                fontSize: 50,
+                fontFamily: 'TallFilms',
                 top: '3%',
               }}>
               Inscription
@@ -99,7 +99,7 @@ export default class Inscription extends React.Component {
                 color: 'white',
                 textTransform: 'uppercase',
                 fontSize: 15,
-                fontFamily: 'DIN Condensed',
+                fontFamily: 'GnuolaneRG-Regular',
                 top: '18%',
               }}>
               Vous avez déjà un compte ?
@@ -122,7 +122,7 @@ export default class Inscription extends React.Component {
                 color: '#53B4DC',
                 textTransform: 'uppercase',
                 fontSize: 15,
-                fontFamily: 'DIN Condensed',
+                fontFamily: 'GnuolaneRG-Regular',
                 top: '25%',
                 margin: '5%',
               }}>
@@ -134,7 +134,7 @@ export default class Inscription extends React.Component {
                   color: '#FFFFFF',
                   textTransform: 'uppercase',
                   fontSize: 15,
-                  fontFamily: 'DIN Condensed',
+                  fontFamily: 'GnuolaneRG-Regular',
                   top: '20%',
                 }}>
                 {' '}

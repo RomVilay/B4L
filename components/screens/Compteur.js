@@ -93,7 +93,7 @@ export default class Compteur extends React.Component {
                             getTime={this.getFormattedTime}
                             msec={true}
                         />
-                        <Text style={{color: '#5FCDFA', fontSize: 30}}>{this.state.pause}</Text>
+                        <Text style={{color: '#5FCDFA', fontSize: 30, fontFamily:"TallFilms"}}>{this.state.pause}</Text>
                     </View>
                     <View style={styles.middle} >
                         <ImageBackground source={require('../../assets/compteur.png')} style={styles.aiguille}>
@@ -123,12 +123,12 @@ export default class Compteur extends React.Component {
                             <View style={styles.midBot} >
                                 <View style={styles.textbloc}>
                                     <View style={{flexDirection:'row'}}>
-                                        <Text style={[styles.midText,{ fontSize: 20}]}>{this.state.kmp}</Text>
-                                        <Text style={[styles.midText2,{ fontSize: 20}]}>km parcourus </Text>
+                                        <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kmp}</Text>
+                                        <Text style={[styles.midText2,{ color:'white',marginLeft:'2%'}]}>km <Text style={{color:"#5FCDFA"}}>parcourus </Text></Text>
                                     </View>
                                     <View style={{flexDirection:'row'}}>
-                                        <Text style={[styles.midText,{ fontSize: 20}]}>{this.state.kmc}</Text>
-                                        <Text style={[styles.midText2,{ fontSize: 20}]}>km cumulés</Text>
+                                        <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kmc}</Text>
+                                        <Text style={[styles.midText2,{  color:'white', marginLeft:'2%'}]}>km <Text style={{color:"#5FCDFA"}}> cumulés</Text></Text>
                                     </View>
                                 </View>
                             </View>
@@ -137,7 +137,7 @@ export default class Compteur extends React.Component {
                             <Text style={[styles.midText,{ fontSize: 70, marginRight:'5%'}]}  onPress={() => {this.state.watts -= 5}}>-</Text>
                             <View style={styles.textbloc}>
                                 <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.watts}</Text>
-                                <Text style={[styles.midText2,{ fontSize: 30}]}>watts </Text>
+                                <Text style={[styles.midText2]}>watts </Text>
                                 <TouchableOpacity style={styles.midText2} onPress={() => this.toggleStopwatch()} color={"white"}><Text style={[styles.midText,{fontSize:30}]}>Pause</Text></TouchableOpacity>
                             </View>
                             <Text style={[styles.midText,{ fontSize: 70, marginRight:'5%'}]} onPress={() => {this.state.watts += 5}}>+</Text>
@@ -253,8 +253,9 @@ const styles = StyleSheet.create({
     },
     midText2:{
         color: '#5FCDFA',
-        fontSize: 20,
-        fontFamily: 'GnuolaneRG-Regular'
+        fontSize: 30,
+        textTransform:'uppercase',
+        fontFamily: 'TallFilms'
     },
     textbloc:{
         flexDirection:'column',
