@@ -8,6 +8,9 @@ import {
   SafeAreaView,
 } from 'react-native';
 
+import {login} from '../../functions/login';
+// import {APP_TOKEN} from 'react-native-dotenv';
+// Bonjour 30/10/2020
 import LogoMed from '../../assets/logoMed';
 
 export default class Connexion extends React.Component {
@@ -61,7 +64,7 @@ export default class Connexion extends React.Component {
                 fontFamily: 'DIN Condensed',
                 top: '5%',
               }}>
-              Connexion
+              Connexion {process.env.BASE_URL}
             </Text>
           </View>
           <Text
