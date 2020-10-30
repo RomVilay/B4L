@@ -114,23 +114,23 @@ const styles = StyleSheet.create({
          color: "#5FCDFA",
          textTransform: 'uppercase',
          fontSize: 25,
-         fontFamily: 'DIN Condensed',
+         fontFamily:'GnuolaneRG-Regular'
      },
      whiteTitle : {
          color: "white",
          textTransform: 'uppercase',
          fontSize: 25,
-         fontFamily: 'DIN Condensed',
+         fontFamily:'GnuolaneRG-Regular'
      },
      linesb : {
          color: "#5FCDFA",
          fontSize: 17,
-         fontFamily: 'DIN Condensed',
+         fontFamily:'GnuolaneRG-Regular'
      },
      linesw : {
          color: "white",
          fontSize: 17,
-         fontFamily: 'DIN Condensed',
+         fontFamily:'GnuolaneRG-Regular'
      },
      middle: {
          flex: 3,

@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 12,
     textTransform: 'uppercase',
+    fontFamily:'GnuolaneRG-Regular'
   },
 
   fond: {

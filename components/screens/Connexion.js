@@ -60,7 +60,7 @@ export default class Connexion extends React.Component {
                 color: '#5FCDFA',
                 textTransform: 'uppercase',
                 fontSize: 25,
-                fontFamily: 'DIN Condensed',
+                fontFamily: 'GeosansLight',
                 top: '5%',
               }}>
               Connexion {process.env.BASE_URL}
@@ -72,7 +72,7 @@ export default class Connexion extends React.Component {
               color: 'white',
               textTransform: 'uppercase',
               fontSize: 15,
-              fontFamily: 'DIN Condensed',
+              fontFamily: 'GnuolaneRG-Regular',
               top: '20%',
             }}>
             Pas encore inscrit ?
@@ -84,7 +84,7 @@ export default class Connexion extends React.Component {
               color: '#53B4DC',
               textTransform: 'uppercase',
               fontSize: 25,
-              fontFamily: 'DIN Condensed',
+              fontFamily: 'GnuolaneRG-Regular',
               top: '20%',
             }}>
             Créer un compte
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     textAlign: 'center',
     alignSelf: 'center',
+      fontFamily:'GnuolaneRG-Regular'
   },
 
   inputContainer: {

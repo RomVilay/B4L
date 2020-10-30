@@ -19,7 +19,13 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* BikeForLifeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BikeForLifeTests.m */; };
 		6A528F2810CF411D40E96AF1 /* libPods-BikeForLifeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB47DFC8E1EE78963987BDA0 /* libPods-BikeForLifeTests.a */; };
-		8DA3C66F254B1C70002FF9C1 /* YanoneKaffeesatz-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8DA3C66E254B1C13002FF9C1 /* YanoneKaffeesatz-Light.otf */; };
+		8D3103D4254C4BD50022BFD7 /* Gnuolane.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8D3102A1254C20020022BFD7 /* Gnuolane.ttf */; };
+		8D3103D9254C4BD80022BFD7 /* GeosansLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8D31029F254C20020022BFD7 /* GeosansLight.ttf */; };
+		8D3103DE254C4BDB0022BFD7 /* GeosansLight-Oblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8D31029D254C20020022BFD7 /* GeosansLight-Oblique.ttf */; };
+		8D3103F4254C57090022BFD7 /* YanoneKaffeesatz-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8D3103F0254C57090022BFD7 /* YanoneKaffeesatz-Light.ttf */; };
+		8D3103F5254C57090022BFD7 /* YanoneKaffeesatz-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8D3103F1254C57090022BFD7 /* YanoneKaffeesatz-Thin.ttf */; };
+		8D310402254C58EB0022BFD7 /* TallFilmsFine.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8D310400254C58EB0022BFD7 /* TallFilmsFine.ttf */; };
+		8D310403254C58EB0022BFD7 /* TallFilms.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8D310401254C58EB0022BFD7 /* TallFilms.ttf */; };
 		B35B4CED395DD05E484E6846 /* libPods-BikeForLife.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0770D3B590EE4C1965E03F4C /* libPods-BikeForLife.a */; };
 /* End PBXBuildFile section */
 
@@ -67,7 +73,13 @@
 		5BAB6BA32EA44D33BAE70DDD /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		6BB832AADECCD20A81976467 /* Pods-BikeForLife-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BikeForLife-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-BikeForLife-tvOSTests/Pods-BikeForLife-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		81A940E529D24DE699038B49 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
-		8DA3C66E254B1C13002FF9C1 /* YanoneKaffeesatz-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "YanoneKaffeesatz-Light.otf"; path = "../assets/Font/YanoneKaffeesatz-Light.otf"; sourceTree = "<group>"; };
+		8D31029D254C20020022BFD7 /* GeosansLight-Oblique.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GeosansLight-Oblique.ttf"; path = "../assets/fonts/GeosansLight-Oblique.ttf"; sourceTree = "<group>"; };
+		8D31029F254C20020022BFD7 /* GeosansLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = GeosansLight.ttf; path = ../assets/fonts/GeosansLight.ttf; sourceTree = "<group>"; };
+		8D3102A1254C20020022BFD7 /* Gnuolane.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Gnuolane.ttf; path = ../assets/fonts/Gnuolane.ttf; sourceTree = "<group>"; };
+		8D3103F0254C57090022BFD7 /* YanoneKaffeesatz-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "YanoneKaffeesatz-Light.ttf"; path = "../assets/fonts/YanoneKaffeesatz-Light.ttf"; sourceTree = "<group>"; };
+		8D3103F1254C57090022BFD7 /* YanoneKaffeesatz-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "YanoneKaffeesatz-Thin.ttf"; path = "../assets/fonts/YanoneKaffeesatz-Thin.ttf"; sourceTree = "<group>"; };
+		8D310400254C58EB0022BFD7 /* TallFilmsFine.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = TallFilmsFine.ttf; path = ../assets/fonts/TallFilmsFine.ttf; sourceTree = "<group>"; };
+		8D310401254C58EB0022BFD7 /* TallFilms.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = TallFilms.ttf; path = ../assets/fonts/TallFilms.ttf; sourceTree = "<group>"; };
 		ACA6AEF67770F6C1C546EEB0 /* Pods-BikeForLife.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BikeForLife.release.xcconfig"; path = "Target Support Files/Pods-BikeForLife/Pods-BikeForLife.release.xcconfig"; sourceTree = "<group>"; };
 		B37FDF597EC32E727054D68F /* libPods-BikeForLife-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BikeForLife-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B51CAA0B27197CAA278AFBF0 /* Pods-BikeForLife-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BikeForLife-tvOS.release.xcconfig"; path = "Target Support Files/Pods-BikeForLife-tvOS/Pods-BikeForLife-tvOS.release.xcconfig"; sourceTree = "<group>"; };
@@ -219,7 +231,13 @@
 		AC3D255BFC0F43B88E38BC08 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8DA3C66E254B1C13002FF9C1 /* YanoneKaffeesatz-Light.otf */,
+				8D310400254C58EB0022BFD7 /* TallFilmsFine.ttf */,
+				8D310401254C58EB0022BFD7 /* TallFilms.ttf */,
+				8D3103F0254C57090022BFD7 /* YanoneKaffeesatz-Light.ttf */,
+				8D3103F1254C57090022BFD7 /* YanoneKaffeesatz-Thin.ttf */,
+				8D31029D254C20020022BFD7 /* GeosansLight-Oblique.ttf */,
+				8D31029F254C20020022BFD7 /* GeosansLight.ttf */,
+				8D3102A1254C20020022BFD7 /* Gnuolane.ttf */,
 				CFA8B3C146844113A36EF0D2 /* AntDesign.ttf */,
 				25D64F70866144D5A6CB4496 /* Entypo.ttf */,
 				C274D52410684E7FBD7627BE /* EvilIcons.ttf */,
@@ -385,8 +403,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8DA3C66F254B1C70002FF9C1 /* YanoneKaffeesatz-Light.otf in Resources */,
+				8D3103F5254C57090022BFD7 /* YanoneKaffeesatz-Thin.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				8D3103F4254C57090022BFD7 /* YanoneKaffeesatz-Light.ttf in Resources */,
+				8D3103DE254C4BDB0022BFD7 /* GeosansLight-Oblique.ttf in Resources */,
+				8D310403254C58EB0022BFD7 /* TallFilms.ttf in Resources */,
+				8D3103D9254C4BD80022BFD7 /* GeosansLight.ttf in Resources */,
+				8D310402254C58EB0022BFD7 /* TallFilmsFine.ttf in Resources */,
+				8D3103D4254C4BD50022BFD7 /* Gnuolane.ttf in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

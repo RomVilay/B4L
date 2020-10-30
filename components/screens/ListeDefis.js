@@ -99,13 +99,13 @@ const styles = StyleSheet.create({
             color: "white",
             textTransform: 'uppercase',
             fontSize: 25,
-            fontFamily: 'DIN Condensed',
+         fontFamily: 'GnuolaneRG-Regular'
         },
     titreBleu : {
         color: "#56ADCE",
         textTransform: 'uppercase',
         fontSize: 25,
-        fontFamily: 'DIN Condensed',
+        fontFamily: 'GnuolaneRG-Regular'
     },
     fond: {
          width: '100%',

@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
         color: "#5FCDFA",
         textTransform: 'uppercase',
         fontSize: 25,
-        fontFamily: 'DIN Condensed',
+        fontFamily: 'GnuolaneRG-Regular',
         top: '10%'
     },
 
@@ -124,8 +124,7 @@ const styles = StyleSheet.create({
         textAlign: 'justify',
         color: '#FF0000',
         fontSize: 15,
-        color: '#FFFFFF',
-        fontFamily: 'DIN Condensed'
+        fontFamily: 'GnuolaneRG-Regular'
     },
 
     fond: {

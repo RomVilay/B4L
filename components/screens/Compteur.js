@@ -159,7 +159,8 @@ const options = {
     },
     text: {
         fontSize: 30,
-        color: 'white'
+        color: 'white',
+        fontFamily: 'GnuolaneRG-Regular'
     }
 }
 
@@ -247,11 +248,13 @@ const styles = StyleSheet.create({
     midText: {
         color: 'white',
         fontSize: 12,
-        textTransform: 'uppercase'
+        textTransform: 'uppercase',
+        fontFamily: 'GnuolaneRG-Regular'
     },
     midText2:{
         color: '#5FCDFA',
-        fontSize: 20
+        fontSize: 20,
+        fontFamily: 'GnuolaneRG-Regular'
     },
     textbloc:{
         flexDirection:'column',
