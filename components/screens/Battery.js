@@ -73,7 +73,8 @@ const styles = StyleSheet.create({
 		width: 60,
 		fontSize: 20,
 		textAlign: 'center',
-		alignSelf: 'center'
+		alignSelf: 'center',
+		fontFamily: 'GnuolaneRG-Regular'
 	},
 	battery2: {
     		backgroundColor: '#5FCDFA',

@@ -43,7 +43,7 @@ export default class Accueil extends React.Component {
           </View>
           <View style={[styles.middle, {width: '100%'}]}>
             <View style={styles.midTop}>
-              <Text style={[styles.midText, {fontSize: 50}]}>
+              <Text style={styles.nom}>
                 {this.state.name}
               </Text>
             </View>
@@ -141,7 +141,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 100,
   },
-
+nom:{
+    color:"white",
+  fontSize:50,
+  fontFamily:'GnuolaneRG-Regular'
+},
   midText: {
     color: 'white',
     fontSize: 30,

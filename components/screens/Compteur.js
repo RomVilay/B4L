@@ -96,8 +96,8 @@ export default class Compteur extends React.Component {
                         <Text style={{color: '#5FCDFA', fontSize: 30, fontFamily:"TallFilms"}}>{this.state.pause}</Text>
                     </View>
                     <View style={styles.middle} >
-                        <ImageBackground source={require('../../assets/compteur.png')} style={styles.aiguille}>
-                            <Animated.Image source={require('../../assets/Aig.png')} style={[{transform:[{rotate:rotation}], position:'absolute',resizeMode:"stretch" , left:'5%', zIndex:0  }]}/>
+                        <ImageBackground source={require('../../assets/compteur.png')} style={styles.compteur}>
+                            <Animated.Image source={require('../../assets/aig.png')} style={[{transform:[{rotate:rotation}], position:'absolute',resizeMode:"stretch" , marginLeft:'15.5%',top:'6.5%',alignContent:'center', zIndex:0  }]}/>
                             <View style={styles.midTop}>
                                 <View style={[styles.textbloc,{width:'20%',borderRadius:50, marginLeft:'30%'}]}>
                                     <ImageBackground source={require('../../assets/fondBulle.png')} style={styles.fondBulle}>
@@ -189,18 +189,22 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         zIndex: 100
     },
-    aiguille:{
+    compteur:{
         flex: 3,
+        width:'110%',
+        height:'110%',
+        right: '10%',
         resizeMode: "cover",
         justifyContent: "center",
-        zIndex:0
+        zIndex:0,
     },
     midTop:{
         flex:1,
         flexDirection: 'row',
         alignItems: 'center',
         zIndex: 100,
-        paddingBottom:0
+        paddingBottom:0,
+        marginLeft:'10%'
     },
     fondBulle:{
         width:'120%',
@@ -214,6 +218,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         zIndex: 100,
         paddingLeft: '30%',
+        marginLeft:'12%'
     },
     flecheG:{
         transform: [{scale:2}],
@@ -226,7 +231,8 @@ const styles = StyleSheet.create({
     midBot: {
         flex:1,
         alignItems: 'center',
-        zIndex: 100
+        zIndex: 100,
+        marginLeft:'12%'
     },
     footer: {
         flex:1,

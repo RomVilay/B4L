@@ -162,6 +162,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     textAlign: 'center',
     alignSelf: 'center',
+    fontFamily:'GnuolaneRG-Regular'
   },
 
   inputContainer: {
