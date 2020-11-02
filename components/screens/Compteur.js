@@ -37,9 +37,10 @@ export default class Compteur extends React.Component {
             endPosition:2,
             outputRange:['0deg','10deg']
         }
+        this.tab = [{type:'rpm',value:this.state.rpm},{type:'kcal',value:this.state.kcal},{type:'km/h',value:this.state.kmh}]
         this.toggleStopwatch = this.toggleStopwatch.bind(this);
         this.resetStopwatch = this.resetStopwatch.bind(this);
-
+        this.valueSlider = this.valueSlider.bind(this)
     }
     toggleStopwatch() {
         this.setState({start: !this.state.start, reset: false});
@@ -51,7 +52,13 @@ export default class Compteur extends React.Component {
     getFormattedTime(time) {
         this.currentTime = time;
     }
-
+    valueSlider(forward){
+        if (forward == true){
+            this.tab = [this.tab[2],this.tab[0],this.tab[1]]
+        }else {
+            this.tab = [this.tab[1],this.tab[2],this.tab[0]]
+        }
+    }
 
     componentDidMount() {
         this.StartImageRotateFunction();
@@ -101,24 +108,24 @@ export default class Compteur extends React.Component {
                             <View style={styles.midTop}>
                                 <View style={[styles.textbloc,{width:'20%',borderRadius:50, marginLeft:'30%'}]}>
                                     <ImageBackground source={require('../../assets/fondBulle.png')} style={styles.fondBulle}>
-                                        <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.rpm}</Text>
-                                        <Text style={[styles.midText2]}>rpm</Text>
+                                        <Text style={[styles.midText,{ fontSize: 30}]}>{this.tab[0].value}</Text>
+                                        <Text style={[styles.midText2]}>{this.tab[0].type}</Text>
                                     </ImageBackground>
                                 </View>
                                 <View style={[styles.textbloc,{width:'20%',borderRadius:50}]}>
                                     <ImageBackground source={require('../../assets/fondBulle.png')} style={styles.fondBulle}>
-                                        <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kcal}</Text>
-                                        <Text style={styles.midText2}>kcal</Text>
+                                        <Text style={[styles.midText,{ fontSize: 30}]}>{this.tab[1].value}</Text>
+                                        <Text style={styles.midText2}>{this.tab[1].type}</Text>
                                     </ImageBackground>
                                 </View>
                             </View>
                             <View style={styles.midMid} >
-                                <FlecheG style={styles.flecheG} />
+                                <TouchableOpacity onPress={() => this.valueSlider(false)} ><FlecheG style={styles.flecheG} /></TouchableOpacity>
                                 <View style={[styles.textbloc, {margin:10}]}>
-                                    <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kmh}</Text>
-                                    <Text style={styles.midText2}> km/h</Text>
+                                    <Text style={[styles.midText,{ fontSize: 30}]}>{this.tab[2].value}</Text>
+                                    <Text style={styles.midText2}>{this.tab[2].type}</Text>
                                 </View>
-                                <FlecheG style={styles.flecheD} />
+                                <TouchableOpacity onPress={() => this.valueSlider(true)} ><FlecheG style={styles.flecheD} /></TouchableOpacity>
                             </View>
                             <View style={styles.midBot} >
                                 <View style={styles.textbloc}>
