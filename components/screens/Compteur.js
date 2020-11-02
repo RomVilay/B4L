@@ -22,6 +22,9 @@ export default class Compteur extends React.Component {
     constructor(props) {
         super(props);
         this.RotateValueHolder = new Animated.Value(0);
+        this.rpm = new Animated.ValueXY({x:0,y:0});
+        this.kcal = new Animated.ValueXY({x:0,y:0});
+        this.kmh = new Animated.ValueXY({x:0,y:0});
         this.state = {
             kmp: 16.3,
             kmh: 20,
@@ -79,13 +82,83 @@ export default class Compteur extends React.Component {
             duration: 3000
         }).start(() => this.StartImageRotateFunction());
     }
-
+    StartTranslateFunction= () =>{
+        if (this.tab[0] === 'rpm')``
+        {
+            Animated.parallel([
+                Animated.timing(this.rpm, {
+                    toValue: {x:36,y:107},
+                    duration:1000
+                }),
+                Animated.timing(this.kcal, {
+                    toValue: {x:-70,y:0},
+                    duration:1000
+                }),
+                Animated.timing(this.kmh, {
+                    toValue: {x:40,y:-100},
+                    duration:1000
+                })
+            ]).start()
+        }
+        if (this.tab[0] == 'kcals')
+        {
+            Animated.parallel([
+                Animated.timing(this.kcal, {
+                    toValue: {x:36,y:107},
+                    duration:1000
+                }),
+                Animated.timing(this.kmh, {
+                    toValue: {x:-70,y:0},
+                    duration:1000
+                }),
+                Animated.timing(this.rpm, {
+                    toValue: {x:40,y:-100},
+                    duration:1000
+                })
+            ]).start()
+        }
+        if (this.tab[0] == 'kmh')
+        {
+            Animated.parallel([
+                Animated.timing(this.kmh, {
+                    toValue: {x:36,y:107},
+                    duration:1000
+                }),
+                Animated.timing(this.rpm, {
+                    toValue: {x:-70,y:0},
+                    duration:1000
+                }),
+                Animated.timing(this.kcal, {
+                    toValue: {x:40,y:-100},
+                    duration:1000
+                })
+            ]).start()
+        }
+    }
+    ReverseSlider = () => {
+        Animated.parallel([
+            Animated.timing(this.kmh, {
+                toValue: {x:-36,y:-107},
+                duration:1000
+            }),
+            Animated.timing(this.rpm, {
+                toValue: {x:70,y:0},
+                duration:1000
+            }),
+            Animated.timing(this.kcal, {
+                toValue: {x:-40,y:100},
+                duration:1000
+            })
+        ]).start()
+    }
     render() {
         const rotation = this.RotateValueHolder.interpolate({
             inputRange: [ 0, 10],
             outputRange:this.state.outputRange,
         });
-
+        const trans0 = this.rpm
+        const trans1 = this.kcal
+        const trans2 = this.kmh
         return (
             <SafeAreaView style={styles.container}>
                 <ImageBackground source={require('../../assets/fond.png')} style={{flex: 1,
@@ -106,26 +179,26 @@ export default class Compteur extends React.Component {
                         <ImageBackground source={require('../../assets/compteur.png')} style={styles.compteur}>
                             <Animated.Image source={require('../../assets/aig.png')} style={[{transform:[{rotate:rotation}], position:'absolute',resizeMode:"stretch" , marginLeft:'15.5%',top:'6.5%',alignContent:'center', zIndex:0  }]}/>
                             <View style={styles.midTop}>
-                                <View style={[styles.textbloc,{width:'20%',borderRadius:50, marginLeft:'30%'}]}>
+                                <Animated.View style={[styles.textbloc,{width:'20%',borderRadius:50, marginLeft:'30%'},trans0.getLayout()]}>
                                     <ImageBackground source={require('../../assets/fondBulle.png')} style={styles.fondBulle}>
-                                        <Text style={[styles.midText,{ fontSize: 30}]}>{this.tab[0].value}</Text>
-                                        <Text style={[styles.midText2]}>{this.tab[0].type}</Text>
+                                        <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.rpm}</Text>
+                                        <Text style={[styles.midText2]}>rpm</Text>
                                     </ImageBackground>
-                                </View>
-                                <View style={[styles.textbloc,{width:'20%',borderRadius:50}]}>
+                                </Animated.View>
+                                <Animated.View style={[styles.textbloc,{width:'20%',borderRadius:50}, trans1.getLayout()]}>
                                     <ImageBackground source={require('../../assets/fondBulle.png')} style={styles.fondBulle}>
-                                        <Text style={[styles.midText,{ fontSize: 30}]}>{this.tab[1].value}</Text>
-                                        <Text style={styles.midText2}>{this.tab[1].type}</Text>
+                                        <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kcal}</Text>
+                                        <Text style={styles.midText2}>kcals</Text>
                                     </ImageBackground>
-                                </View>
+                                </Animated.View>
                             </View>
                             <View style={styles.midMid} >
-                                <TouchableOpacity onPress={() => this.valueSlider(false)} ><FlecheG style={styles.flecheG} /></TouchableOpacity>
-                                <View style={[styles.textbloc, {margin:10}]}>
-                                    <Text style={[styles.midText,{ fontSize: 30}]}>{this.tab[2].value}</Text>
-                                    <Text style={styles.midText2}>{this.tab[2].type}</Text>
-                                </View>
-                                <TouchableOpacity onPress={() => this.valueSlider(true)} ><FlecheG style={styles.flecheD} /></TouchableOpacity>
+                                <TouchableOpacity onPress={() => this.ReverseSlider} ><FlecheG style={styles.flecheG} /></TouchableOpacity>
+                                <Animated.View style={[styles.textbloc, {margin:10}, trans2.getLayout()]}>
+                                    <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kmh}</Text>
+                                    <Text style={styles.midText2}>kmh</Text>
+                                </Animated.View>
+                                <TouchableOpacity onPress={() => this.StartTranslateFunction} ><FlecheG style={styles.flecheD} /></TouchableOpacity>
                             </View>
                             <View style={styles.midBot} >
                                 <View style={styles.textbloc}>
