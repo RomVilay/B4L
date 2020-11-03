@@ -253,12 +253,12 @@ export default class Compteur extends React.Component {
                                 </View>
                             </View>
                         </ImageBackground>
-                        <View style={[{flex:1, flexDirection:"row", marginLeft:'30%'}]}>
+                        <View style={[{flex:1, flexDirection:"row", marginLeft:'30%', paddingTop:'10%'}]}>
                             <Text style={[styles.midText,{ fontSize: 70, marginRight:'5%'}]}  onPress={() => {this.state.watts -= 5}}>-</Text>
                             <View style={styles.textbloc}>
-                                <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.watts}</Text>
+                                <Text style={[styles.midText,{ fontSize: 70}]}> {this.state.watts} </Text>
                                 <Text style={[styles.midText2]}>watts </Text>
-                                <TouchableOpacity style={styles.midText2} onPress={() => this.toggleStopwatch()} color={"white"}><Text style={[styles.midText,{fontSize:30}]}>Pause</Text></TouchableOpacity>
+                                <TouchableOpacity style={styles.midText2} onPress={() => this.toggleStopwatch()}><Text style={[styles.midText,{fontSize:30}]}>Pause</Text></TouchableOpacity>
                             </View>
                             <Text style={[styles.midText,{ fontSize: 70, marginRight:'5%'}]} onPress={() => {this.state.watts += 5}}>+</Text>
                         </View>
@@ -278,7 +278,7 @@ const options = {
         marginLeft:'22%'
     },
     text: {
-        fontSize: 30,
+        fontSize: 50,
         color: 'white',
         fontFamily: 'GnuolaneRG-Regular'
     }
@@ -295,7 +295,8 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         zIndex: 100,
-        padding:5
+        padding:5,
+        paddingBottom:'9%'
     },
     stopwatch:{
         backgroundColor:'transparent',
