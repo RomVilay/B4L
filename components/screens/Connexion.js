@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useState, useContext} from 'react';
+import {Context} from '../utils/Store';
+
 import {
   Image,
   Text,
@@ -6,93 +8,119 @@ import {
   View,
   StyleSheet,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 
 import {login} from '../../functions/login';
-// import {APP_TOKEN} from 'react-native-dotenv';
+import {APP_TOKEN} from '@env';
 import LogoMed from '../../assets/logoMed';
 
-export default class Connexion extends React.Component {
-  state = {
-    username: '',
-    password: '',
+export default function Connexion(props) {
+  const [username, setUsername] = useState('julian');
+  const [password, setPassword] = useState('zzz');
+  // const [user, setUser] = useContext(Context);
+  // const [token, setToken] = useContext(Context);
+  const [state, setState] = useContext(Context);
+
+  const checkFields = () => {
+    if (!username.match(/^([a-zA-Z0-9]){5,}$/) || username == 'undefined') {
+      Alert.alert('Erreur', `Veuillez saisir votre nom d'utilisateur`);
+    } else if (!password.match(/^([a-zA-Z0-9]){3,}$/)) {
+      Alert.alert('Erreur', `Veuillez saisir votre mot de passe`);
+    } else {
+      getAuthToken();
+    }
   };
 
-  render() {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.container}>
-          <Image
-            style={styles.fond}
-            source={require('../../assets/fond.png')}
-            resizeMode="cover"
-          />
-          <LogoMed style={styles.logo} />
-          <View
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <View style={styles.inputContainer}>
-              <TextInput
-                value={this.state.username}
-                style={styles.input}
-                keyboardType="email-address"
-                onChangeText={username => this.setState({username})}
-                placeholder="Nom d'utilisateur"
-                placeholderTextColor="#FFFFFF"
-              />
-            </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                value={this.state.password}
-                style={styles.input}
-                onChangeText={password => this.setState({password})}
-                placeholder={'Mot de passe'}
-                secureTextEntry={true}
-                placeholderTextColor="#FFFFFF"
-              />
-            </View>
-            <Text
-              onPress={() => this.props.navigation.navigate('Home')}
-              backgroundColor="transparent"
-              style={{
-                color: '#5FCDFA',
-                textTransform: 'uppercase',
-                fontSize: 25,
-                fontFamily: 'DIN Condensed',
-                top: '5%',
-              }}>
-              Connexion {process.env.BASE_URL}
-            </Text>
+  const getAuthToken = async () => {
+    const myLogin = await login({username, password}, APP_TOKEN);
+    console.log('mylogin : ', myLogin);
+    if (myLogin.message) {
+      Alert.alert('Erreur', `${myLogin.message}`);
+    } else {
+      // Alert.alert(
+      //   "Informations de l'user",
+      //   `Username : ${state.user.username}, mail : ${state.user.mail}`,
+      // );
+      setState({user: myLogin.user, token: myLogin.token});
+      props.navigation.navigate('Home');
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <Image
+          style={styles.fond}
+          source={require('../../assets/fond.png')}
+          resizeMode="cover"
+        />
+        <LogoMed style={styles.logo} />
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <View style={styles.inputContainer}>
+            <TextInput
+              value={username}
+              style={styles.input}
+              keyboardType="email-address"
+              onChangeText={username => setUsername(username)}
+              placeholder="Nom d'utilisateur"
+              placeholderTextColor="#FFFFFF"
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              value={password}
+              style={styles.input}
+              onChangeText={password => setPassword(password)}
+              placeholder={'Mot de passe'}
+              secureTextEntry={true}
+              placeholderTextColor="#FFFFFF"
+            />
           </View>
           <Text
+            // onPress={() => props.navigation.navigate('Home')}
+            onPress={() => checkFields()}
             backgroundColor="transparent"
             style={{
-              color: 'white',
-              textTransform: 'uppercase',
-              fontSize: 15,
-              fontFamily: 'DIN Condensed',
-              top: '20%',
-            }}>
-            Pas encore inscrit ?
-          </Text>
-          <Text
-            onPress={() => this.props.navigation.navigate('Inscription')}
-            backgroundColor="transparent"
-            style={{
-              color: '#53B4DC',
+              color: '#5FCDFA',
               textTransform: 'uppercase',
               fontSize: 25,
               fontFamily: 'DIN Condensed',
-              top: '20%',
+              top: '5%',
             }}>
-            Créer un compte
+            Connexion
           </Text>
         </View>
-      </SafeAreaView>
-    );
-  }
+        <Text
+          backgroundColor="transparent"
+          style={{
+            color: 'white',
+            textTransform: 'uppercase',
+            fontSize: 15,
+            fontFamily: 'DIN Condensed',
+            top: '20%',
+          }}>
+          Pas encore inscrit ?
+        </Text>
+        <Text
+          onPress={() => props.navigation.navigate('Inscription')}
+          backgroundColor="transparent"
+          style={{
+            color: '#53B4DC',
+            textTransform: 'uppercase',
+            fontSize: 25,
+            fontFamily: 'DIN Condensed',
+            top: '20%',
+          }}>
+          Créer un compte
+        </Text>
+      </View>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
