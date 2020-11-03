@@ -32,7 +32,7 @@ export default class Compteur extends React.Component {
             watts: 200,
             rpm:15,
             kcal:80,
-            start:true,
+            start:false,
             reset:false,
             pause: "",
             time:"",
@@ -64,7 +64,7 @@ export default class Compteur extends React.Component {
     }
 
     componentDidMount() {
-        this.StartImageRotateFunction();
+       /* this.StartImageRotateFunction();
         setInterval( () => {
             const nend = Math.floor(Math.random() * 50)
             const ang = `${nend}deg`
@@ -72,7 +72,7 @@ export default class Compteur extends React.Component {
                 endPosition:nend ,
                 outputRange: this.state.outputRange[1]<ang ? [this.state.outputRange[1], ang] : [ang,this.state.outputRange[1]]})
             //this.setState({ :Math.random()*10})
-        }, 6000)
+        }, 6000)*/
     }
     StartImageRotateFunction() {
         this.RotateValueHolder.setValue(this.state.startPosition);
@@ -87,15 +87,15 @@ export default class Compteur extends React.Component {
         {
             Animated.parallel([
                 Animated.timing(this.rpm, {
-                    toValue: {x:36,y:107},
+                    toValue: {x:63,y:77},
                     duration:1000
                 }),
                 Animated.timing(this.kmh, {
-                    toValue: {x:40,y:-100},
+                    toValue: {x:45,y:-80},
                     duration:1000
                 }),
                 Animated.timing(this.kcal, {
-                    toValue: {x:-70,y:0},
+                    toValue: {x:-110,y:0},
                     duration:1000
                 }),
             ]).start()
@@ -104,32 +104,15 @@ export default class Compteur extends React.Component {
         {
             Animated.parallel([
                 Animated.timing(this.kcal, {
-                    toValue: {x:-34,y:107},
+                    toValue: {x:-40,y:72},
                     duration:1000
                 }),
                 Animated.timing(this.rpm, {
-                    toValue: {x:60,y:10},
+                    toValue: {x:112,y:0},
                     duration:1000
                 }),
                 Animated.timing(this.kmh, {
-                    toValue: {x:-30,y:-100},
-                    duration:1000
-                })
-            ]).start()
-        }
-        if (this.tab[0] == 'kmh')
-        {
-            Animated.parallel([
-                Animated.timing(this.kmh, {
-                    toValue: {x:36,y:107},
-                    duration:1000
-                }),
-                Animated.timing(this.rpm, {
-                    toValue: {x:-70,y:0},
-                    duration:1000
-                }),
-                Animated.timing(this.kcal, {
-                    toValue: {x:40,y:-100},
+                    toValue: {x:-70,y:-80},
                     duration:1000
                 })
             ]).start()
@@ -174,33 +157,34 @@ export default class Compteur extends React.Component {
         if (this.tab[0] == 'kmh')
         {
             Animated.parallel([
-                Animated.timing(this.kcal, {
-                    toValue: {x:-60,y:10},
-                    duration:1000
-                }),
                 Animated.timing(this.rpm, {
-                    toValue: {x:32,y:110},
+                    toValue: {x:63,y:77},
                     duration:1000
                 }),
                 Animated.timing(this.kmh, {
-                    toValue: {x:40,y:-98},
+                    toValue: {x:45,y:-80},
                     duration:1000
-                })
+                }),
+                Animated.timing(this.kcal, {
+                    toValue: {x:-110,y:0},
+                    duration:1000
+                }),
             ]).start()
+
         }
         if (this.tab[0] == 'rpm')
         {
             Animated.parallel([
-                Animated.timing(this.kmh, {
-                    toValue: {x:-36,y:-107},
+                Animated.timing(this.kcal, {
+                    toValue: {x:-40,y:72},
                     duration:1000
                 }),
                 Animated.timing(this.rpm, {
-                    toValue: {x:70,y:0},
+                    toValue: {x:112,y:0},
                     duration:1000
                 }),
-                Animated.timing(this.kcal, {
-                    toValue: {x:-40,y:100},
+                Animated.timing(this.kmh, {
+                    toValue: {x:-70,y:-80},
                     duration:1000
                 })
             ]).start()
@@ -233,40 +217,38 @@ export default class Compteur extends React.Component {
                     </View>
                     <View style={styles.middle} >
                         <ImageBackground source={require('../../assets/compteur.png')} style={styles.compteur}>
-                            <Animated.Image source={require('../../assets/aig.png')} style={[{transform:[{rotate:rotation}], position:'absolute',resizeMode:"stretch" , marginLeft:'15.5%',top:'6.5%',alignContent:'center', zIndex:0  }]}/>
+                            <Animated.Image source={require('../../assets/aig.png')} style={[{transform:[{rotate:rotation}]}, styles.aiguille]}/>
                             <View style={styles.midTop}>
-                                <Animated.View style={[styles.textbloc,{width:'20%',borderRadius:50, marginLeft:'30%'},trans0.getLayout()]}>
-                                    <ImageBackground source={require('../../assets/fondBulle.png')} style={styles.fondBulle}>
-                                        <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.rpm}</Text>
-                                        <Text style={[styles.midText2]}>rpm</Text>
-                                    </ImageBackground>
+                                <ImageBackground source={require('../../assets/fondBulle.png')} style={[styles.fondBulle,{borderRadius:50, marginLeft:'22%', textAlign:'center'}]}>
+                                <Animated.View style={[styles.textbloc,trans0.getLayout()]}>
+                                        <Text style={[styles.midText,{ fontSize: 30,}]}>{this.state.rpm}</Text>
+                                        <Text style={[styles.midText2,{ fontSize: 20, }]}>rpm</Text>
                                 </Animated.View>
-                                <Animated.View style={[styles.textbloc,{width:'20%',borderRadius:50}, trans1.getLayout()]}>
-                                    <ImageBackground source={require('../../assets/fondBulle.png')} style={styles.fondBulle}>
-                                        <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kcal}</Text>
-                                        <Text style={styles.midText2}>kcals</Text>
-                                    </ImageBackground>
+                                </ImageBackground>
+                                <ImageBackground source={require('../../assets/fondBulle.png')} style={[styles.fondBulle,{borderRadius:50, marginLeft:'5%'}]}>
+                                <Animated.View style={[styles.textbloc, trans1.getLayout()]}>
+                                        <Text style={[styles.midText,{ fontSize: 30, }]}>{this.state.kcal}</Text>
+                                        <Text style={[styles.midText2,{ fontSize: 20, }]}>kcals</Text>
                                 </Animated.View>
+                                </ImageBackground>
                             </View>
                             <View style={styles.midMid} >
                                 <TouchableOpacity onPress={this.ReverseSlider} ><FlecheG style={styles.flecheG} /></TouchableOpacity>
                                 <Animated.View style={[styles.textbloc, {margin:10}, trans2.getLayout()]}>
-                                    <ImageBackground source={require('../../assets/fondBulle.png')} style={styles.fondBulle}>
                                     <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kmh}</Text>
                                     <Text style={styles.midText2}>kmh</Text>
-                                    </ImageBackground>
                                 </Animated.View>
                                 <TouchableOpacity onPress={this.StartTranslateFunction} ><FlecheG style={styles.flecheD} /></TouchableOpacity>
                             </View>
                             <View style={styles.midBot} >
                                 <View style={styles.textbloc}>
-                                    <View style={{flexDirection:'row'}}>
-                                        <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kmp}</Text>
-                                        <Text style={[styles.midText2,{ color:'white',marginLeft:'2%'}]}>km <Text style={{color:"#5FCDFA"}}>parcourus </Text></Text>
+                                    <View style={{flexDirection:'column'}}>
+                                        <Text style={[styles.midText,{ fontSize: 20}]}>{this.state.kmp}<Text style={[styles.midText2,{ color:'white',marginLeft:'2%'}]}> km <Text style={{color:"#5FCDFA"}}>parcourus </Text></Text></Text>
+                                        <Text style={[styles.midText,{ fontSize: 20}]}>{this.state.kmc} <Text style={[styles.midText2,{  color:'white', marginLeft:'2%'}]}>km <Text style={{color:"#5FCDFA"}}> cumulés</Text></Text></Text>
                                     </View>
                                     <View style={{flexDirection:'row'}}>
-                                        <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kmc}</Text>
-                                        <Text style={[styles.midText2,{  color:'white', marginLeft:'2%'}]}>km <Text style={{color:"#5FCDFA"}}> cumulés</Text></Text>
+
+
                                     </View>
                                 </View>
                             </View>
@@ -336,41 +318,57 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         zIndex:0,
     },
+    aiguille:{
+        top:'22%',
+        bottom:'28%',
+        width:'55%',
+        height:'73%',
+        position:'absolute',
+        resizeMode:"stretch" ,
+        marginLeft:'25%',
+        alignContent:'center',
+        zIndex:0
+    },
     midTop:{
         flex:1,
         flexDirection: 'row',
         alignItems: 'center',
         zIndex: 100,
-        paddingBottom:0,
-        marginLeft:'10%'
+        marginLeft:'10%',
+        paddingTop: '20%'
     },
     fondBulle:{
-        width:'120%',
+        width:90,
+        height:90,
         resizeMode: "cover",
         justifyContent: "center",
-        paddingLeft:20
     },
     midMid: {
         flex:1,
         flexDirection: 'row',
         alignItems: 'center',
         zIndex: 100,
-        paddingLeft: '30%',
-        marginLeft:'12%'
+        paddingTop: '5%',
+        paddingBottom:'2%',
+        paddingLeft: '32%'
     },
     flecheG:{
+        marginTop:'5%',
         transform: [{scale:2}],
-        marginRight:'5%'
+        marginRight:'20%'
     },
     flecheD:{
+        marginTop:'5%',
         transform: [{scale:2}, {rotate:"180deg"}],
-        marginLeft:'5%'
+        marginLeft:'50%',
+        right:'5%'
     },
     midBot: {
         flex:1,
         alignItems: 'center',
         zIndex: 100,
-        marginLeft:'12%'
+        marginLeft:'12%',
+        paddingBottom:'10%',
     },
     footer: {
         flex:1,
