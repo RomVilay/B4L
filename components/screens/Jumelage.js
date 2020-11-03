@@ -83,8 +83,8 @@ const styles = StyleSheet.create({
     textTitle: {
         color: "#5FCDFA",
         textTransform: 'uppercase',
-        fontSize: 25,
-        fontFamily: 'DIN Condensed',
+        fontSize: 50,
+        fontFamily: 'TallFilms',
      },
     item: {
         width: 80,
@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
         zIndex: 100,
     },
     midText: {
+        fontFamily: 'GnuolaneRG-Regular',
         color: 'white',
         fontSize: 16
     },

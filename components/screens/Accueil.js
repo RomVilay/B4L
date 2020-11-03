@@ -80,7 +80,7 @@ export default class Accueil extends React.Component {
             <Cercle />
             <Text
               style={styles.go}
-              onPress={() => this.props.navigation.navigate('ListeDefis')}>
+              onPress={() => this.props.navigation.navigate('Jumelage')}>
               GO
             </Text>
           </View>

@@ -32,7 +32,7 @@ export default class Compteur extends React.Component {
             watts: 200,
             rpm:15,
             kcal:80,
-            start:false,
+            start:true,
             reset:false,
             pause: "",
             time:"",
@@ -64,7 +64,7 @@ export default class Compteur extends React.Component {
     }
 
     componentDidMount() {
-       /* this.StartImageRotateFunction();
+        this.StartImageRotateFunction();
         setInterval( () => {
             const nend = Math.floor(Math.random() * 50)
             const ang = `${nend}deg`
@@ -72,7 +72,7 @@ export default class Compteur extends React.Component {
                 endPosition:nend ,
                 outputRange: this.state.outputRange[1]<ang ? [this.state.outputRange[1], ang] : [ang,this.state.outputRange[1]]})
             //this.setState({ :Math.random()*10})
-        }, 6000)*/
+        }, 6000)
     }
     StartImageRotateFunction() {
         this.RotateValueHolder.setValue(this.state.startPosition);
@@ -87,15 +87,15 @@ export default class Compteur extends React.Component {
         {
             Animated.parallel([
                 Animated.timing(this.rpm, {
-                    toValue: {x:63,y:77},
+                    toValue: {x:63,y:50},
                     duration:1000
                 }),
                 Animated.timing(this.kmh, {
-                    toValue: {x:45,y:-80},
+                    toValue: {x:45,y:-60},
                     duration:1000
                 }),
                 Animated.timing(this.kcal, {
-                    toValue: {x:-110,y:0},
+                    toValue: {x:-110,y:-10},
                     duration:1000
                 }),
             ]).start()
@@ -104,7 +104,7 @@ export default class Compteur extends React.Component {
         {
             Animated.parallel([
                 Animated.timing(this.kcal, {
-                    toValue: {x:-40,y:72},
+                    toValue: {x:-39,y:48},
                     duration:1000
                 }),
                 Animated.timing(this.rpm, {
@@ -112,7 +112,7 @@ export default class Compteur extends React.Component {
                     duration:1000
                 }),
                 Animated.timing(this.kmh, {
-                    toValue: {x:-70,y:-80},
+                    toValue: {x:-65,y:-55},
                     duration:1000
                 })
             ]).start()
@@ -137,46 +137,45 @@ export default class Compteur extends React.Component {
         this.tab = [this.tab[2],this.tab[0],this.tab[1]]
     }
     ReverseSlider = () => {
-        if (this.tab[0] === 'kcals')
+        if (this.tab[0] === 'kmh')
         {
             Animated.parallel([
                 Animated.timing(this.rpm, {
-                    toValue: {x:0,y:0},
+                    toValue: {x:63,y:50},
                     duration:1000
                 }),
                 Animated.timing(this.kmh, {
-                    toValue: {x:0,y:0},
+                    toValue: {x:45,y:-60},
                     duration:1000
                 }),
                 Animated.timing(this.kcal, {
-                    toValue: {x:0,y:0},
+                    toValue: {x:-110,y:-10},
                     duration:1000
                 }),
             ]).start()
         }
-        if (this.tab[0] == 'kmh')
+        if (this.tab[0] == 'kcals')
         {
             Animated.parallel([
                 Animated.timing(this.rpm, {
-                    toValue: {x:63,y:77},
+                    toValue: {x:0,y:0},
                     duration:1000
                 }),
                 Animated.timing(this.kmh, {
-                    toValue: {x:45,y:-80},
+                    toValue: {x:0,y:0},
                     duration:1000
                 }),
                 Animated.timing(this.kcal, {
-                    toValue: {x:-110,y:0},
+                    toValue: {x:0,y:0},
                     duration:1000
                 }),
             ]).start()
-
         }
         if (this.tab[0] == 'rpm')
         {
             Animated.parallel([
                 Animated.timing(this.kcal, {
-                    toValue: {x:-40,y:72},
+                    toValue: {x:-39,y:48},
                     duration:1000
                 }),
                 Animated.timing(this.rpm, {
@@ -184,7 +183,7 @@ export default class Compteur extends React.Component {
                     duration:1000
                 }),
                 Animated.timing(this.kmh, {
-                    toValue: {x:-70,y:-80},
+                    toValue: {x:-65,y:-55},
                     duration:1000
                 })
             ]).start()
@@ -322,11 +321,11 @@ const styles = StyleSheet.create({
     aiguille:{
         top:'22%',
         bottom:'28%',
-        width:'55%',
+        width:'45%',
         height:'73%',
         position:'absolute',
         resizeMode:"stretch" ,
-        marginLeft:'25%',
+        marginLeft:'30%',
         alignContent:'center',
         zIndex:0
     },
