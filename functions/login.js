@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
-const BASE_URL = `${process.env.BASE_URL}${process.env.PORT}`;
+import {URL, PORT} from '@env';
+const BASE_URL = `${URL}:${PORT}`;
 
 /**
  * Apppelle la route /login/register pour envoyer un mail de confirmation au nouvel user

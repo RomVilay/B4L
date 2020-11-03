@@ -1,5 +1,6 @@
-const fetch = require("node-fetch");
-const BASE_URL = `${process.env.BASE_URL}${process.env.PORT}`;
+const fetch = require('node-fetch');
+import {URL, PORT} from '@env';
+const BASE_URL = `${URL}:${PORT}`;
 
 /**
  * Appelle la route /users/:username et retourne l'utilisateur
@@ -8,9 +9,10 @@ const BASE_URL = `${process.env.BASE_URL}${process.env.PORT}`;
  * @returns L'user correspondant à l'username | Un message d'erreur si pas autorisé
  */
 async function getUser(username, authToken) {
+  console.log('aaaa : ', BASE_URL);
   let get = await fetch(`${BASE_URL}/users/${username}`, {
-    headers: { "auth-token": authToken },
-  }).then((res) => {
+    headers: {'auth-token': authToken},
+  }).then(res => {
     return res.json();
   });
   return get;
@@ -23,8 +25,8 @@ async function getUser(username, authToken) {
  */
 async function getAllUsers(authToken) {
   let get = await fetch(`${BASE_URL}/users`, {
-    headers: { "auth-token": authToken },
-  }).then((res) => {
+    headers: {'auth-token': authToken},
+  }).then(res => {
     return res.json();
   });
   return get;
@@ -37,8 +39,8 @@ async function getAllUsers(authToken) {
  */
 async function usersCount(authToken) {
   let count = await fetch(`${BASE_URL}/count/users`, {
-    headers: { "auth-token": authToken },
-  }).then((res) => {
+    headers: {'auth-token': authToken},
+  }).then(res => {
     return res.json();
   });
   return count.count;
@@ -53,10 +55,10 @@ async function usersCount(authToken) {
  */
 async function editUser(username, body, authToken) {
   let patch = await fetch(`${BASE_URL}/users/${username}`, {
-    method: "patch",
+    method: 'patch',
     body: JSON.stringify(body),
-    headers: { "Content-Type": "application/json", "auth-token": authToken },
-  }).then((res) => {
+    headers: {'Content-Type': 'application/json', 'auth-token': authToken},
+  }).then(res => {
     return res.json();
   });
   return patch;
@@ -70,9 +72,9 @@ async function editUser(username, body, authToken) {
  */
 async function deleteUser(username, authToken) {
   let deletedUser = await fetch(`${BASE_URL}/users/${username}`, {
-    method: "DELETE",
-    headers: { "auth-token": authToken },
-  }).then((res) => {
+    method: 'DELETE',
+    headers: {'auth-token': authToken},
+  }).then(res => {
     return res.json();
   });
   return deletedUser;

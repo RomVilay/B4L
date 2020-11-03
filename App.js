@@ -1,10 +1,12 @@
-import React from 'react'
+import React from 'react';
 
-import Navigation from './components/navigation/Navigation'
+import Store from './components/utils/Store';
+import Navigation from './components/navigation/Navigation';
 
 export default function App() {
-
-	return (
-		<Navigation></Navigation>
-	)
+  return (
+    <Store>
+      <Navigation />
+    </Store>
+  );
 }
