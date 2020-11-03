@@ -18,8 +18,6 @@ import LogoMed from '../../assets/logoMed';
 export default function Connexion(props) {
   const [username, setUsername] = useState('julian');
   const [password, setPassword] = useState('zzz');
-  // const [user, setUser] = useContext(Context);
-  // const [token, setToken] = useContext(Context);
   const [state, setState] = useContext(Context);
 
   const checkFields = () => {
@@ -87,9 +85,9 @@ export default function Connexion(props) {
             backgroundColor="transparent"
             style={{
               color: '#5FCDFA',
+              fontSize: 50,
               textTransform: 'uppercase',
-              fontSize: 25,
-              fontFamily: 'DIN Condensed',
+              fontFamily: 'TallFilms',
               top: '5%',
             }}>
             Connexion
@@ -101,7 +99,7 @@ export default function Connexion(props) {
             color: 'white',
             textTransform: 'uppercase',
             fontSize: 15,
-            fontFamily: 'DIN Condensed',
+            fontFamily: 'GnuolaneRG-Regular',
             top: '20%',
           }}>
           Pas encore inscrit ?
@@ -113,7 +111,7 @@ export default function Connexion(props) {
             color: '#53B4DC',
             textTransform: 'uppercase',
             fontSize: 25,
-            fontFamily: 'DIN Condensed',
+            fontFamily: 'GnuolaneRG-Regular',
             top: '20%',
           }}>
           Créer un compte
@@ -137,6 +135,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     textAlign: 'center',
     alignSelf: 'center',
+    fontFamily: 'GnuolaneRG-Regular',
   },
 
   inputContainer: {

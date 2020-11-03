@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     },
 
     text: {
+        fontFamily:'GnuolaneRG-Regular',
         color: 'white'
     },
 

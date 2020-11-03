@@ -83,7 +83,7 @@ export default class Parametres extends React.Component {
                      </View>
                      <View style={styles.footer}>
                         <TouchableHighlight onPress={() => this.props.navigation.navigate("Parametres2")}>
-                            <Text style={styles.textTitle}>Suivant</Text>
+                            <Text style={[styles.textTitle,{fontSize:30}]}>Suivant</Text>
                         </TouchableHighlight>
                         <TouchableHighlight onPress={() => this.props.navigation.navigate("Accueil")}>
                             <Text style={styles.linesw}>cacher ces information</Text>
@@ -113,24 +113,24 @@ const styles = StyleSheet.create({
      textTitle: {
          color: "#5FCDFA",
          textTransform: 'uppercase',
-         fontSize: 25,
-         fontFamily: 'DIN Condensed',
+         fontSize: 50,
+         fontFamily:'TallFilms'
      },
      whiteTitle : {
          color: "white",
          textTransform: 'uppercase',
          fontSize: 25,
-         fontFamily: 'DIN Condensed',
+         fontFamily:'GnuolaneRG-Regular'
      },
      linesb : {
          color: "#5FCDFA",
-         fontSize: 17,
-         fontFamily: 'DIN Condensed',
+         fontSize: 30,
+         fontFamily:'TallFilms'
      },
      linesw : {
          color: "white",
-         fontSize: 17,
-         fontFamily: 'DIN Condensed',
+         fontSize: 30,
+         fontFamily:'TallFilms'
      },
      middle: {
          flex: 3,

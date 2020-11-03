@@ -108,8 +108,8 @@ const styles = StyleSheet.create({
     textTitle: {
         color: "#5FCDFA",
         textTransform: 'uppercase',
-        fontSize: 25,
-        fontFamily: 'DIN Condensed',
+        fontSize: 50,
+        fontFamily: 'TallFilms',
         top: '10%'
     },
 
@@ -122,10 +122,9 @@ const styles = StyleSheet.create({
 
     textScrollView: {
         textAlign: 'justify',
-        color: '#FF0000',
+        color: 'white',
         fontSize: 15,
-        color: '#FFFFFF',
-        fontFamily: 'DIN Condensed'
+        fontFamily: 'GnuolaneRG-Regular'
     },
 
     fond: {

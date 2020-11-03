@@ -10,9 +10,12 @@ import CheckBox from '@react-native-community/checkbox'
 const Item = ({ item, onPress }) => (
   <TouchableOpacity style={styles.listItem} onPress={onPress}>
       <CheckBox
+          style={{marginLeft:'5%'}}
           disabled={false}
           value={item.statut}
-          onPress={onPress}/>
+          onPress={onPress}
+          boxType={'square'}
+      />
        <Text style={styles.whiteText}>{item.nom}</Text>
    </TouchableOpacity>
 );
@@ -51,8 +54,8 @@ export default class Objectifs extends React.Component {
                 <View style={[styles.container, { height: '100%', width: '100%' }]}>
                    <View style={[styles.header, { width: '100%' }]}>
                         <LogoMin></LogoMin>
-                        <Text  style={[styles.textTitle, {fontSize:60}]}>Défi</Text>
-                        <Text style={[styles.whiteTitle,{fontSize:15,position:'absolute',top:'63%', left:'38%'}]}>Le</Text>
+                        <Text  style={[styles.textTitle, {fontSize:100}]}>Défi</Text>
+                        <Text style={[styles.whiteTitle,{fontSize:18,position:'absolute',top:'53%', left:'41.5%'}]}>Le</Text>
                     </View>
                     <View style={styles.middle}>
                             <Text style={styles.linesw}> Choisis tes objectifs</Text>
@@ -89,24 +92,24 @@ const styles = StyleSheet.create({
      textTitle: {
          color: "#5FCDFA",
          textTransform: 'uppercase',
-         fontSize: 25,
-         fontFamily: 'DIN Condensed',
+         fontSize: 80,
+         fontFamily:'TallFilms'
      },
      whiteTitle : {
                  color: "white",
                  textTransform: 'uppercase',
-                 fontSize: 25,
-                 fontFamily: 'DIN Condensed',
+                 fontSize: 18,
+         fontFamily:'GnuolaneRG-Regular'
              },
      linesb : {
             color: "#5FCDFA",
             fontSize: 25,
-            fontFamily: 'DIN Condensed',
+         fontFamily:'GnuolaneRG-Regular'
         },
      linesw : {
            color: "white",
            fontSize: 25,
-           fontFamily: 'DIN Condensed',
+         fontFamily:'GnuolaneRG-Regular'
           },
      middle: {
         flex: 2,
@@ -134,7 +137,7 @@ const styles = StyleSheet.create({
             color: "white",
             textTransform: 'uppercase',
             fontSize: 25,
-            fontFamily: 'DIN Condensed',
+         fontFamily:'GnuolaneRG-Regular'
         },
     footer: {
         flex: 1,

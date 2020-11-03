@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {FlatList, Text, View, StyleSheet, Button, ImageBackground, Image, TouchableOpacity, SafeAreaView} from 'react-native'
 import CheckBox from '@react-native-community/checkbox'
 import LogoMin from '../../assets/logoMin'
+import FlecheG from "../../assets/flecheG";
 import NavApp from "../navigation/NavApp";
 
 /*
@@ -45,16 +46,18 @@ export default function  ListeDefis(props) {
             >
                 <View style={styles.header}>
                     <LogoMin style={{marginBottom:'5%'}}/>
-                    <Text  style={[styles.titreBleu, {fontSize:90, fontWeight:'normal'}]}>Défi</Text>
-                    <Text style={[styles.titreBlanc,{fontSize:20,position:'absolute',top:'63%', left:'38%'}]}>Le</Text>
-                    <Text style={[styles.titreBlanc, {position:'absolute',top:'93%'}]}>pour cette session</Text>
+                    <Text  style={[styles.titreBleu, {fontSize:100, fontWeight:'normal', fontFamily:'TallFilms'}]}>Défi</Text>
+                    <Text style={[styles.titreBlanc,{fontSize:18,position:'absolute',top:'70%', left:'43%'}]}>Le</Text>
+                    <Text style={[styles.titreBlanc, {position:'absolute',top:'100%'}]}>pour cette session</Text>
                 </View>
                 <View style={styles.body}>
+                    <FlecheG style={{transform:[{rotate:'90deg'}]}} />
                     <FlatList
                         data={ListeDefs}
                         renderItem={render_item}
                         keyExtractor={(item) => {item.id}}
                         extraData={defisSelect}/>
+                        <FlecheG style={{transform:[{rotate:'270deg'}]}}/>
                 </View>
                 <View style={styles.footer}>
                     <TouchableOpacity style={{marginBottom:'10%'}} onPress={()=> props.navigation.navigate("Compteur")} color={'white'}>
@@ -99,13 +102,13 @@ const styles = StyleSheet.create({
             color: "white",
             textTransform: 'uppercase',
             fontSize: 25,
-            fontFamily: 'DIN Condensed',
+         fontFamily: 'GnuolaneRG-Regular'
         },
     titreBleu : {
         color: "#56ADCE",
         textTransform: 'uppercase',
         fontSize: 25,
-        fontFamily: 'DIN Condensed',
+        fontFamily: 'GnuolaneRG-Regular'
     },
     fond: {
          width: '100%',

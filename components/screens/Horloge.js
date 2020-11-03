@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
         width: 90,
         fontSize: 25,
         textAlign: 'center',
-        alignSelf: 'center'
+        alignSelf: 'center',
+        fontFamily:'GnuolaneRG-Regular'
     }
 })
