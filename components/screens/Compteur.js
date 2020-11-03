@@ -40,7 +40,7 @@ export default class Compteur extends React.Component {
             endPosition:2,
             outputRange:['0deg','10deg']
         }
-        this.tab = [{type:'rpm',value:this.state.rpm},{type:'kcal',value:this.state.kcal},{type:'km/h',value:this.state.kmh}]
+        this.tab = ['rpm','kmh','kcals']
         this.toggleStopwatch = this.toggleStopwatch.bind(this);
         this.resetStopwatch = this.resetStopwatch.bind(this);
         this.valueSlider = this.valueSlider.bind(this)
@@ -83,36 +83,36 @@ export default class Compteur extends React.Component {
         }).start(() => this.StartImageRotateFunction());
     }
     StartTranslateFunction= () =>{
-        if (this.tab[0] === 'rpm')``
+        if (this.tab[0] === 'rpm')
         {
             Animated.parallel([
                 Animated.timing(this.rpm, {
                     toValue: {x:36,y:107},
                     duration:1000
                 }),
+                Animated.timing(this.kmh, {
+                    toValue: {x:40,y:-100},
+                    duration:1000
+                }),
                 Animated.timing(this.kcal, {
                     toValue: {x:-70,y:0},
                     duration:1000
                 }),
-                Animated.timing(this.kmh, {
-                    toValue: {x:40,y:-100},
-                    duration:1000
-                })
             ]).start()
         }
         if (this.tab[0] == 'kcals')
         {
             Animated.parallel([
                 Animated.timing(this.kcal, {
-                    toValue: {x:36,y:107},
-                    duration:1000
-                }),
-                Animated.timing(this.kmh, {
-                    toValue: {x:-70,y:0},
+                    toValue: {x:-34,y:107},
                     duration:1000
                 }),
                 Animated.timing(this.rpm, {
-                    toValue: {x:40,y:-100},
+                    toValue: {x:60,y:10},
+                    duration:1000
+                }),
+                Animated.timing(this.kmh, {
+                    toValue: {x:-30,y:-100},
                     duration:1000
                 })
             ]).start()
@@ -134,22 +134,78 @@ export default class Compteur extends React.Component {
                 })
             ]).start()
         }
+        if (this.tab[0] == 'kmh')
+        {
+            Animated.parallel([
+                Animated.timing(this.kmh, {
+                    toValue: {x:0,y:0},
+                    duration:1000
+                }),
+                Animated.timing(this.kcal, {
+                    toValue: {x:0,y:0},
+                    duration:1000
+                }),
+                Animated.timing(this.rpm, {
+                    toValue: {x:0,y:0},
+                    duration:1000
+                }),
+            ]).start()
+        }
+        this.tab = [this.tab[2],this.tab[0],this.tab[1]]
     }
     ReverseSlider = () => {
-        Animated.parallel([
-            Animated.timing(this.kmh, {
-                toValue: {x:-36,y:-107},
-                duration:1000
-            }),
-            Animated.timing(this.rpm, {
-                toValue: {x:70,y:0},
-                duration:1000
-            }),
-            Animated.timing(this.kcal, {
-                toValue: {x:-40,y:100},
-                duration:1000
-            })
-        ]).start()
+        if (this.tab[0] === 'kcals')
+        {
+            Animated.parallel([
+                Animated.timing(this.rpm, {
+                    toValue: {x:0,y:0},
+                    duration:1000
+                }),
+                Animated.timing(this.kmh, {
+                    toValue: {x:0,y:0},
+                    duration:1000
+                }),
+                Animated.timing(this.kcal, {
+                    toValue: {x:0,y:0},
+                    duration:1000
+                }),
+            ]).start()
+        }
+        if (this.tab[0] == 'kmh')
+        {
+            Animated.parallel([
+                Animated.timing(this.kcal, {
+                    toValue: {x:-60,y:10},
+                    duration:1000
+                }),
+                Animated.timing(this.rpm, {
+                    toValue: {x:32,y:110},
+                    duration:1000
+                }),
+                Animated.timing(this.kmh, {
+                    toValue: {x:40,y:-98},
+                    duration:1000
+                })
+            ]).start()
+        }
+        if (this.tab[0] == 'rpm')
+        {
+            Animated.parallel([
+                Animated.timing(this.kmh, {
+                    toValue: {x:-36,y:-107},
+                    duration:1000
+                }),
+                Animated.timing(this.rpm, {
+                    toValue: {x:70,y:0},
+                    duration:1000
+                }),
+                Animated.timing(this.kcal, {
+                    toValue: {x:-40,y:100},
+                    duration:1000
+                })
+            ]).start()
+        }
+        this.tab = [this.tab[1],this.tab[2],this.tab[0]]
     }
     render() {
         const rotation = this.RotateValueHolder.interpolate({
@@ -193,12 +249,14 @@ export default class Compteur extends React.Component {
                                 </Animated.View>
                             </View>
                             <View style={styles.midMid} >
-                                <TouchableOpacity onPress={() => this.ReverseSlider} ><FlecheG style={styles.flecheG} /></TouchableOpacity>
+                                <TouchableOpacity onPress={this.ReverseSlider} ><FlecheG style={styles.flecheG} /></TouchableOpacity>
                                 <Animated.View style={[styles.textbloc, {margin:10}, trans2.getLayout()]}>
+                                    <ImageBackground source={require('../../assets/fondBulle.png')} style={styles.fondBulle}>
                                     <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kmh}</Text>
                                     <Text style={styles.midText2}>kmh</Text>
+                                    </ImageBackground>
                                 </Animated.View>
-                                <TouchableOpacity onPress={() => this.StartTranslateFunction} ><FlecheG style={styles.flecheD} /></TouchableOpacity>
+                                <TouchableOpacity onPress={this.StartTranslateFunction} ><FlecheG style={styles.flecheD} /></TouchableOpacity>
                             </View>
                             <View style={styles.midBot} >
                                 <View style={styles.textbloc}>
