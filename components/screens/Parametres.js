@@ -2,9 +2,9 @@ import React from 'react'
 import { View, Image, StyleSheet, Text, SafeAreaView, TextInput, TouchableHighlight } from 'react-native'
 import LogoMin from '../../assets/logoMin'
 import NavApp from '../navigation/NavApp'
+import Fleche from "../../assets/fleche";
 
 var avatar = require('../../assets/avatar.png')
-var flecheG = require('../../assets/flecheG.png')
 
 export default class Parametres extends React.Component {
 
@@ -37,9 +37,9 @@ export default class Parametres extends React.Component {
                     </View>
                     <View style={styles.middle}>
                         <View style={styles.midTop}>
-                            <Image source={flecheG} />
+                           <Fleche />
                             <Image source={this.state.avatar} />
-                            <Image source={flecheG} />
+                            <Fleche />
                         </View>
                         <View style={[styles.midMid,  {borderBottomWidth:1,borderColor:'white'}]}>
                             {

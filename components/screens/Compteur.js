@@ -15,7 +15,7 @@ import {
 import LogoMin from '../../assets/logoMin'
 import NavApp from '../navigation/NavApp'
 // Imports Components
-import FlecheG from "../../assets/flecheG";
+import Fleche from "../../assets/fleche";
 import {Stopwatch} from 'react-native-stopwatch-timer'
 
 export default class Compteur extends React.Component {
@@ -215,16 +215,16 @@ export default class Compteur extends React.Component {
                         <Text style={{color: '#5FCDFA', fontSize: 30, fontFamily:"TallFilms"}}>{this.state.pause}</Text>
                     </View>
                     <View style={styles.middle} >
-                        <ImageBackground source={require('../../assets/compteur.png')} style={styles.compteur}>
-                            <Animated.Image source={require('../../assets/aig.png')} style={[{transform:[{rotate:rotation}]}, styles.aiguille]}/>
+                        <ImageBackground source={require('../../assets/Compteur/compteur.png')} style={styles.compteur}>
+                            <Animated.Image source={require('../../assets/Compteur/aiguille.png')} style={[{transform:[{rotate:rotation}]}, styles.aiguille]}/>
                             <View style={styles.midTop}>
-                                <ImageBackground source={require('../../assets/fondBulle.png')} style={[styles.fondBulle,{borderRadius:50, marginLeft:'22%', textAlign:'center'}]}>
+                                <ImageBackground source={require('../../assets/Accueil/fondBulle.png')} style={[styles.fondBulle,{borderRadius:50, marginLeft:'22%', textAlign:'center'}]}>
                                 <Animated.View style={[styles.textbloc,trans0.getLayout()]}>
                                         <Text style={[styles.midText,{ fontSize: 30,}]}>{this.state.rpm}</Text>
                                         <Text style={[styles.midText2,{ fontSize: 20, }]}>rpm</Text>
                                 </Animated.View>
                                 </ImageBackground>
-                                <ImageBackground source={require('../../assets/fondBulle.png')} style={[styles.fondBulle,{borderRadius:50, marginLeft:'5%'}]}>
+                                <ImageBackground source={require('../../assets/Accueil/fondBulle.png')} style={[styles.fondBulle,{borderRadius:50, marginLeft:'5%'}]}>
                                 <Animated.View style={[styles.textbloc, trans1.getLayout()]}>
                                         <Text style={[styles.midText,{ fontSize: 30, }]}>{this.state.kcal}</Text>
                                         <Text style={[styles.midText2,{ fontSize: 20, }]}>kcals</Text>
@@ -232,12 +232,12 @@ export default class Compteur extends React.Component {
                                 </ImageBackground>
                             </View>
                             <View style={styles.midMid} >
-                                <TouchableOpacity onPress={this.ReverseSlider} ><FlecheG style={styles.flecheG} /></TouchableOpacity>
+                                <TouchableOpacity onPress={this.ReverseSlider} ><Fleche style={styles.flecheG} /></TouchableOpacity>
                                 <Animated.View style={[styles.textbloc, {margin:10}, trans2.getLayout()]}>
                                     <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kmh}</Text>
                                     <Text style={styles.midText2}>kmh</Text>
                                 </Animated.View>
-                                <TouchableOpacity onPress={this.StartTranslateFunction} ><FlecheG style={styles.flecheD} /></TouchableOpacity>
+                                <TouchableOpacity onPress={this.StartTranslateFunction} ><Fleche style={styles.flecheD} /></TouchableOpacity>
                             </View>
                             <View style={styles.midBot} >
                                 <View style={styles.textbloc}>

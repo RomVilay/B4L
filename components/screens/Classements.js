@@ -1,17 +1,15 @@
 import React from 'react'
-import { View, StyleSheet, SafeAreaView, Image, Text } from 'react-native'
+import {View, StyleSheet, SafeAreaView, Image, Text, TouchableOpacity} from 'react-native'
 
 import Navigation from '../../assets/navigation'
 
 import LogoMin from '../../assets/logoMin'
-import P1 from '../../assets/p1'
-import P2 from '../../assets/p2'
-import P3 from '../../assets/p3'
+import P1 from '../../assets/Classement/p1'
 import NavApp from "../navigation/NavApp";
 
 var avatar = require('../../assets/avatar.png')
-var scnd = require('../../assets/scnd.png')
-var third = require('../../assets/third.png')
+var scnd = require('../../assets/Classement/scnd.png')
+var third = require('../../assets/Classement/third.png')
 
 
 export default class Classements extends React.Component {
@@ -55,7 +53,7 @@ export default class Classements extends React.Component {
                             <Text style={styles.number}>{this.state.membres} </Text>
                             <Text style={styles.linesb}> utilisateurs</Text>
                          </View>
-                         <View><Text style={styles.linesw}>voir tes stats</Text></View>
+                        <View><Text style={styles.linesw}>voir tes stats</Text></View>
                     </View>
                     <View style={[styles.middle, {width: '100%'}]}>
                        <View style={[styles.midMid, {borderColor:'white',borderTopWidth:2}]}>
@@ -63,26 +61,26 @@ export default class Classements extends React.Component {
                         </View>
                          <View style={styles.midMid}>
                              <View style={styles.midItem}>
-                                <P1></P1>
+                                <P1 />
                                 <View><Text style={[styles.linesb, {fontSize: 20}]}>{this.state.membre1}</Text></View>
                                 <View><Text style={[styles.linesw, {fontSize: 20}]}>voir ses stats</Text></View>
                              </View>
                         </View>
                         <View style={styles.midMid}>
                              <View style={styles.midItem}>
-                                <Image
-                                source={require('../../assets/scnd.png')}
-                                style={{
-                                    resizeMode:'contain',
-                                    height:60
-                                }}
-                                />
+                                 <Image
+                                     source={scnd}
+                                     style={{
+                                         resizeMode:'contain',
+                                         height:60
+                                     }}
+                                 />
                                 <View><Text style={[styles.linesb, {fontSize: 20}]}>{this.state.membre2}</Text></View>
                                 <View><Text style={[styles.linesw, {fontSize: 20}]}>voir ses stats</Text></View>
                              </View>
                              <View style={styles.midItem}>
                              <Image
-                                source={require('../../assets/third.png')}
+                                source={require('../../assets/Classement/third.png')}
                                 style={{
                                     resizeMode:'contain',
                                     height:60

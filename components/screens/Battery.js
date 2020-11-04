@@ -3,9 +3,9 @@ import { View, StyleSheet, Text, ImageBackground } from 'react-native'
 
 import DeviceInfo from 'react-native-device-info'
 
-import Thunder from '../../assets/thunder'
+import Thunder from '../../assets/Accueil/thunder'
 
-import Bat from '../../assets/bat'
+import Bat from '../../assets/Accueil/bat'
 
 var levelBattery = DeviceInfo.getBatteryLevel().then(batteryLevel => {
 	levelBattery = batteryLevel

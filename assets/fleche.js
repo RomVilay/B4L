@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Svg, {  Path } from 'react-native-svg'
-function FlecheG(props) {
+function Fleche(props) {
     return (
         <Svg width={17.514} height={20.223} {...props}>
             <Path
@@ -16,4 +16,4 @@ function FlecheG(props) {
     );
 }
 
-export default FlecheG;
+export default Fleche;

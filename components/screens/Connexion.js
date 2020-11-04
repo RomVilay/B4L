@@ -11,15 +11,15 @@ import {
   Alert,
 } from 'react-native';
 
-import {login} from '../../functions/login';
-import {APP_TOKEN} from '@env';
+//import {login} from '../../functions/login';
+//import {APP_TOKEN} from '@env';
 import LogoMed from '../../assets/logoMed';
 
 export default function Connexion(props) {
   const [username, setUsername] = useState('julian');
   const [password, setPassword] = useState('zzz');
   const [state, setState] = useContext(Context);
-
+/*
   const checkFields = () => {
     if (!username.match(/^([a-zA-Z0-9]){5,}$/) || username == 'undefined') {
       Alert.alert('Erreur', `Veuillez saisir votre nom d'utilisateur`);
@@ -43,7 +43,7 @@ export default function Connexion(props) {
       setState({user: myLogin.user, token: myLogin.token});
       props.navigation.navigate('Home');
     }
-  };
+  };*/
 
   return (
     <SafeAreaView style={styles.container}>
@@ -80,8 +80,8 @@ export default function Connexion(props) {
             />
           </View>
           <Text
-            // onPress={() => props.navigation.navigate('Home')}
-            onPress={() => checkFields()}
+             onPress={() => props.navigation.navigate('Home')}
+            //onPress={() => checkFields()}
             backgroundColor="transparent"
             style={{
               color: '#5FCDFA',
