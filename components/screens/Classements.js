@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
             color: "#5FCDFA",
             textTransform: 'uppercase',
             fontSize: 25,
-         fontFamily:'GnuolaneRG-Regular',
+         fontFamily:'TallFilms',
                 },
      middle: {
               flex: 2,
@@ -178,7 +178,8 @@ const styles = StyleSheet.create({
         width: 300,
         fontSize: 20,
         color:'white',
-        textAlign:'center'
+        textAlign:'center',
+         fontFamily: 'GnuolaneRG-Regular'
                     },
     footer: {
         flex:1,
