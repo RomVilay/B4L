@@ -11,7 +11,8 @@ export default class Parametres2 extends React.Component {
         prenom: 'Gaston',
         nom:'Lagaffe',
         mail:'GL@mail.com',
-        password:'Lagaffe'
+        password:'Lagaffe',
+        password2:'Lagaffe'
         }
 
 
@@ -66,7 +67,12 @@ export default class Parametres2 extends React.Component {
                                     placeholderTextColor='#FFFFFF'/>
                             </View>
                             <View style={styles.inputContainer}>
-                                <Text style={styles.input}>Confirmer</Text>
+                                <TextInput
+                                    value={this.state.password}
+                                    secureTextEntry={true}
+                                    style={styles.input}
+                                    onChangeText={password2 => this.setState({ password2 })}
+                                    placeholderTextColor='#FFFFFF'/>
                             </View>
                          </View>
                      </View>
