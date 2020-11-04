@@ -60,6 +60,7 @@ export default class Parametres2 extends React.Component {
                             <View style={styles.inputContainer}>
                                 <TextInput
                                     value={this.state.password}
+                                    secureTextEntry={true}
                                    style={styles.input}
                                     onChangeText={password => this.setState({ password })}
                                     placeholderTextColor='#FFFFFF'/>
@@ -101,8 +102,8 @@ const styles = StyleSheet.create({
     textTitle: {
         color: "#5FCDFA",
         textTransform: 'uppercase',
-        fontSize: 25,
-        fontFamily:'GnuolaneRG-Regular'
+        fontSize: 70,
+        fontFamily:'TallFilms'
     },
     whiteTitle : {
         color: "white",
@@ -163,7 +164,8 @@ const styles = StyleSheet.create({
              borderRadius: 10,
              textAlign: 'center',
              alignSelf: 'center',
-             color:'white'
+             color:'white',
+          fontFamily:'GnuolaneRG-Regular'
          },
       footer: {
              flex: 1,
