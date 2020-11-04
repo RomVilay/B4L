@@ -1,5 +1,14 @@
 import React from 'react'
-import { View, Image, StyleSheet, Text, SafeAreaView, TextInput, TouchableHighlight } from 'react-native'
+import {
+    View,
+    Image,
+    StyleSheet,
+    Text,
+    SafeAreaView,
+    TextInput,
+    TouchableHighlight,
+    TouchableOpacity
+} from 'react-native'
 import LogoMin from '../../assets/logoMin'
 import NavApp from '../navigation/NavApp'
 import Fleche from "../../assets/fleche";
@@ -15,7 +24,7 @@ export default class Parametres extends React.Component {
         age:'23',
         taille:'170',
         poids:'70',
-        partieS:'Tenue',
+        selection:'Tenue',
         parties:['Visage','Coupe','Couleur','Tenue','Accessoire']
         }
 
@@ -39,12 +48,21 @@ export default class Parametres extends React.Component {
                         <View style={styles.midTop}>
                            <Fleche />
                             <Image source={this.state.avatar} />
-                            <Fleche />
+                            <Fleche style={{transform:[{rotate:'180deg'}]}}/>
                         </View>
                         <View style={[styles.midMid,  {borderBottomWidth:1,borderColor:'white'}]}>
                             {
-                                this.state.parties.map(item => (
-                                    {item} === 'Tenue' ? <Text style={styles.linesw} key={item}>{item}</Text> : <Text style={styles.linesb} key={item}>{item}</Text>
+                                this.state.parties.map(item => (item == this.state.selection  ?
+                                        <View style={{flexDirection:'row'}}>
+                                            <Text style={styles.linesw}>{item}</Text>
+                                            <View style={item !== 'Accessoire' ? {width:5, height:5, backgroundColor:'#5FCDFA', top:'25%', left:'6%'} : {width:5, height:5,opacity:0}}/>
+                                        </View>
+                                        : <View style={{flexDirection:'row'}}>
+                                            <TouchableOpacity onPress={ () => {this.setState({selection:item})}}>
+                                                <Text style={styles.linesb}>{item}</Text>
+                                            </TouchableOpacity>
+                                            <View style={item !== 'Accessoire' ? {width:5, height:5, backgroundColor:'#5FCDFA', top:'25%', left:'6%'} : {width:5, height:5,opacity:0}}/>
+                                        </View>
 
 
                                 ))
