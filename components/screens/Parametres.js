@@ -46,9 +46,9 @@ export default class Parametres extends React.Component {
                     </View>
                     <View style={styles.middle}>
                         <View style={styles.midTop}>
-                           <Fleche />
+                            <TouchableOpacity onPress={() =>{console.log('gauche')}} ><Fleche /></TouchableOpacity>
                             <Image source={this.state.avatar} />
-                            <Fleche style={{transform:[{rotate:'180deg'}]}}/>
+                            <TouchableOpacity onPress={() => {console.log('droite')}} ><Fleche style={{transform:[{rotate:'180deg'}]}}/></TouchableOpacity>
                         </View>
                         <View style={[styles.midMid,  {borderBottomWidth:1,borderColor:'white'}]}>
                             {
