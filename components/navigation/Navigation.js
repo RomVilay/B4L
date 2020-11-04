@@ -45,7 +45,7 @@ function HomeModalNavigator() {
             <Stack.Screen name="Home" component={HomeNavigator} options={{ headerShown: false }} />
             <Stack.Screen name="NavApp" component={NavApp} options={{ headerShown: false }} />
             <Stack.Screen name="Classements" component={Classements} options={{ headerShown: false }} />
-            <Stack.Screen name="Parametres" component={Parametres} options={{ title: 'Parametres' }} />
+            <Stack.Screen name="Parametres" component={Parametres} options={{ headerShown:false }} />
             <Stack.Screen name="Compteur" component={Compteur} options={{ headerShown: false }} />
         </Stack.Navigator>
     )
@@ -107,7 +107,7 @@ function AppNavigator() {
                 <Stack.Screen name="Demarrage" component={Demarrage} options={{ headerShown: false }} />
                 <Stack.Screen name="Connexion" component={ConnexionNavigator} options={{ headerShown: false }} />
                 <Stack.Screen name="Home" component={HomeModalNavigator} options={{ headerShown: false }} />
-                <Stack.Screen name="Parametres" component={Parametres} options={{ title: 'Parametres' }} />
+                <Stack.Screen name="Parametres" component={Parametres} options={{ headerShown : false }} />
                 <Stack.Screen name="Parametres2" component={Parametres2} options={{ headerShown: false }} />
                 <Stack.Screen name="Parametres3" component={Parametres3} options={{ headerShown: false }} />
                 <Stack.Screen name="NavApp" component={NavAppNavigator} options={{ headerShown: false }} />

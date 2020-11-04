@@ -1,24 +1,31 @@
 import React from 'react'
-import { View, Image, StyleSheet, Text, SafeAreaView, TextInput, TouchableHighlight } from 'react-native'
+import {
+    View,
+    Image,
+    StyleSheet,
+    Text,
+    SafeAreaView,
+    TextInput,
+    TouchableHighlight,
+    TouchableOpacity
+} from 'react-native'
 import LogoMin from '../../assets/logoMin'
+import Fleche from "../../assets/fleche";
 
 var avatar = require('../../assets/avatar.png')
 
 export default class Parametres3 extends React.Component {
-
-        state={
-        avatar:avatar,
-        login: 'Gaston',
-        password:'Lagaffe',
-        distances:['km','miles'],
-        poids:['kg','livres']
+    constructor(props) {
+        super(props);
+        this.state={
+            avatar:avatar,
+            login: 'Gaston',
+            password:'Lagaffe',
+            distances:['km','miles'],
+            poids:['kg','pounds']
         }
-
-
-
+    }
     render() {
-
-
         return (
              <SafeAreaView style={styles.container}>
                <Image
@@ -51,11 +58,27 @@ export default class Parametres3 extends React.Component {
                                     placeholderTextColor='#FFFFFF'/>
                             </View>
                             <Text style={[styles.linesb,{alignSelf:'center'}]}>Unités</Text>
-                            <View style={styles.inputContainer}>
-                                <Text style={styles.input}>Distances</Text>
-                            </View>
-                            <View style={styles.inputContainer}>
-                                <Text style={styles.input}>Poids</Text>
+                             <View style={[styles.inputContainer,{zIndex:100, alignContent:'center', justifyContent:'center',flexDirection:'row', padding:10}]}>
+                                  <TouchableOpacity
+                                     onPress={() => { this.setState({distances:[this.state.distances[1],this.state.distances[0]]})}}>
+                                     <Fleche style={{}}/>
+                                 </TouchableOpacity>
+                                 <Text style={styles.input}>{this.state.distances[0]}</Text>
+                                 <TouchableOpacity
+                                     onPress={() => { this.setState({distances:[this.state.distances[1],this.state.distances[0]]})}}>
+                                     <Fleche style={{transform:[{rotate:'180deg'}]}}/>
+                                 </TouchableOpacity>
+                             </View>
+                            <View style={[styles.inputContainer,{zIndex:100,alignContent:'center', justifyContent:'center', flexDirection:'row',padding:10}]}>
+                                <TouchableOpacity
+                                    onPress={() => { this.setState({poids:[this.state.poids[1],this.state.poids[0]]})}}>
+                                    <Fleche style={{ }}/>
+                                </TouchableOpacity>
+                                <Text style={styles.input}>{this.state.poids[0]}</Text>
+                                <TouchableOpacity
+                                    onPress={() => { this.setState({poids:[this.state.poids[1],this.state.poids[0]]})}}>
+                                    <Fleche style={{ transform:[{rotate:'180deg'}]}}/>
+                                </TouchableOpacity>
                             </View>
                          </View>
                      </View>
@@ -91,8 +114,8 @@ const styles = StyleSheet.create({
     textTitle: {
         color: "#5FCDFA",
         textTransform: 'uppercase',
-        fontSize: 25,
-        fontFamily:'GnuolaneRG-Regular'
+        fontSize: 70,
+        fontFamily:'TallFilms'
     },
     whiteTitle : {
         color: "white",
@@ -153,7 +176,8 @@ const styles = StyleSheet.create({
              borderRadius: 10,
              textAlign: 'center',
              alignSelf: 'center',
-             color:'white'
+             color:'white',
+             fontFamily:'GnuolaneRG-Regular'
          },
       footer: {
              flex: 1,

@@ -11,7 +11,8 @@ export default class Parametres2 extends React.Component {
         prenom: 'Gaston',
         nom:'Lagaffe',
         mail:'GL@mail.com',
-        password:'Lagaffe'
+        password:'Lagaffe',
+        password2:'Lagaffe'
         }
 
 
@@ -60,12 +61,18 @@ export default class Parametres2 extends React.Component {
                             <View style={styles.inputContainer}>
                                 <TextInput
                                     value={this.state.password}
+                                    secureTextEntry={true}
                                    style={styles.input}
                                     onChangeText={password => this.setState({ password })}
                                     placeholderTextColor='#FFFFFF'/>
                             </View>
                             <View style={styles.inputContainer}>
-                                <Text style={styles.input}>Confirmer</Text>
+                                <TextInput
+                                    value={this.state.password}
+                                    secureTextEntry={true}
+                                    style={styles.input}
+                                    onChangeText={password2 => this.setState({ password2 })}
+                                    placeholderTextColor='#FFFFFF'/>
                             </View>
                          </View>
                      </View>
@@ -101,8 +108,8 @@ const styles = StyleSheet.create({
     textTitle: {
         color: "#5FCDFA",
         textTransform: 'uppercase',
-        fontSize: 25,
-        fontFamily:'GnuolaneRG-Regular'
+        fontSize: 70,
+        fontFamily:'TallFilms'
     },
     whiteTitle : {
         color: "white",
@@ -163,7 +170,8 @@ const styles = StyleSheet.create({
              borderRadius: 10,
              textAlign: 'center',
              alignSelf: 'center',
-             color:'white'
+             color:'white',
+          fontFamily:'GnuolaneRG-Regular'
          },
       footer: {
              flex: 1,

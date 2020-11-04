@@ -231,23 +231,23 @@ PODS:
     - ReactCommon/jscallinvoker (= 0.61.5)
   - RNCAsyncStorage (1.13.1):
     - React
-  - RNCCheckbox (0.5.1):
+  - RNCCheckbox (0.5.5):
     - React
   - RNCMaskedView (0.1.10):
     - React
   - RNDeviceInfo (5.6.5):
     - React
-  - RNGestureHandler (1.7.0):
+  - RNGestureHandler (1.8.0):
     - React
   - RNPermissions (2.2.2):
     - React-Core
   - RNReanimated (1.13.1):
     - React
-  - RNScreens (2.10.1):
-    - React
+  - RNScreens (2.12.0):
+    - React-Core
   - RNSVG (11.0.1):
     - React
-  - RNVectorIcons (7.0.0):
+  - RNVectorIcons (7.1.0):
     - React
   - Yoga (1.14.0)
 
@@ -406,15 +406,15 @@ SPEC CHECKSUMS:
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
   RNCAsyncStorage: 43b0cd421ea28a0f342e026366d4b58d817feb27
-  RNCCheckbox: 953b425a4889b026f4e48de5c427ae2d15fd4a96
+  RNCCheckbox: 0d96d7725fecba464d0af856e93ce66dde780d75
   RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
   RNDeviceInfo: e841619c3dac5495a095c5455473579ff04908d4
-  RNGestureHandler: b6b359bb800ae399a9c8b27032bdbf7c18f08a08
+  RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
   RNPermissions: 067727df624665d4a6c8e2cffcc172ba608b96ed
   RNReanimated: dd8c286ab5dd4ba36d3a7fef8bff7e08711b5476
-  RNScreens: b748efec66e095134c7166ca333b628cd7e6f3e2
+  RNScreens: 4b488fdf9537bbce829e2910c8cce1d17f6d9be8
   RNSVG: 67f1f12dae2cef6ed59a42cae74a6b8f5a9e7b46
-  RNVectorIcons: da6fe858f5a65d7bbc3379540a889b0b12aa5976
+  RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
 PODFILE CHECKSUM: b4bff010f6805e2c1129107f23cd1878b0acc43e

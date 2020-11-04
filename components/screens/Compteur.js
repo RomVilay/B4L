@@ -245,10 +245,6 @@ export default class Compteur extends React.Component {
                                         <Text style={[styles.midText,{ fontSize: 20}]}>{this.state.kmp}<Text style={[styles.midText2,{ color:'white',marginLeft:'2%'}]}> km <Text style={{color:"#5FCDFA"}}>parcourus </Text></Text></Text>
                                         <Text style={[styles.midText,{ fontSize: 20}]}>{this.state.kmc} <Text style={[styles.midText2,{  color:'white', marginLeft:'2%'}]}>km <Text style={{color:"#5FCDFA"}}> cumulés</Text></Text></Text>
                                     </View>
-                                    <View style={{flexDirection:'row'}}>
-
-
-                                    </View>
                                 </View>
                             </View>
                         </ImageBackground>
