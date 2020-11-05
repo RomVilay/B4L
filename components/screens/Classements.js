@@ -35,7 +35,7 @@ export default class Classements extends React.Component {
                 <View style={[styles.container, { height: '100%', width: '100%' }]}>
                     <View style={[styles.header, { width: '100%' }]}>
                             <LogoMin></LogoMin>
-                              <Text  style={styles.textTitle}>Classement</Text>
+                              <Text  style={[styles.textTitle, {fontSize:70}]}>Classement</Text>
                     </View>
                     <View style={[styles.middle, { width: '100%'}]}>
                         <Text style={styles.inputContainer}>Catégorie</Text>
@@ -53,7 +53,7 @@ export default class Classements extends React.Component {
                             <Text style={styles.number}>{this.state.membres} </Text>
                             <Text style={styles.linesb}> utilisateurs</Text>
                          </View>
-                        <View><Text style={styles.linesw}>voir tes stats</Text></View>
+                        <View><TouchableOpacity onPress={ () => {this.props.navigation.navigate('Statistiques')}} ><Text style={styles.linesw}>voir tes stats</Text></TouchableOpacity></View>
                     </View>
                     <View style={[styles.middle, {width: '100%'}]}>
                        <View style={[styles.midMid, {borderColor:'white',borderTopWidth:2}]}>
@@ -63,7 +63,10 @@ export default class Classements extends React.Component {
                              <View style={styles.midItem}>
                                 <P1 />
                                 <View><Text style={[styles.linesb, {fontSize: 20}]}>{this.state.membre1}</Text></View>
-                                <View><Text style={[styles.linesw, {fontSize: 20}]}>voir ses stats</Text></View>
+                                 <View>
+                                     <TouchableOpacity onPress={ () => {this.props.navigation.navigate('Statistiques')}} >
+                                         <Text style={[styles.linesw, {fontSize: 20}]}>voir ses stats</Text>
+                                     </TouchableOpacity></View>
                              </View>
                         </View>
                         <View style={styles.midMid}>
@@ -76,7 +79,10 @@ export default class Classements extends React.Component {
                                      }}
                                  />
                                 <View><Text style={[styles.linesb, {fontSize: 20}]}>{this.state.membre2}</Text></View>
-                                <View><Text style={[styles.linesw, {fontSize: 20}]}>voir ses stats</Text></View>
+                                 <View>
+                                     <TouchableOpacity onPress={ () => {this.props.navigation.navigate('Statistiques')}} >
+                                         <Text style={[styles.linesw, {fontSize: 20}]}>voir ses stats</Text>
+                                     </TouchableOpacity></View>
                              </View>
                              <View style={styles.midItem}>
                              <Image
@@ -87,7 +93,9 @@ export default class Classements extends React.Component {
                                 }}
                                 />
                                 <View><Text style={[styles.linesb, {fontSize: 20}]}>{this.state.membre3}</Text></View>
-                                <View><Text style={[styles.linesw, {fontSize: 20}]}>voir ses stats</Text></View>
+                                 <View>
+                                     <TouchableOpacity onPress={ () => {this.props.navigation.navigate('Statistiques')}} >
+                                         <Text style={[styles.linesw, {fontSize: 20}]}>voir ses stats</Text></TouchableOpacity></View>
                              </View>
                         </View>
                         <View style={styles.footer} >

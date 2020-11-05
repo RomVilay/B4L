@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
             zIndex: 100
      },
      header: {
+         marginTop:10,
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
@@ -174,6 +175,7 @@ const styles = StyleSheet.create({
           fontFamily:'GnuolaneRG-Regular'
          },
       footer: {
+         marginTop: 50,
              flex: 1,
              flexDirection: 'column',
              alignItems: 'center',

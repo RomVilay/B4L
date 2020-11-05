@@ -58,23 +58,23 @@ export default class Parametres3 extends React.Component {
                                     placeholderTextColor='#FFFFFF'/>
                             </View>
                             <Text style={[styles.linesb,{alignSelf:'center'}]}>Unités</Text>
-                             <View style={[styles.inputContainer,{zIndex:100, alignContent:'center', justifyContent:'center',flexDirection:'row', padding:10}]}>
+                             <View style={[styles.inputContainer,{zIndex:100, alignContent:'center', justifyContent:'space-around',flexDirection:'row',height:40,paddingTop:10 }]}>
                                   <TouchableOpacity
                                      onPress={() => { this.setState({distances:[this.state.distances[1],this.state.distances[0]]})}}>
                                      <Fleche style={{}}/>
                                  </TouchableOpacity>
-                                 <Text style={styles.input}>{this.state.distances[0]}</Text>
+                                 <Text style={styles.linesw}>{this.state.distances[0]}</Text>
                                  <TouchableOpacity
                                      onPress={() => { this.setState({distances:[this.state.distances[1],this.state.distances[0]]})}}>
                                      <Fleche style={{transform:[{rotate:'180deg'}]}}/>
                                  </TouchableOpacity>
                              </View>
-                            <View style={[styles.inputContainer,{zIndex:100,alignContent:'center', justifyContent:'center', flexDirection:'row',padding:10}]}>
+                            <View style={[styles.inputContainer,{zIndex:100,alignContent:'center', justifyContent:'space-around',height:40, flexDirection:'row',paddingTop:10}]}>
                                 <TouchableOpacity
                                     onPress={() => { this.setState({poids:[this.state.poids[1],this.state.poids[0]]})}}>
                                     <Fleche style={{ }}/>
                                 </TouchableOpacity>
-                                <Text style={styles.input}>{this.state.poids[0]}</Text>
+                                <Text style={styles.linesw}>{this.state.poids[0]}</Text>
                                 <TouchableOpacity
                                     onPress={() => { this.setState({poids:[this.state.poids[1],this.state.poids[0]]})}}>
                                     <Fleche style={{ transform:[{rotate:'180deg'}]}}/>
