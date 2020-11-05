@@ -34,6 +34,7 @@ function HomeNavigator() {
             <Stack.Screen name="Compteur" component={Compteur} options={{ headerShown: false }} />
             <Stack.Screen name="Parametres" component={Parametres} options={{ headerShown: false }} />
             <Stack.Screen name="Jumelage" component={Jumelage} options={{ headerShown: false }} />
+            <Stack.Screen name="Statistiques" component={Statistiques} options={{ headerShown: false }} />
             <Stack.Screen name="ListeDefis" component={ListeDefis} options={{headerShown: false}} />
         </Stack.Navigator>
     )

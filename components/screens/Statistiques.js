@@ -183,7 +183,7 @@ export default function  Statistiques(props) {
                     </View>
                 </View>
                 <View style={styles.footer}>
-                    <TouchableHighlight onPress={() => this.props.navigation.navigate("Parametres")}>
+                    <TouchableHighlight onPress={() => props.navigation.navigate("Classements")}>
                         <Text style={[styles.titreBleu, {fontSize:50,marginTop:50}]}>retour</Text>
                     </TouchableHighlight>
                 </View>
