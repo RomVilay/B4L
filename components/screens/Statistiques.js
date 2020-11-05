@@ -19,7 +19,7 @@ import moment from "moment"
 import DateRangePicker from "react-native-daterange-picker";
 
 export default function  Statistiques(props) {
-    const [Dates, setDates]= useState([null,null])
+    const [Dates, setDates]= useState([moment("2020-10-10"),moment()])
     const [displayedDate, setdisplayedDate]= useState(moment())
     const data = {
         labels: ["Objectif"], // optional
@@ -44,17 +44,23 @@ export default function  Statistiques(props) {
                 <View style={styles.header}>
                     <LogoMin />
                     <Text style={[styles.titreBleu, {height:50}]}>Statistiques</Text>
-                    <DateRangePicker onChange={setDates}
+                    {/**/}
+                    <DateRangePicker onChange={(date) =>
+                        date.startDate != null && date.endDate != null ?
+                            setDates([moment(date.startDate),moment(date.endDate)]) :
+                            date.startDate!= null && date.endDate == null ? setDates([moment(date.startDate),Dates[1]]) :
+                                setDates([Dates[0], moment(date.endDate)])}
                                      endDate={Dates[1]}
                                      startDate={Dates[0]}
                                      displayedDate={displayedDate}
                                      range
+                                     containerStyle={{zIndex:600}}
                                      >
-                        <Text style={styles.texteBlanc}>Du 02/11 au 10/11</Text>
+                        <Text style={styles.texteBlanc}>Du {Dates[0].format('DD/MM')} au {Dates[1].format('DD/MM')}</Text>
                     </DateRangePicker>
                 </View>
-                <View style={styles.body}>
-                    <View style={{alignItems:'center'}}>
+                <View style={[styles.body, {zIndex:0}]}>
+                    <View style={{alignItems:'center', zIndex:0}}>
                         <Text style={styles.texteBlanc}>Historique des Distances</Text>
                         <LineChart
                             data={{
@@ -87,10 +93,11 @@ export default function  Statistiques(props) {
                                 labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                                 style: {
                                     borderRadius: 16,
-
+                                    zIndex:0
                                 },
                                 propsForDots: {
-                                    r: "6"
+                                    r: "6",
+                                    zIndex:0
                                 }
                             }}
                             bezier
@@ -100,7 +107,7 @@ export default function  Statistiques(props) {
                             }}
                         />
                     </View>
-                    <View style={{alignItems:'center'}}>
+                    <View style={{alignItems:'center', zIndex:0}}>
                         <Text style={styles.texteBlanc}>Historique de l'énergie produite</Text>
                         <LineChart
                             data={{
@@ -133,10 +140,11 @@ export default function  Statistiques(props) {
                                 labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                                 style: {
                                     borderRadius: 16,
-
+                                    zIndex:0
                                 },
                                 propsForDots: {
-                                    r: "6"
+                                    r: "6",
+                                    zIndex:0
                                 }
                             }}
                             bezier
@@ -197,6 +205,7 @@ const styles = StyleSheet.create({
         flex:1,
         flexDirection: 'column',
         alignItems: 'center',
+        //zIndex:20
     },
     titreBleu : {
         color: "#56ADCE",
@@ -214,6 +223,7 @@ const styles = StyleSheet.create({
         marginTop: '10%',
         flex:4,
         alignItems: 'center',
+        //zIndex:0
     },
     footer:{
         flex:1,
