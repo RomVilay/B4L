@@ -15,8 +15,12 @@ import {
 import LogoMin from '../../assets/logoMin'
 import NavApp from "../navigation/NavApp";
 import { LineChart, ProgressChart } from "react-native-chart-kit";
+import moment from "moment"
+import DateRangePicker from "react-native-daterange-picker";
 
 export default function  Statistiques(props) {
+    const [Dates, setDates]= useState([null,null])
+    const [displayedDate, setdisplayedDate]= useState(moment())
     const data = {
         labels: ["Objectif"], // optional
         data: [0.5]
@@ -40,7 +44,14 @@ export default function  Statistiques(props) {
                 <View style={styles.header}>
                     <LogoMin />
                     <Text style={[styles.titreBleu, {height:50}]}>Statistiques</Text>
-                    <Text style={styles.texteBlanc}>Du 02/11 au 10/11</Text>
+                    <DateRangePicker onChange={setDates}
+                                     endDate={Dates[1]}
+                                     startDate={Dates[0]}
+                                     displayedDate={displayedDate}
+                                     range
+                                     >
+                        <Text style={styles.texteBlanc}>Du 02/11 au 10/11</Text>
+                    </DateRangePicker>
                 </View>
                 <View style={styles.body}>
                     <View style={{alignItems:'center'}}>
