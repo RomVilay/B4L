@@ -136,6 +136,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignSelf: 'center',
     fontFamily: 'GnuolaneRG-Regular',
+    color:'white'
   },
 
   inputContainer: {
