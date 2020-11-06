@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
     aiguille:{
         top:'22%',
         bottom:'28%',
-        width:'45%',
+        width:'40%',
         height:'73%',
         position:'absolute',
         resizeMode:"stretch" ,
