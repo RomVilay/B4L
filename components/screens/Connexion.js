@@ -9,16 +9,23 @@ import {
   StyleSheet,
   SafeAreaView,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 
 import {login} from '../../functions/login';
 import {APP_TOKEN} from '@env';
+import NetInfo from '@react-native-community/netinfo';
 import LogoMed from '../../assets/logoMed';
 
 export default function Connexion(props) {
   const [username, setUsername] = useState('julian');
   const [password, setPassword] = useState('zzz');
+  const [isLoading, setIsLoading] = useState(false);
   const [state, setState] = useContext(Context);
+
+  if (Object.keys(state.user).length != 0) {
+    props.navigation.navigate('Home');
+  }
 
   const checkFields = () => {
     if (!username.match(/^([a-zA-Z0-9]){5,}$/) || username == 'undefined') {
@@ -31,17 +38,22 @@ export default function Connexion(props) {
   };
 
   const getAuthToken = async () => {
-    const myLogin = await login({username, password}, APP_TOKEN);
-    console.log('mylogin : ', myLogin);
-    if (myLogin.message) {
-      Alert.alert('Erreur', `${myLogin.message}`);
+    setIsLoading(true);
+    let isConnected = await NetInfo.fetch().then(state => {
+      return state.isConnected;
+    });
+    if (!isConnected) {
+      Alert.alert('Erreur', 'Vérifiez votre connexion Internet et réessayez');
     } else {
-      // Alert.alert(
-      //   "Informations de l'user",
-      //   `Username : ${state.user.username}, mail : ${state.user.mail}`,
-      // );
-      setState({user: myLogin.user, token: myLogin.token});
-      props.navigation.navigate('Home');
+      const myLogin = await login({username, password}, APP_TOKEN);
+      // console.log('mylogin : ', myLogin);
+      if (myLogin.message) {
+        Alert.alert('Erreur', `${myLogin.message}`);
+      } else {
+        await setState({user: myLogin.user, token: myLogin.token});
+        setIsLoading(false);
+        props.navigation.navigate('Home');
+      }
     }
   };
 
@@ -80,8 +92,7 @@ export default function Connexion(props) {
             />
           </View>
           <Text
-             onPress={() => props.navigation.navigate('Home')}
-            //onPress={() => checkFields()}
+            onPress={() => checkFields()}
             backgroundColor="transparent"
             style={{
               color: '#5FCDFA',
@@ -93,6 +104,7 @@ export default function Connexion(props) {
             Connexion
           </Text>
         </View>
+        {isLoading ? <ActivityIndicator size="large" /> : null}
         <Text
           backgroundColor="transparent"
           style={{
@@ -136,7 +148,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignSelf: 'center',
     fontFamily: 'GnuolaneRG-Regular',
-    color:'white'
   },
 
   inputContainer: {

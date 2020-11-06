@@ -100,7 +100,7 @@ export default class Inscription extends React.Component {
                 textTransform: 'uppercase',
                 fontSize: 15,
                 fontFamily: 'GnuolaneRG-Regular',
-                top: '18%',
+                top: '15%',
               }}>
               Vous avez déjà un compte ?
             </Text>
@@ -111,8 +111,8 @@ export default class Inscription extends React.Component {
                 color: '#53B4DC',
                 textTransform: 'uppercase',
                 fontSize: 25,
-                fontFamily: 'DIN Condensed',
-                top: '18%',
+                fontFamily: 'TallFilms',
+                top: '15%',
               }}>
               Se connecter
             </Text>
@@ -123,7 +123,7 @@ export default class Inscription extends React.Component {
                 textTransform: 'uppercase',
                 fontSize: 15,
                 fontFamily: 'GnuolaneRG-Regular',
-                top: '25%',
+                top: '20%',
                 margin: '5%',
               }}>
               En vous inscrivant, vous acceptez nos
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     textAlign: 'center',
     alignSelf: 'center',
-    fontFamily:'GnuolaneRG-Regular'
+    fontFamily: 'GnuolaneRG-Regular',
   },
 
   inputContainer: {

@@ -1,6 +1,7 @@
 // Imports Modules
 import React, {useState, useContext, useEffect} from 'react';
 import {Context} from '../utils/Store';
+import {CommonActions} from '@react-navigation/native';
 import {
   View,
   StyleSheet,
@@ -30,14 +31,11 @@ export default function Accueil(props) {
   // };
   const [state, setState] = useContext(Context);
 
-  useEffect(() => {
-    props.navigation.addListener('beforeRemove', e => {
-      // e.preventDefault();
-      // props.navigation.popToTop();
-      // props.navigation.navigate('Demarrage');
-      return;
-    });
-  });
+  // useEffect(() => {
+  //   props.navigation.reset({
+  //     routes: [{name: 'Home'}],
+  //   });
+  // });
 
   return (
     <SafeAreaView style={styles.container}>
