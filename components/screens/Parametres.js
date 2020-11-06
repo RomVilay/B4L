@@ -53,11 +53,11 @@ export default class Parametres extends React.Component {
                         <View style={[styles.midMid,  {borderBottomWidth:1,borderColor:'white'}]}>
                             {
                                 this.state.parties.map(item => (item == this.state.selection  ?
-                                        <View style={{flexDirection:'row'}}>
+                                        <View style={{flexDirection:'row'}} key={item}>
                                             <Text style={styles.linesw}>{item}</Text>
-                                            <View style={item !== 'Accessoire' ? {width:5, height:5, backgroundColor:'#5FCDFA', top:'25%', left:'6%'} : {width:5, height:5,opacity:0}}/>
+                                            <View key={item} style={item !== 'Accessoire' ? {width:5, height:5, backgroundColor:'#5FCDFA', top:'25%', left:'6%'} : {width:5, height:5,opacity:0}}/>
                                         </View>
-                                        : <View style={{flexDirection:'row'}}>
+                                        : <View style={{flexDirection:'row'}} key={item}>
                                             <TouchableOpacity onPress={ () => {this.setState({selection:item})}}>
                                                 <Text style={styles.linesb}>{item}</Text>
                                             </TouchableOpacity>
