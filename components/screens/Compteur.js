@@ -3,14 +3,14 @@ import {
     View,
     StyleSheet,
     SafeAreaView,
-    Image,
     Text,
     ImageBackground,
-    Button,
     Animated,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert,
+    Button
 } from 'react-native'
-
+import Icon from "react-native-vector-icons/MaterialIcons";
 // Imports Assets
 import LogoMin from '../../assets/logoMin'
 import NavApp from '../navigation/NavApp'
@@ -43,7 +43,6 @@ export default class Compteur extends React.Component {
         this.tab = ['rpm','kmh','kcals']
         this.toggleStopwatch = this.toggleStopwatch.bind(this);
         this.resetStopwatch = this.resetStopwatch.bind(this);
-        this.valueSlider = this.valueSlider.bind(this)
     }
     toggleStopwatch() {
         this.setState({start: !this.state.start, reset: false});
@@ -55,34 +54,38 @@ export default class Compteur extends React.Component {
     getFormattedTime(time) {
         this.currentTime = time;
     }
-    valueSlider(forward){
-        if (forward == true){
-            this.tab = [this.tab[2],this.tab[0],this.tab[1]]
-        }else {
-            this.tab = [this.tab[1],this.tab[2],this.tab[0]]
-        }
-    }
 
-    componentDidMount() {
-        this.StartImageRotateFunction();
+    //fonction qui défini la rotation à effectuer
+    randomRotation(){
         setInterval( () => {
             const nend = Math.floor(Math.random() * 50)
-            const ang = `${nend}deg`
+            const ang = `${nend}deg` //définition de la valeur de rotation
             this.setState({startPosition:this.state.endPosition,
                 endPosition:nend ,
                 outputRange: this.state.outputRange[1]<ang ? [this.state.outputRange[1], ang] : [ang,this.state.outputRange[1]]})
-            //this.setState({ :Math.random()*10})
-        }, 6000)
+        }, 6000) //mise à jour du tableau d'interpolation de la rotation, toutes les 6s
     }
+    //déclenchement de l'animation du compteur à l'ouverture de la page
+    componentDidMount() {
+        this.StartImageRotateFunction();
+       this.randomRotation()
+    }
+    //arrêt de l'animation
+    componentWillUnmount() {
+        clearInterval(this.randomRotation())
+    }
+    //fonction animation
     StartImageRotateFunction() {
-        this.RotateValueHolder.setValue(this.state.startPosition);
+        this.RotateValueHolder.setValue(this.state.startPosition); //définition de la position de départ pour l'animation
         Animated.timing(this.RotateValueHolder, {
             toValue: this.state.endPosition,
             Easing:'linear',
             duration: 3000
-        }).start(() => this.StartImageRotateFunction());
+        }).start(() => this.StartImageRotateFunction()); // animation de la rotation, pour une durée de 3s
     }
+    //animation de déplacement des valeur pour la flèche droite
     StartTranslateFunction= () =>{
+        // test de la première valeur du tableau pour savoir quel déplacement effectuer
         if (this.tab[0] === 'rpm')
         {
             Animated.parallel([
@@ -99,6 +102,7 @@ export default class Compteur extends React.Component {
                     duration:1000
                 }),
             ]).start()
+            //lancement en parallèle de 3 déplacement avec une durée de 1s
         }
         if (this.tab[0] == 'kcals')
         {
@@ -136,6 +140,7 @@ export default class Compteur extends React.Component {
         }
         this.tab = [this.tab[2],this.tab[0],this.tab[1]]
     }
+    //fonction de déplacement des valeur en sens inverse
     ReverseSlider = () => {
         if (this.tab[0] === 'kmh')
         {
@@ -188,13 +193,33 @@ export default class Compteur extends React.Component {
                 })
             ]).start()
         }
+        //mise à jour du tableau représentant la position des valeur, la première étant la plus à gauche et la dernière celle à droite
         this.tab = [this.tab[1],this.tab[2],this.tab[0]]
     }
+    //fonction quitter la session
+    AlertQuit = () =>
+        Alert.alert(
+            "",
+            "Voulez vous arrêter la session ?",
+            [
+                {
+                    text: "continuer",
+                    style: "cancel"
+                },
+                { text: "quitter la session",
+                    onPress: () => this.props.navigation.navigate('Accueil') }
+            ],
+            { cancelable: false }
+        );
+
+
     render() {
+        //définition du tableau d'interpolation pour la première rotation
         const rotation = this.RotateValueHolder.interpolate({
             inputRange: [ 0, 10],
             outputRange:this.state.outputRange,
         });
+        //définition des positions pour les différentes valeurs
         const trans0 = this.rpm
         const trans1 = this.kcal
         const trans2 = this.kmh
@@ -213,6 +238,7 @@ export default class Compteur extends React.Component {
                             msec={true}
                         />
                         <Text style={{color: '#5FCDFA', fontSize: 30, fontFamily:"TallFilms"}}>{this.state.pause}</Text>
+                        <TouchableOpacity style={{position: 'absolute', top: 10, left: 10 }} onPress={()=>{ this.AlertQuit()}}><Icon name='clear' size={40} color="white"  /></TouchableOpacity>
                     </View>
                     <View style={styles.middle} >
                         <ImageBackground source={require('../../assets/Compteur/compteur.png')} style={styles.compteur}>
@@ -267,6 +293,7 @@ export default class Compteur extends React.Component {
         )
     }
 }
+//style compteur
 const options = {
     container: {
         width: 220,
@@ -278,7 +305,6 @@ const options = {
         fontFamily: 'GnuolaneRG-Regular'
     }
 }
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
