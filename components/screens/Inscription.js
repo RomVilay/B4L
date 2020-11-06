@@ -119,7 +119,7 @@ export default class Inscription extends React.Component {
             <Text
               backgroundColor="transparent"
               style={{
-                color: '#53B4DC',
+                color: '#FFFFFF',
                 textTransform: 'uppercase',
                 fontSize: 15,
                 fontFamily: 'GnuolaneRG-Regular',
@@ -131,7 +131,7 @@ export default class Inscription extends React.Component {
                 onPress={() => this.props.navigation.navigate('Termes')}
                 backgroundColor="transparent"
                 style={{
-                  color: '#FFFFFF',
+                  color: '#53B4DC',
                   textTransform: 'uppercase',
                   fontSize: 15,
                   fontFamily: 'GnuolaneRG-Regular',

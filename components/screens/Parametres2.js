@@ -34,7 +34,7 @@ export default class Parametres2 extends React.Component {
                     <View style={styles.middle}>
                         <View style={[styles.midTop, {borderBottomWidth:1,borderColor:'white'}]}>
                             <Image source={this.state.avatar} />
-                            <Text style={[styles.whiteTitle, {fontSize:40}]}>{this.state.prenom}</Text>
+                            <Text style={[styles.whiteTitle, {fontSize:40, marginTop:15, marginBottom:10}]}>{this.state.prenom}</Text>
                          </View>
                          <View style={styles.midBot}>
                             <View style={styles.inputContainer}>

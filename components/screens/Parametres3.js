@@ -40,7 +40,7 @@ export default class Parametres3 extends React.Component {
                     <View style={styles.middle}>
                         <View style={[styles.midTop, {borderBottomWidth:1,borderColor:'white'}]}>
                             <Image source={this.state.avatar} />
-                            <Text style={[styles.whiteTitle, {fontSize:40}]}>{this.state.prenom}</Text>
+                            <Text style={[styles.whiteTitle, {fontSize:40, marginTop:10, marginBottom:10 }]}>{this.state.login}</Text>
                          </View>
                          <View style={styles.midBot}>
                             <View style={styles.inputContainer}>
@@ -53,6 +53,7 @@ export default class Parametres3 extends React.Component {
                             <View style={styles.inputContainer}>
                                 <TextInput
                                     value={this.state.password}
+                                    secureTextEntry={true}
                                     style={styles.input}
                                     onChangeText={password => this.setState({ password })}
                                     placeholderTextColor='#FFFFFF'/>
