@@ -55,13 +55,13 @@ export default class Parametres extends React.Component {
                                 this.state.parties.map(item => (item == this.state.selection  ?
                                         <View style={{flexDirection:'row'}} key={item}>
                                             <Text style={styles.linesw}>{item}</Text>
-                                            <View key={item} style={item !== 'Accessoire' ? {width:5, height:5, backgroundColor:'#5FCDFA', top:'25%', left:'6%'} : {width:5, height:5,opacity:0}}/>
+                                            <View key={item} style={item !== 'Accessoire' ? {width:5, height:5, backgroundColor:'#5FCDFA', top:'25%', left:'25%'} : {width:5, height:5,opacity:0}}/>
                                         </View>
                                         : <View style={{flexDirection:'row'}} key={item}>
                                             <TouchableOpacity onPress={ () => {this.setState({selection:item})}}>
                                                 <Text style={styles.linesb}>{item}</Text>
                                             </TouchableOpacity>
-                                            <View style={item !== 'Accessoire' ? {width:5, height:5, backgroundColor:'#5FCDFA', top:'25%', left:'6%'} : {width:5, height:5,opacity:0}}/>
+                                            <View style={item !== 'Accessoire' ? {width:5, height:5, backgroundColor:'#5FCDFA', top:'25%', left:'15%'} : {width:5, height:5,opacity:0}}/>
                                         </View>
 
 
@@ -83,6 +83,17 @@ export default class Parametres extends React.Component {
                                     onChangeText={age => this.setState({ age })}
                                     placeholderTextColor='#FFFFFF'/>
                             </View>
+                             <View style={[styles.inputContainer, {alignContent:'center', justifyContent:'space-around',flexDirection:'row',height:40,paddingTop:10 }]}>
+                                 <TouchableOpacity
+                                     onPress={() => { this.setState( {genre: this.state.genre == 'homme' ? 'femme': 'homme'})}}>
+                                     <Fleche />
+                                 </TouchableOpacity>
+                                 <Text style={[styles.input,{ paddingTop:5}]}>{this.state.genre}</Text>
+                                 <TouchableOpacity
+                                     onPress={() => { this.setState( {genre: this.state.genre == 'homme' ? 'femme': 'homme'})}}>
+                                    <Fleche style={{transform:[{rotate:'180deg'}]}}/>
+                                 </TouchableOpacity>
+                             </View>
                             <View style={styles.inputContainer}>
                                 <TextInput
                                     value={this.state.taille}
@@ -166,12 +177,11 @@ const styles = StyleSheet.create({
          zIndex: 100
      },
      midMid: {
-         flex: 1,
          flexDirection: 'row',
          alignItems: 'center',
          justifyContent:'space-between',
          zIndex: 100,
-         width:'80%'
+         width:'80%',
      },
     midBot: {
             flex: 2,
@@ -198,7 +208,7 @@ const styles = StyleSheet.create({
              fontFamily:'GnuolaneRG-Regular'
          },
       footer: {
-         marginTop: 50,
+         marginTop: 60,
              flex: 1,
              flexDirection: 'column',
              alignItems: 'center',
