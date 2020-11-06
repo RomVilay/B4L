@@ -87,7 +87,7 @@ export default function Accueil(props) {
         <Cercle />
         <Text
           style={styles.go}
-          onPress={() => props.navigation.navigate('Jumelage')}>
+          onPress={() => props.navigation.navigate('ListeDefis')}>
           GO
         </Text>
       </View>
