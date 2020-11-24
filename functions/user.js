@@ -9,7 +9,6 @@ const BASE_URL = `${URL}:${PORT}`;
  * @returns L'user correspondant à l'username | Un message d'erreur si pas autorisé
  */
 async function getUser(username, authToken) {
-  console.log('aaaa : ', BASE_URL);
   let get = await fetch(`${BASE_URL}/users/${username}`, {
     headers: {'auth-token': authToken},
   }).then(res => {

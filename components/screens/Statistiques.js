@@ -1,37 +1,17 @@
-import React from 'react'
-import { View, Image, StyleSheet, Text } from 'react-native'
+import React, {useState} from 'react'
+import {FlatList, Text, View, StyleSheet, Button, ImageBackground, Image, TouchableOpacity, SafeAreaView} from 'react-native'
 
-export default class Statistiques extends React.Component {
-    render() {
-        return (
-            <View style={styles.container}>
-                <Image
-                    style={styles.fond}
-                    source={require('../../assets/fond.png')}
-                    resizeMode="cover"
-                />
-                <Text
-                    style={{
-                        color: "white"
-                    }}
-                >
-                    Statistiques
-                </Text>
-            </View>
-        )
-    }
+
+
+export default function  Statistiques(props) {
+    return (
+        <SafeAreaView>
+            <ImageBackground
+                style={styles.fond}
+                source={require('../../assets/fond.png')}
+            >
+            </ImageBackground>
+        </SafeAreaView>
+    )
+
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-
-    fond: {
-        width: '100%',
-        height: '110%',
-        position: 'absolute'
-    }
-})

@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 // Imports Assets
 import LogoMin from '../../assets/logoMin';
-import Cercle from '../../assets/cercle';
+import Cercle from '../../assets/Accueil/cercle';
 import NavApp from '../navigation/NavApp';
 
 // Imports Components

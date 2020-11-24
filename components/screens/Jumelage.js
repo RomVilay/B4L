@@ -21,11 +21,10 @@ import { RNCamera } from 'react-native-camera';
 import NavApp from "../navigation/NavApp";
 // Imports Components
 
-var qrcode = require('../../assets/qrcode.png')
 
 export default class Jumelage extends React.Component {
     state = {
-        code: qrcode
+        code: 'qrcode'
     }
     onSuccess = e => {
         this.props.navigation.navigate("Compteur")

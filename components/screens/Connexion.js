@@ -23,7 +23,7 @@ export default function Connexion(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [state, setState] = useContext(Context);
 
-  if (Object.keys(state.user).length != 0) {
+  if (state.user.username) {
     props.navigation.navigate('Home');
   }
 
@@ -48,7 +48,8 @@ export default function Connexion(props) {
       const myLogin = await login({username, password}, APP_TOKEN);
       // console.log('mylogin : ', myLogin);
       if (myLogin.message) {
-        Alert.alert('Erreur', `${myLogin.message}`);
+        // Alert.alert('Erreur', `${myLogin.message}`);
+        setIsLoading(false);
       } else {
         await setState({user: myLogin.user, token: myLogin.token});
         setIsLoading(false);
@@ -58,19 +59,15 @@ export default function Connexion(props) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.main}>
+      <Image
+        style={styles.fond}
+        source={require('../../assets/fond.png')}
+        resizeMode="cover"
+      />
+      <LogoMed style={styles.logo} />
       <View style={styles.container}>
-        <Image
-          style={styles.fond}
-          source={require('../../assets/fond.png')}
-          resizeMode="cover"
-        />
-        <LogoMed style={styles.logo} />
-        <View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
+        <View style={styles.top}>
           <View style={styles.inputContainer}>
             <TextInput
               value={username}
@@ -91,55 +88,95 @@ export default function Connexion(props) {
               placeholderTextColor="#FFFFFF"
             />
           </View>
-          <Text
-            onPress={() => checkFields()}
-            backgroundColor="transparent"
-            style={{
-              color: '#5FCDFA',
-              fontSize: 50,
-              textTransform: 'uppercase',
-              fontFamily: 'TallFilms',
-              top: '5%',
-            }}>
-            Connexion
-          </Text>
         </View>
-        {isLoading ? <ActivityIndicator size="large" /> : null}
-        <Text
-          backgroundColor="transparent"
-          style={{
-            color: 'white',
-            textTransform: 'uppercase',
-            fontSize: 15,
-            fontFamily: 'GnuolaneRG-Regular',
-            top: '20%',
-          }}>
-          Pas encore inscrit ?
-        </Text>
-        <Text
-          onPress={() => props.navigation.navigate('Inscription')}
-          backgroundColor="transparent"
-          style={{
-            color: '#53B4DC',
-            textTransform: 'uppercase',
-            fontSize: 25,
-            fontFamily: 'GnuolaneRG-Regular',
-            top: '20%',
-          }}>
-          Créer un compte
-        </Text>
+
+        <View style={styles.mid}>
+          <View
+            style={{
+              position: 'absolute',
+              // bottom: '30%',
+              // margin: 0,
+              // padding: 0,
+            }}>
+            {isLoading ? (
+              <ActivityIndicator
+                size="large"
+                color="#5FCDFA"
+                style={{top: '10%'}}
+              />
+            ) : (
+              <Text
+                onPress={() => checkFields()}
+                backgroundColor="transparent"
+                style={{
+                  color: '#5FCDFA',
+                  fontSize: 50,
+                  textTransform: 'uppercase',
+                  fontFamily: 'TallFilms',
+                }}>
+                Connexion
+              </Text>
+            )}
+          </View>
+          <View style={styles.bottom}>
+            <Text
+              backgroundColor="transparent"
+              style={{
+                color: 'white',
+                textTransform: 'uppercase',
+                fontSize: 15,
+                fontFamily: 'GnuolaneRG-Regular',
+                top: '20%',
+              }}>
+              Pas encore inscrit ?
+            </Text>
+            <Text
+              onPress={() => props.navigation.navigate('Inscription')}
+              backgroundColor="transparent"
+              style={{
+                color: '#53B4DC',
+                textTransform: 'uppercase',
+                fontSize: 25,
+                fontFamily: 'GnuolaneRG-Regular',
+                top: '20%',
+              }}>
+              Créer un compte
+            </Text>
+          </View>
+        </View>
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  main: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
   },
-
+  container: {
+    // flex: 1,
+    // height: '50%',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+  },
+  top: {
+    position: 'relative',
+    top: '20%',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+  },
+  mid: {
+    flex: 1,
+    position: 'relative',
+    top: '25%',
+    alignItems: 'center',
+  },
+  bottom: {
+    position: 'relative',
+    top: '25%',
+    alignItems: 'center',
+  },
   input: {
     height: 45,
     width: 300,
@@ -166,7 +203,7 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    position: 'absolute',
+    position: 'relative',
     top: '5%',
   },
 });

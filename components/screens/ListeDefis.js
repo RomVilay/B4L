@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {FlatList, Text, View, StyleSheet, Button, ImageBackground, Image, TouchableOpacity, SafeAreaView} from 'react-native'
 import CheckBox from '@react-native-community/checkbox'
 import LogoMin from '../../assets/logoMin'
-import FlecheG from "../../assets/flecheG";
+import Fleche from "../../assets/fleche";
 import NavApp from "../navigation/NavApp";
 
 /*
@@ -51,13 +51,13 @@ export default function  ListeDefis(props) {
                     <Text style={[styles.titreBlanc, {position:'absolute',top:'100%'}]}>pour cette session</Text>
                 </View>
                 <View style={styles.body}>
-                    <FlecheG style={{transform:[{rotate:'90deg'}]}} />
+                    <Fleche style={{transform:[{rotate:'90deg'}]}} />
                     <FlatList
                         data={ListeDefs}
                         renderItem={render_item}
                         keyExtractor={(item) => {item.id}}
                         extraData={defisSelect}/>
-                        <FlecheG style={{transform:[{rotate:'270deg'}]}}/>
+                        <Fleche style={{transform:[{rotate:'270deg'}]}}/>
                 </View>
                 <View style={styles.footer}>
                     <TouchableOpacity style={{marginBottom:'10%'}} onPress={()=> props.navigation.navigate("Compteur")} color={'white'}>
