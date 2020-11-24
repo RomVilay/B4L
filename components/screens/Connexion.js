@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {Context} from '../utils/Store';
 
 import {
@@ -18,14 +18,25 @@ import NetInfo from '@react-native-community/netinfo';
 import LogoMed from '../../assets/logoMed';
 
 export default function Connexion(props) {
-  const [username, setUsername] = useState('julian');
+  const [username, setUsername] = useState('julooo');
   const [password, setPassword] = useState('zzz');
+  const [hasSignInInfos, setHasSignInInfos] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [state, setState] = useContext(Context);
 
-  if (state.user.username) {
-    props.navigation.navigate('Home');
+  if (props.route.params && props.route.params.username && !hasSignInInfos) {
+    console.log('if');
+    setHasSignInInfos(true);
+    setUsername(props.route.params.username);
+    if (props.route.params.password) {
+      setPassword(props.route.params.password);
+    }
   }
+
+  // if (state.user.username) {
+  //   console.log('user already logged in');
+  //   props.navigation.navigate('Home');
+  // }
 
   const checkFields = () => {
     if (!username.match(/^([a-zA-Z0-9]){5,}$/) || username == 'undefined') {
@@ -48,7 +59,7 @@ export default function Connexion(props) {
       const myLogin = await login({username, password}, APP_TOKEN);
       // console.log('mylogin : ', myLogin);
       if (myLogin.message) {
-        // Alert.alert('Erreur', `${myLogin.message}`);
+        Alert.alert('Erreur', `${myLogin.message}`);
         setIsLoading(false);
       } else {
         await setState({user: myLogin.user, token: myLogin.token});
@@ -66,7 +77,7 @@ export default function Connexion(props) {
         resizeMode="cover"
       />
       <LogoMed style={styles.logo} />
-      <View style={styles.container}>
+      <View>
         <View style={styles.top}>
           <View style={styles.inputContainer}>
             <TextInput
@@ -94,9 +105,6 @@ export default function Connexion(props) {
           <View
             style={{
               position: 'absolute',
-              // bottom: '30%',
-              // margin: 0,
-              // padding: 0,
             }}>
             {isLoading ? (
               <ActivityIndicator
@@ -108,38 +116,19 @@ export default function Connexion(props) {
               <Text
                 onPress={() => checkFields()}
                 backgroundColor="transparent"
-                style={{
-                  color: '#5FCDFA',
-                  fontSize: 50,
-                  textTransform: 'uppercase',
-                  fontFamily: 'TallFilms',
-                }}>
+                style={styles.connexionText}>
                 Connexion
               </Text>
             )}
           </View>
           <View style={styles.bottom}>
-            <Text
-              backgroundColor="transparent"
-              style={{
-                color: 'white',
-                textTransform: 'uppercase',
-                fontSize: 15,
-                fontFamily: 'GnuolaneRG-Regular',
-                top: '20%',
-              }}>
+            <Text backgroundColor="transparent" style={styles.inscriptionText1}>
               Pas encore inscrit ?
             </Text>
             <Text
               onPress={() => props.navigation.navigate('Inscription')}
               backgroundColor="transparent"
-              style={{
-                color: '#53B4DC',
-                textTransform: 'uppercase',
-                fontSize: 25,
-                fontFamily: 'GnuolaneRG-Regular',
-                top: '20%',
-              }}>
+              style={styles.inscriptionText2}>
               Créer un compte
             </Text>
           </View>
@@ -154,17 +143,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  container: {
-    // flex: 1,
-    // height: '50%',
-    // alignItems: 'center',
-    // justifyContent: 'center',
-  },
   top: {
     position: 'relative',
     top: '20%',
-    // alignItems: 'center',
-    // justifyContent: 'center',
   },
   mid: {
     flex: 1,
@@ -174,8 +155,17 @@ const styles = StyleSheet.create({
   },
   bottom: {
     position: 'relative',
-    top: '25%',
+    top: '30%',
     alignItems: 'center',
+  },
+  fond: {
+    width: '110%',
+    height: '120%',
+    position: 'absolute',
+  },
+  logo: {
+    position: 'relative',
+    top: '5%',
   },
   input: {
     height: 45,
@@ -186,7 +176,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontFamily: 'GnuolaneRG-Regular',
   },
-
   inputContainer: {
     borderWidth: 1,
     borderRadius: 10,
@@ -195,15 +184,24 @@ const styles = StyleSheet.create({
     borderColor: '#5FCDFA',
     backgroundColor: '#284462',
   },
-
-  fond: {
-    width: '110%',
-    height: '120%',
-    position: 'absolute',
+  connexionText: {
+    color: '#5FCDFA',
+    fontSize: 50,
+    textTransform: 'uppercase',
+    fontFamily: 'TallFilms',
   },
-
-  logo: {
-    position: 'relative',
-    top: '5%',
+  inscriptionText1: {
+    color: 'white',
+    textTransform: 'uppercase',
+    fontSize: 15,
+    fontFamily: 'GnuolaneRG-Regular',
+    top: '20%',
+  },
+  inscriptionText2: {
+    color: '#53B4DC',
+    textTransform: 'uppercase',
+    fontSize: 25,
+    fontFamily: 'GnuolaneRG-Regular',
+    top: '20%',
   },
 });

@@ -18,10 +18,10 @@ import NetInfo from '@react-native-community/netinfo';
 import LogoMed from '../../assets/logoMed';
 
 export default function Inscription(props) {
-  const [username, setUsername] = useState('julian');
-  const [email, setEmail] = useState('aaa@gmail.com');
+  const [username, setUsername] = useState('julooo');
+  const [mail, setMail] = useState('teykilae@gmail.com');
   const [password, setPassword] = useState('zzz');
-  const [password2, setPassword2] = useState('zzzs');
+  const [password2, setPassword2] = useState('zzz');
   const [isLoading, setIsLoading] = useState(false);
   const [state, setState] = useContext(Context);
 
@@ -56,37 +56,36 @@ export default function Inscription(props) {
     if (!isConnected) {
       Alert.alert('Erreur', 'Vérifiez votre connexion Internet et réessayez');
     } else {
-      const myRegister = await register({username, password}, APP_TOKEN);
-      console.log('myRegister : ', myRegister);
+      const myRegister = await register({username, password, mail}, APP_TOKEN);
+      // console.log('myRegister : ', myRegister);
       if (myRegister.message) {
         Alert.alert('Erreur', `${myRegister.message}`);
+        setIsLoading(false);
       } else {
         // await setState({user: myLogin.user, token: myLogin.token});
         setIsLoading(false);
         Alert.alert(
           'Email de confirmation envoyé',
-          `Un email de confirmation a été envoyé à ${email}`,
+          `Un email de confirmation a été envoyé à ${mail}`,
         );
-        props.navigation.navigate('Connexion');
+        props.navigation.navigate('Connexion', {
+          username: username,
+          password: password,
+        });
       }
     }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.main}>
+      <Image
+        style={styles.fond}
+        source={require('../../assets/fond.png')}
+        resizeMode="cover"
+      />
+      <LogoMed style={styles.logo} />
       <View style={styles.container}>
-        <Image
-          style={styles.fond}
-          source={require('../../assets/fond.png')}
-          resizeMode="cover"
-        />
-        <LogoMed style={styles.logo} />
-        <View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            top: '7%',
-          }}>
+        <View style={styles.top}>
           <View style={styles.inputContainer}>
             <TextInput
               value={username}
@@ -98,10 +97,10 @@ export default function Inscription(props) {
           </View>
           <View style={styles.inputContainer}>
             <TextInput
-              value={email}
+              value={mail}
               style={styles.input}
               keyboardType="email-address"
-              onChangeText={email => setEmail(email)}
+              onChangeText={mail => setMail(mail)}
               placeholder="Adresse mail"
               placeholderTextColor="#FFFFFF"
             />
@@ -126,54 +125,61 @@ export default function Inscription(props) {
               placeholderTextColor="#FFFFFF"
             />
           </View>
-          <Text
-            onPress={() => checkFields()}
-            backgroundColor="transparent"
+        </View>
+        <View style={styles.mid}>
+          <View
             style={{
-              color: '#53B4DC',
-              textTransform: 'uppercase',
-              fontSize: 50,
-              fontFamily: 'TallFilms',
-              top: '3%',
+              position: 'absolute',
+              // bottom: '30%',
+              // margin: 0,
+              // padding: 0,
             }}>
-            Inscription
-          </Text>
-          <Text
-            backgroundColor="transparent"
-            style={{
-              color: 'white',
-              textTransform: 'uppercase',
-              fontSize: 15,
-              fontFamily: 'GnuolaneRG-Regular',
-              top: '15%',
-            }}>
-            Vous avez déjà un compte ?
-          </Text>
-          <Text
-            onPress={() => props.navigation.navigate('Connexion')}
-            backgroundColor="transparent"
-            style={{
-              color: '#53B4DC',
-              textTransform: 'uppercase',
-              fontSize: 25,
-              fontFamily: 'TallFilms',
-              top: '15%',
-            }}>
-            Se connecter
-          </Text>
-          <Text
-            backgroundColor="transparent"
-            style={{
-              color: '#53B4DC',
-              textTransform: 'uppercase',
-              fontSize: 15,
-              fontFamily: 'GnuolaneRG-Regular',
-              top: '20%',
-              margin: '5%',
-            }}>
-            En vous inscrivant, vous acceptez nos
+            {isLoading ? (
+              <ActivityIndicator
+                size="large"
+                color="#5FCDFA"
+                style={{top: '10%'}}
+              />
+            ) : (
+              <Text
+                onPress={() => checkFields()}
+                backgroundColor="transparent"
+                style={{
+                  color: '#53B4DC',
+                  textTransform: 'uppercase',
+                  fontSize: 50,
+                  fontFamily: 'TallFilms',
+                  top: '3%',
+                }}>
+                Inscription
+              </Text>
+            )}
+          </View>
+          <View style={styles.bottom}>
             <Text
-              onPress={() => props.navigation.navigate('Termes')}
+              backgroundColor="transparent"
+              style={{
+                color: 'white',
+                textTransform: 'uppercase',
+                fontSize: 15,
+                fontFamily: 'GnuolaneRG-Regular',
+                top: '15%',
+              }}>
+              Vous avez déjà un compte ?
+            </Text>
+            <Text
+              onPress={() => props.navigation.navigate('Connexion')}
+              backgroundColor="transparent"
+              style={{
+                color: '#53B4DC',
+                textTransform: 'uppercase',
+                fontSize: 25,
+                fontFamily: 'GnuolaneRG-Regular',
+                top: '15%',
+              }}>
+              Se connecter
+            </Text>
+            <Text
               backgroundColor="transparent"
               style={{
                 color: '#FFFFFF',
@@ -181,11 +187,24 @@ export default function Inscription(props) {
                 fontSize: 15,
                 fontFamily: 'GnuolaneRG-Regular',
                 top: '20%',
+                margin: '5%',
               }}>
-              {' '}
-              Termes et conditions
+              En vous inscrivant, vous acceptez nos
+              <Text
+                onPress={() => props.navigation.navigate('Termes')}
+                backgroundColor="transparent"
+                style={{
+                  color: '#53B4DC',
+                  textTransform: 'uppercase',
+                  fontSize: 15,
+                  fontFamily: 'GnuolaneRG-Regular',
+                  top: '20%',
+                }}>
+                {' '}
+                Termes et conditions
+              </Text>
             </Text>
-          </Text>
+          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -193,12 +212,34 @@ export default function Inscription(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  main: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
   },
-
+  container: {
+    // flex: 1,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // backgroundColor: 'red',
+  },
+  top: {
+    position: 'relative',
+    top: '10%',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+  },
+  mid: {
+    flex: 1,
+    position: 'relative',
+    top: '15%',
+    alignItems: 'center',
+    // backgroundColor: 'blue',
+  },
+  bottom: {
+    position: 'relative',
+    top: '25%',
+    alignItems: 'center',
+  },
   input: {
     height: 45,
     width: 300,
@@ -225,7 +266,7 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    position: 'absolute',
+    position: 'relative',
     top: '5%',
   },
 });

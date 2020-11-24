@@ -2,7 +2,7 @@ import {URL, PORT} from '@env';
 import {fetchWithTimeout} from './fetchWithTimeout';
 
 const BASE_URL = `${URL}:${PORT}`;
-const serverTimeout = 2000;
+const serverTimeout = 5000;
 
 /**
  * Apppelle la route /login/register pour envoyer un mail de confirmation au nouvel user
