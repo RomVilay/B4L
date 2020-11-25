@@ -1,5 +1,5 @@
-import React, {useState, useContext, useEffect} from 'react';
-import {Context} from '../utils/Store';
+import React, {useState, useContext} from 'react';
+import NetInfo from '@react-native-community/netinfo';
 
 import {
   Image,
@@ -12,9 +12,10 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import {login} from '../../functions/login';
 import {APP_TOKEN} from '@env';
-import NetInfo from '@react-native-community/netinfo';
+import {Context} from '../utils/Store';
+import goTo from '../utils/navFunctions';
+import {login} from '../../functions/login';
 import LogoMed from '../../assets/logoMed';
 
 export default function Connexion(props) {
@@ -25,18 +26,12 @@ export default function Connexion(props) {
   const [state, setState] = useContext(Context);
 
   if (props.route.params && props.route.params.username && !hasSignInInfos) {
-    console.log('if');
     setHasSignInInfos(true);
     setUsername(props.route.params.username);
     if (props.route.params.password) {
       setPassword(props.route.params.password);
     }
   }
-
-  // if (state.user.username) {
-  //   console.log('user already logged in');
-  //   props.navigation.navigate('Home');
-  // }
 
   const checkFields = () => {
     if (!username.match(/^([a-zA-Z0-9]){5,}$/) || username == 'undefined') {
@@ -64,7 +59,7 @@ export default function Connexion(props) {
       } else {
         await setState({user: myLogin.user, token: myLogin.token});
         setIsLoading(false);
-        props.navigation.navigate('Home');
+        goTo(props);
       }
     }
   };

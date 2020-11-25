@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 
+import goTo from '../utils/navFunctions';
 import Navigation from '../../assets/navigation';
 import NavigationReverse from '../../assets/navigation_reverse';
 
@@ -77,7 +78,7 @@ class BottomPopup extends React.Component {
                         style={styles.item}
                         onPress={() => {
                           this.close();
-                          navigation.navigate('Home');
+                          goTo(this.props);
                         }}>
                         <Image source={require('../../assets/home.png')} />
                       </TouchableOpacity>

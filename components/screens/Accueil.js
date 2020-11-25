@@ -1,7 +1,6 @@
 // Imports Modules
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useState, useContext} from 'react';
 import {Context} from '../utils/Store';
-import {CommonActions} from '@react-navigation/native';
 import {
   View,
   StyleSheet,
@@ -30,12 +29,6 @@ export default function Accueil(props) {
   //   avatar: avatar,
   // };
   const [state, setState] = useContext(Context);
-
-  // useEffect(() => {
-  //   props.navigation.reset({
-  //     routes: [{name: 'Home'}],
-  //   });
-  // });
 
   return (
     <SafeAreaView style={styles.container}>
@@ -89,10 +82,7 @@ export default function Accueil(props) {
           GO
         </Text>
       </View>
-      <NavApp
-        style={{flex: 1, justifyContent: 'center'}}
-        navigation={props.navigation}
-      />
+      <NavApp navigation={props.navigation} />
     </SafeAreaView>
   );
 }
