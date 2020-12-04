@@ -22,22 +22,15 @@ import Horloge from '../screens/Horloge';
 var avatar = require('../../assets/avatar.png');
 
 export default function Accueil(props) {
+  const [state, setState] = useContext(Context);
   // state = {
-  //   name: 'Gaston',
-  //   kcal: '5400',
-  //   km: '234.0',
-  //   watts: '40000',
-  //   avatar: avatar,
+  //   user: {
+  //     username: 'Toto',
+  //   },
+  //   kcal: 153,
+  //   km: 234,
+  //   watts: 1552,
   // };
-  // const [state, setState] = useContext(Context);
-  state = {
-    user: {
-      username: 'Toto',
-    },
-    kcal: 153,
-    km: 234,
-    watts: 1552,
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -50,7 +43,9 @@ export default function Accueil(props) {
         <View style={styles.item}>
           <LogoMin />
         </View>
-        <View style={styles.item}>{/* <Battery /> */}</View>
+        <View style={styles.item}>
+          <Battery />
+        </View>
       </View>
       {/* FIN HEADER */}
 
@@ -68,13 +63,13 @@ export default function Accueil(props) {
           </View>
           <View style={styles.midItem}>
             <TouchableOpacity
-              // onPress={() => props.navigation.navigate('Classements')}>
-              onPress={() => console.log('slt')}>
+              onPress={() => props.navigation.navigate('Classements')}>
+              {/* onPress={() => console.log('slt')}> */}
               <Image source={avatar} />
             </TouchableOpacity>
           </View>
           <View style={[styles.midItem]}>
-            <Text style={styles.chiffres}>{state.km}</Text>
+            <Text style={styles.chiffres}>{state.user.prenom}</Text>
             <Text style={[styles.midText]}>
               km <Text style={{color: '#5FCDFA'}}>cumulés</Text>
             </Text>
@@ -98,8 +93,7 @@ export default function Accueil(props) {
           <Cercle />
           <Text
             style={styles.go}
-            // onPress={() => props.navigation.navigate('Jumelage')}>
-          >
+            onPress={() => props.navigation.navigate('Jumelage')}>
             GO
           </Text>
         </TouchableOpacity>

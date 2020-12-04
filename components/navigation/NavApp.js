@@ -88,15 +88,18 @@ class BottomPopup extends React.Component {
                           this.close();
                           navigation.navigate('Parametres');
                         }}>
-                        <Image source={require('../../assets/settings.png')} />
+                        <Image
+                          style={{width: 36, resizeMode: 'contain'}}
+                          source={require('../../assets/profile.png')}
+                        />
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={styles.item}
                         onPress={() => {
                           this.close();
-                          navigation.navigate('Termes');
+                          navigation.navigate('Parametres2');
                         }}>
-                        <Image source={require('../../assets/i.png')} />
+                        <Image source={require('../../assets/settings.png')} />
                       </TouchableOpacity>
                     </View>
                   </View>

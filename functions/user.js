@@ -1,6 +1,8 @@
-const fetch = require('node-fetch');
 import {URL, PORT} from '@env';
+import {fetchWithTimeout} from './fetchWithTimeout';
+
 const BASE_URL = `${URL}:${PORT}`;
+const serverTimeout = 5000;
 
 /**
  * Appelle la route /users/:username et retourne l'utilisateur
@@ -9,11 +11,13 @@ const BASE_URL = `${URL}:${PORT}`;
  * @returns L'user correspondant à l'username | Un message d'erreur si pas autorisé
  */
 async function getUser(username, authToken) {
-  let get = await fetch(`${BASE_URL}/users/${username}`, {
-    headers: {'auth-token': authToken},
-  }).then(res => {
-    return res.json();
-  });
+  let get = await fetchWithTimeout(
+    `${BASE_URL}/users/${username}`,
+    {
+      headers: {'auth-token': authToken},
+    },
+    serverTimeout,
+  );
   return get;
 }
 
@@ -23,10 +27,9 @@ async function getUser(username, authToken) {
  * @returns La liste des users | Un message d'erreur si pas admin
  */
 async function getAllUsers(authToken) {
-  let get = await fetch(`${BASE_URL}/users`, {
+  let get = await fetchWithTimeout(`${BASE_URL}/users`, {
     headers: {'auth-token': authToken},
-  }).then(res => {
-    return res.json();
+    serverTimeout,
   });
   return get;
 }
@@ -37,12 +40,31 @@ async function getAllUsers(authToken) {
  * @returns Le nombre d'users | Un message d'erreur si pas admin
  */
 async function usersCount(authToken) {
-  let count = await fetch(`${BASE_URL}/count/users`, {
+  let count = await fetchWithTimeout(`${BASE_URL}/count/users`, {
     headers: {'auth-token': authToken},
-  }).then(res => {
-    return res.json();
+    serverTimeout,
   });
   return count.count;
+}
+
+/**
+ * Appelle la route /users/:username en patch et modifie l'utilisateur concerné
+ * @param {String} username Le nom de l'utilisateur à vérifier
+ * @param {String} password Le mot de passe actuel de l'utilisateur
+ * @param {String} authToken Le token d'authentification
+ * @returns true si password valide, false sinon | Un message d'erreur si pas autorisé
+ */
+async function isValidPassword(username, password, authToken) {
+  let isValid = await fetchWithTimeout(
+    `${BASE_URL}/users/${username}/checkPassword`,
+    {
+      method: 'POST',
+      body: JSON.stringify({password: password}),
+      headers: {'Content-Type': 'application/json', 'auth-token': authToken},
+    },
+    serverTimeout,
+  );
+  return isValid;
 }
 
 /**
@@ -53,13 +75,15 @@ async function usersCount(authToken) {
  * @returns Les informations de l'utilisateur concené | Un message d'erreur si pas autorisé
  */
 async function editUser(username, body, authToken) {
-  let patch = await fetch(`${BASE_URL}/users/${username}`, {
-    method: 'patch',
-    body: JSON.stringify(body),
-    headers: {'Content-Type': 'application/json', 'auth-token': authToken},
-  }).then(res => {
-    return res.json();
-  });
+  let patch = await fetchWithTimeout(
+    `${BASE_URL}/users/${username}`,
+    {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+      headers: {'Content-Type': 'application/json', 'auth-token': authToken},
+    },
+    serverTimeout,
+  );
   return patch;
 }
 
@@ -70,11 +94,10 @@ async function editUser(username, body, authToken) {
  * @returns L'utilisateur supprimé | Un message d'erreur si pas autorisé
  */
 async function deleteUser(username, authToken) {
-  let deletedUser = await fetch(`${BASE_URL}/users/${username}`, {
+  let deletedUser = await fetchWithTimeout(`${BASE_URL}/users/${username}`, {
     method: 'DELETE',
     headers: {'auth-token': authToken},
-  }).then(res => {
-    return res.json();
+    serverTimeout,
   });
   return deletedUser;
 }
@@ -85,4 +108,5 @@ module.exports = {
   usersCount,
   editUser,
   deleteUser,
+  isValidPassword,
 };

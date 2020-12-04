@@ -1,16 +1,26 @@
 import React, {useContext} from 'react';
-import {View, StyleSheet, Image, SafeAreaView} from 'react-native';
+import {View, StyleSheet, Image, SafeAreaView, Alert} from 'react-native';
 
 import {Context} from '../utils/Store';
 import goTo from '../utils/navFunctions';
 import Logo from '../../assets/logo';
 import Fingerprint from '../../assets/fingerprint';
-import NavApp from '../navigation/NavApp';
+import {APP_TOKEN} from '@env';
+import {login} from '../../functions/login';
 
 export default function Demarrage(props) {
-  const [state] = useContext(Context);
+  const [state, setState] = useContext(Context);
 
-  const navigate = () => {
+  const navigate = async () => {
+    // // Pour se connecter et tester directement sur la page voulue
+    // let myLogin = await login({username: 'julooo', password: 'zzz'}, APP_TOKEN);
+    // if (myLogin.message) {
+    //   Alert.alert('Erreur', `${myLogin.message}`);
+    // } else {
+    //   setState({user: myLogin.user, token: myLogin.token});
+    //   goTo(props, 'Parametres2');
+    // }
+
     if (state.user.username && state.token != '') {
       console.log('user already logged in');
       goTo(props);
@@ -38,7 +48,6 @@ export default function Demarrage(props) {
           }}
         />
       </View>
-      <NavApp navigation={props.navigation} />
     </SafeAreaView>
   );
 }

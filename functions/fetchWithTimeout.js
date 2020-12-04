@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 
-async function fetchWithTimeout(url, options, delay) {
+async function fetchWithTimeout(url, options, delay = 10000) {
   const timer = new Promise(resolve => {
     setTimeout(resolve, delay, {
       timeout: true,

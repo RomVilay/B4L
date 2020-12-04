@@ -25,6 +25,7 @@
     "react-native-device-info": "^5.6.5",
     "react-native-elements": "^3.0.0-alpha.1",
     "react-native-gesture-handler": "^1.8.0",
+    "react-native-keyboard-aware-scroll-view": "^0.9.3",
     "react-native-modalbox": "^2.0.2",
     "react-native-permissions": "^2.2.2",
     "react-native-push-notification": "^6.1.2",
