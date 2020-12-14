@@ -116,6 +116,7 @@ function AppNavigator() {
                 <Stack.Screen name="Termes" component={Termes} options={{ headerShown: false }} />
                 <Stack.Screen name="Jumelage" component={Jumelage} options={{ headerShown: false }} />
                 <Stack.Screen name="Statistiques" component={Statistiques} options={{ headerShown: false }} />
+                <Stack.Screen name="Compteur" component={Compteur} options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>
     )

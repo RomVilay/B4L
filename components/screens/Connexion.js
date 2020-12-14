@@ -38,7 +38,7 @@ export default function Connexion(props) {
   };
 
   const getAuthToken = async () => {
-    setIsLoading(true);
+    /*setIsLoading(true);
     let isConnected = await NetInfo.fetch().then(state => {
       return state.isConnected;
     });
@@ -51,10 +51,10 @@ export default function Connexion(props) {
         Alert.alert('Erreur', `${myLogin.message}`);
       } else {
         await setState({user: myLogin.user, token: myLogin.token});
-        setIsLoading(false);
+        setIsLoading(false);*/
         props.navigation.navigate('Home');
-      }
-    }
+     /* }
+    }*/
   };
 
   return (

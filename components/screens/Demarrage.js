@@ -15,7 +15,7 @@ export default class Demarrage extends React.Component {
                     />
                     <Logo style={styles.logo} />
                     <Fingerprint
-                        onPress={() => this.props.navigation.navigate("Connexion")}
+                        onPress={() => this.props.navigation.navigate("Compteur")}
                         style={{
                             color: 'white',
                             position: 'absolute',
