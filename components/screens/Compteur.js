@@ -17,8 +17,7 @@ import NavApp from '../navigation/NavApp'
 // Imports Components
 import Fleche from "../../assets/fleche";
 import {Stopwatch} from 'react-native-stopwatch-timer'
-import AfficheurCompteur from "./afficheurConpteur";
-
+import SegmentedRoundDisplay from "react-native-segmented-round-display/src";
 export default class Compteur extends React.Component {
     constructor(props) {
         super(props);
@@ -37,6 +36,7 @@ export default class Compteur extends React.Component {
             reset:false,
             pause: "",
             time:"",
+            angle:-150,
             startPosition:-3,
             endPosition:2,
             outputRange:['0deg','10deg']
@@ -63,6 +63,7 @@ export default class Compteur extends React.Component {
             const ang = `${nend}deg` //définition de la valeur de rotation
             this.setState({startPosition:this.state.endPosition,
                 endPosition:nend ,
+                angle:nend ,
                 outputRange: this.state.outputRange[1]<ang ? [this.state.outputRange[1], ang] : [ang,this.state.outputRange[1]]})
         }, 6000) //mise à jour du tableau d'interpolation de la rotation, toutes les 6s
     }
@@ -224,40 +225,20 @@ export default class Compteur extends React.Component {
         const trans0 = this.rpm
         const trans1 = this.kcal
         const trans2 = this.kmh
-        const old = <ImageBackground source={require('../../assets/Compteur/compteur.png')} style={styles.compteur}>
-            <Animated.Image source={require('../../assets/Compteur/aiguille.png')} style={[{transform:[{rotate:rotation}]}, styles.aiguille]}/>
-            <View style={styles.midTop}>
-                <ImageBackground source={require('../../assets/Accueil/fondBulle.png')} style={[styles.fondBulle,{borderRadius:50, marginLeft:'22%', textAlign:'center'}]}>
-                    <Animated.View style={[styles.textbloc,trans0.getLayout()]}>
-                        <Text style={[styles.midText,{ fontSize: 30,}]}>{this.state.rpm}</Text>
-                        <Text style={[styles.midText2,{ fontSize: 20, }]}>rpm</Text>
-                    </Animated.View>
-                </ImageBackground>
-                <ImageBackground source={require('../../assets/Accueil/fondBulle.png')} style={[styles.fondBulle,{borderRadius:50, marginLeft:'5%'}]}>
-                    <Animated.View style={[styles.textbloc, trans1.getLayout()]}>
-                        <Text style={[styles.midText,{ fontSize: 30, }]}>{this.state.kcal}</Text>
-                        <Text style={[styles.midText2,{ fontSize: 20, }]}>kcals</Text>
-                    </Animated.View>
-                </ImageBackground>
-            </View>
-            <View style={styles.midMid} >
-                <TouchableOpacity onPress={this.ReverseSlider} ><Fleche style={styles.flecheG} /></TouchableOpacity>
-                <Animated.View style={[styles.textbloc, {margin:10}, trans2.getLayout()]}>
-                    <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kmh}</Text>
-                    <Text style={styles.midText2}>kmh</Text>
-                </Animated.View>
-                <TouchableOpacity onPress={this.StartTranslateFunction} ><Fleche style={styles.flecheD} /></TouchableOpacity>
-            </View>
-            <View style={styles.midBot} >
-                <View style={styles.textbloc}>
-                    <View style={{flexDirection:'column'}}>
-                        <Text style={[styles.midText,{ fontSize: 20}]}>{this.state.kmp}<Text style={[styles.midText2,{ color:'white',marginLeft:'2%'}]}> km <Text style={{color:"#5FCDFA"}}>parcourus </Text></Text></Text>
-                        <Text style={[styles.midText,{ fontSize: 20}]}>{this.state.kmc} <Text style={[styles.midText2,{  color:'white', marginLeft:'2%'}]}>km <Text style={{color:"#5FCDFA"}}> cumulés</Text></Text></Text>
-                    </View>
-                </View>
-            </View>
-        </ImageBackground>
-
+        const  example =
+            {
+                displayValue: false,
+                formatValue: (value) => `R$ ${value.toFixed(2)}`,
+                radius:120,
+                segments: [
+                    {
+                        total: 80,
+                        filled: this.state.endPosition,
+                    },
+                ],
+                emptyArcColor:'transparent',
+                incompleteArcColor:'#5FCDFA'
+            };
         return (
             <SafeAreaView style={styles.container}>
                 <ImageBackground source={require('../../assets/fond.png')} style={{flex: 1,
@@ -276,7 +257,42 @@ export default class Compteur extends React.Component {
                         <TouchableOpacity style={{position: 'absolute', top: 10, left: 10 }} onPress={()=>{ this.AlertQuit()}}><Icon name='clear' size={40} color="white"  /></TouchableOpacity>
                     </View>
                     <View style={styles.middle} >
-                        <AfficheurCompteur />
+                        <ImageBackground source={require('../../assets/Compteur/compteur.png')} style={styles.compteur}>
+                            <Animated.Image source={require('../../assets/Compteur/aiguille.png')} style={[{transform:[{rotate:rotation}]}, styles.aiguille]}/>
+                            <SafeAreaView style={styles.graph}>
+                                <SegmentedRoundDisplay {...example} />
+                            </SafeAreaView>
+                            <View style={styles.midTop}>
+                                <ImageBackground source={require('../../assets/Accueil/fondBulle.png')} style={[styles.fondBulle,{borderRadius:50, marginLeft:'22%', textAlign:'center'}]}>
+                                    <Animated.View style={[styles.textbloc,trans0.getLayout()]}>
+                                        <Text style={[styles.midText,{ fontSize: 30,}]}>{this.state.rpm}</Text>
+                                        <Text style={[styles.midText2,{ fontSize: 20, }]}>rpm</Text>
+                                    </Animated.View>
+                                </ImageBackground>
+                                <ImageBackground source={require('../../assets/Accueil/fondBulle.png')} style={[styles.fondBulle,{borderRadius:50, marginLeft:'5%'}]}>
+                                    <Animated.View style={[styles.textbloc, trans1.getLayout()]}>
+                                        <Text style={[styles.midText,{ fontSize: 30, }]}>{this.state.kcal}</Text>
+                                        <Text style={[styles.midText2,{ fontSize: 20, }]}>kcals</Text>
+                                    </Animated.View>
+                                </ImageBackground>
+                            </View>
+                            <View style={styles.midMid} >
+                                <TouchableOpacity onPress={this.ReverseSlider} ><Fleche style={styles.flecheG} /></TouchableOpacity>
+                                <Animated.View style={[styles.textbloc, {margin:10}, trans2.getLayout()]}>
+                                    <Text style={[styles.midText,{ fontSize: 30}]}>{this.state.kmh}</Text>
+                                    <Text style={styles.midText2}>kmh</Text>
+                                </Animated.View>
+                                <TouchableOpacity onPress={this.StartTranslateFunction} ><Fleche style={styles.flecheD} /></TouchableOpacity>
+                            </View>
+                            <View style={styles.midBot} >
+                                <View style={styles.textbloc}>
+                                    <View style={{flexDirection:'column'}}>
+                                        <Text style={[styles.midText,{ fontSize: 20}]}>{this.state.kmp}<Text style={[styles.midText2,{ color:'white',marginLeft:'2%'}]}> km <Text style={{color:"#5FCDFA"}}>parcourus </Text></Text></Text>
+                                        <Text style={[styles.midText,{ fontSize: 20}]}>{this.state.kmc} <Text style={[styles.midText2,{  color:'white', marginLeft:'2%'}]}>km <Text style={{color:"#5FCDFA"}}> cumulés</Text></Text></Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </ImageBackground>
                         <View style={[{flex:1, flexDirection:"row", marginLeft:'30%'}]}>
                             <Text style={[styles.midText,{ fontSize: 70, marginRight:'5%'}]}  onPress={() => {this.state.watts -= 5}}>-</Text>
                             <View style={styles.textbloc}>
@@ -353,6 +369,11 @@ const styles = StyleSheet.create({
         marginLeft:'30%',
         alignContent:'center',
         zIndex:0
+    },graph:{
+        position:"absolute",
+        top:82,
+        left:65,
+        zIndex:500
     },
     midTop:{
         flex:1,

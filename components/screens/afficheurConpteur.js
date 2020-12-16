@@ -21,44 +21,64 @@ const fondUri = RNimage.resolveAssetSource(fond).uri;
 import aiguille from '../../assets/Compteur/aiguille.png';
 const aiguilleUri = RNimage.resolveAssetSource(aiguille).uri;
 import fondBulle from '../../assets/Accueil/fondBulle.png';
+import SegmentedRoundDisplay from "react-native-segmented-round-display/src";
 const fondBulleUri = RNimage.resolveAssetSource(fondBulle);
+
 
 export default class AfficheurCompteur extends React.Component {
 
-
-    handleCompteur(canvas) {
-        const context = canvas.getContext('2d');
-        canvas.width = Dimensions.get('window').width;
-        canvas.height = 350;
-
-        const fond = new CanvasImage(canvas);
-        fond.src = fondUri
-        const aiguille = new CanvasImage(canvas)
-        aiguille.src = aiguilleUri
-        fond.addEventListener('load', e =>{
-            context.drawImage(fond,20,0,400,400)
-            context.beginPath()
-            context.strokeStyle = '#5FCDFA';
-            context.arc(220, 200, 100, 2*Math.PI/3, 3*Math.PI/4, false);
-            context.lineWidth = 10;
-            context.stroke();
-            context.translate(100,160)
-            context.rotate((Math.PI / 180) * -135)
-            context.translate(-330,-145)
-            context.drawImage(aiguille, 100,80,240,240)
-        })
-
-
-
-    }
     constructor(props) {
         super(props);
         this.canvas = React.createRef();
+        this.handleCompteur = this.handleCompteur.bind(this)
     }
+
+
+    async handleCompteur() {
+        const context = this.refs.canvas.getContext('2d');
+        canvas.width = Dimensions.get('window').width;
+        canvas.height = 350;
+        const {angle} = this.props
+        const fond = new CanvasImage(canvas);
+        fond.src = fondUri
+        const fondb = new CanvasImage(canvas);
+        fondb.src = fondBulleUri
+        const aiguille = new CanvasImage(canvas)
+        aiguille.src = aiguilleUri
+        fond.addEventListener('load', e => {
+            context.drawImage(fond, canvas.width/64, canvas.height/64, 400, 400)
+            /*context.drawImage(fondb, 0,0, 20,20) message out of range*/
+            context.beginPath()
+            context.strokeStyle = '#5FCDFA';
+            context.arc(220, 200, 100, 2 * Math.PI / 3, 3 * Math.PI / 4, false);
+            context.lineWidth = 10;
+            context.stroke();
+            context.save();
+            context.translate(canvas.width/2, canvas.width*0.55)
+            context.rotate((Math.PI / 180) * angle)
+            //context.translate(-canvas.width/2, -canvas.width/2)
+            context.drawImage(aiguille, -canvas.width/4, -canvas.width/4, 240, 240)
+            context.restore();
+            requestAnimationFrame(() => this.handleCompteur(this.canvas))
+        })
+    }
+
     render(){
+        //<Canvas ref="canvas"/>
+        const example =
+            {
+                displayValue: false,
+                formatValue: (value) => `R$ ${value.toFixed(2)}`,
+                segments: [
+                    {
+                        total: 80,
+                        filled: 20,
+                    },
+                ],
+            };
         return(
             <View>
-                    <Canvas ref={this.handleCompteur}/>
+                    <SegmentedRoundDisplay {...example} />
             </View>
             )
 
