@@ -12,7 +12,7 @@ import {
     Dimensions
 } from 'react-native'
 import Canvas, {Image as CanvasImage, Path2D, ImageData} from 'react-native-canvas';
-
+import Svg, {  Path, G } from 'react-native-svg'
 //assets
 import Fleche from "../../assets/fleche";
 import {Image as RNimage} from 'react-native'
@@ -65,20 +65,18 @@ export default class AfficheurCompteur extends React.Component {
 
     render(){
         //<Canvas ref="canvas"/>
-        const example =
-            {
-                displayValue: false,
-                formatValue: (value) => `R$ ${value.toFixed(2)}`,
-                segments: [
-                    {
-                        total: 80,
-                        filled: 20,
-                    },
-                ],
-            };
+        //M 120 270 A 1 1 0 0 1 250 270
+        const x =`M120,280 a125,125 0 1,1 110,10 `
         return(
-            <View>
-                    <SegmentedRoundDisplay {...example} />
+            <View style={this.props.style}>
+                <Svg >
+                    <Path
+                        d={x}
+                        stroke="#5FCDFA"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                    />
+                </Svg>
             </View>
             )
 

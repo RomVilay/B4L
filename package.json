@@ -1,14 +1,4 @@
 {
-  "name": "BikeForLife",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "start": "react-native start",
-    "test": "jest",
-    "lint": "eslint ."
-  },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.13.2",
     "@react-native-community/checkbox": "^0.5.6",
@@ -20,7 +10,7 @@
     "babel-plugin-dotenv-import": "^2.1.0",
     "moment": "^2.29.1",
     "node-fetch": "^2.6.1",
-    "react": "16.9.0",
+    "react": "^16.14.0",
     "react-native": "0.61.5",
     "react-native-camera": "^3.40.0",
     "react-native-canvas": "^0.1.37",
@@ -42,9 +32,11 @@
     "react-native-slider": "^0.11.0",
     "react-native-speedometer": "^1.0.5",
     "react-native-stopwatch-timer": "0.0.21",
-    "react-native-svg": "^11.0.1",
+    "react-native-svg": "^12.1.0",
     "react-native-vector-icons": "^7.1.0",
-    "react-native-webview": "^11.0.2"
+    "react-native-webview": "^11.0.2",
+    "react-dom": "16.8.0",
+    "prop-types": "*"
   },
   "devDependencies": {
     "@babel/core": "7.8.4",
@@ -59,5 +51,15 @@
   },
   "jest": {
     "preset": "react-native"
-  }
+  },
+  "name": "BikeForLife",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "version": "0.0.1"
 }

@@ -8,7 +8,8 @@ import {
     Animated,
     TouchableOpacity,
     Alert,
-    Button
+    Button,
+    Dimensions
 } from 'react-native'
 import Icon from "react-native-vector-icons/MaterialIcons";
 // Imports Assets
@@ -18,6 +19,8 @@ import NavApp from '../navigation/NavApp'
 import Fleche from "../../assets/fleche";
 import {Stopwatch} from 'react-native-stopwatch-timer'
 import SegmentedRoundDisplay from "react-native-segmented-round-display/src";
+import Svg from "react-native-svg";
+import AfficheurCompteur from "./afficheurConpteur";
 export default class Compteur extends React.Component {
     constructor(props) {
         super(props);
@@ -259,9 +262,7 @@ export default class Compteur extends React.Component {
                     <View style={styles.middle} >
                         <ImageBackground source={require('../../assets/Compteur/compteur.png')} style={styles.compteur}>
                             <Animated.Image source={require('../../assets/Compteur/aiguille.png')} style={[{transform:[{rotate:rotation}]}, styles.aiguille]}/>
-                            <SafeAreaView style={styles.graph}>
-                                <SegmentedRoundDisplay {...example} />
-                            </SafeAreaView>
+                            <AfficheurCompteur style={styles.graph}/>
                             <View style={styles.midTop}>
                                 <ImageBackground source={require('../../assets/Accueil/fondBulle.png')} style={[styles.fondBulle,{borderRadius:50, marginLeft:'22%', textAlign:'center'}]}>
                                     <Animated.View style={[styles.textbloc,trans0.getLayout()]}>
@@ -369,11 +370,16 @@ const styles = StyleSheet.create({
         marginLeft:'30%',
         alignContent:'center',
         zIndex:0
-    },graph:{
+    },
+    graph:{
         position:"absolute",
-        top:82,
+        top:0,
         left:65,
-        zIndex:500
+        width:Dimensions.get("window").width-55,
+        height:350,
+        zIndex:500,
+        borderWidth: 3,
+        borderColor: "white"
     },
     midTop:{
         flex:1,
