@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, Image, SafeAreaView } from 'react-native'
+import { View, StyleSheet, Image, SafeAreaView, StatusBar } from 'react-native'
 import Logo from '../../assets/logo'
 import Fingerprint from '../../assets/fingerprint'
 
@@ -7,6 +7,12 @@ export default class Demarrage extends React.Component {
     render() {
         return (
             <SafeAreaView style={styles.container}>
+                <StatusBar
+                    barStyle= "light-content"
+                    hidden={false}
+                    translucent={false}
+                    networkActivityIndicatorVisible={true}
+                    />
                 <View style={styles.container}>
                     <Image
                         style={styles.fond}
@@ -15,7 +21,7 @@ export default class Demarrage extends React.Component {
                     />
                     <Logo style={styles.logo} />
                     <Fingerprint
-                        onPress={() => this.props.navigation.navigate("Compteur")}
+                        onPress={() => this.props.navigation.navigate("Connexion")}
                         style={{
                             color: 'white',
                             position: 'absolute',

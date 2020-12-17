@@ -262,7 +262,7 @@ export default class Compteur extends React.Component {
                     <View style={styles.middle} >
                         <ImageBackground source={require('../../assets/Compteur/compteur.png')} style={styles.compteur}>
                             <Animated.Image source={require('../../assets/Compteur/aiguille.png')} style={[{transform:[{rotate:rotation}]}, styles.aiguille]}/>
-                            <AfficheurCompteur style={styles.graph}/>
+                           <AfficheurCompteur style={styles.graph}/>
                             <View style={styles.midTop}>
                                 <ImageBackground source={require('../../assets/Accueil/fondBulle.png')} style={[styles.fondBulle,{borderRadius:50, marginLeft:'22%', textAlign:'center'}]}>
                                     <Animated.View style={[styles.textbloc,trans0.getLayout()]}>

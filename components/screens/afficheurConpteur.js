@@ -65,8 +65,10 @@ export default class AfficheurCompteur extends React.Component {
 
     render(){
         //<Canvas ref="canvas"/>
-        //M 120 270 A 1 1 0 0 1 250 270
-        const x =`M120,280 a125,125 0 1,1 110,10 `
+        //M120,280 a125,125 0 1,1 110,10 cercle complet
+        //`M120,280 a122,122 0 1,1 180,-100 ` cercle - 3/4
+
+        const x =`M120,280 a122,122 0 1,1 180,-140 `
         return(
             <View style={this.props.style}>
                 <Svg >

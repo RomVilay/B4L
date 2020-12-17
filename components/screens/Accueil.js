@@ -46,8 +46,6 @@ export default function Accueil(props) {
           <LogoMin />
         </View>
         <View style={styles.item}>
-          <Battery />
-          <Horloge />
         </View>
       </View>
       <View style={[styles.middle, {width: '100%'}]}>
@@ -85,7 +83,7 @@ export default function Accueil(props) {
         <Cercle />
         <Text
           style={styles.go}
-          onPress={() => props.navigation.navigate('Jumelage')}>
+          onPress={() => props.navigation.navigate('Compteur')}>
           GO
         </Text>
       </View>
