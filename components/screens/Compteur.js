@@ -40,9 +40,11 @@ export default class Compteur extends React.Component {
             pause: "",
             time:"",
             angle:-150,
-            startPosition:-3,
-            endPosition:2,
-            outputRange:['0deg','10deg']
+            startPosition:-150,
+            endPosition:-130,
+            outputRange:['0deg','10deg'],
+            seg:1,
+            up:true
         }
         this.tab = ['rpm','kmh','kcals']
         this.toggleStopwatch = this.toggleStopwatch.bind(this);
@@ -62,13 +64,28 @@ export default class Compteur extends React.Component {
     //fonction qui défini la rotation à effectuer
     randomRotation(){
         setInterval( () => {
-            const nend = Math.floor(Math.random() * 50)
-            const ang = `${nend}deg` //définition de la valeur de rotation
-            this.setState({startPosition:this.state.endPosition,
-                endPosition:nend ,
-                angle:nend ,
-                outputRange: this.state.outputRange[1]<ang ? [this.state.outputRange[1], ang] : [ang,this.state.outputRange[1]]})
-        }, 6000) //mise à jour du tableau d'interpolation de la rotation, toutes les 6s
+            if (this.state.up){
+                const nend = this.state.endPosition+10
+                const ang = `${nend}deg` //définition de la valeur de rotation
+                this.setState({startPosition:this.state.endPosition,
+                    endPosition:nend ,
+                    seg:this.state.seg+1,
+                    angle:nend })
+                if (this.state.endPosition >= -110 ){
+                    this.state.up = false
+                }
+            } else {
+                const nend = this.state.endPosition-10
+                const ang = `${nend}deg` //définition de la valeur de rotation
+                this.setState({startPosition:this.state.endPosition,
+                    endPosition:nend ,
+                    seg:this.state.seg-1,
+                    angle:nend })
+                if (this.state.endPosition <= -135 ){
+                    this.state.up = true
+                }
+            }
+        }, 500) //mise à jour du tableau d'interpolation de la rotation, toutes les 6s
     }
     //déclenchement de l'animation du compteur à l'ouverture de la page
     componentDidMount() {
@@ -85,7 +102,7 @@ export default class Compteur extends React.Component {
         Animated.timing(this.RotateValueHolder, {
             toValue: this.state.endPosition,
             Easing:'linear',
-            duration: 3000
+            duration: 1000
         }).start(() => this.StartImageRotateFunction()); // animation de la rotation, pour une durée de 3s
     }
     //animation de déplacement des valeur pour la flèche droite
@@ -262,7 +279,7 @@ export default class Compteur extends React.Component {
                     <View style={styles.middle} >
                         <ImageBackground source={require('../../assets/Compteur/compteur.png')} style={styles.compteur}>
                             <Animated.Image source={require('../../assets/Compteur/aiguille.png')} style={[{transform:[{rotate:rotation}]}, styles.aiguille]}/>
-                           <AfficheurCompteur style={styles.graph}/>
+
                             <View style={styles.midTop}>
                                 <ImageBackground source={require('../../assets/Accueil/fondBulle.png')} style={[styles.fondBulle,{borderRadius:50, marginLeft:'22%', textAlign:'center'}]}>
                                     <Animated.View style={[styles.textbloc,trans0.getLayout()]}>

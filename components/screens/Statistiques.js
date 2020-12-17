@@ -35,6 +35,16 @@ export default function  Statistiques(props) {
         barPercentage: 0.5,
         useShadowColorFromDataset: false // optional
     };
+    const chartConfig2 = {
+        backgroundGradientFrom: "#5FCDFA",
+        backgroundGradientFromOpacity: 0,
+        backgroundGradientTo: "#5FCDFA",
+        backgroundGradientToOpacity: 0,
+        color: (opacity = 1) => `rgba(95, 206, 250, ${opacity})`,
+        strokeWidth: 1, // optional, default 3
+        barPercentage: 0.5,
+        useShadowColorFromDataset: false // optional
+    };
     return (
         <SafeAreaView style={styles.container}>
             <ImageBackground
@@ -156,8 +166,9 @@ export default function  Statistiques(props) {
                     </View>
                     <Text style={[styles.texteBlanc, {fontSize:20}]}>Complétion des objectifs de la période </Text>
                     <View style={{alignItems:'center', flexDirection:"row"}}>
-                        <View style={{ flexDirection:"column", alignItems:'center'}}>
-                            <Text style={[styles.texteBlanc, {fontSize:20,textTransform:'none'}]}>production d'énergie </Text>
+                        <View style={{ flexDirection:"column", alignItems:'center',backgroundColor:'#FFFFFF22', borderRadius:10,}}>
+                            <Text style={[styles.texteBlanc, {fontSize:20,textTransform:'none',marginLeft: 5}]}>production d'énergie </Text>
+                            <Text style={{position:"absolute", top:52, color:"white"}}>{data.data*100}%</Text>
                             <ProgressChart
                                 data={data}
                                 width={80}
@@ -168,15 +179,16 @@ export default function  Statistiques(props) {
                                 hideLegend={true}
                             />
                         </View>
-                        <View style={{ flexDirection:"column", alignItems:'center'}}>
-                            <Text style={[styles.texteBlanc, {fontSize:20, textTransform:'none'}]}>calories dépensées </Text>
+                        <View style={{ flexDirection:"column", alignItems:'center', backgroundColor:'#5fcefa22', borderRadius:10, marginLeft:50}}>
+                            <Text style={[styles.texteBlanc, {fontSize:20, textTransform:'none', color:"#5fcefa", marginLeft: 5}]}>calories dépensées </Text>
+                            <Text style={{position:"absolute", top:52, color:"#5fcefa"}}>{data.data*100}%</Text>
                             <ProgressChart
                                 data={data}
                                 width={80}
                                 height={80}
                                 strokeWidth={16}
                                 radius={32}
-                                chartConfig={chartConfig}
+                                chartConfig={chartConfig2}
                                 hideLegend={true}
                             />
                         </View>

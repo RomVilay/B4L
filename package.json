@@ -10,7 +10,9 @@
     "babel-plugin-dotenv-import": "^2.1.0",
     "moment": "^2.29.1",
     "node-fetch": "^2.6.1",
+    "prop-types": "*",
     "react": "^16.14.0",
+    "react-dom": "16.8.0",
     "react-native": "0.61.5",
     "react-native-camera": "^3.40.0",
     "react-native-canvas": "^0.1.37",
@@ -30,13 +32,11 @@
     "react-native-segmented-round-display": "^1.0.0",
     "react-native-selectable-flatlist": "^1.0.3",
     "react-native-slider": "^0.11.0",
-    "react-native-speedometer": "^1.0.5",
     "react-native-stopwatch-timer": "0.0.21",
     "react-native-svg": "^12.1.0",
+    "react-native-svg-animations": "^0.2.6",
     "react-native-vector-icons": "^7.1.0",
-    "react-native-webview": "^11.0.2",
-    "react-dom": "16.8.0",
-    "prop-types": "*"
+    "react-native-webview": "^11.0.2"
   },
   "devDependencies": {
     "@babel/core": "7.8.4",
