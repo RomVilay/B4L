@@ -28,6 +28,7 @@ export default function  ListeDefis(props) {
     const render_item = ({ item }) =>{
         return (
             <Item
+                key={item.id}
                 item={item}
                 onPress={() => {
                     item.statut = !item.statut

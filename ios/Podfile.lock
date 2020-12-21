@@ -192,8 +192,12 @@ PODS:
     - React-Core
   - react-native-camera/RN (3.40.0):
     - React-Core
+  - react-native-netinfo (5.9.9):
+    - React-Core
   - react-native-safe-area-context (0.7.3):
     - React
+  - react-native-webview (11.0.2):
+    - React-Core
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
   - React-RCTAnimation (0.61.5):
@@ -229,14 +233,21 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
+<<<<<<< HEAD
   - RNCAsyncStorage (1.13.1):
     - React
   - RNCCheckbox (0.5.5):
+=======
+  - RNCAsyncStorage (1.13.2):
+>>>>>>> romain
     - React
+  - RNCCheckbox (0.5.6):
+    - React-Core
   - RNCMaskedView (0.1.10):
     - React
   - RNDeviceInfo (5.6.5):
     - React
+<<<<<<< HEAD
   - RNGestureHandler (1.8.0):
     - React
   - RNPermissions (2.2.2):
@@ -246,6 +257,17 @@ PODS:
   - RNScreens (2.12.0):
     - React-Core
   - RNSVG (11.0.1):
+=======
+  - RNGestureHandler (1.9.0):
+    - React-Core
+  - RNPermissions (2.2.2):
+    - React-Core
+  - RNReanimated (1.13.2):
+    - React-Core
+  - RNScreens (2.16.1):
+    - React-Core
+  - RNSVG (12.1.0):
+>>>>>>> romain
     - React
   - RNVectorIcons (7.1.0):
     - React
@@ -270,7 +292,9 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-camera (from `../node_modules/react-native-camera`)
+  - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -331,8 +355,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-camera:
     :path: "../node_modules/react-native-camera"
+  react-native-netinfo:
+    :path: "../node_modules/@react-native-community/netinfo"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-webview:
+    :path: "../node_modules/react-native-webview"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -394,7 +422,9 @@ SPEC CHECKSUMS:
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
   react-native-camera: 5c1fbfecf63b802b8ca4a71c60d30a71550fb348
+  react-native-netinfo: 77d133105df525d4a11f10fcaa8d0b8883ea6429
   react-native-safe-area-context: 8260e5157617df4b72865f44006797f895b2ada7
+  react-native-webview: b2542d6fd424bcc3e3b2ec5f854f0abb4ec86c87
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -405,6 +435,7 @@ SPEC CHECKSUMS:
   React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
+<<<<<<< HEAD
   RNCAsyncStorage: 43b0cd421ea28a0f342e026366d4b58d817feb27
   RNCCheckbox: 0d96d7725fecba464d0af856e93ce66dde780d75
   RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
@@ -414,9 +445,20 @@ SPEC CHECKSUMS:
   RNReanimated: dd8c286ab5dd4ba36d3a7fef8bff7e08711b5476
   RNScreens: 4b488fdf9537bbce829e2910c8cce1d17f6d9be8
   RNSVG: 67f1f12dae2cef6ed59a42cae74a6b8f5a9e7b46
+=======
+  RNCAsyncStorage: bc2f81cc1df90c267ce9ed30bb2dbc93b945a8ee
+  RNCCheckbox: 0fa612ce146445b80efde233dab96602faf67d31
+  RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
+  RNDeviceInfo: e841619c3dac5495a095c5455473579ff04908d4
+  RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
+  RNPermissions: 067727df624665d4a6c8e2cffcc172ba608b96ed
+  RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
+  RNScreens: 45c457af3d2ee9e08fc01e70da87e653d46b1198
+  RNSVG: ce9d996113475209013317e48b05c21ee988d42e
+>>>>>>> romain
   RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: b4bff010f6805e2c1129107f23cd1878b0acc43e
+PODFILE CHECKSUM: 5a77bbf599fd4da876eb5500baacc2c39e95f542
 
 COCOAPODS: 1.9.3

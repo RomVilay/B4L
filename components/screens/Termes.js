@@ -84,13 +84,7 @@ export default class Termes extends React.Component {
                     </ScrollView>
                     <Text
                         onPress={() => this.props.navigation.goBack()}
-                        style={{
-                            color: "#FFFFFF",
-                            textTransform: 'uppercase',
-                            fontSize: 20,
-                            fontFamily: 'DIN Condensed',
-                            bottom: '5%'
-                        }}
+                        style={[styles.textTitle, {top:0, marginBottom: '20%'}]}
                     >Accepter et continuer</Text>
                 </View>
             </SafeAreaView>
@@ -116,8 +110,8 @@ const styles = StyleSheet.create({
     scrollView: {
         marginStart: '10%',
         marginEnd: '10%',
-        marginTop: '30%',
-        marginBottom: '20%'
+        marginTop: '15%',
+        marginBottom: '5%'
     },
 
     textScrollView: {

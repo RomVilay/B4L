@@ -1,5 +1,13 @@
 import React, {useContext} from 'react';
-import {View, StyleSheet, Image, SafeAreaView, Alert} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Image,
+  SafeAreaView,
+  Alert,
+  StatusBar,
+  Text,
+} from 'react-native';
 
 import {Context} from '../utils/Store';
 import goTo from '../utils/navFunctions';
@@ -31,6 +39,13 @@ export default function Demarrage(props) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar
+        barStyle="light-content"
+        hidden={false}
+        translucent={true}
+        backgroundColor="transparent"
+        networkActivityIndicatorVisible={true}
+      />
       <View style={styles.container}>
         <Image
           style={styles.fond}
@@ -38,7 +53,7 @@ export default function Demarrage(props) {
           resizeMode="cover"
         />
         <Logo style={styles.logo} />
-        <Fingerprint
+        {/* <Fingerprint
           onPress={() => navigate()}
           style={{
             color: 'white',
@@ -46,7 +61,8 @@ export default function Demarrage(props) {
             top: 550,
             fontSize: 30,
           }}
-        />
+        /> */}
+        <Text style={styles.text}>Start</Text>
       </View>
     </SafeAreaView>
   );
@@ -66,5 +82,13 @@ const styles = StyleSheet.create({
   logo: {
     position: 'absolute',
     top: 150,
+  },
+  text: {
+    color: '#5FCDFA',
+    fontSize: 70,
+    textTransform: 'uppercase',
+    fontFamily: 'TallFilms',
+    position: 'absolute',
+    top: 550,
   },
 });

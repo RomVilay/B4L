@@ -42,7 +42,7 @@ export default class Jumelage extends React.Component {
                     justifyContent: "center"}}>
                             <QRCodeScanner
                                     onRead={this.onSuccess.bind(this)}
-                                    topContent={  <View style={styles.header}><LogoMin /><Text style={[styles.textTitle, {fontSize:30, marginTop:5}]}>Jumellage</Text>
+                                    topContent={  <View style={styles.header}><LogoMin /><Text style={[styles.textTitle, {fontSize:70, marginTop:5}]}>Jumellage</Text>
                                         <Text style={[styles.midText,{marginBottom:20}]}>Commencez à pédaler pour allumer la machine, puis scannez le qrcode.</Text>
                                     </View>
                                         }
