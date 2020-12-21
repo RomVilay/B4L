@@ -47,10 +47,10 @@ export default function  Statistiques(props) {
     };
     return (
         <SafeAreaView style={styles.container}>
-            <ImageBackground
+            <Image
                 style={styles.fond}
                 source={require('../../assets/fond.png')}
-            >
+            />
                 <View style={styles.header}>
                     <LogoMin />
                     <Text style={[styles.titreBleu, {height:50}]}>Statistiques</Text>
@@ -199,18 +199,18 @@ export default function  Statistiques(props) {
                         <Text style={[styles.titreBleu, {fontSize:50,marginTop:50}]}>retour</Text>
                     </TouchableHighlight>
                 </View>
-            </ImageBackground>
         </SafeAreaView>
     )
 
 }
 const styles = StyleSheet.create({
     fond: {
+        position: 'absolute',
+        flex: 1,
         width: '100%',
-        height:'100%',
-        resizeMode: "cover",
-        justifyContent: "center",
-        overflow:"scroll",
+        height: '110%',
+        resizeMode: 'cover',
+        justifyContent: 'center',
     },
     header:{
         marginTop:10,

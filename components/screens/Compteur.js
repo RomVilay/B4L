@@ -5,6 +5,7 @@ import {
     SafeAreaView,
     Text,
     ImageBackground,
+    Image,
     Animated,
     TouchableOpacity,
     Alert,
@@ -43,7 +44,7 @@ export default class Compteur extends React.Component {
             startPosition:-160,
             endPosition:-130,
             outputRange:['0deg','10deg'],
-            seg:1,
+            seg:6,
             up:true
         }
         this.tab = ['rpm','kmh','kcals']
@@ -261,9 +262,7 @@ export default class Compteur extends React.Component {
             };
         return (
             <SafeAreaView style={styles.container}>
-                <ImageBackground source={require('../../assets/fond.png')} style={{flex: 1,
-                    resizeMode: "cover",
-                    justifyContent: "center"}}>
+                <Image source={require('../../assets/fond.png')} style={styles.fond} />
                     <View style={styles.header} >
                         <LogoMin></LogoMin>
                         <Stopwatch
@@ -325,7 +324,6 @@ export default class Compteur extends React.Component {
                     <View style={styles.footer}>
                         <NavApp  navigation={this.props.navigation} />
                     </View>
-                </ImageBackground>
             </SafeAreaView>
         )
     }

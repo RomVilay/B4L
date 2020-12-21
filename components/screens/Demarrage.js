@@ -32,7 +32,7 @@ export default class Demarrage extends React.Component {
                         resizeMode="cover"
                     />
                     <Logo style={styles.logo} />
-                   <Text style={styles.text}>Start</Text>
+                   <Text style={styles.text} onPress={() => this.props.navigation.navigate("Connexion")}>Start</Text>
                 </View>
             </SafeAreaView>
         )
