@@ -11,6 +11,7 @@ import {
   SafeAreaView,
   Dimensions,
   TouchableHighlight,
+  Platform
 } from 'react-native';
 import LogoMin from '../../assets/logoMin';
 import NavApp from '../navigation/NavApp';
@@ -34,6 +35,8 @@ export default function Statistiques(props) {
     strokeWidth: 1, // optional, default 3
     barPercentage: 0.5,
     useShadowColorFromDataset: false, // optional
+    position:"absolute",
+    zIndex: 0,
   };
   const chartConfig2 = {
     backgroundGradientFrom: '#5FCDFA',
@@ -66,7 +69,7 @@ export default function Statistiques(props) {
             startDate={Dates[0]}
             displayedDate={displayedDate}
             range
-            containerStyle={{zIndex: 600}}>
+            containerStyle={styles.containerDate}>
             <Text style={styles.texteBlanc}>
               Du {Dates[0].format('DD/MM')} au {Dates[1].format('DD/MM')}
             </Text>
@@ -104,16 +107,15 @@ export default function Statistiques(props) {
               yAxisSuffix="km"
               yAxisInterval={1} // optional, defaults to 1
               chartConfig={{
-                backgroundGradientFrom: '#FFFFFF',
+                backgroundGradientFrom: '#000000',
                 backgroundGradientFromOpacity: 0.2,
-                backgroundGradientTo: '#FFFFFF',
+                backgroundGradientTo: '#000000',
                 backgroundGradientToOpacity: 0.2,
                 decimalPlaces: 2, // optional, defaults to 2dp
                 color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                 labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                 style: {
                   borderRadius: 16,
-                  zIndex: 0,
                 },
                 propsForDots: {
                   r: '6',
@@ -180,6 +182,7 @@ export default function Statistiques(props) {
               style={{
                 marginVertical: 8,
                 borderRadius: 16,
+                zIndex:0
               }}
             />
           </View>
@@ -262,20 +265,37 @@ export default function Statistiques(props) {
   );
 }
 const styles = StyleSheet.create({
-  fond: {
-    position: 'absolute',
+  fond: { ...Platform.select({
+      ios: {
+        position: 'absolute',
+        zIndex:0
+      },
+      android: {
+      },
+    }),
     flex: 1,
     width: '100%',
     height: '110%',
     resizeMode: 'cover',
     justifyContent: 'center',
+
   },
   header: {
     marginTop: 10,
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    //zIndex:20
+    ...Platform.select({
+      ios:{
+        position:"absolute",
+        top:10,
+        left:Dimensions.get("window").width/2-60,
+        zIndex:20
+      },
+      android:{
+
+      }
+    })
   },
   titreBleu: {
     color: '#56ADCE',
@@ -290,19 +310,32 @@ const styles = StyleSheet.create({
     fontFamily: 'GnuolaneRG-Regular',
   },
   body: {
-    marginTop: '10%',
+    ...Platform.select({
+      ios:{
+    marginTop: '40%'}}),
     flex: 4,
     alignItems: 'center',
-    //zIndex:0
+    zIndex:0,
+
   },
   footer: {
+    position:"absolute",
+    bottom:50,
+    left: 150,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  containerDate:{
+    position:"absolute",
+    top:-200,
+    left:-170,
+    zIndex:20
   },
   container: {
     flex: 1,
     height: '200%',
     flexWrap: 'nowrap',
+    zIndex:0
   },
 });
