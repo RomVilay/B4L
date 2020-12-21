@@ -37,9 +37,7 @@ export default class Jumelage extends React.Component {
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <ImageBackground source={require('../../assets/fond.png')} style={{flex: 1,
-                    resizeMode: "cover",
-                    justifyContent: "center"}}>
+                <Image source={require('../../assets/fond.png')} style={styles.fond} />
                             <QRCodeScanner
                                     onRead={this.onSuccess.bind(this)}
                                     topContent={  <View style={styles.header}><LogoMin /><Text style={[styles.textTitle, {fontSize:70, marginTop:5}]}>Jumellage</Text>
@@ -58,7 +56,7 @@ export default class Jumelage extends React.Component {
                                        }
                                     bottomViewStyle={{flex:1,padding:0, margin:0}}
                                 />
-                </ImageBackground>
+
             </SafeAreaView>
         )
     }
@@ -67,8 +65,9 @@ export default class Jumelage extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 100
+        zIndex: 100,
     },
 
     header: {
@@ -111,7 +110,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '110%',
         resizeMode: 'cover',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
 
     footer: {

@@ -263,11 +263,12 @@ export default function Statistiques(props) {
 }
 const styles = StyleSheet.create({
   fond: {
+    position: 'absolute',
+    flex: 1,
     width: '100%',
-    height: '100%',
+    height: '110%',
     resizeMode: 'cover',
     justifyContent: 'center',
-    overflow: 'scroll',
   },
   header: {
     marginTop: 10,

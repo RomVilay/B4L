@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   Text,
   ImageBackground,
+  Image,
   Animated,
   TouchableOpacity,
   Alert,
@@ -261,143 +262,140 @@ export default class Compteur extends React.Component {
     };
     return (
       <SafeAreaView style={styles.container}>
-        <ImageBackground
-          source={require('../../assets/fond.png')}
-          style={{flex: 1, resizeMode: 'cover', justifyContent: 'center'}}>
-          <View style={styles.header}>
-            <LogoMin />
-            <Stopwatch
-              start={this.state.start}
-              reset={this.state.reset}
-              options={options}
-              getTime={this.getFormattedTime}
-              msec={true}
+        <Image source={require('../../assets/fond.png')} style={styles.fond} />
+        <View style={styles.header}>
+          <LogoMin />
+          <Stopwatch
+            start={this.state.start}
+            reset={this.state.reset}
+            options={options}
+            getTime={this.getFormattedTime}
+            msec={true}
+          />
+          <Text
+            style={{color: '#5FCDFA', fontSize: 30, fontFamily: 'TallFilms'}}>
+            {this.state.pause}
+          </Text>
+          <TouchableOpacity
+            style={{position: 'absolute', top: 10, left: 10}}
+            onPress={() => {
+              this.AlertQuit();
+            }}>
+            <Icon name="power-settings-new" size={40} color="white" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.middle}>
+          <ImageBackground
+            source={require('../../assets/Compteur/compteur.png')}
+            style={styles.compteur}>
+            <Animated.Image
+              source={require('../../assets/Compteur/aiguille.png')}
+              style={[{transform: [{rotate: rotation}]}, styles.aiguille]}
             />
-            <Text
-              style={{color: '#5FCDFA', fontSize: 30, fontFamily: 'TallFilms'}}>
-              {this.state.pause}
-            </Text>
-            <TouchableOpacity
-              style={{position: 'absolute', top: 10, left: 10}}
-              onPress={() => {
-                this.AlertQuit();
-              }}>
-              <Icon name="power-settings-new" size={40} color="white" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.middle}>
-            <ImageBackground
-              source={require('../../assets/Compteur/compteur.png')}
-              style={styles.compteur}>
-              <Animated.Image
-                source={require('../../assets/Compteur/aiguille.png')}
-                style={[{transform: [{rotate: rotation}]}, styles.aiguille]}
-              />
-              <AfficheurCompteur style={styles.graph} i={this.state.seg} />
-              <View style={styles.midTop}>
-                <ImageBackground
-                  source={require('../../assets/Accueil/fondBulle.png')}
-                  style={[
-                    styles.fondBulle,
-                    {borderRadius: 50, marginLeft: '22%', textAlign: 'center'},
-                  ]}>
-                  <Animated.View style={[styles.textbloc, trans0.getLayout()]}>
-                    <Text style={[styles.midText, {fontSize: 30}]}>
-                      {this.state.rpm}
-                    </Text>
-                    <Text style={[styles.midText2, {fontSize: 20}]}>rpm</Text>
-                  </Animated.View>
-                </ImageBackground>
-                <ImageBackground
-                  source={require('../../assets/Accueil/fondBulle.png')}
-                  style={[
-                    styles.fondBulle,
-                    {borderRadius: 50, marginLeft: '5%'},
-                  ]}>
-                  <Animated.View style={[styles.textbloc, trans1.getLayout()]}>
-                    <Text style={[styles.midText, {fontSize: 30}]}>
-                      {this.state.kcal}
-                    </Text>
-                    <Text style={[styles.midText2, {fontSize: 20}]}>kcals</Text>
-                  </Animated.View>
-                </ImageBackground>
-              </View>
-              <View style={styles.midMid}>
-                <TouchableOpacity onPress={this.ReverseSlider}>
-                  <Fleche style={styles.flecheG} />
-                </TouchableOpacity>
-                <Animated.View
-                  style={[styles.textbloc, {margin: 10}, trans2.getLayout()]}>
+            <AfficheurCompteur style={styles.graph} i={this.state.seg} />
+            <View style={styles.midTop}>
+              <ImageBackground
+                source={require('../../assets/Accueil/fondBulle.png')}
+                style={[
+                  styles.fondBulle,
+                  {borderRadius: 50, marginLeft: '22%', textAlign: 'center'},
+                ]}>
+                <Animated.View style={[styles.textbloc, trans0.getLayout()]}>
                   <Text style={[styles.midText, {fontSize: 30}]}>
-                    {this.state.kmh}
+                    {this.state.rpm}
                   </Text>
-                  <Text style={styles.midText2}>kmh</Text>
+                  <Text style={[styles.midText2, {fontSize: 20}]}>rpm</Text>
                 </Animated.View>
-                <TouchableOpacity onPress={this.StartTranslateFunction}>
-                  <Fleche style={styles.flecheD} />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.midBot}>
-                <View style={styles.textbloc}>
-                  <View style={{flexDirection: 'column'}}>
-                    <Text style={[styles.midText, {fontSize: 20}]}>
-                      {this.state.kmp}
-                      <Text
-                        style={[
-                          styles.midText2,
-                          {color: 'white', marginLeft: '2%'},
-                        ]}>
-                        {' '}
-                        km <Text style={{color: '#5FCDFA'}}>parcourus </Text>
-                      </Text>
+              </ImageBackground>
+              <ImageBackground
+                source={require('../../assets/Accueil/fondBulle.png')}
+                style={[
+                  styles.fondBulle,
+                  {borderRadius: 50, marginLeft: '5%'},
+                ]}>
+                <Animated.View style={[styles.textbloc, trans1.getLayout()]}>
+                  <Text style={[styles.midText, {fontSize: 30}]}>
+                    {this.state.kcal}
+                  </Text>
+                  <Text style={[styles.midText2, {fontSize: 20}]}>kcals</Text>
+                </Animated.View>
+              </ImageBackground>
+            </View>
+            <View style={styles.midMid}>
+              <TouchableOpacity onPress={this.ReverseSlider}>
+                <Fleche style={styles.flecheG} />
+              </TouchableOpacity>
+              <Animated.View
+                style={[styles.textbloc, {margin: 10}, trans2.getLayout()]}>
+                <Text style={[styles.midText, {fontSize: 30}]}>
+                  {this.state.kmh}
+                </Text>
+                <Text style={styles.midText2}>kmh</Text>
+              </Animated.View>
+              <TouchableOpacity onPress={this.StartTranslateFunction}>
+                <Fleche style={styles.flecheD} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.midBot}>
+              <View style={styles.textbloc}>
+                <View style={{flexDirection: 'column'}}>
+                  <Text style={[styles.midText, {fontSize: 20}]}>
+                    {this.state.kmp}
+                    <Text
+                      style={[
+                        styles.midText2,
+                        {color: 'white', marginLeft: '2%'},
+                      ]}>
+                      {' '}
+                      km <Text style={{color: '#5FCDFA'}}>parcourus </Text>
                     </Text>
-                    <Text style={[styles.midText, {fontSize: 20}]}>
-                      {this.state.kmc}{' '}
-                      <Text
-                        style={[
-                          styles.midText2,
-                          {color: 'white', marginLeft: '2%'},
-                        ]}>
-                        km <Text style={{color: '#5FCDFA'}}> cumulés</Text>
-                      </Text>
+                  </Text>
+                  <Text style={[styles.midText, {fontSize: 20}]}>
+                    {this.state.kmc}{' '}
+                    <Text
+                      style={[
+                        styles.midText2,
+                        {color: 'white', marginLeft: '2%'},
+                      ]}>
+                      km <Text style={{color: '#5FCDFA'}}> cumulés</Text>
                     </Text>
-                  </View>
+                  </Text>
                 </View>
               </View>
-            </ImageBackground>
-            <View style={[{flex: 1, flexDirection: 'row', marginLeft: '30%'}]}>
-              <Text
-                style={[styles.midText, {fontSize: 70, marginRight: '5%'}]}
-                onPress={() => {
-                  this.state.watts -= 5;
-                }}>
-                -
-              </Text>
-              <View style={styles.textbloc}>
-                <Text style={[styles.midText, {fontSize: 70}]}>
-                  {' '}
-                  {this.state.watts}{' '}
-                </Text>
-                <Text style={[styles.midText2]}>watts </Text>
-                <TouchableOpacity
-                  style={styles.midText2}
-                  onPress={() => this.toggleStopwatch()}>
-                  <Text style={[styles.midText, {fontSize: 30}]}>Pause</Text>
-                </TouchableOpacity>
-              </View>
-              <Text
-                style={[styles.midText, {fontSize: 70, marginRight: '5%'}]}
-                onPress={() => {
-                  this.state.watts += 5;
-                }}>
-                +
-              </Text>
             </View>
+          </ImageBackground>
+          <View style={[{flex: 1, flexDirection: 'row', marginLeft: '30%'}]}>
+            <Text
+              style={[styles.midText, {fontSize: 70, marginRight: '5%'}]}
+              onPress={() => {
+                this.state.watts -= 5;
+              }}>
+              -
+            </Text>
+            <View style={styles.textbloc}>
+              <Text style={[styles.midText, {fontSize: 70}]}>
+                {' '}
+                {this.state.watts}{' '}
+              </Text>
+              <Text style={[styles.midText2]}>watts </Text>
+              <TouchableOpacity
+                style={styles.midText2}
+                onPress={() => this.toggleStopwatch()}>
+                <Text style={[styles.midText, {fontSize: 30}]}>Pause</Text>
+              </TouchableOpacity>
+            </View>
+            <Text
+              style={[styles.midText, {fontSize: 70, marginRight: '5%'}]}
+              onPress={() => {
+                this.state.watts += 5;
+              }}>
+              +
+            </Text>
           </View>
-          <View style={styles.footer}>
-            <NavApp navigation={this.props.navigation} />
-          </View>
-        </ImageBackground>
+        </View>
+        <View style={styles.footer}>
+          <NavApp navigation={this.props.navigation} />
+        </View>
       </SafeAreaView>
     );
   }
