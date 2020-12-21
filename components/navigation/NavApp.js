@@ -1,134 +1,170 @@
-// Imports Modules
-import React from 'react'
-import { StyleSheet, SafeAreaView, Image, View, Text, TouchableHighlight , ImageBackground, Button, Dimensions, TextInput, ScrollView} from 'react-native'
-import { Icon } from 'react-native-elements'
+import React from 'react';
 import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem
-} from '@react-navigation/drawer';
-import Modal from 'react-native-modalbox'
-import Navigation from '../../assets/navigation'
+  Modal,
+  Dimensions,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  View,
+} from 'react-native';
 
-import Accueil from '../screens/Accueil.js'
-import Termes from '../screens/Termes.js'
-import Parametres from '../screens/Parametres.js'
+import goTo from '../utils/navFunctions';
+import Navigation from '../../assets/navigation';
+import NavigationReverse from '../../assets/navigation_reverse';
 
-import Navigation_reverse from '../../assets/navigation_reverse'
+const deviceHeight = Dimensions.get('window').height;
+class BottomPopup extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      show: false,
+    };
+  }
 
-var screen = Dimensions.get('window');
-export default class NavApp extends React.Component {
+  show = () => {
+    this.setState({show: true});
+  };
 
-        constructor() {
-            super();
-            this.state = {
-              isOpen: true,
-              isDisabled: false,
-              swipeToClose: true
-            };
-          }
+  close = () => {
+    this.setState({show: false});
+  };
 
-    render() {
-        return (
-      <View style={styles.wrapper}>
-        <Navigation onPress={() => {this.refs.modal.open()}} style={[styles.btn,{opacity:this.state.isOpen ? 100 : 0}]} />
-        <Modal style={styles.modal} position={"bottom"} ref={"modal"}>
-           <View style={styles.container}>
-               <Navigation_reverse
-                                  onPress={() => this.setState({isOpen: false})}
-                                  style={{ top: '2%', marginBottom:10}}
-                />
-               <View style={[styles.logos, { width: '100%' }]}>
-                  <View style={styles.item} >
-                        <TouchableHighlight
-                               onPress={() => this.props.navigation.navigate("Accueil")}>
-                                   <Image source={require('../../assets/home.png')}/>
-                        </TouchableHighlight>
-                  </View>
-                  <View style={styles.item} >
-                      <TouchableHighlight
-                       onPress={() => this.props.navigation.navigate("Parametres")}>
-                          <Image source={require('../../assets/settings.png')}/>
-                      </TouchableHighlight>
-                  </View>
-                  <View style={styles.item}>
-                      <TouchableHighlight
-                          onPress={() => this.props.navigation.navigate("Termes")}>
-                          <Image source={require('../../assets/i.png')}/>
-                      </TouchableHighlight>
-                  </View>
-               </View>
-         </View>
-        </Modal>
-      </View>
+  renderOutsideTouchable(onTouch) {
+    const view = <View style={{flex: 1, width: '100%'}} />;
+    if (!onTouch) return view;
+    return (
+      <TouchableWithoutFeedback
+        onPress={onTouch}
+        style={{flex: 1, width: '100%'}}>
+        {view}
+      </TouchableWithoutFeedback>
     );
-    }
+  }
+
+  render() {
+    let {show} = this.state;
+    const {onTouchOutside, navigation} = this.props;
+
+    return (
+      <>
+        <View style={styles.container}>
+          <View style={styles.main}>
+            <View>
+              {!show ? (
+                <TouchableWithoutFeedback onPress={() => this.show()}>
+                  <Navigation />
+                </TouchableWithoutFeedback>
+              ) : null}
+              <Modal
+                animationType={'slide'}
+                transparent={true}
+                visible={show}
+                onRequestClose={this.close}>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'flex-end',
+                  }}>
+                  {this.renderOutsideTouchable(onTouchOutside)}
+                  <View style={styles.navAppContainer}>
+                    <NavigationReverse
+                      onPress={() => {
+                        this.close();
+                      }}
+                    />
+                    <View style={styles.logos}>
+                      <TouchableOpacity
+                        style={styles.item}
+                        onPress={() => {
+                          this.close();
+                          goTo(this.props);
+                        }}>
+                        <Image source={require('../../assets/home.png')} />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.item}
+                        onPress={() => {
+                          this.close();
+                          navigation.navigate('Parametres');
+                        }}>
+                        <Image
+                          style={{width: 36, resizeMode: 'contain'}}
+                          source={require('../../assets/profile.png')}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.item}
+                        onPress={() => {
+                          this.close();
+                          navigation.navigate('Parametres2');
+                        }}>
+                        <Image source={require('../../assets/settings.png')} />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+              </Modal>
+            </View>
+          </View>
+        </View>
+      </>
+    );
+  }
 }
 
+export default (NavApp = props => {
+  let popupRef = React.createRef();
+
+  // Ferme la popup quand on clique en dehors
+  const onClosePopup = () => {
+    popupRef.close();
+  };
+
+  return (
+    <>
+      <BottomPopup
+        ref={target => (popupRef = target)}
+        onTouchOutside={onClosePopup}
+        navigation={props.navigation}
+      />
+    </>
+  );
+});
+
 const styles = StyleSheet.create({
-    wrapper: {
-        flex:1,
-        position:'absolute',
-        bottom:0,
-        height:100,
-        width:500,
-        zIndex:500
-    },
-    modal: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor:'transparent',
-        flex:1,
-        flexDirection:'row'
-    },
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        zIndex: 100,
-    },
-
-    logos: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'flex-start',
-        justifyContent: 'space-around',
-        marginBottom:'5%',
-        zIndex: 100
-    },
-
-    item: {
-        width: 80,
-        height: 50,
-        zIndex: 100,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-
-    text: {
-        fontFamily:'GnuolaneRG-Regular',
-        color: 'white'
-    },
-
-    fond: {
-        position: 'absolute',
-        flex: 1,
-        width: '100%',
-        height: '20%',
-        resizeMode: 'cover',
-        justifyContent: 'center'
-    },
-      btn: {
-        color: "white",
-        position:'absolute',
-        bottom:10,
-        left:'20%'
-      },
-
-      btnModal: {
-        position: "absolute",
-        top: 0,
-        right: 0,
-        backgroundColor: "transparent"
-      }
-})
+  container: {
+    alignItems: 'center',
+    // flex: 1,
+  },
+  main: {
+    position: 'absolute',
+    bottom: 0,
+  },
+  navAppContainer: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    width: '100%',
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
+    // paddingHorizontal: 10,
+    maxHeight: deviceHeight * 0.15,
+  },
+  logos: {
+    // flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-around',
+    // zIndex: 100,
+    // marginBottom: 55,
+    marginTop: 5,
+  },
+  item: {
+    width: 80,
+    height: 50,
+    zIndex: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 60,
+  },
+});

@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react';
-import {Context} from '../utils/Store';
+import NetInfo from '@react-native-community/netinfo';
 
 import {
   Image,
@@ -12,19 +12,25 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import {login} from '../../functions/login';
 import {APP_TOKEN} from '@env';
-import NetInfo from '@react-native-community/netinfo';
+import {Context} from '../utils/Store';
+import goTo from '../utils/navFunctions';
+import {login} from '../../functions/login';
 import LogoMed from '../../assets/logoMed';
 
 export default function Connexion(props) {
-  const [username, setUsername] = useState('julian');
+  const [username, setUsername] = useState('julooo');
   const [password, setPassword] = useState('zzz');
+  const [hasSignInInfos, setHasSignInInfos] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [state, setState] = useContext(Context);
 
-  if (Object.keys(state.user).length != 0) {
-    props.navigation.navigate('Home');
+  if (props.route.params && props.route.params.username && !hasSignInInfos) {
+    setHasSignInInfos(true);
+    setUsername(props.route.params.username);
+    if (props.route.params.password) {
+      setPassword(props.route.params.password);
+    }
   }
 
   const checkFields = () => {
@@ -38,7 +44,7 @@ export default function Connexion(props) {
   };
 
   const getAuthToken = async () => {
-    /*setIsLoading(true);
+    setIsLoading(true);
     let isConnected = await NetInfo.fetch().then(state => {
       return state.isConnected;
     });
@@ -49,28 +55,25 @@ export default function Connexion(props) {
       // console.log('mylogin : ', myLogin);
       if (myLogin.message) {
         Alert.alert('Erreur', `${myLogin.message}`);
+        setIsLoading(false);
       } else {
         await setState({user: myLogin.user, token: myLogin.token});
-        setIsLoading(false);*/
-        props.navigation.navigate('Home');
-     /* }
-    }*/
+        setIsLoading(false);
+        goTo(props);
+      }
+    }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
-        <Image
-          style={styles.fond}
-          source={require('../../assets/fond.png')}
-          resizeMode="cover"
-        />
-        <LogoMed style={styles.logo} />
-        <View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
+    <SafeAreaView style={styles.main}>
+      <Image
+        style={styles.fond}
+        source={require('../../assets/fond.png')}
+        resizeMode="cover"
+      />
+      <LogoMed style={styles.logo} />
+      <View>
+        <View style={styles.top}>
           <View style={styles.inputContainer}>
             <TextInput
               value={username}
@@ -91,66 +94,84 @@ export default function Connexion(props) {
               placeholderTextColor="#FFFFFF"
             />
           </View>
-          <Text
-            onPress={() => checkFields()}
-            backgroundColor="transparent"
-            style={{
-              color: '#5FCDFA',
-              fontSize: 50,
-              textTransform: 'uppercase',
-              fontFamily: 'TallFilms',
-              top: '5%',
-            }}>
-            Connexion
-          </Text>
         </View>
-        {isLoading ? <ActivityIndicator size="large" /> : null}
-        <Text
-          backgroundColor="transparent"
-          style={{
-            color: 'white',
-            textTransform: 'uppercase',
-            fontSize: 15,
-            fontFamily: 'GnuolaneRG-Regular',
-            top: '20%',
-          }}>
-          Pas encore inscrit ?
-        </Text>
-        <Text
-          onPress={() => props.navigation.navigate('Inscription')}
-          backgroundColor="transparent"
-          style={{
-            color: '#53B4DC',
-            textTransform: 'uppercase',
-            fontSize: 25,
-            fontFamily: 'GnuolaneRG-Regular',
-            top: '20%',
-          }}>
-          Créer un compte
-        </Text>
+
+        <View style={styles.mid}>
+          <View
+            style={{
+              position: 'absolute',
+            }}>
+            {isLoading ? (
+              <ActivityIndicator
+                size="large"
+                color="#5FCDFA"
+                style={{top: '10%'}}
+              />
+            ) : (
+              <Text
+                onPress={() => checkFields()}
+                backgroundColor="transparent"
+                style={styles.connexionText}>
+                Connexion
+              </Text>
+            )}
+          </View>
+          <View style={styles.bottom}>
+            <Text backgroundColor="transparent" style={styles.inscriptionText1}>
+              Pas encore inscrit ?
+            </Text>
+            <Text
+              onPress={() => props.navigation.navigate('Inscription')}
+              backgroundColor="transparent"
+              style={styles.inscriptionText2}>
+              Créer un compte
+            </Text>
+          </View>
+        </View>
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  main: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
   },
-
+  top: {
+    position: 'relative',
+    top: '20%',
+  },
+  mid: {
+    flex: 1,
+    position: 'relative',
+    top: '25%',
+    alignItems: 'center',
+  },
+  bottom: {
+    position: 'relative',
+    top: '30%',
+    alignItems: 'center',
+  },
+  fond: {
+    width: '110%',
+    height: '120%',
+    position: 'absolute',
+  },
+  logo: {
+    position: 'relative',
+    top: '5%',
+  },
   input: {
     height: 45,
     width: 300,
     fontSize: 20,
-    color:'white',
+    color: 'white',
     borderRadius: 10,
     textAlign: 'center',
     alignSelf: 'center',
     fontFamily: 'GnuolaneRG-Regular',
   },
-
   inputContainer: {
     borderWidth: 1,
     borderRadius: 10,
@@ -159,15 +180,24 @@ const styles = StyleSheet.create({
     borderColor: '#5FCDFA',
     backgroundColor: '#284462',
   },
-
-  fond: {
-    width: '110%',
-    height: '120%',
-    position: 'absolute',
+  connexionText: {
+    color: '#5FCDFA',
+    fontSize: 50,
+    textTransform: 'uppercase',
+    fontFamily: 'TallFilms',
   },
-
-  logo: {
-    position: 'absolute',
-    top: '5%',
+  inscriptionText1: {
+    color: 'white',
+    textTransform: 'uppercase',
+    fontSize: 15,
+    fontFamily: 'GnuolaneRG-Regular',
+    top: '20%',
+  },
+  inscriptionText2: {
+    color: '#53B4DC',
+    textTransform: 'uppercase',
+    fontSize: 25,
+    fontFamily: 'GnuolaneRG-Regular',
+    top: '20%',
   },
 });

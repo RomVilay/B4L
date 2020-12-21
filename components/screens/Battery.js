@@ -12,7 +12,7 @@ var levelBattery = DeviceInfo.getBatteryLevel().then(batteryLevel => {
 })
 
 var charging = DeviceInfo.isBatteryCharging().then(isCharging => {
-	console.log(isCharging)
+	// console.log(isCharging)
 	charging = isCharging
 })
 
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     		height:20,
     	},
 	withThunder: {
-		flex: 1,
+		// flex: 1,
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between'

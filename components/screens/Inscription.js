@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useState, useContext} from 'react';
+import {Context} from '../utils/Store';
+
 import {
   Image,
   Text,
@@ -7,92 +9,153 @@ import {
   StyleSheet,
   SafeAreaView,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 
+import {register} from '../../functions/login';
+import {APP_TOKEN} from '@env';
+import NetInfo from '@react-native-community/netinfo';
 import LogoMed from '../../assets/logoMed';
 
-export default class Inscription extends React.Component {
-  state = {
-    username: '',
-    email: '',
-    password: '',
-    password2: '',
+export default function Inscription(props) {
+  const [username, setUsername] = useState('julooo');
+  const [mail, setMail] = useState('teykilae@gmail.com');
+  const [password, setPassword] = useState('zzz');
+  const [password2, setPassword2] = useState('zzz');
+  const [isLoading, setIsLoading] = useState(false);
+  const [state, setState] = useContext(Context);
+
+  const checkFields = () => {
+    if (!username.match(/^([a-zA-Z0-9]){5,}$/) || username == 'undefined') {
+      Alert.alert(
+        'Erreur',
+        `Le nom d'utilisateur doit contenir au moins 5 caractères`,
+      );
+    } else if (
+      !password.match(/^([a-zA-Z0-9]){3,}$/) ||
+      password == 'undefined'
+    ) {
+      Alert.alert(
+        'Erreur',
+        `Le mot de passe doit contenir au moins 3 caractères`,
+      );
+    } else if (password2 !== password) {
+      Alert.alert('inscription', 'veuillez saisir un mot de passe identique', [
+        {text: 'fermer'},
+      ]);
+    } else {
+      sendConfirmMail();
+    }
   };
-  render() {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.container}>
-          <Image
-            style={styles.fond}
-            source={require('../../assets/fond.png')}
-            resizeMode="cover"
-          />
-          <LogoMed style={styles.logo} />
+
+  const sendConfirmMail = async () => {
+    setIsLoading(true);
+    let isConnected = await NetInfo.fetch().then(state => {
+      return state.isConnected;
+    });
+    if (!isConnected) {
+      Alert.alert('Erreur', 'Vérifiez votre connexion Internet et réessayez');
+    } else {
+      const myRegister = await register({username, password, mail}, APP_TOKEN);
+      // console.log('myRegister : ', myRegister);
+      if (myRegister.message) {
+        Alert.alert('Erreur', `${myRegister.message}`);
+        setIsLoading(false);
+      } else {
+        // await setState({user: myLogin.user, token: myLogin.token});
+        setIsLoading(false);
+        Alert.alert(
+          'Email de confirmation envoyé',
+          `Un email de confirmation a été envoyé à ${mail}`,
+        );
+        props.navigation.navigate('Connexion', {
+          username: username,
+          password: password,
+        });
+      }
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.main}>
+      <Image
+        style={styles.fond}
+        source={require('../../assets/fond.png')}
+        resizeMode="cover"
+      />
+      <LogoMed style={styles.logo} />
+      <View style={styles.container}>
+        <View style={styles.top}>
+          <View style={styles.inputContainer}>
+            <TextInput
+              value={username}
+              style={styles.input}
+              onChangeText={username => setUsername(username)}
+              placeholder="Nom d'utilisateur"
+              placeholderTextColor="#FFFFFF"
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              value={mail}
+              style={styles.input}
+              keyboardType="email-address"
+              onChangeText={mail => setMail(mail)}
+              placeholder="Adresse mail"
+              placeholderTextColor="#FFFFFF"
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              value={password}
+              style={styles.input}
+              onChangeText={password => setPassword(password)}
+              placeholder={'Mot de passe'}
+              secureTextEntry={true}
+              placeholderTextColor="#FFFFFF"
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              value={password2}
+              style={styles.input}
+              onChangeText={password2 => setPassword2(password2)}
+              placeholder={'Validez votre mot de passe'}
+              secureTextEntry={true}
+              placeholderTextColor="#FFFFFF"
+            />
+          </View>
+        </View>
+        <View style={styles.mid}>
           <View
             style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              top: '7%',
+              position: 'absolute',
+              // bottom: '30%',
+              // margin: 0,
+              // padding: 0,
             }}>
-            <View style={styles.inputContainer}>
-              <TextInput
-                value={this.state.username}
-                style={styles.input}
-                onChangeText={username => this.setState({username})}
-                placeholder="Nom d'utilisateur"
-                placeholderTextColor="#FFFFFF"
+            {isLoading ? (
+              <ActivityIndicator
+                size="large"
+                color="#5FCDFA"
+                style={{top: '10%'}}
               />
-            </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                value={this.state.email}
-                style={styles.input}
-                keyboardType="email-address"
-                onChangeText={email => this.setState({email})}
-                placeholder="Adresse mail"
-                placeholderTextColor="#FFFFFF"
-              />
-            </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                value={this.state.password}
-                style={styles.input}
-                onChangeText={password => this.setState({password})}
-                placeholder={'Mot de passe'}
-                secureTextEntry={true}
-                placeholderTextColor="#FFFFFF"
-              />
-            </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                value={this.state.password2}
-                style={styles.input}
-                onChangeText={password2 => this.setState({password2})}
-                placeholder={'Validez votre mot de passe'}
-                secureTextEntry={true}
-                placeholderTextColor="#FFFFFF"
-              />
-            </View>
-            <Text
-              onPress={() =>
-                this.state.password == this.state.password2
-                  ? this.props.navigation.navigate('Objectifs')
-                  : Alert.alert(
-                      'inscription',
-                      'veuillez saisir un mot de passe identique',
-                      [{text: 'fermer'}],
-                    )
-              }
-              backgroundColor="transparent"
-              style={{
-                color: '#53B4DC',
-                textTransform: 'uppercase',
-                fontSize: 50,
-                fontFamily: 'TallFilms',
-                top: '3%',
-              }}>
-              Inscription
-            </Text>
+            ) : (
+              <Text
+                onPress={() => checkFields()}
+                backgroundColor="transparent"
+                style={{
+                  color: '#53B4DC',
+                  textTransform: 'uppercase',
+                  fontSize: 50,
+                  fontFamily: 'TallFilms',
+                  top: '3%',
+                }}>
+                Inscription
+              </Text>
+            )}
+          </View>
+          <View style={styles.bottom}>
             <Text
               backgroundColor="transparent"
               style={{
@@ -105,13 +168,13 @@ export default class Inscription extends React.Component {
               Vous avez déjà un compte ?
             </Text>
             <Text
-              onPress={() => this.props.navigation.navigate('Connexion')}
+              onPress={() => props.navigation.navigate('Connexion')}
               backgroundColor="transparent"
               style={{
                 color: '#53B4DC',
                 textTransform: 'uppercase',
                 fontSize: 25,
-                fontFamily: 'TallFilms',
+                fontFamily: 'GnuolaneRG-Regular',
                 top: '15%',
               }}>
               Se connecter
@@ -128,7 +191,7 @@ export default class Inscription extends React.Component {
               }}>
               En vous inscrivant, vous acceptez nos
               <Text
-                onPress={() => this.props.navigation.navigate('Termes')}
+                onPress={() => props.navigation.navigate('Termes')}
                 backgroundColor="transparent"
                 style={{
                   color: '#53B4DC',
@@ -143,18 +206,40 @@ export default class Inscription extends React.Component {
             </Text>
           </View>
         </View>
-      </SafeAreaView>
-    );
-  }
+      </View>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  main: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
   },
-
+  container: {
+    // flex: 1,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // backgroundColor: 'red',
+  },
+  top: {
+    position: 'relative',
+    top: '10%',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+  },
+  mid: {
+    flex: 1,
+    position: 'relative',
+    top: '15%',
+    alignItems: 'center',
+    // backgroundColor: 'blue',
+  },
+  bottom: {
+    position: 'relative',
+    top: '25%',
+    alignItems: 'center',
+  },
   input: {
     height: 45,
     width: 300,
@@ -181,7 +266,7 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    position: 'absolute',
+    position: 'relative',
     top: '5%',
   },
 });

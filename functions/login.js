@@ -1,6 +1,8 @@
-const fetch = require('node-fetch');
 import {URL, PORT} from '@env';
+import {fetchWithTimeout} from './fetchWithTimeout';
+
 const BASE_URL = `${URL}:${PORT}`;
+const serverTimeout = 5000;
 
 /**
  * Apppelle la route /login/register pour envoyer un mail de confirmation au nouvel user
@@ -9,13 +11,15 @@ const BASE_URL = `${URL}:${PORT}`;
  * @returns Un message indiquant que l'email a été envoyé | Un message d'erreur si les champs sont invalides
  */
 async function register(data, appToken) {
-  let post = await fetch(`${BASE_URL}/login/register`, {
-    method: 'post',
-    body: JSON.stringify(data),
-    headers: {'Content-Type': 'application/json', 'app-token': appToken},
-  }).then(res => {
-    return res.json();
-  });
+  let post = await fetchWithTimeout(
+    `${BASE_URL}/login/register`,
+    {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {'Content-Type': 'application/json', 'app-token': appToken},
+    },
+    serverTimeout,
+  );
   return post;
 }
 
@@ -32,13 +36,15 @@ async function login(data, appToken) {
   } else {
     body = {mail: data.mail, password: data.password};
   }
-  let post = await fetch(`${BASE_URL}/login/`, {
-    method: 'post',
-    body: JSON.stringify(body),
-    headers: {'Content-Type': 'application/json', 'app-token': appToken},
-  }).then(res => {
-    return res.json();
-  });
+  let post = await fetchWithTimeout(
+    `${BASE_URL}/login/`,
+    {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {'Content-Type': 'application/json', 'app-token': appToken},
+    },
+    serverTimeout,
+  );
   return post;
 }
 
