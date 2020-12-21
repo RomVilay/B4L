@@ -31,8 +31,15 @@ export default class AfficheurCompteur extends React.Component {
         this.canvas = React.createRef();
         this.handleCompteur = this.handleCompteur.bind(this)
         this.state= {
-            tab :["M93 262 C 90 258 90 260 83 253"," M115 277 C 110 273 110 275 100 267",
-                "M53 185 C 52 175 52 175 52 170"],
+            tab :[
+                "M115 277 C 110 273 110 275 100 267",
+                "M93 262 C 90 258 90 260 83 253",
+                "M76 245 C 80 250 80 251 69 235",
+                "M66 229 C 59 215 59 214 60 216",
+                "M57 208 C 54 195 54 195 54 192",
+                "M53 185 C 52 175 52 175 52 170"
+
+            ],
             anim:""
         }
     }
@@ -77,6 +84,11 @@ export default class AfficheurCompteur extends React.Component {
 
     componentDidMount() {
         this.animation()
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if ( prevProps.i !== this.props.i){
+            this.animation()
+        }
     }
 
     render(){
@@ -132,7 +144,7 @@ export default class AfficheurCompteur extends React.Component {
                 segments: [
                     {
                         total: 200,
-                        filled: this.state.gpos,
+                        filled: 70,
                     },
                 ],
                 emptyArcColor:'transparent',
@@ -149,7 +161,8 @@ export default class AfficheurCompteur extends React.Component {
                         height={400}
                         width={400}
                         scale={1}
-                        delay={500}
+                        delay={2000}
+                        duration={1000}
                         loop={true}
                         d={this.state.anim}
                         />

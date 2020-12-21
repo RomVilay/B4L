@@ -40,7 +40,7 @@ export default class Compteur extends React.Component {
             pause: "",
             time:"",
             angle:-150,
-            startPosition:-150,
+            startPosition:-160,
             endPosition:-130,
             outputRange:['0deg','10deg'],
             seg:1,
@@ -69,9 +69,9 @@ export default class Compteur extends React.Component {
                 const ang = `${nend}deg` //définition de la valeur de rotation
                 this.setState({startPosition:this.state.endPosition,
                     endPosition:nend ,
-                    seg:this.state.seg+1,
+                    ///seg:this.state.seg+1,
                     angle:nend })
-                if (this.state.endPosition >= -110 ){
+                if (this.state.endPosition >= -100 ){
                     this.state.up = false
                 }
             } else {
@@ -79,13 +79,13 @@ export default class Compteur extends React.Component {
                 const ang = `${nend}deg` //définition de la valeur de rotation
                 this.setState({startPosition:this.state.endPosition,
                     endPosition:nend ,
-                    seg:this.state.seg-1,
+                   // seg:this.state.seg-1,
                     angle:nend })
                 if (this.state.endPosition <= -135 ){
                     this.state.up = true
                 }
             }
-        }, 500) //mise à jour du tableau d'interpolation de la rotation, toutes les 6s
+        }, 1000) //mise à jour du tableau d'interpolation de la rotation, toutes les 6s
     }
     //déclenchement de l'animation du compteur à l'ouverture de la page
     componentDidMount() {
@@ -274,12 +274,12 @@ export default class Compteur extends React.Component {
                             msec={true}
                         />
                         <Text style={{color: '#5FCDFA', fontSize: 30, fontFamily:"TallFilms"}}>{this.state.pause}</Text>
-                        <TouchableOpacity style={{position: 'absolute', top: 10, left: 10 }} onPress={()=>{ this.AlertQuit()}}><Icon name='clear' size={40} color="white"  /></TouchableOpacity>
+                        <TouchableOpacity style={{position: 'absolute', top: 10, left: 10 }} onPress={()=>{ this.AlertQuit()}}><Icon name="power-settings-new" size={40} color="white"  /></TouchableOpacity>
                     </View>
                     <View style={styles.middle} >
                         <ImageBackground source={require('../../assets/Compteur/compteur.png')} style={styles.compteur}>
                             <Animated.Image source={require('../../assets/Compteur/aiguille.png')} style={[{transform:[{rotate:rotation}]}, styles.aiguille]}/>
-
+                            <AfficheurCompteur style={styles.graph} i={this.state.seg}/>
                             <View style={styles.midTop}>
                                 <ImageBackground source={require('../../assets/Accueil/fondBulle.png')} style={[styles.fondBulle,{borderRadius:50, marginLeft:'22%', textAlign:'center'}]}>
                                     <Animated.View style={[styles.textbloc,trans0.getLayout()]}>
@@ -394,9 +394,7 @@ const styles = StyleSheet.create({
         left:65,
         width:Dimensions.get("window").width-55,
         height:350,
-        zIndex:500,
-        borderWidth: 3,
-        borderColor: "white"
+        zIndex:500
     },
     midTop:{
         flex:1,
