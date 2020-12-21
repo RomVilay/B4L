@@ -64,7 +64,7 @@ export default function  Statistiques(props) {
                                      startDate={Dates[0]}
                                      displayedDate={displayedDate}
                                      range
-                                     containerStyle={{zIndex:600}}
+                                     containerStyle={styles.containerStyle}
                                      >
                         <Text style={styles.texteBlanc}>Du {Dates[0].format('DD/MM')} au {Dates[1].format('DD/MM')}</Text>
                     </DateRangePicker>
@@ -103,15 +103,14 @@ export default function  Statistiques(props) {
                                 labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                                 style: {
                                     borderRadius: 16,
-                                    zIndex:0
                                 },
                                 propsForDots: {
                                     r: "6",
-                                    zIndex:0
                                 }
                             }}
                             bezier
                             style={{
+
                                 marginVertical: 8,
                                 borderRadius: 16
                             }}
@@ -150,6 +149,7 @@ export default function  Statistiques(props) {
                                 labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                                 style: {
                                     borderRadius: 16,
+                                   // position:"absolute",
                                     zIndex:0
                                 },
                                 propsForDots: {
@@ -234,13 +234,18 @@ const styles = StyleSheet.create({
     body:{
         marginTop: '10%',
         flex:4,
-        alignItems: 'center',
-        //zIndex:0
+        alignItems: 'center'
     },
     footer:{
         flex:1,
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    containerStyle:{
+       position:"absolute",
+        zIndex:200,
+        top:-150,
+        left:-160
     },
     container:{
         flex:1,
