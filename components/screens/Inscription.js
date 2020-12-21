@@ -15,6 +15,7 @@ import {
 import {register} from '../../functions/login';
 import {APP_TOKEN} from '@env';
 import NetInfo from '@react-native-community/netinfo';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import LogoMed from '../../assets/logoMed';
 
 export default function Inscription(props) {
@@ -55,14 +56,14 @@ export default function Inscription(props) {
     });
     if (!isConnected) {
       Alert.alert('Erreur', 'Vérifiez votre connexion Internet et réessayez');
+      setIsLoading(false);
     } else {
       const myRegister = await register({username, password, mail}, APP_TOKEN);
       // console.log('myRegister : ', myRegister);
       if (myRegister.message) {
-        Alert.alert('Erreur', `${myRegister.message}`);
         setIsLoading(false);
+        Alert.alert('Erreur', `${myRegister.message}`);
       } else {
-        // await setState({user: myLogin.user, token: myLogin.token});
         setIsLoading(false);
         Alert.alert(
           'Email de confirmation envoyé',
@@ -77,68 +78,60 @@ export default function Inscription(props) {
   };
 
   return (
-    <SafeAreaView style={styles.main}>
-      <Image
-        style={styles.fond}
-        source={require('../../assets/fond.png')}
-        resizeMode="cover"
-      />
-      <LogoMed style={styles.logo} />
-      <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <Image style={styles.fond} source={require('../../assets/fond.png')} />
+      <KeyboardAwareScrollView style={styles.scroll}>
         <View style={styles.top}>
-          <View style={styles.inputContainer}>
-            <TextInput
-              value={username}
-              style={styles.input}
-              onChangeText={username => setUsername(username)}
-              placeholder="Nom d'utilisateur"
-              placeholderTextColor="#FFFFFF"
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <TextInput
-              value={mail}
-              style={styles.input}
-              keyboardType="email-address"
-              onChangeText={mail => setMail(mail)}
-              placeholder="Adresse mail"
-              placeholderTextColor="#FFFFFF"
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <TextInput
-              value={password}
-              style={styles.input}
-              onChangeText={password => setPassword(password)}
-              placeholder={'Mot de passe'}
-              secureTextEntry={true}
-              placeholderTextColor="#FFFFFF"
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <TextInput
-              value={password2}
-              style={styles.input}
-              onChangeText={password2 => setPassword2(password2)}
-              placeholder={'Validez votre mot de passe'}
-              secureTextEntry={true}
-              placeholderTextColor="#FFFFFF"
-            />
-          </View>
+          <LogoMed style={styles.logo} />
         </View>
         <View style={styles.mid}>
-          <View
-            style={{
-              position: 'absolute',
-              // bottom: '30%',
-              // margin: 0,
-              // padding: 0,
-            }}>
+          <View style={styles.inputs}>
+            <View style={styles.inputContainer}>
+              <TextInput
+                value={username}
+                style={styles.input}
+                onChangeText={username => setUsername(username)}
+                placeholder="Nom d'utilisateur"
+                placeholderTextColor="#FFFFFF"
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                value={mail}
+                style={styles.input}
+                keyboardType="email-address"
+                onChangeText={mail => setMail(mail)}
+                placeholder="Adresse mail"
+                placeholderTextColor="#FFFFFF"
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                value={password}
+                style={styles.input}
+                onChangeText={password => setPassword(password)}
+                placeholder={'Mot de passe'}
+                secureTextEntry={true}
+                placeholderTextColor="#FFFFFF"
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                value={password2}
+                style={styles.input}
+                onChangeText={password2 => setPassword2(password2)}
+                placeholder={'Validez votre mot de passe'}
+                secureTextEntry={true}
+                placeholderTextColor="#FFFFFF"
+              />
+            </View>
+          </View>
+          <View style={styles.loading}>
             {isLoading ? (
               <ActivityIndicator
                 size="large"
                 color="#5FCDFA"
-                style={{top: '10%'}}
+                style={{bottom: '30%'}}
               />
             ) : (
               <Text
@@ -149,107 +142,104 @@ export default function Inscription(props) {
                   textTransform: 'uppercase',
                   fontSize: 50,
                   fontFamily: 'TallFilms',
-                  top: '3%',
                 }}>
                 Inscription
               </Text>
             )}
           </View>
-          <View style={styles.bottom}>
+        </View>
+
+        <View style={styles.bottom}>
+          <Text
+            backgroundColor="transparent"
+            style={{
+              color: 'white',
+              textTransform: 'uppercase',
+              fontSize: 15,
+              fontFamily: 'GnuolaneRG-Regular',
+              top: '15%',
+            }}>
+            Vous avez déjà un compte ?
+          </Text>
+          <Text
+            onPress={() => props.navigation.navigate('Connexion')}
+            backgroundColor="transparent"
+            style={{
+              color: '#53B4DC',
+              textTransform: 'uppercase',
+              fontSize: 25,
+              fontFamily: 'GnuolaneRG-Regular',
+              top: '15%',
+            }}>
+            Se connecter
+          </Text>
+          <Text
+            backgroundColor="transparent"
+            style={{
+              color: '#FFFFFF',
+              textTransform: 'uppercase',
+              fontSize: 15,
+              fontFamily: 'GnuolaneRG-Regular',
+              top: '20%',
+              margin: '5%',
+            }}>
+            En vous inscrivant, vous acceptez nos
             <Text
-              backgroundColor="transparent"
-              style={{
-                color: 'white',
-                textTransform: 'uppercase',
-                fontSize: 15,
-                fontFamily: 'GnuolaneRG-Regular',
-                top: '15%',
-              }}>
-              Vous avez déjà un compte ?
-            </Text>
-            <Text
-              onPress={() => props.navigation.navigate('Connexion')}
+              onPress={() => props.navigation.navigate('Termes')}
               backgroundColor="transparent"
               style={{
                 color: '#53B4DC',
                 textTransform: 'uppercase',
-                fontSize: 25,
-                fontFamily: 'GnuolaneRG-Regular',
-                top: '15%',
-              }}>
-              Se connecter
-            </Text>
-            <Text
-              backgroundColor="transparent"
-              style={{
-                color: '#FFFFFF',
-                textTransform: 'uppercase',
                 fontSize: 15,
                 fontFamily: 'GnuolaneRG-Regular',
                 top: '20%',
-                margin: '5%',
               }}>
-              En vous inscrivant, vous acceptez nos
-              <Text
-                onPress={() => props.navigation.navigate('Termes')}
-                backgroundColor="transparent"
-                style={{
-                  color: '#53B4DC',
-                  textTransform: 'uppercase',
-                  fontSize: 15,
-                  fontFamily: 'GnuolaneRG-Regular',
-                  top: '20%',
-                }}>
-                {' '}
-                Termes et conditions
-              </Text>
+              {' '}
+              Termes et conditions
             </Text>
-          </View>
+          </Text>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  main: {
-    flex: 1,
-    alignItems: 'center',
-  },
   container: {
-    // flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    // backgroundColor: 'red',
+    flex: 1,
+    flexDirection: 'column',
   },
   top: {
-    position: 'relative',
-    top: '10%',
-    // alignItems: 'center',
-    // justifyContent: 'center',
+    marginTop: '8%',
+    marginBottom: '10%',
+    alignItems: 'center',
+    // backgroundColor: 'red',
   },
   mid: {
-    flex: 1,
-    position: 'relative',
-    top: '15%',
+    paddingBottom: '20%',
+    flexDirection: 'column-reverse',
     alignItems: 'center',
     // backgroundColor: 'blue',
   },
   bottom: {
-    position: 'relative',
-    top: '25%',
+    marginTop: '15%',
     alignItems: 'center',
+    // backgroundColor: 'black',
+  },
+  loading: {
+    position: 'absolute',
+    // backgroundColor: 'orange',
   },
   input: {
     height: 45,
     width: 300,
     fontSize: 20,
     borderRadius: 10,
+    color: 'white',
     textAlign: 'center',
     alignSelf: 'center',
     fontFamily: 'GnuolaneRG-Regular',
   },
-
   inputContainer: {
     borderWidth: 1,
     borderRadius: 10,
@@ -258,15 +248,9 @@ const styles = StyleSheet.create({
     borderColor: '#5FCDFA',
     backgroundColor: '#284462',
   },
-
   fond: {
     width: '110%',
     height: '120%',
     position: 'absolute',
-  },
-
-  logo: {
-    position: 'relative',
-    top: '5%',
   },
 });

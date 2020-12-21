@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 
+import {useRoute} from '@react-navigation/native';
 import goTo from '../utils/navFunctions';
 import Navigation from '../../assets/navigation';
 import NavigationReverse from '../../assets/navigation_reverse';
@@ -44,8 +45,7 @@ class BottomPopup extends React.Component {
 
   render() {
     let {show} = this.state;
-    const {onTouchOutside, navigation} = this.props;
-
+    const {onTouchOutside, navigation, route} = this.props;
     return (
       <>
         <View style={styles.container}>
@@ -101,6 +101,16 @@ class BottomPopup extends React.Component {
                         }}>
                         <Image source={require('../../assets/settings.png')} />
                       </TouchableOpacity>
+                      {route === 'Parametres2' || route === 'Parametres' ? (
+                        <TouchableOpacity
+                          style={styles.item}
+                          onPress={() => {
+                            this.close();
+                            navigation.navigate('Termes');
+                          }}>
+                          <Image source={require('../../assets/i.png')} />
+                        </TouchableOpacity>
+                      ) : null}
                     </View>
                   </View>
                 </View>
@@ -127,6 +137,7 @@ export default (NavApp = props => {
         ref={target => (popupRef = target)}
         onTouchOutside={onClosePopup}
         navigation={props.navigation}
+        route={useRoute().name}
       />
     </>
   );

@@ -27,7 +27,7 @@ export default function Accueil(props) {
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />
       {/* HEADER */}
-      <View style={[styles.header, {width: '100%'}]}>
+      <View style={styles.header}>
         <View style={styles.item} />
         <View style={styles.item}>
           <LogoMin />
@@ -71,15 +71,14 @@ export default function Accueil(props) {
       {/* FIN MIDDLE */}
 
       {/* FOOTER */}
-      <View style={styles.footer}>
-        <TouchableOpacity
-          style={styles.footer}
-          activeOpacity={0.5}
-          onPress={() => props.navigation.navigate('Jumelage')}>
-          <Cercle />
-          <Text style={styles.go}>GO</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        style={styles.footer}
+        activeOpacity={0.5}
+        onPress={() => props.navigation.navigate('Jumelage')}>
+        <Cercle />
+        <Text style={styles.go}>GO</Text>
+      </TouchableOpacity>
+      <View style={styles.end} />
       {/* FIN FOOTER */}
       <NavApp navigation={props.navigation} />
     </SafeAreaView>
@@ -97,16 +96,15 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     flexDirection: 'row',
-    // alignItems: 'flex-start',
     justifyContent: 'space-around',
+    width: '100%',
     zIndex: 100,
     // backgroundColor: 'red',
   },
 
   item: {
-    top: '5%',
     zIndex: 100,
-    // justifyContent: 'center',
+    justifyContent: 'center',
     alignItems: 'center',
     width: 80,
     height: 100,
@@ -116,12 +114,14 @@ const styles = StyleSheet.create({
     flex: 3,
     width: '100%',
     zIndex: 100,
+    alignItems: 'center',
     // backgroundColor: 'orange',
   },
   midTop: {
-    flex: 1,
+    flex: 2,
     // width: '100%',
     // marginBottom: 20,
+    justifyContent: 'center',
     // backgroundColor: 'blue',
     alignItems: 'center',
   },
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   },
 
   midBot: {
-    flex: 1.5,
+    flex: 2,
     alignItems: 'center',
     zIndex: 100,
     // backgroundColor: 'black',
@@ -168,25 +168,16 @@ const styles = StyleSheet.create({
     fontFamily: 'GnuolaneRG-Regular',
   },
 
-  fond: {
-    position: 'absolute',
-    flex: 1,
-    width: '100%',
-    height: '110%',
-    resizeMode: 'cover',
-    justifyContent: 'center',
-  },
-
   footer: {
-    flex: 4,
-    flexDirection: 'row',
+    flex: 3,
+    // flexDirection: 'row',
     alignItems: 'center',
     alignContent: 'center',
     justifyContent: 'center',
-    width: '100%',
+    // marginBottom: '5%',
+    // width: '100%',
     // zIndex: 100,
-    // bottom: '10%',
-    // backgroundColor: 'brown',
+    // backgroundColor: 'red',
   },
   go: {
     color: '#56ADCE',
@@ -194,13 +185,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     position: 'absolute',
     zIndex: 100,
-    // top: 10,
   },
-  rank: {
-    width: '20%',
-    height: '10%',
+  end: {
+    flex: 0.5,
+  },
+  fond: {
     position: 'absolute',
-    bottom: 20,
-    left: 50,
+    flex: 1,
+    width: '100%',
+    height: '110%',
+    resizeMode: 'cover',
+    justifyContent: 'center',
   },
 });

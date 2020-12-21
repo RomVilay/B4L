@@ -114,7 +114,6 @@ function ParametresNavigator() {
 function AppNavigator() {
     return (
       <NavigationContainer>
-        {/* <StatusBar hidden/> */}
         <StatusBar
           barStyle="light-content"
           hidden={false}

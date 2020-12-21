@@ -81,7 +81,7 @@ export default function Parametres2(props) {
       Alert.alert('Erreur', `Veuillez saisir un prénom valide`);
       inputs['prenom'].reference.focus();
     } else if (
-      !tempNom.match(/^[A-Z][A-Za-z\é\è\ê\- ]{1,50}$/) &&
+      !tempNom.match(/^[A-Z][A-Za-z\é\è\ê\-\'\ ]{1,50}$/) &&
       tempNom.length > 0
     ) {
       Alert.alert('Erreur', `Veuillez saisir un nom valide`);
@@ -142,6 +142,7 @@ export default function Parametres2(props) {
       return state.isConnected;
     });
     if (!isConnected) {
+      setIsLoading(false);
       Alert.alert('Erreur', 'Vérifiez votre connexion Internet et réessayez');
     } else {
       const updated = await editUser(
@@ -157,6 +158,7 @@ export default function Parametres2(props) {
       setIsLoading(false);
       // console.log('updated : ', updated);
       if (updated.message) {
+        setIsLoading(false);
         Alert.alert('Erreur', `${updated.message}`);
       } else {
         setState({user: updated, token: state.token});
@@ -224,6 +226,9 @@ export default function Parametres2(props) {
 
         {/* FOOTER */}
         <View style={styles.footer}>
+          {/* <TouchableOpacity onPress={() => props.back()}>
+            <Text style={[styles.enregistrer]}>Retour</Text>
+          </TouchableOpacity> */}
           {isLoading ? (
             <ActivityIndicator
               size="large"
@@ -318,7 +323,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     padding: 5,
-    borderColor: '#FFFF',
+    borderColor: '#5FCDFA',
     backgroundColor: '#284462',
   },
   footer: {
@@ -328,7 +333,7 @@ const styles = StyleSheet.create({
     // zIndex: 100,
     width: '100%',
     paddingTop: '5%',
-    paddingBottom: '5%',
+    marginBottom: '5%',
   },
   fond: {
     width: '100%',
