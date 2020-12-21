@@ -11,7 +11,7 @@ import {
     Button,
     Dimensions
 } from 'react-native'
-import Canvas, {Image as CanvasImage, Path2D, ImageData} from 'react-native-canvas';
+//import Canvas, {Image as CanvasImage, Path2D, ImageData} from 'react-native-canvas';
 import Svg, {  Path, G } from 'react-native-svg'
 //assets
 import Fleche from "../../assets/fleche";
@@ -29,7 +29,7 @@ export default class AfficheurCompteur extends React.Component {
     constructor(props) {
         super(props);
         this.canvas = React.createRef();
-        this.handleCompteur = this.handleCompteur.bind(this)
+      //  this.handleCompteur = this.handleCompteur.bind(this)
         this.state= {
             tab :[
                 "M115 277 C 110 273 110 275 100 267",
@@ -44,7 +44,7 @@ export default class AfficheurCompteur extends React.Component {
         }
     }
 
-
+/*
     async handleCompteur() {
         const context = this.refs.canvas.getContext('2d');
         canvas.width = Dimensions.get('window').width;
@@ -58,7 +58,7 @@ export default class AfficheurCompteur extends React.Component {
         aiguille.src = aiguilleUri
         fond.addEventListener('load', e => {
             context.drawImage(fond, canvas.width/64, canvas.height/64, 400, 400)
-            /*context.drawImage(fondb, 0,0, 20,20) message out of range*/
+            /*context.drawImage(fondb, 0,0, 20,20) message out of range
             context.beginPath()
             context.strokeStyle = '#5FCDFA';
             context.arc(220, 200, 100, 2 * Math.PI / 3, 3 * Math.PI / 4, false);
@@ -73,6 +73,7 @@ export default class AfficheurCompteur extends React.Component {
             requestAnimationFrame(() => this.handleCompteur(this.canvas))
         })
     }
+    */
     animation(){
         let svg = ""
         for (let x = 0; x<this.props.i; x++){
@@ -153,7 +154,9 @@ export default class AfficheurCompteur extends React.Component {
             };
         return(
             <View style={this.props.style}>
+
                 <Svg >
+
                     <AnimatedSVGPath
                         strokeColor={"#5FCDFA"}
                         duration={2500}
