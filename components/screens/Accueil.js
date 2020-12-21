@@ -14,10 +14,6 @@ import LogoMin from '../../assets/logoMin';
 import Cercle from '../../assets/Accueil/cercle';
 import NavApp from '../navigation/NavApp';
 
-// Imports Components
-import Battery from '../screens/Battery';
-import Horloge from '../screens/Horloge';
-
 var avatar = require('../../assets/avatar.png');
 
 export default function Accueil(props) {
@@ -79,13 +75,9 @@ export default function Accueil(props) {
         <TouchableOpacity
           style={styles.footer}
           activeOpacity={0.5}
-          onPress={() => console.log('hey')}>
+          onPress={() => props.navigation.navigate('Jumelage')}>
           <Cercle />
-          <Text
-            style={styles.go}
-            onPress={() => props.navigation.navigate('Jumelage')}>
-            GO
-          </Text>
+          <Text style={styles.go}>GO</Text>
         </TouchableOpacity>
       </View>
       {/* FIN FOOTER */}
