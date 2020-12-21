@@ -1,13 +1,5 @@
 import React, {useContext} from 'react';
-import {
-  View,
-  StyleSheet,
-  Image,
-  SafeAreaView,
-  Alert,
-  StatusBar,
-  Text,
-} from 'react-native';
+import {View, StyleSheet, Image, SafeAreaView, Text, Alert} from 'react-native';
 
 import {Context} from '../utils/Store';
 import goTo from '../utils/navFunctions';
@@ -39,13 +31,6 @@ export default function Demarrage(props) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar
-        barStyle="light-content"
-        hidden={false}
-        translucent={true}
-        backgroundColor="transparent"
-        networkActivityIndicatorVisible={true}
-      />
       <View style={styles.container}>
         <Image
           style={styles.fond}
@@ -62,7 +47,9 @@ export default function Demarrage(props) {
             fontSize: 30,
           }}
         /> */}
-        <Text style={styles.text}>Start</Text>
+        <Text style={styles.text} onPress={() => navigate('Connexion')}>
+          Start
+        </Text>
       </View>
     </SafeAreaView>
   );

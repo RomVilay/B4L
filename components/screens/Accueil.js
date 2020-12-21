@@ -27,19 +27,16 @@ export default function Accueil(props) {
   // const [km, setKm] = useState('234.0')
   // const [watts,setWatts] = useState('4000')
 
-
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />
       {/* HEADER */}
       <View style={[styles.header, {width: '100%'}]}>
-        <View style={styles.item}>
-        </View>
+        <View style={styles.item} />
         <View style={styles.item}>
           <LogoMin />
         </View>
-        <View style={styles.item}>
-        </View>
+        <View style={styles.item} />
       </View>
       {/* FIN HEADER */}
 
@@ -50,7 +47,7 @@ export default function Accueil(props) {
         </View>
         <View style={styles.midMid}>
           <View style={[styles.midItem]}>
-            <Text style={styles.chiffres}>{kcal}</Text>
+            <Text style={styles.chiffres}>{state.user.kcal}</Text>
             <Text style={[styles.midText]}>
               kcal <Text style={{color: '#5FCDFA'}}>cumulées</Text>
             </Text>
@@ -62,14 +59,14 @@ export default function Accueil(props) {
             </TouchableOpacity>
           </View>
           <View style={[styles.midItem]}>
-            <Text style={styles.chiffres}>{km}</Text>
+            <Text style={styles.chiffres}>{state.user.km}</Text>
             <Text style={[styles.midText]}>
               km <Text style={{color: '#5FCDFA'}}>cumulés</Text>
             </Text>
           </View>
         </View>
         <View style={styles.midBot}>
-          <Text style={styles.chiffres}>{watts}</Text>
+          <Text style={styles.chiffres}>{state.user.watts}</Text>
           <Text style={[styles.midText]}>
             wh <Text style={{color: '#5FCDFA'}}>produits</Text>
           </Text>
