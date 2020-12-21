@@ -30,7 +30,10 @@ export default function Accueil(props) {
   //   avatar: avatar,
   // };
   const [state, setState] = useContext(Context);
-
+  const [name, setName]= useState('Gaston')
+  const [kcal, setKcal]= useState('5400')
+  const [km, setKm] = useState('234.0')
+  const [watts,setWatts] = useState('4000')
   // useEffect(() => {
   //   props.navigation.reset({
   //     routes: [{name: 'Home'}],
@@ -50,11 +53,11 @@ export default function Accueil(props) {
       </View>
       <View style={[styles.middle, {width: '100%'}]}>
         <View style={styles.midTop}>
-          <Text style={styles.nom}>{state.user.username}</Text>
+          <Text style={styles.nom}>{name}</Text>
         </View>
         <View style={styles.midMid}>
           <View style={[styles.midItem]}>
-            <Text style={styles.chiffres}>{state.kcal}</Text>
+            <Text style={styles.chiffres}>{kcal}</Text>
             <Text style={[styles.midText]}>
               kcal <Text style={{color: '#5FCDFA'}}>cumulées</Text>
             </Text>
@@ -66,14 +69,14 @@ export default function Accueil(props) {
             </TouchableHighlight>
           </View>
           <View style={[styles.midItem]}>
-            <Text style={styles.chiffres}>{state.km}</Text>
+            <Text style={styles.chiffres}>{km}</Text>
             <Text style={[styles.midText]}>
               km <Text style={{color: '#5FCDFA'}}>cumulés</Text>
             </Text>
           </View>
         </View>
         <View style={styles.midBot}>
-          <Text style={styles.chiffres}>{state.watts}</Text>
+          <Text style={styles.chiffres}>{watts}</Text>
           <Text style={[styles.midText]}>
             wh <Text style={{color: '#5FCDFA'}}>produits</Text>
           </Text>
@@ -83,7 +86,7 @@ export default function Accueil(props) {
         <Cercle />
         <Text
           style={styles.go}
-          onPress={() => props.navigation.navigate('Compteur')}>
+          onPress={() => props.navigation.navigate('Jumelage')}>
           GO
         </Text>
       </View>
