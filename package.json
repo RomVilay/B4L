@@ -10,6 +10,7 @@
     "babel-plugin-dotenv-import": "^2.1.0",
     "moment": "^2.29.1",
     "node-fetch": "^2.6.1",
+    "patch-package": "^6.2.2",
     "prop-types": "*",
     "react": "^16.14.0",
     "react-dom": "16.8.0",
@@ -55,6 +56,7 @@
   "name": "BikeForLife",
   "private": true,
   "scripts": {
+    "postinstall": "patch-package",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
