@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         flex: 1,
         width: '100%',
-        height: '110%',
+        height: '115%',
         resizeMode: 'cover',
         justifyContent: 'center',
     },
@@ -142,8 +142,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         zIndex: 100,
         position:"absolute",
-        backgroundColor:"#05141B",
-        bottom:0
+        ...Platform.select({
+            ios: {
+                backgroundColor:"transparent",
+                bottom:-18
+            },
+            android: {
+                backgroundColor:"#05141B",
+                bottom:0
+            }
+        })
+
     },
     centerText: {
         flex: 1,

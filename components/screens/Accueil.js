@@ -8,6 +8,7 @@ import {
   Image,
   Text,
   TouchableOpacity,
+  Platform, Dimensions
 } from 'react-native';
 // Imports Assets
 import LogoMin from '../../assets/logoMin';
@@ -91,7 +92,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 100,
   },
 
   header: {
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     flex: 1,
     width: '100%',
-    height: '110%',
+    height: '115%',
     resizeMode: 'cover',
     justifyContent: 'center',
   },

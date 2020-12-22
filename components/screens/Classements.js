@@ -64,7 +64,7 @@ export default class Classements extends React.Component {
               </TouchableOpacity>
             </View>
           </View>
-          <View style={[styles.middle, {width: '100%'}]}>
+          <View style={[styles.bottom, {width: '100%'}]}>
             <View
               style={[
                 styles.midMid,
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 100,
+    zIndex: 100
   },
   textTitle: {
     color: '#5FCDFA',
@@ -173,10 +173,18 @@ const styles = StyleSheet.create({
     fontFamily: 'TallFilms',
   },
   middle: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    zIndex: 100,
+    margin:'15%'
+  },
+  bottom: {
     flex: 2,
     flexDirection: 'column',
     alignItems: 'center',
     zIndex: 100,
+
   },
   midMid: {
     flexDirection: 'row',
@@ -232,6 +240,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 30
   },
   fond: {
     position: 'absolute',

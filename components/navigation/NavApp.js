@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   },
   main: {
     position: 'absolute',
-    bottom: 0,
+    bottom: 0
   },
   navAppContainer: {
     alignItems: 'center',
@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     // paddingHorizontal: 10,
     maxHeight: deviceHeight * 0.15,
+    paddingBottom:6
   },
   logos: {
     // flex: 1,
