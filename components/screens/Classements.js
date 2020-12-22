@@ -34,8 +34,8 @@ export default class Classements extends React.Component {
     return (
       <SafeAreaView style={styles.container}>
         <Image style={styles.fond} source={require('../../assets/fond.png')} />
-        <View style={[styles.container, {height: '100%', width: '100%'}]}>
-          <View style={[styles.header, {width: '100%'}]}>
+        <View style={styles.container}>
+          <View style={styles.header}>
             <LogoMin />
             <Text style={[styles.textTitle, {fontSize: 70}]}>Classement</Text>
           </View>
