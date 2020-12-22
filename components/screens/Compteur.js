@@ -73,7 +73,7 @@ export default class Compteur extends React.Component {
         this.setState({
           startPosition: this.state.endPosition,
           endPosition: nend,
-          ///seg:this.state.seg+1,
+          seg:this.state.seg+1,
           angle: nend,
         });
         if (this.state.endPosition >= -100) {
@@ -85,7 +85,7 @@ export default class Compteur extends React.Component {
         this.setState({
           startPosition: this.state.endPosition,
           endPosition: nend,
-          // seg:this.state.seg-1,
+           seg:this.state.seg-1,
           angle: nend,
         });
         if (this.state.endPosition <= -135) {

@@ -25,6 +25,10 @@ export default function Statistiques(props) {
   const data = {
     labels: ['Objectif'], // optional
     data: [0.5],
+    units:"kw",
+    units2:"kcals",
+    quantits:'2500',
+    totalq:'5000'
   };
   const chartConfig = {
     backgroundGradientFrom: '#1E2923',
@@ -107,9 +111,9 @@ export default function Statistiques(props) {
               yAxisSuffix="km"
               yAxisInterval={1} // optional, defaults to 1
               chartConfig={{
-                backgroundGradientFrom: '#000000',
+                backgroundGradientFrom: '#FFFFFF',
                 backgroundGradientFromOpacity: 0.2,
-                backgroundGradientTo: '#000000',
+                backgroundGradientTo: '#FFFFFF',
                 backgroundGradientToOpacity: 0.2,
                 decimalPlaces: 2, // optional, defaults to 2dp
                 color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -159,7 +163,7 @@ export default function Statistiques(props) {
               width={Dimensions.get('window').width - 10}
               height={120}
               yAxisLabel=""
-              yAxisSuffix="km"
+              yAxisSuffix="kw"
               yAxisInterval={1} // optional, defaults to 1
               chartConfig={{
                 backgroundGradientFrom: '#FFFFFF',
@@ -216,6 +220,7 @@ export default function Statistiques(props) {
                 chartConfig={chartConfig}
                 hideLegend={true}
               />
+              <Text style={{ color: 'white'}}>{data.quantits} / {data.totalq} {data.units}</Text>
             </View>
             <View
               style={{
@@ -249,13 +254,14 @@ export default function Statistiques(props) {
                 chartConfig={chartConfig2}
                 hideLegend={true}
               />
+              <Text style={{ color: '#5fcefa'}}>{data.quantits} / {data.totalq} {data.units2}</Text>
             </View>
           </View>
         </View>
         <View style={styles.footer}>
           <TouchableHighlight
             onPress={() => props.navigation.navigate('Classements')}>
-            <Text style={[styles.titreBleu, {fontSize: 50, marginTop: 50}]}>
+            <Text style={[styles.titreBleu, {fontSize: 45}]}>
               retour
             </Text>
           </TouchableHighlight>
@@ -281,14 +287,14 @@ const styles = StyleSheet.create({
 
   },
   header: {
-    marginTop: 10,
+    marginTop: 20,
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
     ...Platform.select({
       ios:{
         position:"absolute",
-        top:10,
+        top:20,
         left:Dimensions.get("window").width/2-60,
         zIndex:20
       },
@@ -312,7 +318,7 @@ const styles = StyleSheet.create({
   body: {
     ...Platform.select({
       ios:{
-    marginTop: '40%'}}),
+    marginTop: '45%'}}),
     flex: 4,
     alignItems: 'center',
     zIndex:0,
@@ -320,11 +326,13 @@ const styles = StyleSheet.create({
   },
   footer: {
     position:"absolute",
-    bottom:50,
-    left: 150,
+    left: Dimensions.get("screen").width/2-20,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    ...Platform.select({
+      ios:{bottom:40},
+      android:{bottom:0}})
   },
   containerDate:{
     position:"absolute",
@@ -334,7 +342,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    height: '200%',
+    height: '110%',
     flexWrap: 'nowrap',
     zIndex:0
   },
