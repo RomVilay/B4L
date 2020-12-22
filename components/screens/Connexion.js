@@ -19,8 +19,8 @@ import {login} from '../../functions/login';
 import LogoMed from '../../assets/logoMed';
 
 export default function Connexion(props) {
-  const [username, setUsername] = useState('julooo');
-  const [password, setPassword] = useState('zzz');
+  const [username, setUsername] = useState('toto24');
+  const [password, setPassword] = useState('toto');
   const [hasSignInInfos, setHasSignInInfos] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [state, setState] = useContext(Context);

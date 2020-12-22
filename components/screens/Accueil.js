@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   },
   nom: {
     color: 'white',
-    fontSize: 50,
+    fontSize: 45,
     textTransform: 'uppercase',
     fontFamily: 'GnuolaneRG-Regular',
   },
