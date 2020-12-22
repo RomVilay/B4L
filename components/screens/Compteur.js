@@ -231,7 +231,7 @@ export default class Compteur extends React.Component {
         },
         {
           text: 'quitter la session',
-          onPress: () => this.props.navigation.navigate('Accueil'),
+          onPress: () => this.props.navigation.navigate('Home'),
         },
       ],
       {cancelable: false},
@@ -277,7 +277,7 @@ export default class Compteur extends React.Component {
             {this.state.pause}
           </Text>
           <TouchableOpacity
-            style={{position: 'absolute', top: 10, left: 10}}
+            style={{position: 'absolute', top: 30, left: 20}}
             onPress={() => {
               this.AlertQuit();
             }}>
