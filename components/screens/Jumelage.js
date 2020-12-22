@@ -6,10 +6,12 @@ import {
     SafeAreaView,
     Image,
     Text,
+    Dimensions,
     TouchableOpacity,
     Linking,
     ImageBackground,
     AppRegistry,
+    Platform,
     Button
 } from 'react-native'
 
@@ -19,6 +21,7 @@ import Navigation from '../../assets/navigation'
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
 import NavApp from "../navigation/NavApp";
+import {height} from "react-native-daterange-picker/src/modules";
 // Imports Components
 
 
@@ -40,21 +43,23 @@ export default class Jumelage extends React.Component {
                 <Image source={require('../../assets/fond.png')} style={styles.fond} />
                             <QRCodeScanner
                                     onRead={this.onSuccess.bind(this)}
-                                    topContent={  <View style={styles.header}><LogoMin /><Text style={[styles.textTitle, {fontSize:70, marginTop:5}]}>Jumellage</Text>
-                                        <Text style={[styles.midText,{marginBottom:20}]}>Commencez à pédaler pour allumer la machine, puis scannez le qrcode.</Text>
+                                    containerStyle={styles.cameracontainer}
+                                    topContent={  <View style={{alignItems:"center"}}>
+                                        <LogoMin /><Text style={[styles.textTitle, {fontSize:70, marginTop:5}]}>Jumellage</Text>
+                                        <Text style={[styles.midText,{marginBottom:20}]}>
+                                            Commencez à pédaler pour allumer la machine, puis scannez le qrcode.
+                                        </Text>
                                     </View>
                                         }
-                                    topViewStyle={{flex:1}}
-                                    cameraStyle={{
-                                        height:'80%',
-                                        marginTop:'10%'}}
+                                    topViewStyle={styles.header}
+                                    cameraStyle={styles.middle}
                                     bottomContent={
                                         <View style={{alignItems:'center'}}>
                                             <Text style={[styles.midText, {marginBottom:'10%'}]}>Scannez le qrcode pour associer l'appareil.</Text>
                                             <NavApp navigation={this.props.navigation} />
                                         </View>
                                        }
-                                    bottomViewStyle={{flex:1,padding:0, margin:0}}
+                                    bottomViewStyle={styles.footer}
                                 />
 
             </SafeAreaView>
@@ -65,18 +70,22 @@ export default class Jumelage extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
         zIndex: 100,
+        height:'110%'
     },
-
+    cameracontainer:{
+        height:Dimensions.get("screen").height,
+        paddingTop:0,
+        marginTop: 0
+    },
     header: {
+        position:"absolute",
+        top:0,
          flex:1,
          flexDirection: 'column',
-         alignItems: 'center',
-         justifyContent: 'center',
+        justifyContent:"space-around",
          zIndex: 100,
-        marginTop:50
+        marginTop:30
     },
     textTitle: {
         color: "#5FCDFA",
@@ -93,10 +102,24 @@ const styles = StyleSheet.create({
     },
 
     middle: {
+        position: 'absolute',
         flex: 2,
         flexDirection: 'column',
         alignItems: 'center',
         zIndex: 100,
+        ...Platform.select({
+            ios: {
+                height:Dimensions.get("screen").height/3+50,
+                top:Dimensions.get("screen").width/4+10,
+                width:Dimensions.get("screen").width+10 ,
+                left:-100
+            },
+            android: {
+                left:-Dimensions.get("screen").width/4,
+                top:Dimensions.get("screen").width/4,
+                width:Dimensions.get("screen").width ,
+            }
+        })
     },
     midText: {
         fontFamily: 'GnuolaneRG-Regular',
@@ -113,11 +136,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 
-    footer: {
+    footer: {paddingTop: 50,
         flex:1,
         flexDirection: 'column',
         justifyContent: 'center',
         zIndex: 100,
+        position:"absolute",
+        backgroundColor:"#05141B",
+        bottom:0
     },
     centerText: {
         flex: 1,
