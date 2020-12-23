@@ -18,6 +18,7 @@ import NavApp from '../navigation/NavApp';
 import {LineChart, ProgressChart} from 'react-native-chart-kit';
 import moment from 'moment';
 import DateRangePicker from 'react-native-daterange-picker';
+import slicedToArrayLoose from "@babel/runtime/helpers/esm/slicedToArrayLoose";
 
 export default function Statistiques(props) {
   const [Dates, setDates] = useState([moment('2020-10-10'), moment()]);
@@ -73,7 +74,10 @@ export default function Statistiques(props) {
             startDate={Dates[0]}
             displayedDate={displayedDate}
             range
-            containerStyle={styles.containerDate}>
+            containerStyle={styles.containerDate}
+            selectedStyle={styles.selected}
+            backdropStyle={styles.backdropStyle}
+          >
             <Text style={styles.texteBlanc}>
               Du {Dates[0].format('DD/MM')} au {Dates[1].format('DD/MM')}
             </Text>
@@ -338,7 +342,18 @@ const styles = StyleSheet.create({
     position:"absolute",
     top:-200,
     left:-170,
-    zIndex:20
+    zIndex:20,
+    backgroundColor:'#FFFFFFDD'
+  },
+  selectedtext:{
+    color:"white"
+  },
+
+  backdropStyle:{
+    backgroundColor:'transparent'
+  },
+  selected:{
+    backgroundColor: '#56ADCE'
   },
   container: {
     flex: 1,

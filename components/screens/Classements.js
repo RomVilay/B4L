@@ -55,14 +55,14 @@ export default class Classements extends React.Component {
               <Text style={styles.number}>{this.state.membres} </Text>
               <Text style={styles.linesb}> utilisateurs</Text>
             </View>
-            <View>
-              <TouchableOpacity
+          </View>
+          <View>
+            <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate('Statistiques');
                 }}>
-                <Text style={styles.linesw}>voir tes stats</Text>
-              </TouchableOpacity>
-            </View>
+              <Text style={styles.linesw}>voir tes stats</Text>
+            </TouchableOpacity>
           </View>
           <View style={[styles.bottom, {width: '100%'}]}>
             <View

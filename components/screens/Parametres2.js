@@ -309,6 +309,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     color: '#5FCDFA',
     fontFamily: 'TallFilms',
+    height:50
   },
   editPwd: {
     width: '120%',
