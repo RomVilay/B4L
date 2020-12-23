@@ -51,7 +51,7 @@ export default function Parametres(props) {
     ) {
       Alert.alert('Erreur', `Veuillez saisir une taille valide`);
     } else if (
-      !tempPoids.match(/^[0-9]{1,4}\,{0,1}[0-9]{2}$/) &&
+      !tempPoids.match(/^[0-9]{1,4}\,{0,1}[0-9]{0,2}$/) &&
       tempPoids.length > 0
     ) {
       Alert.alert('Erreur', `Veuillez saisir un poids valide`);

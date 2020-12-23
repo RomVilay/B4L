@@ -16,7 +16,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {Context} from '../utils/Store';
 import goTo from '../utils/navFunctions';
-import {editUser, isValidPassword} from '../../functions/user';
+import {editUser, isValidPassword, deleteUser} from '../../functions/user';
 import LogoMin from '../../assets/logoMin';
 import NavApp from '../navigation/NavApp';
 
@@ -81,7 +81,7 @@ export default function Parametres2(props) {
       Alert.alert('Erreur', `Veuillez saisir un prénom valide`);
       inputs['prenom'].reference.focus();
     } else if (
-      !tempNom.match(/^[A-Z][A-Za-z\é\è\ê\- ]{1,50}$/) &&
+      !tempNom.match(/^[A-Z][A-Za-z\é\è\ê\-\'\ ]{1,50}$/) &&
       tempNom.length > 0
     ) {
       Alert.alert('Erreur', `Veuillez saisir un nom valide`);
@@ -142,6 +142,7 @@ export default function Parametres2(props) {
       return state.isConnected;
     });
     if (!isConnected) {
+      setIsLoading(false);
       Alert.alert('Erreur', 'Vérifiez votre connexion Internet et réessayez');
     } else {
       const updated = await editUser(
@@ -157,11 +158,31 @@ export default function Parametres2(props) {
       setIsLoading(false);
       // console.log('updated : ', updated);
       if (updated.message) {
+        setIsLoading(false);
         Alert.alert('Erreur', `${updated.message}`);
       } else {
         setState({user: updated, token: state.token});
         goTo(props);
       }
+    }
+  };
+
+  const logout = async () => {
+    setState({user: {}, token: ''});
+    goTo(props, 'Demarrage');
+  };
+
+  const deleteAccount = async () => {
+    let res = await deleteUser(state.user.username, state.token);
+    if (res.message) {
+      Alert.alert(
+        'Erreur',
+        "Quelque chose s'est mal passé, contactez BikeForLife. Erreur : " +
+          res.message,
+      );
+    } else {
+      setState({user: {}, token: ''});
+      goTo(props, 'Demarrage');
     }
   };
 
@@ -232,9 +253,51 @@ export default function Parametres2(props) {
             />
           ) : (
             <TouchableOpacity onPress={() => checkFields()}>
-              <Text style={[styles.enregistrer]}>Enregistrer</Text>
+              <Text style={[styles.textBottom, {marginTop:'10%'}]}>Enregistrer</Text>
             </TouchableOpacity>
           )}
+          <View style={styles.horizontal}>
+            <TouchableOpacity
+              onPress={() => {
+                Alert.alert(
+                  'Déconnexion',
+                  'Êtes-vous sûr de vouloir vous déconnecter ?',
+                  [
+                    {
+                      text: 'Oui',
+                      onPress: () => logout(),
+                    },
+                    {
+                      text: 'Annuler',
+                      style: 'cancel',
+                    },
+                  ],
+                );
+              }}>
+              <Text style={[styles.textBottom]}>Déconnexion</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{alignItems: 'center'}}
+              onPress={() => {
+                Alert.alert(
+                  'Suppression du compte',
+                  'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est définitive',
+                  [
+                    {
+                      text: 'Oui',
+                      onPress: () => deleteAccount(),
+                    },
+                    {
+                      text: 'Annuler',
+                      style: 'cancel',
+                    },
+                  ],
+                );
+              }}>
+              <Text style={[styles.textBottom]}>Supprimer</Text>
+              <Text style={[styles.textBottom]}>mon compte</Text>
+            </TouchableOpacity>
+          </View>
         </View>
         {/* FIN FOOTER */}
       </KeyboardAwareScrollView>
@@ -299,17 +362,16 @@ const styles = StyleSheet.create({
     height: 45,
     fontSize: 20,
     borderRadius: 10,
-    // alignItems: 'center',
+    alignItems: 'center',
     textAlign: 'center',
-    // alignSelf: 'center',
+    alignSelf: 'center',
     color: 'white',
   },
-  enregistrer: {
+  textBottom: {
     textTransform: 'uppercase',
     fontSize: 40,
     color: '#5FCDFA',
     fontFamily: 'TallFilms',
-    height:50
   },
   editPwd: {
     width: '120%',
@@ -319,8 +381,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     padding: 5,
-    borderColor: '#FFFF',
+    borderColor: '#5FCDFA',
     backgroundColor: '#284462',
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: '10%',
+    // backgroundColor: 'black',
   },
   footer: {
     flexDirection: 'column',
@@ -329,7 +399,8 @@ const styles = StyleSheet.create({
     // zIndex: 100,
     width: '100%',
     paddingTop: '5%',
-    paddingBottom: '5%',
+    marginBottom: '10%',
+    // backgroundColor: 'red',
   },
   fond: {
     width: '100%',
