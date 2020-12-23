@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {View, StyleSheet, Image, SafeAreaView, Text, Alert} from 'react-native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Context} from '../utils/Store';
 import goTo from '../utils/navFunctions';
 import Logo from '../../assets/logo';
@@ -20,12 +20,25 @@ export default function Demarrage(props) {
     //   setState({user: myLogin.user, token: myLogin.token});
     //   goTo(props, 'Parametres2');
     // }
-
-    if (state.user.username && state.token != '') {
-      console.log('user already logged in');
-      goTo(props);
-    } else {
-      props.navigation.navigate('Connexion');
+    try {
+      let storedUsername = await AsyncStorage.getItem('@username');
+      let storedPassword = await AsyncStorage.getItem('@password');
+      if (storedUsername !== null && storedPassword !== null) {
+        let myLogin = await login(
+          {username: storedUsername, password: storedPassword},
+          APP_TOKEN,
+        );
+        if (myLogin.message) {
+          Alert.alert('Erreur', `${myLogin.message}`);
+        } else {
+          setState({user: myLogin.user, token: myLogin.token});
+          goTo(props, 'Parametres');
+        }
+      } else {
+        props.navigation.navigate('Connexion');
+      }
+    } catch (e) {
+      Alert.alert('Erreur', `${e}`);
     }
   };
 

@@ -17,6 +17,7 @@ import {Context} from '../utils/Store';
 import goTo from '../utils/navFunctions';
 import {login} from '../../functions/login';
 import LogoMed from '../../assets/logoMed';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Connexion(props) {
   const [username, setUsername] = useState('julooo');
@@ -57,6 +58,12 @@ export default function Connexion(props) {
         Alert.alert('Erreur', `${myLogin.message}`);
         setIsLoading(false);
       } else {
+        try {
+          await AsyncStorage.setItem('@username', myLogin.user.username);
+          await AsyncStorage.setItem('@password', password);
+        } catch (e) {
+          Alert.alert('Erreur', `${e}`);
+        }
         await setState({user: myLogin.user, token: myLogin.token});
         setIsLoading(false);
         goTo(props);

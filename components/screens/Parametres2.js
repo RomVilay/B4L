@@ -19,6 +19,7 @@ import goTo from '../utils/navFunctions';
 import {editUser, isValidPassword, deleteUser} from '../../functions/user';
 import LogoMin from '../../assets/logoMin';
 import NavApp from '../navigation/NavApp';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Parametres2(props) {
   const [state, setState] = useContext(Context);
@@ -155,24 +156,26 @@ export default function Parametres2(props) {
         },
         state.token,
       );
-      setIsLoading(false);
       // console.log('updated : ', updated);
       if (updated.message) {
-        setIsLoading(false);
         Alert.alert('Erreur', `${updated.message}`);
+        setIsLoading(false);
       } else {
         setState({user: updated, token: state.token});
+        setIsLoading(false);
         goTo(props);
       }
     }
   };
 
   const logout = async () => {
+    await deleteLocalStorage();
     setState({user: {}, token: ''});
     goTo(props, 'Demarrage');
   };
 
   const deleteAccount = async () => {
+    await deleteLocalStorage();
     let res = await deleteUser(state.user.username, state.token);
     if (res.message) {
       Alert.alert(
@@ -183,6 +186,15 @@ export default function Parametres2(props) {
     } else {
       setState({user: {}, token: ''});
       goTo(props, 'Demarrage');
+    }
+  };
+
+  const deleteLocalStorage = async () => {
+    try {
+      await AsyncStorage.removeItem('@username');
+      await AsyncStorage.removeItem('@password');
+    } catch (e) {
+      Alert.alert('Erreur', `${e}`);
     }
   };
 
@@ -253,7 +265,9 @@ export default function Parametres2(props) {
             />
           ) : (
             <TouchableOpacity onPress={() => checkFields()}>
-              <Text style={[styles.textBottom, {marginTop:'10%'}]}>Enregistrer</Text>
+              <Text style={[styles.textBottom, {marginTop: '10%'}]}>
+                Enregistrer
+              </Text>
             </TouchableOpacity>
           )}
           <View style={styles.horizontal}>
