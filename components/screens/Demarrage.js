@@ -25,7 +25,7 @@ export default function Demarrage(props) {
       console.log('user already logged in');
       goTo(props);
     } else {
-      props.navigation.navigate('Compteur');
+      props.navigation.navigate('Connexion');
     }
   };
 
