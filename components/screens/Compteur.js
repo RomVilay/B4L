@@ -543,7 +543,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     flex: 1,
     width: '100%',
-    height: '110%',
+    height: '150%',
     resizeMode: 'cover',
     justifyContent: 'center',
   },
