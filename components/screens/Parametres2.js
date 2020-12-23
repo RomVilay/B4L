@@ -253,7 +253,7 @@ export default function Parametres2(props) {
             />
           ) : (
             <TouchableOpacity onPress={() => checkFields()}>
-              <Text style={[styles.textBottom]}>Enregistrer</Text>
+              <Text style={[styles.textBottom, {marginTop:'10%'}]}>Enregistrer</Text>
             </TouchableOpacity>
           )}
           <View style={styles.horizontal}>
