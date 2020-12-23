@@ -16,7 +16,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {Context} from '../utils/Store';
 import goTo from '../utils/navFunctions';
-import {editUser, isValidPassword} from '../../functions/user';
+import {editUser, isValidPassword, deleteUser} from '../../functions/user';
 import LogoMin from '../../assets/logoMin';
 import NavApp from '../navigation/NavApp';
 
@@ -167,6 +167,25 @@ export default function Parametres2(props) {
     }
   };
 
+  const logout = async () => {
+    setState({user: {}, token: ''});
+    goTo(props, 'Demarrage');
+  };
+
+  const deleteAccount = async () => {
+    let res = await deleteUser(state.user.username, state.token);
+    if (res.message) {
+      Alert.alert(
+        'Erreur',
+        "Quelque chose s'est mal passé, contactez BikeForLife. Erreur : " +
+          res.message,
+      );
+    } else {
+      setState({user: {}, token: ''});
+      goTo(props, 'Demarrage');
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />
@@ -226,9 +245,6 @@ export default function Parametres2(props) {
 
         {/* FOOTER */}
         <View style={styles.footer}>
-          {/* <TouchableOpacity onPress={() => props.back()}>
-            <Text style={[styles.enregistrer]}>Retour</Text>
-          </TouchableOpacity> */}
           {isLoading ? (
             <ActivityIndicator
               size="large"
@@ -237,9 +253,51 @@ export default function Parametres2(props) {
             />
           ) : (
             <TouchableOpacity onPress={() => checkFields()}>
-              <Text style={[styles.enregistrer]}>Enregistrer</Text>
+              <Text style={[styles.textBottom]}>Enregistrer</Text>
             </TouchableOpacity>
           )}
+          <View style={styles.horizontal}>
+            <TouchableOpacity
+              onPress={() => {
+                Alert.alert(
+                  'Déconnexion',
+                  'Êtes-vous sûr de vouloir vous déconnecter ?',
+                  [
+                    {
+                      text: 'Oui',
+                      onPress: () => logout(),
+                    },
+                    {
+                      text: 'Annuler',
+                      style: 'cancel',
+                    },
+                  ],
+                );
+              }}>
+              <Text style={[styles.textBottom]}>Déconnexion</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{alignItems: 'center'}}
+              onPress={() => {
+                Alert.alert(
+                  'Suppression du compte',
+                  'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est définitive',
+                  [
+                    {
+                      text: 'Oui',
+                      onPress: () => deleteAccount(),
+                    },
+                    {
+                      text: 'Annuler',
+                      style: 'cancel',
+                    },
+                  ],
+                );
+              }}>
+              <Text style={[styles.textBottom]}>Supprimer</Text>
+              <Text style={[styles.textBottom]}>mon compte</Text>
+            </TouchableOpacity>
+          </View>
         </View>
         {/* FIN FOOTER */}
       </KeyboardAwareScrollView>
@@ -276,6 +334,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     // zIndex: 100,
     width: '100%',
+    // backgroundColor: 'green',
   },
   items: {
     alignItems: 'center',
@@ -304,16 +363,17 @@ const styles = StyleSheet.create({
     height: 45,
     fontSize: 20,
     borderRadius: 10,
-    // alignItems: 'center',
+    alignItems: 'center',
     textAlign: 'center',
-    // alignSelf: 'center',
+    alignSelf: 'center',
     color: 'white',
   },
-  enregistrer: {
+  textBottom: {
     textTransform: 'uppercase',
     fontSize: 40,
     color: '#5FCDFA',
     fontFamily: 'TallFilms',
+    // backgroundColor: 'red',
   },
   editPwd: {
     width: '120%',
@@ -326,6 +386,14 @@ const styles = StyleSheet.create({
     borderColor: '#5FCDFA',
     backgroundColor: '#284462',
   },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: '10%',
+    // backgroundColor: 'black',
+  },
   footer: {
     flexDirection: 'column',
     alignItems: 'center',
@@ -333,7 +401,8 @@ const styles = StyleSheet.create({
     // zIndex: 100,
     width: '100%',
     paddingTop: '5%',
-    marginBottom: '5%',
+    marginBottom: '10%',
+    // backgroundColor: 'red',
   },
   fond: {
     width: '100%',

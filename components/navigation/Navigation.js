@@ -16,7 +16,6 @@ import Classements from '../screens/Classements';
 import Objectifs from '../screens/Objectifs';
 import Parametres from '../screens/Parametres';
 import Parametres2 from '../screens/Parametres2';
-import Parametres3 from '../screens/Parametres3';
 import Jumelage from '../screens/Jumelage';
 import Compteur from '../screens/Compteur';
 import ListeDefis from '../screens/ListeDefis';
@@ -99,18 +98,6 @@ function NavAppNavigator() {
 }
 
 // prettier-ignore
-function ParametresNavigator() {
-    return (
-        <Stack.Navigator initialRouteName="Parametres">
-            <Stack.Screen name="Parametres" component={Parametres} options={{ headerShown: false }} />
-            <Stack.Screen name="Parametres2" component={Parametres2} options={{ headerShown: false }} />
-            <Stack.Screen name="Parametres3" component={Parametres3} options={{ headerShown: false }} />
-            <Stack.Screen name="NavApp" component={NavApp} options={{ headerShown: false }} />
-        </Stack.Navigator>
-    )
-}
-
-// prettier-ignore
 function AppNavigator() {
     return (
       <NavigationContainer>
@@ -145,11 +132,6 @@ function AppNavigator() {
           <Stack.Screen
             name="Parametres2"
             component={Parametres2}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Parametres3"
-            component={Parametres3}
             options={{headerShown: false}}
           />
           <Stack.Screen
