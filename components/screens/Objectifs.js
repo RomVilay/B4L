@@ -49,7 +49,6 @@ export default class Objectifs extends React.Component {
                 <Image
                     style={styles.fond}
                     source={require('../../assets/fond.png')}
-                    resizeMode="cover"
                 />
                 <View style={[styles.container, { height: '100%', width: '100%' }]}>
                    <View style={[styles.header, { width: '100%' }]}>
@@ -150,7 +149,7 @@ const styles = StyleSheet.create({
 
     fond: {
         width: '100%',
-        height: '110%',
+        height: '150%',
         position: 'absolute'
     }
 })

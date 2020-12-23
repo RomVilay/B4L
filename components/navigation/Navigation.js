@@ -188,6 +188,7 @@ function AppNavigator() {
               component={ListeDefis}
               options={{headerShown: false}}
           />
+            <Stack.Screen name="Objectifs" component={Objectifs} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     );
