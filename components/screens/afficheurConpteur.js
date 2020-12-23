@@ -36,8 +36,19 @@ export default class AfficheurCompteur extends React.Component {
                 "M76 245 C 80 250 80 251 69 235",
                 "M66 229 C 59 215 59 214 60 216",
                 "M57 208 C 54 195 54 195 54 192",
-                "M53 185 C 52 175 52 175 52 170"
-
+                "M54 185 C 54 175 54 175 54 170",
+                "M55 165 C 57 155 57 155 59 145",
+                "M60 140 C 65 125 69 120 69 120",
+                "M73 115 C 77 110 77 110 86 100",
+                "M90 97 C 95 90 95 90 105 82",
+                "M107 79 C 117 70 117 70 130 65",
+                "M135 63 C 150 53 158 55 160 55",
+                "M165 57 C 170 55 180 55 190 57",
+                "M195 57 C 210 60 210 60 230 67",
+                "M235 70 C 250 75 255 80 270 93",
+                "M275 97 C 280 102 280 102 295 125",
+                "M300 130 C 305 150 305 165 304 175",
+                "M305 180 C 300 220 297 220 290 230"
             ],
             anim:""
         }
@@ -50,7 +61,6 @@ export default class AfficheurCompteur extends React.Component {
             svg+=this.state.tab[x]
         }
         this.setState({anim: svg})
-        console.log(svg)
     }
 
     componentDidMount() {
@@ -133,7 +143,7 @@ export default class AfficheurCompteur extends React.Component {
                         height={400}
                         width={400}
                         scale={1}
-                        delay={2000}
+                        delay={2500}
                         duration={1000}
                         loop={true}
                         d={this.state.anim}
@@ -175,9 +185,10 @@ const styles = StyleSheet.create({
         flex: 3,
         width:'110%',
         height:'110%',
-        right: '10%',
         resizeMode: "cover",
         justifyContent: "center",
         zIndex:0,
+        position:'absolute',
+        top:0
     }
 })

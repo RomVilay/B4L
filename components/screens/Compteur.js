@@ -44,7 +44,7 @@ export default class Compteur extends React.Component {
       startPosition: -160,
       endPosition: -130,
       outputRange: ['0deg', '10deg'],
-      seg: 1,
+      seg: 0,
       up: true,
     };
     this.tab = ['rpm', 'kmh', 'kcals'];
@@ -88,7 +88,7 @@ export default class Compteur extends React.Component {
            seg:this.state.seg-1,
           angle: nend,
         });
-        if (this.state.endPosition <= -135) {
+        if (this.state.endPosition <= -130) {
           this.state.up = true;
         }
       }
@@ -464,7 +464,7 @@ const styles = StyleSheet.create({
     left: 65,
     width: Dimensions.get('window').width - 55,
     height: 350,
-    zIndex: 500,
+    zIndex: 0,
   },
   midTop: {
     flex: 1,
