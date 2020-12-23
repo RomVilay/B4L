@@ -76,7 +76,7 @@ export default function Accueil(props) {
         <TouchableOpacity
           style={styles.footer}
           activeOpacity={0.5}
-          onPress={() => props.navigation.navigate('Compteur')}>
+          onPress={() => props.navigation.navigate('Jumelage')}>
           <Cercle />
           <Text style={styles.go}>GO</Text>
         </TouchableOpacity>

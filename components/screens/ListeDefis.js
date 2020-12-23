@@ -40,24 +40,26 @@ export default function  ListeDefis(props) {
         );
     }
     return (
-        <SafeAreaView>
-            <ImageBackground
+        <SafeAreaView style={styles.container}>
+            <Image
                 style={styles.fond}
-                source={require('../../assets/fond.png')}
-            >
+                source={require('../../assets/fond.png')}/>
+
                 <View style={styles.header}>
                     <LogoMin style={{marginBottom:'5%'}}/>
                     <Text  style={[styles.titreBleu, {fontSize:100, fontWeight:'normal', fontFamily:'TallFilms'}]}>Défi</Text>
-                    <Text style={[styles.titreBlanc,{fontSize:18,position:'absolute',top:'70%', left:'43%'}]}>Le</Text>
-                    <Text style={[styles.titreBlanc, {position:'absolute',top:'100%'}]}>pour cette session</Text>
+                    <Text style={[styles.titreBlanc,{fontSize:18,position:'absolute',top:'70%',left:10}]}>Le</Text>
+                    <Text style={[styles.titreBlanc, {position:'absolute',top:160}]}>pour cette session</Text>
                 </View>
                 <View style={styles.body}>
                     <Fleche style={{transform:[{rotate:'90deg'}]}} />
-                    <FlatList
-                        data={ListeDefs}
-                        renderItem={render_item}
-                        keyExtractor={(item) => {item.id}}
-                        extraData={defisSelect}/>
+                    <View style={{height:'120%'}}>
+                        <FlatList
+                            data={ListeDefs}
+                            renderItem={render_item}
+                            keyExtractor={item => item.id}
+                            extraData={defisSelect}/>
+                    </View>
                         <Fleche style={{transform:[{rotate:'270deg'}]}}/>
                 </View>
                 <View style={styles.footer}>
@@ -66,23 +68,27 @@ export default function  ListeDefis(props) {
                     </TouchableOpacity>
                     <NavApp  navigation={props.navigation}/>
                 </View>
-            </ImageBackground>
         </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
-
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     header:{
         flex:1,
         flexDirection: 'column',
         alignItems: 'center',
-        padding:5
+        padding:5,
+        marginTop:17
     },
     body:{
         flex:2,
         alignItems: 'center',
-        margin:'5%'
+        padding:'10%'
     },
     footer:{
         flex:1,
@@ -112,9 +118,11 @@ const styles = StyleSheet.create({
         fontFamily: 'GnuolaneRG-Regular'
     },
     fond: {
-         width: '100%',
-        height:'100%',
-        resizeMode: "cover",
-        justifyContent: "center"
-    }
+        position: 'absolute',
+        flex: 1,
+        width: '100%',
+        height: '115%',
+        resizeMode: 'cover',
+        justifyContent: 'center',
+    },
 })

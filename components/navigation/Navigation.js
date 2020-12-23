@@ -183,6 +183,11 @@ function AppNavigator() {
             component={Compteur}
             options={{headerShown: false}}
           />
+          <Stack.Screen
+              name="ListeDefis"
+              component={ListeDefis}
+              options={{headerShown: false}}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     );
