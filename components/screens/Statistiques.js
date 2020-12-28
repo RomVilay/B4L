@@ -20,7 +20,8 @@ import moment from 'moment';
 import DateRangePicker from 'react-native-daterange-picker';
 import slicedToArrayLoose from "@babel/runtime/helpers/esm/slicedToArrayLoose";
 import Collapsible from "react-native-collapsible";
-import { Icon } from "react-native-elements"
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
 
 export default function Statistiques(props) {
   const [Dates, setDates] = useState([moment('2020-10-10'), moment()]);
@@ -47,6 +48,28 @@ export default function Statistiques(props) {
     position:"absolute",
     zIndex: 0,
   };
+
+  const cc3= {
+    backgroundGradientFrom: "#1E2923",
+    backgroundGradientFromOpacity: 0,
+    backgroundGradientTo: "#08130D",
+    backgroundGradientToOpacity: 0.5,
+    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+    strokeWidth: 2, // optional, default 3
+    barPercentage: 0.5,
+    useShadowColorFromDataset: false // optional
+  }
+  const d = {
+    labels: ["January", "February", "March", "April", "May", "June"],
+    datasets: [
+      {
+        data: [20, 45, 28, 80, 99, 43],
+        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
+        strokeWidth: 2 // optional
+      }
+    ],
+    legend: ["Rainy Days"] // optional
+  }
   const chartConfig2 = {
     backgroundGradientFrom: '#5FCDFA',
     backgroundGradientFromOpacity: 0,
@@ -103,8 +126,7 @@ export default function Statistiques(props) {
               <TouchableOpacity
                   onPress={()=> {setchdist(!chdist)}}>
                 <View style={{flexDirection:"row"}}>
-                <Icon
-                    name={chdist ?'arrow-drop-down': 'arrow-drop-up'} color="white"/>
+                  <Icon name={chdist ? "arrow-drop-down": "arrow-drop-up"} color="white" size={30} />
                 <Text style={styles.texteBlanc}>Historique des Distances Parcourues</Text>
                 </View>
               </TouchableOpacity>
@@ -112,7 +134,7 @@ export default function Statistiques(props) {
             <LineChart
               data={{
                 labels: [
-                  'session 1 ',
+                  "session 1 ",
                   'session 2 ',
                   'session 3 ',
                   'session 4 ',
@@ -165,8 +187,7 @@ export default function Statistiques(props) {
             <TouchableOpacity
                 onPress={()=> {setchprod(!chprod)}}>
               <View style={{flexDirection:"row"}}>
-                <Icon
-                    name={chprod ?'arrow-drop-down': 'arrow-drop-up'} color="white"/>
+                <Icon name={chprod ? "arrow-drop-down": "arrow-drop-up"} color="white" size={30} />
                 <Text style={styles.texteBlanc}>
                   Historique de l'énergie produite
                 </Text>
@@ -176,12 +197,12 @@ export default function Statistiques(props) {
               <LineChart
                   data={{
                     labels: [
-                      'session 1 ',
-                      'session 2 ',
-                      'session 3 ',
-                      'session 4 ',
-                      'session 5 ',
-                      'session 6',
+                      "session 1 ",
+                      "session 2 ",
+                      "session 3 ",
+                      "session 4 ",
+                      "session 5 ",
+                      "session 6",
                     ],
                     datasets: [
                       {
@@ -199,7 +220,7 @@ export default function Statistiques(props) {
                   width={Dimensions.get('window').width - 10}
                   height={120}
                   yAxisLabel=""
-                  yAxisSuffix="kw"
+                  yAxisSuffix=" kw"
                   yAxisInterval={1} // optional, defaults to 1
                   chartConfig={{
                     backgroundGradientFrom: '#FFFFFF',
