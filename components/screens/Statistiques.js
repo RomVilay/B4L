@@ -34,8 +34,16 @@ export default function Statistiques(props) {
     units:"kw",
     units2:"kcals",
     quantits:'2500',
-    totalq:'5000'
+    totalq:'5000',
   };
+  const [labels,setLabels] = useState([
+    " sept",
+    ' oct ',
+    ' nov ',
+    ' dec ',
+    ' janv ',
+    ' fev',
+  ]);
   const chartConfig = {
     backgroundGradientFrom: '#1E2923',
     backgroundGradientFromOpacity: 0,
@@ -48,7 +56,6 @@ export default function Statistiques(props) {
     position:"absolute",
     zIndex: 0,
   };
-
   const chartConfig2 = {
     backgroundGradientFrom: '#5FCDFA',
     backgroundGradientFromOpacity: 0,
@@ -59,6 +66,7 @@ export default function Statistiques(props) {
     barPercentage: 0.5,
     useShadowColorFromDataset: false, // optional
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
@@ -75,13 +83,10 @@ export default function Statistiques(props) {
                 setdisplayedDate(moment(date.displayedDate))
               }
                 if (date.startDate != null) {
-                  ///actif si aucune date n'est sélectionné et pour def le 1er
-                  console.log(displayedDate)
                   setDates([moment(date.startDate), Dates[1]])
                   setdisplayedDate(moment(date.startDate))
                 }
                 if (date.endDate != null){
-                  ///appellé au changement de mois
                   console.log(displayedDate)
                   setDates([Dates[0], moment(date.endDate)])
                   setdisplayedDate(moment(date.endDate))
@@ -113,14 +118,7 @@ export default function Statistiques(props) {
             <Collapsible collapsed={chdist} align={"center"}>
             <LineChart
               data={{
-                labels: [
-                  " sept",
-                  ' oct ',
-                  ' nov ',
-                  ' dec ',
-                  ' janv ',
-                  ' fev',
-                ],
+                labels: labels,
                 datasets: [
                   {
                     data: [
@@ -177,14 +175,7 @@ export default function Statistiques(props) {
             <Collapsible collapsed={chprod} align={"center"}>
               <LineChart
                   data={{
-                    labels: [
-                      "session 1 ",
-                      "session 2 ",
-                      "session 3 ",
-                      "session 4 ",
-                      "session 5 ",
-                      "session 6",
-                    ],
+                    labels: labels,
                     datasets: [
                       {
                         data: [
