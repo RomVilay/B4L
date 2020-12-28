@@ -64,21 +64,22 @@ export default function Statistiques(props) {
           {/**/}
           <DateRangePicker
             onChange={date => {
+              //console.log(date)
               if (moment(date.displayedDate) !== moment(displayedDate)){
                 setdisplayedDate(moment(date.displayedDate))
               }
-              if ( date.startDate != null && date.endDate != null) {
-                setDates([moment(date.startDate), moment(date.endDate)])
-                setdisplayedDate(moment(date.displayedDate))
-              } else {
-                if (date.startDate != null && date.endDate == null) {
+                if (date.startDate != null) {
+                  ///actif si aucune date n'est sélectionné et pour def le 1er
+                  console.log(displayedDate)
                   setDates([moment(date.startDate), Dates[1]])
-                  setdisplayedDate(moment(date.displayedDate))
-                } else {
-                  setDates([Dates[0], moment(date.endDate)])
-                  setdisplayedDate(moment(date.displayedDate))
+                  setdisplayedDate(moment(date.startDate))
                 }
-              }
+                if (date.endDate != null){
+                  ///appellé au changement de mois
+                  console.log(displayedDate)
+                  setDates([Dates[0], moment(date.endDate)])
+                  setdisplayedDate(moment(date.endDate))
+                }
             }}
             endDate={Dates[1]}
             startDate={Dates[0]}
