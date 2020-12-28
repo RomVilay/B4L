@@ -133,9 +133,7 @@ export default class AfficheurCompteur extends React.Component {
             };
         return(
             <View style={this.props.style}>
-
                 <Svg >
-
                     <AnimatedSVGPath
                         strokeColor={"#5FCDFA"}
                         duration={2500}

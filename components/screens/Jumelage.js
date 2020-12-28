@@ -45,7 +45,7 @@ export default class Jumelage extends React.Component {
                                     onRead={this.onSuccess.bind(this)}
                                     containerStyle={styles.cameracontainer}
                                     topContent={  <View style={{alignItems:"center"}}>
-                                        <LogoMin /><Text style={[styles.textTitle, {fontSize:70, marginTop:5}]}>Jumellage</Text>
+                                        <LogoMin /><Text style={[styles.textTitle, {fontSize:70, marginTop:5}]}>Jumelage</Text>
                                         <Text style={[styles.midText,{marginBottom:20}]}>
                                             Commencez à pédaler pour allumer la machine, puis scannez le qrcode.
                                         </Text>

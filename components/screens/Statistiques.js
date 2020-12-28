@@ -22,7 +22,7 @@ import slicedToArrayLoose from "@babel/runtime/helpers/esm/slicedToArrayLoose";
 
 export default function Statistiques(props) {
   const [Dates, setDates] = useState([moment('2020-10-10'), moment()]);
-  const [displayedDate, setdisplayedDate] = useState(moment());
+  const [displayedDate, setdisplayedDate] = useState(moment('2020-11-10'));
   const data = {
     labels: ['Objectif'], // optional
     data: [0.5],
@@ -63,13 +63,23 @@ export default function Statistiques(props) {
           <Text style={[styles.titreBleu, {height: 50}]}>Statistiques</Text>
           {/**/}
           <DateRangePicker
-            onChange={date =>
-              date.startDate != null && date.endDate != null
-                ? setDates([moment(date.startDate), moment(date.endDate)])
-                : date.startDate != null && date.endDate == null
-                ? setDates([moment(date.startDate), Dates[1]])
-                : setDates([Dates[0], moment(date.endDate)])
-            }
+            onChange={date => {
+              if (moment(date.displayedDate) !== moment(displayedDate)){
+                setdisplayedDate(moment(date.displayedDate))
+              }
+              if ( date.startDate != null && date.endDate != null) {
+                setDates([moment(date.startDate), moment(date.endDate)])
+                setdisplayedDate(moment(date.displayedDate))
+              } else {
+                if (date.startDate != null && date.endDate == null) {
+                  setDates([moment(date.startDate), Dates[1]])
+                  setdisplayedDate(moment(date.displayedDate))
+                } else {
+                  setDates([Dates[0], moment(date.endDate)])
+                  setdisplayedDate(moment(date.displayedDate))
+                }
+              }
+            }}
             endDate={Dates[1]}
             startDate={Dates[0]}
             displayedDate={displayedDate}
@@ -85,7 +95,7 @@ export default function Statistiques(props) {
         </View>
         <View style={[styles.body, {zIndex: 0}]}>
           <View style={{alignItems: 'center', zIndex: 0}}>
-            <Text style={styles.texteBlanc}>Historique des Distances</Text>
+            <Text style={styles.texteBlanc}>Historique des Distances Parcourues</Text>
             <LineChart
               data={{
                 labels: [
@@ -195,7 +205,7 @@ export default function Statistiques(props) {
             />
           </View>
           <Text style={[styles.texteBlanc, {fontSize: 20}]}>
-            Complétion des objectifs de la période{' '}
+            Avancement des objectifs sur la période{' '}
           </Text>
           <View style={{alignItems: 'center', flexDirection: 'row'}}>
             <View
@@ -343,7 +353,7 @@ const styles = StyleSheet.create({
     top:-200,
     left:-170,
     zIndex:20,
-    backgroundColor:'#FFFFFFDD'
+    backgroundColor:'#FFFFFF'
   },
   selectedtext:{
     color:"white"
