@@ -19,10 +19,14 @@ import {LineChart, ProgressChart} from 'react-native-chart-kit';
 import moment from 'moment';
 import DateRangePicker from 'react-native-daterange-picker';
 import slicedToArrayLoose from "@babel/runtime/helpers/esm/slicedToArrayLoose";
+import Collapsible from "react-native-collapsible";
+import { Icon } from "react-native-elements"
 
 export default function Statistiques(props) {
   const [Dates, setDates] = useState([moment('2020-10-10'), moment()]);
   const [displayedDate, setdisplayedDate] = useState(moment('2020-11-10'));
+  const [chdist, setchdist] = useState(true)
+  const [chprod, setchprod] = useState(true)
   const data = {
     labels: ['Objectif'], // optional
     data: [0.5],
@@ -96,7 +100,15 @@ export default function Statistiques(props) {
         </View>
         <View style={[styles.body, {zIndex: 0}]}>
           <View style={{alignItems: 'center', zIndex: 0}}>
-            <Text style={styles.texteBlanc}>Historique des Distances Parcourues</Text>
+              <TouchableOpacity
+                  onPress={()=> {setchdist(!chdist)}}>
+                <View style={{flexDirection:"row"}}>
+                <Icon
+                    name={chdist ?'arrow-drop-down': 'arrow-drop-up'} color="white"/>
+                <Text style={styles.texteBlanc}>Historique des Distances Parcourues</Text>
+                </View>
+              </TouchableOpacity>
+            <Collapsible collapsed={chdist} align={"center"}>
             <LineChart
               data={{
                 labels: [
@@ -147,63 +159,73 @@ export default function Statistiques(props) {
                 borderRadius: 16,
               }}
             />
+            </Collapsible>
           </View>
           <View style={{alignItems: 'center', zIndex: 0}}>
-            <Text style={styles.texteBlanc}>
-              Historique de l'énergie produite
-            </Text>
-            <LineChart
-              data={{
-                labels: [
-                  'session 1 ',
-                  'session 2 ',
-                  'session 3 ',
-                  'session 4 ',
-                  'session 5 ',
-                  'session 6',
-                ],
-                datasets: [
-                  {
-                    data: [
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
+            <TouchableOpacity
+                onPress={()=> {setchprod(!chprod)}}>
+              <View style={{flexDirection:"row"}}>
+                <Icon
+                    name={chprod ?'arrow-drop-down': 'arrow-drop-up'} color="white"/>
+                <Text style={styles.texteBlanc}>
+                  Historique de l'énergie produite
+                </Text>
+              </View>
+            </TouchableOpacity>
+            <Collapsible collapsed={chprod} align={"center"}>
+              <LineChart
+                  data={{
+                    labels: [
+                      'session 1 ',
+                      'session 2 ',
+                      'session 3 ',
+                      'session 4 ',
+                      'session 5 ',
+                      'session 6',
                     ],
-                  },
-                ],
-              }}
-              width={Dimensions.get('window').width - 10}
-              height={120}
-              yAxisLabel=""
-              yAxisSuffix="kw"
-              yAxisInterval={1} // optional, defaults to 1
-              chartConfig={{
-                backgroundGradientFrom: '#FFFFFF',
-                backgroundGradientFromOpacity: 0.2,
-                backgroundGradientTo: '#FFFFFF',
-                backgroundGradientToOpacity: 0.2,
-                decimalPlaces: 2, // optional, defaults to 2dp
-                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                style: {
-                  borderRadius: 16,
-                  zIndex: 0,
-                },
-                propsForDots: {
-                  r: '6',
-                  zIndex: 0,
-                },
-              }}
-              bezier
-              style={{
-                marginVertical: 8,
-                borderRadius: 16,
-                zIndex:0
-              }}
-            />
+                    datasets: [
+                      {
+                        data: [
+                          Math.random() * 100,
+                          Math.random() * 100,
+                          Math.random() * 100,
+                          Math.random() * 100,
+                          Math.random() * 100,
+                          Math.random() * 100,
+                        ],
+                      },
+                    ],
+                  }}
+                  width={Dimensions.get('window').width - 10}
+                  height={120}
+                  yAxisLabel=""
+                  yAxisSuffix="kw"
+                  yAxisInterval={1} // optional, defaults to 1
+                  chartConfig={{
+                    backgroundGradientFrom: '#FFFFFF',
+                    backgroundGradientFromOpacity: 0.2,
+                    backgroundGradientTo: '#FFFFFF',
+                    backgroundGradientToOpacity: 0.2,
+                    decimalPlaces: 2, // optional, defaults to 2dp
+                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    style: {
+                      borderRadius: 16,
+                      zIndex: 0,
+                    },
+                    propsForDots: {
+                      r: '6',
+                      zIndex: 0,
+                    },
+                  }}
+                  bezier
+                  style={{
+                    marginVertical: 8,
+                    borderRadius: 16,
+                    zIndex:0
+                  }}
+              />
+            </Collapsible>
           </View>
           <Text style={[styles.texteBlanc, {fontSize: 20}]}>
             Avancement des objectifs sur la période{' '}
