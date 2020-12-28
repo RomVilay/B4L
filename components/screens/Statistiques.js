@@ -21,6 +21,7 @@ import DateRangePicker from 'react-native-daterange-picker';
 import slicedToArrayLoose from "@babel/runtime/helpers/esm/slicedToArrayLoose";
 import Collapsible from "react-native-collapsible";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {diff} from "react-native-reanimated";
 
 
 export default function Statistiques(props) {
@@ -87,9 +88,19 @@ export default function Statistiques(props) {
                   setdisplayedDate(moment(date.startDate))
                 }
                 if (date.endDate != null){
-                  console.log(displayedDate)
                   setDates([Dates[0], moment(date.endDate)])
                   setdisplayedDate(moment(date.endDate))
+                }
+                if (Dates[1] !== date.endDate) {
+                  var diff = Dates[1].diff(Dates[0], "days")
+                  let btw = Dates[0].clone()
+                  let tab = [Dates[0].format("DD-MMM").toString()]
+                  for (let i = 0;i<3;i++){
+                    btw.add(diff/4,"days")
+                    tab.push(btw.format("DD-MMM").toString())
+                  }
+                  tab.push(Dates[1].format("DD-MMM").toString())
+                  setLabels(tab)
                 }
             }}
             endDate={Dates[1]}
