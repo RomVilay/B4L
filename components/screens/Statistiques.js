@@ -49,27 +49,6 @@ export default function Statistiques(props) {
     zIndex: 0,
   };
 
-  const cc3= {
-    backgroundGradientFrom: "#1E2923",
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: "#08130D",
-    backgroundGradientToOpacity: 0.5,
-    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-    strokeWidth: 2, // optional, default 3
-    barPercentage: 0.5,
-    useShadowColorFromDataset: false // optional
-  }
-  const d = {
-    labels: ["January", "February", "March", "April", "May", "June"],
-    datasets: [
-      {
-        data: [20, 45, 28, 80, 99, 43],
-        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
-        strokeWidth: 2 // optional
-      }
-    ],
-    legend: ["Rainy Days"] // optional
-  }
   const chartConfig2 = {
     backgroundGradientFrom: '#5FCDFA',
     backgroundGradientFromOpacity: 0,
@@ -124,7 +103,8 @@ export default function Statistiques(props) {
         <View style={[styles.body, {zIndex: 0}]}>
           <View style={{alignItems: 'center', zIndex: 0}}>
               <TouchableOpacity
-                  onPress={()=> {setchdist(!chdist)}}>
+                  onPress={()=> {setchdist(!chdist)
+                    setchprod(true)}}>
                 <View style={{flexDirection:"row"}}>
                   <Icon name={chdist ? "arrow-drop-down": "arrow-drop-up"} color="white" size={30} />
                 <Text style={styles.texteBlanc}>Historique des Distances Parcourues</Text>
@@ -134,12 +114,12 @@ export default function Statistiques(props) {
             <LineChart
               data={{
                 labels: [
-                  "session 1 ",
-                  'session 2 ',
-                  'session 3 ',
-                  'session 4 ',
-                  'session 5 ',
-                  'session 6',
+                  " sept",
+                  ' oct ',
+                  ' nov ',
+                  ' dec ',
+                  ' janv ',
+                  ' fev',
                 ],
                 datasets: [
                   {
@@ -155,7 +135,7 @@ export default function Statistiques(props) {
                 ],
               }}
               width={Dimensions.get('window').width - 10}
-              height={120}
+              height={190}
               yAxisLabel=""
               yAxisSuffix="km"
               yAxisInterval={1} // optional, defaults to 1
@@ -173,7 +153,7 @@ export default function Statistiques(props) {
                 propsForDots: {
                   r: '6',
                   zIndex: 0,
-                },
+                }
               }}
               bezier
               style={{
@@ -185,7 +165,8 @@ export default function Statistiques(props) {
           </View>
           <View style={{alignItems: 'center', zIndex: 0}}>
             <TouchableOpacity
-                onPress={()=> {setchprod(!chprod)}}>
+                onPress={()=> {setchprod(!chprod)
+                  setchdist(true)}}>
               <View style={{flexDirection:"row"}}>
                 <Icon name={chprod ? "arrow-drop-down": "arrow-drop-up"} color="white" size={30} />
                 <Text style={styles.texteBlanc}>
@@ -218,7 +199,7 @@ export default function Statistiques(props) {
                     ],
                   }}
                   width={Dimensions.get('window').width - 10}
-                  height={120}
+                  height={190}
                   yAxisLabel=""
                   yAxisSuffix=" kw"
                   yAxisInterval={1} // optional, defaults to 1
@@ -241,7 +222,6 @@ export default function Statistiques(props) {
                   }}
                   bezier
                   style={{
-                    marginVertical: 8,
                     borderRadius: 16,
                     zIndex:0
                   }}
