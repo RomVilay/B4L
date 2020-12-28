@@ -79,7 +79,7 @@ export default function Statistiques(props) {
           {/**/}
           <DateRangePicker
             onChange={date => {
-              //console.log(date)
+              console.log(date)
               if (moment(date.displayedDate) !== moment(displayedDate)){
                 setdisplayedDate(moment(date.displayedDate))
               }
@@ -90,17 +90,17 @@ export default function Statistiques(props) {
                 if (date.endDate != null){
                   setDates([Dates[0], moment(date.endDate)])
                   setdisplayedDate(moment(date.endDate))
-                }
-                if (Dates[1] !== date.endDate) {
-                  var diff = Dates[1].diff(Dates[0], "days")
-                  let btw = Dates[0].clone()
-                  let tab = [Dates[0].format("DD-MMM").toString()]
-                  for (let i = 0;i<3;i++){
-                    btw.add(diff/4,"days")
-                    tab.push(btw.format("DD-MMM").toString())
+                  if (Dates[1] !== date.endDate) {
+                    var diff = Dates[1].diff(Dates[0], "days")
+                    let btw = Dates[0].clone()
+                    let tab = [Dates[0].format("DD-MMM").toString()]
+                    for (let i = 0;i<3;i++){
+                      btw.add(diff/4,"days")
+                      tab.push(btw.format("DD-MMM").toString())
+                    }
+                    tab.push(Dates[1].format("DD-MMM").toString())
+                    setLabels(tab)
                   }
-                  tab.push(Dates[1].format("DD-MMM").toString())
-                  setLabels(tab)
                 }
             }}
             endDate={Dates[1]}
