@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Text,
@@ -14,14 +14,11 @@ import {
   Platform
 } from 'react-native';
 import LogoMin from '../../assets/logoMin';
-import NavApp from '../navigation/NavApp';
 import {LineChart, ProgressChart} from 'react-native-chart-kit';
 import moment from 'moment';
 import DateRangePicker from 'react-native-daterange-picker';
-import slicedToArrayLoose from "@babel/runtime/helpers/esm/slicedToArrayLoose";
 import Collapsible from "react-native-collapsible";
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {diff} from "react-native-reanimated";
 
 
 export default function Statistiques(props) {
@@ -98,7 +95,7 @@ export default function Statistiques(props) {
                       btw.add(diff/4,"days")
                       tab.push(btw.format("DD-MMM").toString())
                     }
-                    tab.push(Dates[1].format("DD-MMM").toString())
+                    tab.push(moment(date.endDate).format("DD-MMM"))
                     setLabels(tab)
                   }
                 }
@@ -146,7 +143,7 @@ export default function Statistiques(props) {
               width={Dimensions.get('window').width - 10}
               height={190}
               yAxisLabel=""
-              yAxisSuffix="km"
+              yAxisSuffix=" km"
               yAxisInterval={1} // optional, defaults to 1
               chartConfig={{
                 backgroundGradientFrom: '#FFFFFF',
