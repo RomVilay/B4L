@@ -38,12 +38,12 @@ export default function Statistiques(props) {
     totalq:'5000',
   };
   const [labels,setLabels] = useState([
-    " sept",
-    ' oct ',
-    ' nov ',
-    ' dec ',
-    ' janv ',
-    ' fev',
+    Dates[0].format("DD-MMM").toString(),
+    Dates[0].clone().add(15,"days").format("DD-MMM").toString(),
+    Dates[0].clone().add(30,"days").format("DD-MMM").toString(),
+    Dates[0].clone().add(45,"days").format("DD-MMM").toString(),
+    Dates[0].clone().add(60,"days").format("DD-MMM").toString(),
+    Dates[1].format("DD-MMM").toString(),
   ]);
   const chartConfig = {
     backgroundGradientFrom: '#1E2923',
@@ -87,7 +87,7 @@ export default function Statistiques(props) {
                   setDates([moment(date.startDate), Dates[1]])
                   setdisplayedDate(moment(date.startDate))
                 }
-                if (date.endDate != null){
+                if (date.endDate != null && date.startDate == null){
                   setDates([Dates[0], moment(date.endDate)])
                   setdisplayedDate(moment(date.endDate))
                   if (Dates[1] !== date.endDate) {
