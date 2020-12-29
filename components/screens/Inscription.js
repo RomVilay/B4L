@@ -33,6 +33,13 @@ export default function Inscription(props) {
         `Le nom d'utilisateur doit contenir au moins 5 caractères`,
       );
     } else if (
+      !mail.match(
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+      ) ||
+      mail == 'undefined'
+    ) {
+      Alert.alert('Erreur', `L'adresse e-mail n'est pas valide`);
+    } else if (
       !password.match(/^([a-zA-Z0-9]){3,}$/) ||
       password == 'undefined'
     ) {

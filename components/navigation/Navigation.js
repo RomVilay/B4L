@@ -20,6 +20,7 @@ import Jumelage from '../screens/Jumelage';
 import Compteur from '../screens/Compteur';
 import ListeDefis from '../screens/ListeDefis';
 import Statistiques from '../screens/Statistiques';
+import ForgottenPassword from '../screens/ForgottenPassword';
 
 const Stack = createStackNavigator();
 
@@ -70,6 +71,7 @@ function ConnexionNavigator() {
         <Stack.Navigator initialRouteName="Connexion">
             <Stack.Screen name="Connexion" component={Connexion} options={{ headerShown: false }} />
             <Stack.Screen name="Inscription" component={InscriptionNavigator} options={{ headerShown: false }} />
+            <Stack.Screen name="ForgottenPassword" component={ForgottenPassword} options={{ headerShown: false }} />
         </Stack.Navigator>
     )
 }
