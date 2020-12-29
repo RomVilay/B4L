@@ -96,17 +96,17 @@ export default class Compteur extends React.Component {
   //déclenchement de l'animation du compteur à l'ouverture de la page
   componentDidMount() {
     this._isMounted = true
-/*  this.interval = setInterval(() => {
+  this.interval = setInterval(() => {
     this.StartImageRotateFunction()
     this.randomRotation()
   }, 1000); //mise à jour du tableau d'interpolation de la rotation, toutes les 6s
     //this._isMounted && this.StartImageRotateFunction();
-    this._isMounted && this.randomRotation();*/
+    this._isMounted && this.randomRotation();
   }
   //arrêt de l'animation
   componentWillUnmount() {
     this._isMounted = false
-    //clearInterval(this.interval)
+    clearInterval(this.interval)
     //clearInterval(this.randomRotation());
   }
   //fonction animation
@@ -370,33 +370,36 @@ export default class Compteur extends React.Component {
               </View>
             </View>
           </ImageBackground>
-          <View style={[{flex: 1, flexDirection: 'row', marginLeft: '30%'}]}>
-            <Text
-              style={[styles.midText, {fontSize: 60, marginRight: '5%'}]}
-              onPress={() => {
-                this.state.watts -= 5;
-              }}>
-              -
-            </Text>
-            <View style={styles.textbloc}>
+          <View style={[{flex: 1, flexDirection: 'row', marginLeft: '25%'}]}>
+            <TouchableOpacity onPress={() => {
+              this.state.watts -= 5;
+              console.log(this.state.watts)
+            }}>
+              <Text style={[styles.midText, {fontSize: 60, marginRight: '5%'}]}> - </Text>
+            </TouchableOpacity>
+            <View style={[styles.textbloc,{}]}>
               <Text style={[styles.midText, {fontSize: 60}]}>
                 {' '}
                 {this.state.watts}{' '}
               </Text>
               <Text style={[styles.midText2]}>watts </Text>
              </View>
-            <Text
-              style={[styles.midText, {fontSize: 70, marginRight: '5%'}]}
-              onPress={() => {
-                this.state.watts += 5;
-              }}>
-              +
-            </Text>
+            <TouchableOpacity
+                onPress={() => {
+                  this.state.watts += 5;
+                  console.log(this.state.watts)
+                }}>
+              <Text
+                  style={[styles.midText, {fontSize: 70, marginRight: '5%'}]}
+              >
+                +
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.footer}>
           <TouchableOpacity
-              style={[styles.midText2, {borderWidth: 4, margin:'5%', zIndex:600}]}
+              style={[styles.midText2, { margin:'5%', zIndex:600}]}
               onPress={() => this.toggleStopwatch()}>
             <Text style={[styles.midText, {fontSize: 30}]}>Pause</Text>
           </TouchableOpacity>
