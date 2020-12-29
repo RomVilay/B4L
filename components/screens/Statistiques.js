@@ -19,6 +19,7 @@ import moment from 'moment';
 import DateRangePicker from 'react-native-daterange-picker';
 import Collapsible from "react-native-collapsible";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Picker } from '@react-native-picker/picker';
 
 
 export default function Statistiques(props) {
@@ -26,6 +27,7 @@ export default function Statistiques(props) {
   const [displayedDate, setdisplayedDate] = useState(moment('2020-11-10'));
   const [chdist, setchdist] = useState(true)
   const [chprod, setchprod] = useState(true)
+  const [selector,setselector] = useState(0)
   const data = {
     labels: ['Objectif'], // optional
     data: [0.5],
@@ -76,7 +78,6 @@ export default function Statistiques(props) {
           {/**/}
           <DateRangePicker
             onChange={date => {
-              console.log(date)
               if (moment(date.displayedDate) !== moment(displayedDate)){
                 setdisplayedDate(moment(date.displayedDate))
               }
@@ -112,18 +113,20 @@ export default function Statistiques(props) {
               Du {Dates[0].format('DD/MM')} au {Dates[1].format('DD/MM')}
             </Text>
           </DateRangePicker>
+          <View style={styles.picker}>
+            <Picker
+                selectedValue={selector}
+                style={styles.pickerField}
+                onValueChange={(itemValue) => {
+                  setselector(itemValue)
+                }}>
+              <Picker.Item label="Historique des distances parcourues" value="0" />
+              <Picker.Item label="Historique de l'énergie produite" value="1" />
+            </Picker>
+          </View>
         </View>
-        <View style={[styles.body, {zIndex: 0}]}>
-          <View style={{alignItems: 'center', zIndex: 0}}>
-              <TouchableOpacity
-                  onPress={()=> {setchdist(!chdist)
-                    setchprod(true)}}>
-                <View style={{flexDirection:"row"}}>
-                  <Icon name={chdist ? "arrow-drop-down": "arrow-drop-up"} color="white" size={30} />
-                <Text style={styles.texteBlanc}>Historique des Distances Parcourues</Text>
-                </View>
-              </TouchableOpacity>
-            <Collapsible collapsed={chdist} align={"center"}>
+        <View style={[styles.body, {}]}>
+          <View style={styles.tableView}>
             <LineChart
               data={{
                 labels: labels,
@@ -143,7 +146,7 @@ export default function Statistiques(props) {
               width={Dimensions.get('window').width - 10}
               height={190}
               yAxisLabel=""
-              yAxisSuffix=" km"
+              yAxisSuffix={selector == 0 ? " km" : " kw"}
               yAxisInterval={1} // optional, defaults to 1
               chartConfig={{
                 backgroundGradientFrom: '#FFFFFF',
@@ -167,65 +170,7 @@ export default function Statistiques(props) {
                 borderRadius: 16,
               }}
             />
-            </Collapsible>
-          </View>
-          <View style={{alignItems: 'center', zIndex: 0}}>
-            <TouchableOpacity
-                onPress={()=> {setchprod(!chprod)
-                  setchdist(true)}}>
-              <View style={{flexDirection:"row"}}>
-                <Icon name={chprod ? "arrow-drop-down": "arrow-drop-up"} color="white" size={30} />
-                <Text style={styles.texteBlanc}>
-                  Historique de l'énergie produite
-                </Text>
-              </View>
-            </TouchableOpacity>
-            <Collapsible collapsed={chprod} align={"center"}>
-              <LineChart
-                  data={{
-                    labels: labels,
-                    datasets: [
-                      {
-                        data: [
-                          Math.random() * 100,
-                          Math.random() * 100,
-                          Math.random() * 100,
-                          Math.random() * 100,
-                          Math.random() * 100,
-                          Math.random() * 100,
-                        ],
-                      },
-                    ],
-                  }}
-                  width={Dimensions.get('window').width - 10}
-                  height={190}
-                  yAxisLabel=""
-                  yAxisSuffix=" kw"
-                  yAxisInterval={1} // optional, defaults to 1
-                  chartConfig={{
-                    backgroundGradientFrom: '#FFFFFF',
-                    backgroundGradientFromOpacity: 0.2,
-                    backgroundGradientTo: '#FFFFFF',
-                    backgroundGradientToOpacity: 0.2,
-                    decimalPlaces: 2, // optional, defaults to 2dp
-                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                    labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                    style: {
-                      borderRadius: 16,
-                      zIndex: 0,
-                    },
-                    propsForDots: {
-                      r: '6',
-                      zIndex: 0,
-                    },
-                  }}
-                  bezier
-                  style={{
-                    borderRadius: 16,
-                    zIndex:0
-                  }}
-              />
-            </Collapsible>
+          {/*  </Collapsible> */}
           </View>
           <Text style={[styles.texteBlanc, {fontSize: 20}]}>
             Avancement des objectifs sur la période{' '}
@@ -352,14 +297,27 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontFamily: 'GnuolaneRG-Regular',
   },
+  picker:{
+    backgroundColor:"#56ADCEAA",
+    borderRadius:12
+  },
+  pickerField:{
+    height:40,
+    width:Dimensions.get("screen").width-50,
+    color:"white"
+  },
   body: {
+     marginTop:"25%",
     ...Platform.select({
       ios:{
     marginTop: '45%'}}),
     flex: 4,
     alignItems: 'center',
     zIndex:0,
-
+  },
+  tableView:{
+    alignItems: 'center',
+    zIndex: 0
   },
   footer: {
     position:"absolute",
