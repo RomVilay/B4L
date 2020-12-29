@@ -18,7 +18,7 @@ import {LineChart, ProgressChart} from 'react-native-chart-kit';
 import moment from 'moment';
 import DateRangePicker from 'react-native-daterange-picker';
 import Collapsible from "react-native-collapsible";
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Picker } from '@react-native-picker/picker';
 
 
@@ -131,7 +131,12 @@ export default function Statistiques(props) {
               <Picker.Item label="Historique des dénivelés franchis" value="2" />
               <Picker.Item label="Historique de l'énergie économisée" value="3" />
             </Picker>
+            {Platform.select({
+              ios: () => <Icon name="menu-swap" color="white"  size={30} style={{position:"absolute", top: 5, left: 15}} />,
+              android: () => {}
+            })() }
           </View>
+
           <View style={styles.tableView}>
             <LineChart
               data={{
@@ -317,6 +322,7 @@ const styles = StyleSheet.create({
   picker:{
     backgroundColor:"#56ADCEAA",
     borderRadius:12,
+    flexDirection: "row",
     marginTop:'2%'
   },
   pickerField:{
