@@ -25,8 +25,6 @@ import { Picker } from '@react-native-picker/picker';
 export default function Statistiques(props) {
   const [Dates, setDates] = useState([moment('2020-10-10'), moment()]);
   const [displayedDate, setdisplayedDate] = useState(moment('2020-11-10'));
-  const [chdist, setchdist] = useState(true)
-  const [chprod, setchprod] = useState(true)
   const [selector,setselector] = useState(0)
   const data = {
     labels: ['Objectif'], // optional
@@ -157,7 +155,7 @@ export default function Statistiques(props) {
               width={Dimensions.get('window').width - 10}
               height={190}
               yAxisLabel=""
-              yAxisSuffix={selector == 0 ? " km" : " kw"}
+              yAxisSuffix={selector == 0 ? " km" : selector == 2 ? " m" : " kw"}
               yAxisInterval={1} // optional, defaults to 1
               chartConfig={{
                 backgroundGradientFrom: '#FFFFFF',
@@ -265,6 +263,20 @@ export default function Statistiques(props) {
       </ImageBackground>
     </SafeAreaView>
   );
+}
+
+function unit()  {
+  switch (selector) {
+  case 0:
+    setUnit(" km")
+    break;
+  case 1:
+    setUnit(" kw")
+    break;
+  case 2:
+    setUnit(" m")
+    break;
+  }
 }
 const styles = StyleSheet.create({
   fond: { ...Platform.select({

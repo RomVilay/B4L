@@ -55,14 +55,15 @@ export default class Classements extends React.Component {
               <Text style={styles.number}>{this.state.membres} </Text>
               <Text style={styles.linesb}> utilisateurs</Text>
             </View>
-          </View>
-          <View>
-            <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate('Statistiques');
-                }}>
-              <Text style={styles.linesw}>voir tes stats</Text>
-            </TouchableOpacity>
+            <View>
+              <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate('Statistiques');
+                  }}>
+                <Text style={styles.linesw}>voir tes stats</Text>
+              </TouchableOpacity>
+            </View>
+
           </View>
           <View style={[styles.bottom, {width: '100%'}]}>
             <View
@@ -177,10 +178,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     zIndex: 100,
-    margin:'15%'
+
   },
   bottom: {
     flex: 2,
+    marginTop:'10%',
     flexDirection: 'column',
     alignItems: 'center',
     zIndex: 100,
