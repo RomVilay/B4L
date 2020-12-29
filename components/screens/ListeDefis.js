@@ -15,14 +15,14 @@ const Item = ({ item, onPress, style }) => (
 
 export default function  ListeDefis(props) {
     const [ListeDefs, setListeDefs]= useState([
-        {id:0,descriptionDefis:"faire 200km", statut:false},
-        {id:1,descriptionDefis:"faire 300km", statut:false},
-        {id:2,descriptionDefis:"faire 50km", statut:false},
-        {id:3,descriptionDefis:"faire 100km", statut:false},
-        {id:4,descriptionDefis:"faire 200km", statut:false},
-        {id:5,descriptionDefis:"faire 200km", statut:false},
-        {id:6,descriptionDefis:"faire 200km", statut:false},
-        {id:7,descriptionDefis:"faire 200km", statut:false},
+        {id:"0",descriptionDefis:"faire 200km", statut:false},
+        {id:"1",descriptionDefis:"faire 300km", statut:false},
+        {id:"2",descriptionDefis:"faire 50km", statut:false},
+        {id:"3",descriptionDefis:"faire 100km", statut:false},
+        {id:"4",descriptionDefis:"faire 200km", statut:false},
+        {id:"5",descriptionDefis:"faire 200km", statut:false},
+        {id:"6",descriptionDefis:"faire 200km", statut:false},
+        {id:"7",descriptionDefis:"faire 200km", statut:false},
         ])
     const [defisSelect,setDefiSelect] = useState([])
     const render_item = ({ item }) =>{

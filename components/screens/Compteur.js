@@ -50,6 +50,7 @@ export default class Compteur extends React.Component {
     this.tab = ['rpm', 'kmh', 'kcals'];
     this.toggleStopwatch = this.toggleStopwatch.bind(this);
     this.resetStopwatch = this.resetStopwatch.bind(this);
+    this._isMounted = false
   }
   toggleStopwatch() {
     this.setState({start: !this.state.start, reset: false});
@@ -66,8 +67,7 @@ export default class Compteur extends React.Component {
 
   //fonction qui défini la rotation à effectuer
   randomRotation() {
-    setInterval(() => {
-      if (this.state.up) {
+   if (this.state.up) {
         const nend = this.state.endPosition + 10;
         const ang = `${nend}deg`; //définition de la valeur de rotation
         this.setState({
@@ -92,16 +92,22 @@ export default class Compteur extends React.Component {
           this.state.up = true;
         }
       }
-    }, 1000); //mise à jour du tableau d'interpolation de la rotation, toutes les 6s
   }
   //déclenchement de l'animation du compteur à l'ouverture de la page
   componentDidMount() {
-    this.StartImageRotateFunction();
-    this.randomRotation();
+    this._isMounted = true
+/*  this.interval = setInterval(() => {
+    this.StartImageRotateFunction()
+    this.randomRotation()
+  }, 1000); //mise à jour du tableau d'interpolation de la rotation, toutes les 6s
+    //this._isMounted && this.StartImageRotateFunction();
+    this._isMounted && this.randomRotation();*/
   }
   //arrêt de l'animation
   componentWillUnmount() {
-    clearInterval(this.randomRotation());
+    this._isMounted = false
+    //clearInterval(this.interval)
+    //clearInterval(this.randomRotation());
   }
   //fonction animation
   StartImageRotateFunction() {
@@ -269,7 +275,7 @@ export default class Compteur extends React.Component {
             start={this.state.start}
             reset={this.state.reset}
             options={options}
-            getTime={this.getFormattedTime}
+            getTime={this.getFormattedTime("00:00:00")}
             msec={true}
           />
           <Text
@@ -366,24 +372,19 @@ export default class Compteur extends React.Component {
           </ImageBackground>
           <View style={[{flex: 1, flexDirection: 'row', marginLeft: '30%'}]}>
             <Text
-              style={[styles.midText, {fontSize: 70, marginRight: '5%'}]}
+              style={[styles.midText, {fontSize: 60, marginRight: '5%'}]}
               onPress={() => {
                 this.state.watts -= 5;
               }}>
               -
             </Text>
             <View style={styles.textbloc}>
-              <Text style={[styles.midText, {fontSize: 70}]}>
+              <Text style={[styles.midText, {fontSize: 60}]}>
                 {' '}
                 {this.state.watts}{' '}
               </Text>
               <Text style={[styles.midText2]}>watts </Text>
-              <TouchableOpacity
-                style={styles.midText2}
-                onPress={() => this.toggleStopwatch()}>
-                <Text style={[styles.midText, {fontSize: 30}]}>Pause</Text>
-              </TouchableOpacity>
-            </View>
+             </View>
             <Text
               style={[styles.midText, {fontSize: 70, marginRight: '5%'}]}
               onPress={() => {
@@ -394,7 +395,12 @@ export default class Compteur extends React.Component {
           </View>
         </View>
         <View style={styles.footer}>
-          <NavApp navigation={this.props.navigation} />
+          <TouchableOpacity
+              style={[styles.midText2, {borderWidth: 4, margin:'5%', zIndex:600}]}
+              onPress={() => this.toggleStopwatch()}>
+            <Text style={[styles.midText, {fontSize: 30}]}>Pause</Text>
+          </TouchableOpacity>
+          <NavApp navigation={this.props.navigation}  style={{marginTop:20}}/>
         </View>
       </SafeAreaView>
     );
@@ -505,12 +511,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 100,
     marginLeft: '12%',
-    paddingBottom: '10%',
+    paddingBottom: '10%'
   },
   footer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
+
   },
 
   item: {
