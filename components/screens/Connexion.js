@@ -17,6 +17,7 @@ import {Context} from '../utils/Store';
 import goTo from '../utils/navFunctions';
 import {login} from '../../functions/login';
 import LogoMed from '../../assets/logoMed';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Connexion(props) {
   const [username, setUsername] = useState('toto24');
@@ -34,7 +35,12 @@ export default function Connexion(props) {
   }
 
   const checkFields = () => {
-    if (!username.match(/^([a-zA-Z0-9]){5,}$/) || username == 'undefined') {
+    if (
+      !username.match(
+        /^([a-zA-Z0-9]){5,}||[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+      ) ||
+      username == 'undefined'
+    ) {
       Alert.alert('Erreur', `Veuillez saisir votre nom d'utilisateur`);
     } else if (!password.match(/^([a-zA-Z0-9]){3,}$/)) {
       Alert.alert('Erreur', `Veuillez saisir votre mot de passe`);
@@ -57,6 +63,15 @@ export default function Connexion(props) {
         Alert.alert('Erreur', `${myLogin.message}`);
         setIsLoading(false);
       } else {
+        try {
+          await AsyncStorage.setItem(
+            '@bikeforlifeusername',
+            myLogin.user.username,
+          );
+          await AsyncStorage.setItem('@bikeforlifepassword', password);
+        } catch (e) {
+          Alert.alert('Erreur', `${e}`);
+        }
         await setState({user: myLogin.user, token: myLogin.token});
         setIsLoading(false);
         goTo(props);
@@ -80,7 +95,7 @@ export default function Connexion(props) {
               style={styles.input}
               keyboardType="email-address"
               onChangeText={username => setUsername(username)}
-              placeholder="Nom d'utilisateur"
+              placeholder="Nom d'utilisateur ou adresse e-mail"
               placeholderTextColor="#FFFFFF"
             />
           </View>
@@ -115,6 +130,14 @@ export default function Connexion(props) {
                 Connexion
               </Text>
             )}
+          </View>
+          <View style={{top: 60}}>
+            <Text
+              onPress={() => props.navigation.navigate('ForgottenPassword')}
+              backgroundColor="transparent"
+              style={styles.inscriptionText1}>
+              Mot de passe oublié ?
+            </Text>
           </View>
           <View style={styles.bottom}>
             <Text backgroundColor="transparent" style={styles.inscriptionText1}>

@@ -48,7 +48,27 @@ async function login(data, appToken) {
   return post;
 }
 
+/**
+ * Appelle la route /forgottenPassword pour envoyer un mail à la personne concernée
+ * @param {Object} data Le mail sous la forme d'object {mail: mail}
+ * @param {String} appToken La clé d'API
+ * @returns Un message indiquant que le mail a bien été envoyé | Un message d'erreur si l'e-mail n'existe pas
+ */
+async function forgottenPassword(data, appToken) {
+  let post = await fetchWithTimeout(
+    `${BASE_URL}/login/forgottenPassword`,
+    {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {'Content-Type': 'application/json', 'app-token': appToken},
+    },
+    serverTimeout,
+  );
+  return post;
+}
+
 module.exports = {
   register,
   login,
+  forgottenPassword,
 };

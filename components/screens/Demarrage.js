@@ -1,10 +1,9 @@
 import React, {useContext} from 'react';
 import {View, StyleSheet, Image, SafeAreaView, Text, Alert} from 'react-native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Context} from '../utils/Store';
 import goTo from '../utils/navFunctions';
 import Logo from '../../assets/logo';
-import Fingerprint from '../../assets/fingerprint';
 import {APP_TOKEN} from '@env';
 import {login} from '../../functions/login';
 
@@ -20,12 +19,26 @@ export default function Demarrage(props) {
     //   setState({user: myLogin.user, token: myLogin.token});
     //   goTo(props, 'Parametres2');
     // }
-
-    if (state.user.username && state.token != '') {
-      console.log('user already logged in');
-      goTo(props);
-    } else {
-      props.navigation.navigate('Connexion');
+    try {
+      let storedUsername = await AsyncStorage.getItem('@bikeforlifeusername');
+      let storedPassword = await AsyncStorage.getItem('@bikeforlifepassword');
+      if (storedUsername !== null && storedPassword !== null) {
+        let myLogin = await login(
+          {username: storedUsername, password: storedPassword},
+          APP_TOKEN,
+        );
+        if (myLogin.message) {
+          Alert.alert('Erreur', `${myLogin.message}`);
+          props.navigation.navigate('Connexion');
+        } else {
+          setState({user: myLogin.user, token: myLogin.token});
+          goTo(props);
+        }
+      } else {
+        props.navigation.navigate('Connexion');
+      }
+    } catch (e) {
+      Alert.alert('Erreur', `${e}`);
     }
   };
 
@@ -38,15 +51,6 @@ export default function Demarrage(props) {
           resizeMode="cover"
         />
         <Logo style={styles.logo} />
-        {/* <Fingerprint
-          onPress={() => navigate()}
-          style={{
-            color: 'white',
-            position: 'absolute',
-            top: 550,
-            fontSize: 30,
-          }}
-        /> */}
         <Text style={styles.text} onPress={() => navigate('Connexion')}>
           Start
         </Text>
