@@ -162,6 +162,9 @@ export default function Parametres2(props) {
         setIsLoading(false);
       } else {
         setState({user: updated, token: state.token});
+        if (tempPassword1 !== '') {
+          await AsyncStorage.setItem('@bikeforlifepassword', tempPassword1);
+        }
         setIsLoading(false);
         goTo(props);
       }
@@ -191,8 +194,8 @@ export default function Parametres2(props) {
 
   const deleteLocalStorage = async () => {
     try {
-      await AsyncStorage.removeItem('@username');
-      await AsyncStorage.removeItem('@password');
+      await AsyncStorage.removeItem('@bikeforlifeusername');
+      await AsyncStorage.removeItem('@bikeforlifepassword');
     } catch (e) {
       Alert.alert('Erreur', `${e}`);
     }

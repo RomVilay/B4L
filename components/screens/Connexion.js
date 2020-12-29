@@ -64,8 +64,11 @@ export default function Connexion(props) {
         setIsLoading(false);
       } else {
         try {
-          await AsyncStorage.setItem('@username', myLogin.user.username);
-          await AsyncStorage.setItem('@password', password);
+          await AsyncStorage.setItem(
+            '@bikeforlifeusername',
+            myLogin.user.username,
+          );
+          await AsyncStorage.setItem('@bikeforlifepassword', password);
         } catch (e) {
           Alert.alert('Erreur', `${e}`);
         }

@@ -20,8 +20,8 @@ export default function Demarrage(props) {
     //   goTo(props, 'Parametres2');
     // }
     try {
-      let storedUsername = await AsyncStorage.getItem('@username');
-      let storedPassword = await AsyncStorage.getItem('@password');
+      let storedUsername = await AsyncStorage.getItem('@bikeforlifeusername');
+      let storedPassword = await AsyncStorage.getItem('@bikeforlifepassword');
       if (storedUsername !== null && storedPassword !== null) {
         let myLogin = await login(
           {username: storedUsername, password: storedPassword},
