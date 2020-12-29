@@ -113,19 +113,25 @@ export default function Statistiques(props) {
               Du {Dates[0].format('DD/MM')} au {Dates[1].format('DD/MM')}
             </Text>
           </DateRangePicker>
+
+        </View>
+        <View style={[styles.body, {}]}>
           <View style={styles.picker}>
             <Picker
                 selectedValue={selector}
                 style={styles.pickerField}
+                mode="dropdown"
                 onValueChange={(itemValue) => {
                   setselector(itemValue)
-                }}>
+                }}
+                itemStyle={styles.itemStyle}
+                >
               <Picker.Item label="Historique des distances parcourues" value="0" />
               <Picker.Item label="Historique de l'énergie produite" value="1" />
+              <Picker.Item label="Historique des dénivelés franchis" value="2" />
+              <Picker.Item label="Historique de l'énergie économisée" value="3" />
             </Picker>
           </View>
-        </View>
-        <View style={[styles.body, {}]}>
           <View style={styles.tableView}>
             <LineChart
               data={{
@@ -162,6 +168,9 @@ export default function Statistiques(props) {
                 propsForDots: {
                   r: '6',
                   zIndex: 0,
+                },
+                propsForHorizontalLabels:{
+                  x:"55"
                 }
               }}
               bezier
@@ -218,13 +227,13 @@ export default function Statistiques(props) {
                   {
                     fontSize: 20,
                     textTransform: 'none',
-                    color: '#5fcefa',
+                    color: 'white',
                     marginLeft: 5,
                   },
                 ]}>
                 calories dépensées{' '}
               </Text>
-              <Text style={{position: 'absolute', top: 52, color: '#5fcefa'}}>
+              <Text style={{position: 'absolute', top: 52, color: 'white'}}>
                 {data.data * 100}%
               </Text>
               <ProgressChart
@@ -233,10 +242,10 @@ export default function Statistiques(props) {
                 height={80}
                 strokeWidth={16}
                 radius={32}
-                chartConfig={chartConfig2}
+                chartConfig={chartConfig}
                 hideLegend={true}
               />
-              <Text style={{ color: '#5fcefa'}}>{data.quantits} / {data.totalq} {data.units2}</Text>
+              <Text style={{ color: 'white'}}>{data.quantits} / {data.totalq} {data.units2}</Text>
             </View>
           </View>
         </View>
@@ -297,20 +306,30 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontFamily: 'GnuolaneRG-Regular',
   },
+  itemStyle:{
+    fontSize:20,
+    color:"white",
+    height:40,
+    fontWeight:"bold",
+    textTransform:"uppercase",
+    fontFamily: 'GnuolaneRG-Regular'
+  },
   picker:{
     backgroundColor:"#56ADCEAA",
-    borderRadius:12
+    borderRadius:12,
+    marginTop:'2%'
   },
   pickerField:{
     height:40,
     width:Dimensions.get("screen").width-50,
-    color:"white"
+    color:"white",
+
   },
   body: {
-     marginTop:"25%",
+     marginTop:"5%",
     ...Platform.select({
       ios:{
-    marginTop: '45%'}}),
+      marginTop: '45%'}}),
     flex: 4,
     alignItems: 'center',
     zIndex:0,
