@@ -66,10 +66,10 @@ export default function ForgottenPassword(props) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Image style={styles.fond} source={require('../../assets/fond.png')} />
       <KeyboardAwareScrollView
         contentContainerStyle={{height: windowHeight}}
-        extraHeight={500}>
-        <Image style={styles.fond} source={require('../../assets/fond.png')} />
+        >
         <LogoMed style={styles.logo} />
         <Text style={styles.title}>Mot de passe oublié</Text>
         <View style={styles.main}>
@@ -94,7 +94,7 @@ export default function ForgottenPassword(props) {
             )}
           </View>
         </View>
-        <TouchableOpacity onPress={() => props.navigation.goBack()}>
+        <TouchableOpacity style={{flex:1}} onPress={() => props.navigation.goBack()}>
           <Text style={styles.footerBtn}>Retour</Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>
@@ -106,11 +106,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // alignItems: 'center',
-    width: '100%',
+    width: '100%'
   },
   fond: {
     width: '110%',
-    height: '120%',
+    height: '130%',
     position: 'absolute',
   },
   logo: {
@@ -118,10 +118,10 @@ const styles = StyleSheet.create({
     top: '5%',
   },
   main: {
-    flex: 1,
+    flex: 2,
     width: '100%',
     alignItems: 'center',
-    paddingTop: 50,
+    paddingTop: 50
   },
   title: {
     marginTop: 70,
