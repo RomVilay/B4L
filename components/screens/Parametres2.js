@@ -186,19 +186,33 @@ export default function Parametres2(props) {
 
   const deleteAccount = async () => {
     setIsLoading(true);
-    await deleteLocalStorage();
-    let res = await deleteUser(state.user.username, state.token);
+    let res = await isValidPassword(
+      state.user.username,
+      tempPassword,
+      state.token,
+    );
     if (res.message) {
-      Alert.alert(
-        'Erreur',
-        "Quelque chose s'est mal passé, contactez BikeForLife. Erreur : " +
-          res.message,
-      );
+      Alert.alert('Erreur', `${res.message}`);
       setIsLoading(false);
+    } else if (!res) {
+      setIsLoading(false);
+      Alert.alert('Erreur', `Mot de passe incorrect`);
+      refPwd.focus();
     } else {
-      setState({user: {}, token: ''});
-      setIsLoading(false);
-      goTo(props, 'Demarrage');
+      await deleteLocalStorage();
+      let res = await deleteUser(state.user.username, state.token);
+      if (res.message) {
+        Alert.alert(
+          'Erreur',
+          "Quelque chose s'est mal passé, contactez BikeForLife. Erreur : " +
+            res.message,
+        );
+        setIsLoading(false);
+      } else {
+        setState({user: {}, token: ''});
+        setIsLoading(false);
+        goTo(props, 'Demarrage');
+      }
     }
   };
 
@@ -317,7 +331,16 @@ export default function Parametres2(props) {
                       [
                         {
                           text: 'Oui',
-                          onPress: () => deleteAccount(),
+                          onPress: () => {
+                            if (tempPassword == '') {
+                              Alert.alert(
+                                'Erreur',
+                                'Veuillez renseigner votre mot de passe pour supprimer votre compte.',
+                              );
+                            } else {
+                              deleteAccount();
+                            }
+                          },
                         },
                         {
                           text: 'Annuler',
