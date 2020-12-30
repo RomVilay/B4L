@@ -1,4 +1,4 @@
-import {URL, PORT} from '@env';
+import {URL, PORT} from '../components/utils/constants';
 import {fetchWithTimeout} from './fetchWithTimeout';
 
 const BASE_URL = `${URL}:${PORT}`;

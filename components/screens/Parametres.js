@@ -14,11 +14,13 @@ import NetInfo from '@react-native-community/netinfo';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {Context} from '../utils/Store';
+import {regexDateNaissance, regexTaille, regexPoids} from '../utils/constants';
 import goTo from '../utils/navFunctions';
 import {editUser} from '../../functions/user';
-import LogoMin from '../../assets/logoMin';
-import Fleche from '../../assets/fleche';
+
 import avatar from '../../assets/avatar.png';
+import Fleche from '../../assets/fleche';
+import LogoMin from '../../assets/logoMin';
 import NavApp from '../navigation/NavApp';
 
 export default function Parametres(props) {
@@ -40,19 +42,16 @@ export default function Parametres(props) {
 
   const checkFields = () => {
     if (
-      !tempDateNaissance.match(/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/) &&
+      !tempDateNaissance.match(regexDateNaissance) &&
       tempDateNaissance.length > 0
     ) {
-      Alert.alert('Erreur', `Veuillez saisir un date de naissance valide`);
-    } else if (
-      !tempTaille.match(/^[0-9]{1,4}\,{0,1}[0-9]{0,2}$/) &&
-      tempTaille.length > 0
-    ) {
+      Alert.alert(
+        'Erreur',
+        `Veuillez saisir un date de naissance valide du type AAAA-MM-JJ`,
+      );
+    } else if (!tempTaille.match(regexTaille) && tempTaille.length > 0) {
       Alert.alert('Erreur', `Veuillez saisir une taille valide`);
-    } else if (
-      !tempPoids.match(/^[0-9]{1,4}\,{0,1}[0-9]{0,2}$/) &&
-      tempPoids.length > 0
-    ) {
+    } else if (!tempPoids.match(regexPoids) && tempPoids.length > 0) {
       Alert.alert('Erreur', `Veuillez saisir un poids valide`);
     } else {
       updateUser();
@@ -74,7 +73,6 @@ export default function Parametres(props) {
           poids: tempPoids,
           taille: tempTaille,
         },
-        // ADMIN_TOKEN,
         state.token,
       );
       setIsLoading(false);

@@ -13,13 +13,20 @@ import {
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {Context} from '../utils/Store';
+import {
+  regexPrenom,
+  regexNom,
+  regexEmail,
+  regexPassword,
+} from '../utils/constants';
 import goTo from '../utils/navFunctions';
 import {editUser, isValidPassword, deleteUser} from '../../functions/user';
+
 import LogoMin from '../../assets/logoMin';
 import NavApp from '../navigation/NavApp';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Parametres2(props) {
   const [state, setState] = useContext(Context);
@@ -75,22 +82,16 @@ export default function Parametres2(props) {
   };
 
   const checkFields = async () => {
-    if (
-      !tempPrenom.match(/^[A-Z][A-Za-z\é\è\ê\- ]{1,50}$/) &&
-      tempPrenom.length > 0
-    ) {
+    if (!tempPrenom.match(regexPrenom) && tempPrenom.length > 0) {
       Alert.alert('Erreur', `Veuillez saisir un prénom valide`);
       inputs['prenom'].reference.focus();
-    } else if (
-      !tempNom.match(/^[A-Z][A-Za-z\é\è\ê\-\'\ ]{1,50}$/) &&
-      tempNom.length > 0
-    ) {
+    } else if (!tempNom.match(regexNom) && tempNom.length > 0) {
       Alert.alert('Erreur', `Veuillez saisir un nom valide`);
       inputs['nom'].reference.focus();
-    } else if (!tempMail.match(/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})$/)) {
+    } else if (!tempMail.match(regexEmail)) {
       Alert.alert('Erreur', `Veuillez saisir une adresse e-mail valide`);
       inputs['mail'].reference.focus();
-    } else if (tempPassword1 != tempPassword2) {
+    } else if (tempPassword1 !== tempPassword2) {
       Alert.alert('Erreur', `Les deux mots de passes doivent correspondre`);
       setTempPassword1('');
       setTempPassword2('');
@@ -98,9 +99,8 @@ export default function Parametres2(props) {
       inputs['pwd2'].reference.clear();
       inputs['pwd1'].reference.focus();
     } else if (
-      (!tempPassword1.match(/^[A-Za-z0-9]{3,30}$/) &&
-        tempPassword1.length > 0) ||
-      (!tempPassword2.match(/^[A-Za-z0-9]{3,30}$/) && tempPassword2.length > 0)
+      !tempPassword1.match(regexPassword) &&
+      tempPassword1.length > 0
     ) {
       Alert.alert(
         'Erreur',

@@ -13,9 +13,12 @@ import {
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import LogoMed from '../../assets/logoMed';
+
 import {APP_TOKEN} from '@env';
+import {regexEmail} from '../utils/constants';
 import {forgottenPassword} from '../../functions/login';
+
+import LogoMed from '../../assets/logoMed';
 
 export default function ForgottenPassword(props) {
   const [email, setEmail] = useState('');
@@ -25,11 +28,7 @@ export default function ForgottenPassword(props) {
   const windowHeight = Dimensions.get('window').height;
 
   const checkField = async () => {
-    if (
-      !email.match(
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-      )
-    ) {
+    if (!email.match(regexEmail)) {
       Alert.alert('Erreur', "L'adresse e-mail n'est pas valide");
       reference.clear();
       reference.focus();
@@ -67,9 +66,7 @@ export default function ForgottenPassword(props) {
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />
-      <KeyboardAwareScrollView
-        contentContainerStyle={{height: windowHeight}}
-        >
+      <KeyboardAwareScrollView contentContainerStyle={{height: windowHeight}}>
         <LogoMed style={styles.logo} />
         <Text style={styles.title}>Mot de passe oublié</Text>
         <View style={styles.main}>
@@ -94,7 +91,9 @@ export default function ForgottenPassword(props) {
             )}
           </View>
         </View>
-        <TouchableOpacity style={{flex:1}} onPress={() => props.navigation.goBack()}>
+        <TouchableOpacity
+          style={{flex: 1}}
+          onPress={() => props.navigation.goBack()}>
           <Text style={styles.footerBtn}>Retour</Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>
@@ -106,7 +105,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // alignItems: 'center',
-    width: '100%'
+    width: '100%',
   },
   fond: {
     width: '110%',
@@ -121,7 +120,7 @@ const styles = StyleSheet.create({
     flex: 2,
     width: '100%',
     alignItems: 'center',
-    paddingTop: 50
+    paddingTop: 50,
   },
   title: {
     marginTop: 70,
