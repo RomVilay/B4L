@@ -128,7 +128,6 @@ export default function Parametres2(props) {
         Alert.alert('Erreur', `${res.message}`);
         setIsLoading(false);
       } else if (res) {
-        setIsLoading(false);
         updateUser();
       } else {
         setIsLoading(false);
@@ -151,7 +150,7 @@ export default function Parametres2(props) {
         {
           nom: tempNom,
           prenom: tempPrenom,
-          mail: tempMail,
+          tempMail: tempMail,
           password: tempPassword1,
         },
         state.token,
@@ -161,10 +160,16 @@ export default function Parametres2(props) {
         Alert.alert('Erreur', `${updated.message}`);
         setIsLoading(false);
       } else {
-        setState({user: updated, token: state.token});
+        if (tempMail !== state.user.mail) {
+          Alert.alert(
+            'Information',
+            'Pour que la modification de votre adresse e-mail soit effective, veuillez consulter le mail que nous vous avons envoyé à votre nouvelle adresse.',
+          );
+        }
         if (tempPassword1 !== '') {
           await AsyncStorage.setItem('@bikeforlifepassword', tempPassword1);
         }
+        setState({user: updated, token: state.token});
         setIsLoading(false);
         goTo(props);
       }

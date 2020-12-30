@@ -14,7 +14,6 @@ import NetInfo from '@react-native-community/netinfo';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {Context} from '../utils/Store';
-import {ADMIN_TOKEN} from '@env';
 import goTo from '../utils/navFunctions';
 import {editUser} from '../../functions/user';
 import LogoMin from '../../assets/logoMin';
@@ -79,7 +78,7 @@ export default function Parametres(props) {
         state.token,
       );
       setIsLoading(false);
-      console.log('updated : ', updated);
+      // console.log('updated : ', updated);
       if (updated.message) {
         Alert.alert('Erreur', `${updated.message}`);
       } else {
