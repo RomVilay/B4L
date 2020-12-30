@@ -373,11 +373,10 @@ export default class Compteur extends React.Component {
           <View style={[{flex: 1, flexDirection: 'row', marginLeft: '25%'}]}>
             <TouchableOpacity onPress={() => {
               this.state.watts -= 5;
-              console.log(this.state.watts)
             }}>
-              <Text style={[styles.midText, {fontSize: 60, marginRight: '5%'}]}> - </Text>
+              <Text style={[styles.midText, {fontSize: 60, marginRight: '5%', marginTop:30}]}> - </Text>
             </TouchableOpacity>
-            <View style={[styles.textbloc,{}]}>
+            <View style={[styles.textbloc,{marginTop:30}]}>
               <Text style={[styles.midText, {fontSize: 60}]}>
                 {' '}
                 {this.state.watts}{' '}
@@ -387,10 +386,9 @@ export default class Compteur extends React.Component {
             <TouchableOpacity
                 onPress={() => {
                   this.state.watts += 5;
-                  console.log(this.state.watts)
                 }}>
               <Text
-                  style={[styles.midText, {fontSize: 70, marginRight: '5%'}]}
+                  style={[styles.midText, {fontSize: 70, marginRight: '5%', marginTop:25}]}
               >
                 +
               </Text>
@@ -403,7 +401,7 @@ export default class Compteur extends React.Component {
               onPress={() => this.toggleStopwatch()}>
             <Text style={[styles.midText, {fontSize: 30}]}>Pause</Text>
           </TouchableOpacity>
-          <NavApp navigation={this.props.navigation}  style={{marginTop:20}}/>
+          { /*<NavApp navigation={this.props.navigation}  style={{marginTop:20}}/>  */}
         </View>
       </SafeAreaView>
     );
@@ -457,13 +455,13 @@ const styles = StyleSheet.create({
     zIndex: 0,
   },
   aiguille: {
-    top: '22%',
+    top: '20%',
     bottom: '28%',
-    width: '40%',
-    height: '73%',
+    width: 200,
+    height: 235,
     position: 'absolute',
     resizeMode: 'stretch',
-    marginLeft: '30%',
+    marginLeft: '29%',
     alignContent: 'center',
     zIndex: 0,
   },

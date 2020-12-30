@@ -87,7 +87,7 @@ export default function Parametres2(props) {
     ) {
       Alert.alert('Erreur', `Veuillez saisir un nom valide`);
       inputs['nom'].reference.focus();
-    } else if (!tempMail.match(/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})$/)) {
+    } else if (!tempMail.match(/^([\w-\.]+)@((?:[\w\-]+\.)+)([a-zA-Z]{2,4})$/)) {
       Alert.alert('Erreur', `Veuillez saisir une adresse e-mail valide`);
       inputs['mail'].reference.focus();
     } else if (tempPassword1 != tempPassword2) {
