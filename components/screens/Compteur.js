@@ -99,7 +99,7 @@ export default class Compteur extends React.Component {
   this.interval = setInterval(() => {
     this.StartImageRotateFunction()
     this.randomRotation()
-  }, 1000); //mise à jour du tableau d'interpolation de la rotation, toutes les 6s
+  }, 1200); //mise à jour du tableau d'interpolation de la rotation, toutes les 6s
     //this._isMounted && this.StartImageRotateFunction();
     this._isMounted && this.randomRotation();
   }
