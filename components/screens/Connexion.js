@@ -1,6 +1,4 @@
 import React, {useState, useContext} from 'react';
-import NetInfo from '@react-native-community/netinfo';
-
 import {
   Image,
   Text,
@@ -11,13 +9,16 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import {regexUsername, regexEmail, regexPassword} from '../utils/constants';
 import {APP_TOKEN} from '@env';
 import {Context} from '../utils/Store';
 import goTo from '../utils/navFunctions';
 import {login} from '../../functions/login';
+
 import LogoMed from '../../assets/logoMed';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Connexion(props) {
   const [username, setUsername] = useState('toto24');
@@ -36,13 +37,12 @@ export default function Connexion(props) {
 
   const checkFields = () => {
     if (
-      !username.match(
-        /^([a-zA-Z0-9]){5,}||[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-      ) ||
-      username == 'undefined'
+      (!username.match(regexUsername) && !username.match(regexEmail)) ||
+      username == 'undefined' ||
+      username == 'null'
     ) {
       Alert.alert('Erreur', `Veuillez saisir votre nom d'utilisateur`);
-    } else if (!password.match(/^([a-zA-Z0-9]){3,}$/)) {
+    } else if (!password.match(regexPassword)) {
       Alert.alert('Erreur', `Veuillez saisir votre mot de passe`);
     } else {
       getAuthToken();
