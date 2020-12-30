@@ -12,6 +12,12 @@ import {
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import color0 from '../../assets/img-avatar/color0.png'
+import color1 from '../../assets/img-avatar/color1.png'
+import casque0 from '../../assets/img-avatar/casque1.png'
+import casque1 from '../../assets/img-avatar/casque2.png'
+import tenue0 from '../../assets/img-avatar/tenue0.png'
+import tenue1 from '../../assets/img-avatar/tenue1.png'
 
 import {Context} from '../utils/Store';
 import goTo from '../utils/navFunctions';
@@ -30,6 +36,9 @@ export default function Parametres(props) {
     'Tenue',
     'Accessoire',
   ]);
+  const couleurs = [color0,color1]
+  const tenues = [tenue0,tenue1]
+  const casques = [casque0,casque1]
   const [selection, setSelection] = useState('Visage');
   const [isLoading, setIsLoading] = useState(false);
   const [tempDateNaissance, setTempDateNaissance] = useState(
@@ -37,6 +46,7 @@ export default function Parametres(props) {
   );
   const [tempTaille, setTempTaille] = useState(state.user.taille || '');
   const [tempPoids, setTempPoids] = useState(state.user.poids || '');
+  const [avatar, setAvatar] = useState("000")
 
   const checkFields = () => {
     if (
@@ -104,14 +114,45 @@ export default function Parametres(props) {
           <View style={styles.midTop}>
             <TouchableOpacity
               onPress={() => {
-                console.log('gauche');
+               // console.log('gauche');
+                console.log(selection)
+                switch (selection){
+                  case "Couleur":
+                    let s = ""
+                   avatar.charAt(0) == 0 ?
+                       s = "1"+avatar.charAt(1)+avatar.charAt(2)
+                       :  s = "0"+avatar.charAt(1)+avatar.charAt(2)
+                      setAvatar(s)
+                        break;
+                  case 'Coupe':
+                    console.log(avatar.charAt(1))
+                    avatar.charAt(2) == 0 ?  s = avatar.charAt(0)+avatar.charAt(1)+"1" : s = avatar.charAt(0)+avatar.charAt(1)+"0"
+                    setAvatar(s)
+                      console.log(s)
+                    break;
+                  case   'Tenue':
+                    avatar.charAt(1) == 0 ?  s = avatar.charAt(0)+"1"+avatar.charAt(2) : s = avatar.charAt(0)+"0"+avatar.charAt(2)
+                    setAvatar(s)
+                      s=""
+                    console.log(s)
+                      break;
+                  default:
+                    console.log(selection)
+                        break;
+                }
               }}>
               <Fleche />
             </TouchableOpacity>
-            <Image source={avatar} />
+            <View>
+              <Image source={couleurs[avatar.charAt(0)]} style={{width:80, height:80}}/>
+              <Image source={tenues[avatar.charAt(1)]} style={{width:80, height:32,position:"absolute", top:48, left:0}}/>
+              <Image source={casques[avatar.charAt(2)]} style={{width:60, height:60, position:"absolute", top:-22, left:10}}/>
+            </View>
+            {/*<Image source={avatar} />*/}
             <TouchableOpacity
               onPress={() => {
                 console.log('droite');
+                console.log(selection)
               }}>
               <Fleche
                 style={{
