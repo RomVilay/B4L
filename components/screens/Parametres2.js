@@ -177,12 +177,15 @@ export default function Parametres2(props) {
   };
 
   const logout = async () => {
+    setIsLoading(true);
     await deleteLocalStorage();
     setState({user: {}, token: ''});
+    setIsLoading(false);
     goTo(props, 'Demarrage');
   };
 
   const deleteAccount = async () => {
+    setIsLoading(true);
     await deleteLocalStorage();
     let res = await deleteUser(state.user.username, state.token);
     if (res.message) {
@@ -191,8 +194,10 @@ export default function Parametres2(props) {
         "Quelque chose s'est mal passé, contactez BikeForLife. Erreur : " +
           res.message,
       );
+      setIsLoading(false);
     } else {
       setState({user: {}, token: ''});
+      setIsLoading(false);
       goTo(props, 'Demarrage');
     }
   };
@@ -218,7 +223,8 @@ export default function Parametres2(props) {
         {/* FIN HEADER */}
 
         {/* MID */}
-        <View style={styles.middle}>
+        <View
+          style={[styles.middle, isEditPwd ? null : {paddingBottom: '10%'}]}>
           {Object.keys(inputs).map((item, index) =>
             (item != 'pwd1' && item != 'pwd2') ||
             ((item == 'pwd1' || item == 'pwd2') && isEditPwd) ? (
@@ -265,59 +271,63 @@ export default function Parametres2(props) {
 
         {/* FOOTER */}
         <View style={styles.footer}>
-          {isLoading ? (
-            <ActivityIndicator
-              size="large"
-              color="#5FCDFA"
-              style={{top: '10%'}}
-            />
-          ) : (
-            <TouchableOpacity onPress={() => checkFields()}>
-              <Text style={[styles.textBottom, {marginTop: '10%'}]}>
-                Enregistrer
-              </Text>
-            </TouchableOpacity>
-          )}
+          <View style={styles.loading}>
+            {isLoading ? (
+              <ActivityIndicator
+                size="large"
+                color="#5FCDFA"
+                style={{top: '10%'}}
+              />
+            ) : (
+              <TouchableOpacity onPress={() => checkFields()}>
+                <Text style={styles.textBottom}>Enregistrer</Text>
+              </TouchableOpacity>
+            )}
+          </View>
           <View style={styles.horizontal}>
             <TouchableOpacity
               onPress={() => {
-                Alert.alert(
-                  'Déconnexion',
-                  'Êtes-vous sûr de vouloir vous déconnecter ?',
-                  [
-                    {
-                      text: 'Oui',
-                      onPress: () => logout(),
-                    },
-                    {
-                      text: 'Annuler',
-                      style: 'cancel',
-                    },
-                  ],
-                );
+                isLoading
+                  ? null
+                  : Alert.alert(
+                      'Déconnexion',
+                      'Êtes-vous sûr de vouloir vous déconnecter ?',
+                      [
+                        {
+                          text: 'Oui',
+                          onPress: () => logout(),
+                        },
+                        {
+                          text: 'Annuler',
+                          style: 'cancel',
+                        },
+                      ],
+                    );
               }}>
-              <Text style={[styles.textBottom]}>Déconnexion</Text>
+              <Text style={styles.textBottom}>Déconnexion</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{alignItems: 'center'}}
               onPress={() => {
-                Alert.alert(
-                  'Suppression du compte',
-                  'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est définitive',
-                  [
-                    {
-                      text: 'Oui',
-                      onPress: () => deleteAccount(),
-                    },
-                    {
-                      text: 'Annuler',
-                      style: 'cancel',
-                    },
-                  ],
-                );
+                isLoading
+                  ? null
+                  : Alert.alert(
+                      'Suppression du compte',
+                      'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est définitive',
+                      [
+                        {
+                          text: 'Oui',
+                          onPress: () => deleteAccount(),
+                        },
+                        {
+                          text: 'Annuler',
+                          style: 'cancel',
+                        },
+                      ],
+                    );
               }}>
-              <Text style={[styles.textBottom]}>Supprimer</Text>
-              <Text style={[styles.textBottom]}>mon compte</Text>
+              <Text style={styles.textBottom}>Supprimer</Text>
+              <Text style={styles.textBottom}>mon compte</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -350,7 +360,7 @@ const styles = StyleSheet.create({
   },
   middle: {
     marginTop: '5%',
-    marginBottom: '5%',
+    paddingBottom: '5%',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -406,12 +416,21 @@ const styles = StyleSheet.create({
     borderColor: '#5FCDFA',
     backgroundColor: '#284462',
   },
+  loading: {
+    // flex: 1,
+    width: '100%',
+    top: '0%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    // backgroundColor: 'blue',
+  },
   horizontal: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
     width: '100%',
-    marginTop: '10%',
+    marginTop: '15%',
     // backgroundColor: 'black',
   },
   footer: {
@@ -420,7 +439,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     // zIndex: 100,
     width: '100%',
-    paddingTop: '5%',
+    // paddingTop: '5%',
     marginBottom: '10%',
     // backgroundColor: 'red',
   },
