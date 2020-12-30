@@ -9,7 +9,6 @@
     "@react-navigation/stack": "^5.12.8",
     "babel-plugin-dotenv-import": "^2.1.0",
     "moment": "^2.29.1",
-    "node-fetch": "^2.6.1",
     "prop-types": "*",
     "react": "^16.14.0",
     "react-dom": "16.8.0",
