@@ -52,6 +52,8 @@ import coupe3 from '../../assets/img-avatar/coupe3.png'
 import coupe4 from '../../assets/img-avatar/coupe4.png'
 import coupe5 from '../../assets/img-avatar/coupe5.png'
 import coupe6 from '../../assets/img-avatar/coupe6.png'
+import coupe7 from '../../assets/img-avatar/coupe7.png'
+import coupe8 from '../../assets/img-avatar/coupe8.png'
 
 import {Context} from '../utils/Store';
 import goTo from '../utils/navFunctions';
@@ -75,7 +77,7 @@ export default function Parametres(props) {
   const tenues = [tenue0,tenue1,tenue2,tenue3,tenue4,tenue5,tenue6,tenue7]
   const casques = [casque0,casque1,casque2,casque3,casque4,casque5,casque6,casque7]
   const visages = [visage0,visage1,visage2,visage3]
-  const coupes = [coupe0,coupe1,coupe2,coupe3,coupe4,coupe5,coupe6]
+  const coupes = [coupe0,coupe1,coupe2,coupe3,coupe4,coupe5,coupe6,coupe7,coupe8]
   const [selection, setSelection] = useState('Visage');
   const [isLoading, setIsLoading] = useState(false);
   const [tempDateNaissance, setTempDateNaissance] = useState(
@@ -83,7 +85,7 @@ export default function Parametres(props) {
   );
   const [tempTaille, setTempTaille] = useState(state.user.taille || '');
   const [tempPoids, setTempPoids] = useState(state.user.poids || '');
-  const [avatar, setAvatar] = useState("07851")
+  const [avatar, setAvatar] = useState("07540")
 
   const checkFields = () => {
     if (
@@ -157,18 +159,18 @@ export default function Parametres(props) {
                   case "Couleur":
                     let s = ""
                    avatar.charAt(0) == 0 ?
-                       s = "1"+avatar.charAt(1)+avatar.charAt(2)
-                       :  s = "0"+avatar.charAt(1)+avatar.charAt(2)
+                       s = "1"+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
+                       :  s = "0"+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
                       setAvatar(s)
                         break;
                   case 'Accessoire':
                     console.log(avatar.charAt(1))
-                    avatar.charAt(2) == 0 ?  s = avatar.charAt(0)+avatar.charAt(1)+"1" : s = avatar.charAt(0)+avatar.charAt(1)+"0"
+                    avatar.charAt(2) == 0 ?  s = avatar.charAt(0)+avatar.charAt(1)+"1"+avatar.charAt(3)+avatar.charAt(4) : s = avatar.charAt(0)+avatar.charAt(1)+"0"+avatar.charAt(3)+avatar.charAt(4)
                     setAvatar(s)
                       console.log(s)
                     break;
                   case   'Tenue':
-                    avatar.charAt(1) == 0 ?  s = avatar.charAt(0)+"1"+avatar.charAt(2) : s = avatar.charAt(0)+"0"+avatar.charAt(2)
+                    avatar.charAt(1) == 0 ?  s = avatar.charAt(0)+"1"+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4) : s = avatar.charAt(0)+"0"+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
                     setAvatar(s)
                       s=""
                     console.log(s)
@@ -183,17 +185,38 @@ export default function Parametres(props) {
             <View>
               <Image source={couleurs[avatar.charAt(0)]} style={{width:80, height:80}}/>
               <Image source={tenues[avatar.charAt(1)]} style={{width:80, height:32,position:"absolute", top:47, left:0}}/>
-              <Image source={visages[avatar.charAt(4)]} style={{width:30, height:25, position:"absolute", top:12, left:25}}/>
+              <Image source={visages[avatar.charAt(4)]} style={{width:35, height:25, position:"absolute", top:10, left:22}}/>
               <Image source={coupes[avatar.charAt(3)]} style={{width:60, height:60, position:"absolute", top:-22, left:10}}/>
-              <Image source={casques[avatar.charAt(2)]} style={{width:60, height:60, position:"absolute", top:-22, left:10}}/>
+              <Image source={casques[avatar.charAt(2)]} style={{width:60, height:60, position:"absolute", top:-20, left:10}}/>
 
             </View>
             {/*<Image source={avatar} />*/}
             <TouchableOpacity
               onPress={() => {
-                console.log('droite');
-                console.log(selection)
-              }}>
+                switch (selection){
+                  case "Couleur":
+                    let s = ""
+                    avatar.charAt(0) == 0 ?
+                        s = "1"+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
+                        :  s = "0"+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
+                    setAvatar(s)
+                    break;
+                  case 'Accessoire':
+                    console.log(avatar.charAt(1))
+                    avatar.charAt(2) == 0 ?  s = avatar.charAt(0)+avatar.charAt(1)+"1"+avatar.charAt(3)+avatar.charAt(4) : s = avatar.charAt(0)+avatar.charAt(1)+"0"+avatar.charAt(3)+avatar.charAt(4)
+                    setAvatar(s)
+                    console.log(s)
+                    break;
+                  case   'Tenue':
+                    avatar.charAt(1) == 0 ?  s = avatar.charAt(0)+"1"+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4) : s = avatar.charAt(0)+"0"+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
+                    setAvatar(s)
+                    s=""
+                    console.log(s)
+                    break;
+                  default:
+                    console.log(selection)
+                    break;
+              }}}>
               <Fleche
                 style={{
                   transform: [{rotate: '180deg'}],
