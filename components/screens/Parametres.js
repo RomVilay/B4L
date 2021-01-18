@@ -69,9 +69,9 @@ export default function Parametres(props) {
   const [parties] = useState([
     'Visage',
     'Coupe',
-    'Couleur',
+    'Teint',
     'Tenue',
-    'Accessoire',
+    'Casque',
   ]);
   const couleurs = [color0,color1,color2]
   const tenues = [tenue0,tenue1,tenue2,tenue3,tenue4,tenue5,tenue6,tenue7]
@@ -85,7 +85,7 @@ export default function Parametres(props) {
   );
   const [tempTaille, setTempTaille] = useState(state.user.taille || '');
   const [tempPoids, setTempPoids] = useState(state.user.poids || '');
-  const [avatar, setAvatar] = useState("03940")
+  const [avatar, setAvatar] = useState(state.user.avatar ||"03940")
 
   const checkFields = () => {
     if (
@@ -122,6 +122,7 @@ export default function Parametres(props) {
           dateNaissance: tempDateNaissance,
           poids: tempPoids,
           taille: tempTaille,
+          avatar: avatar
         },
         // ADMIN_TOKEN,
         state.token,
