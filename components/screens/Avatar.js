@@ -1,5 +1,5 @@
 import React, {useContext} from 'react'
-import Image, {View} from 'react-native'
+import { View, Image, Text} from 'react-native'
 
 //imports colors
 import color0 from '../../assets/img-avatar/color0.png'
@@ -53,14 +53,14 @@ const Avatar = () => {
     const coupes = [coupe0, coupe1, coupe2, coupe3, coupe4, coupe5, coupe6, coupe7, coupe8]
     return (
         <View>
-            <Image source={couleurs[state.user.avatar.charAt(0)]} style={{width: 80, height: 80}}/>
-            <Image source={tenues[state.user.avatar.charAt(1)]}
+            <Image source={couleurs[parseInt(state.user.avatar.charAt(0))]} style={{width: 80, height: 80}}/>
+            <Image source={tenues[parseInt(state.user.avatar.charAt(1))]}
                    style={{width: 80, height: 32, position: "absolute", top: 47, left: 0}}/>
-            <Image source={visages[state.user.avatar.charAt(4)]}
+            <Image source={visages[parseInt(state.user.avatar.charAt(4))]}
                    style={{width: 35, height: 25, position: "absolute", top: 10, left: 22}}/>
-            <Image source={coupes[state.user.avatar.charAt(3)]}
+            <Image source={coupes[parseInt(state.user.avatar.charAt(3))]}
                    style={{width: 60, height: 60, position: "absolute", top: -22, left: 10}}/>
-            <Image source={casques[state.user.avatar.charAt(2)]}
+            <Image source={casques[parseInt(state.user.avatar.charAt(2))]}
                    style={{width: 60, height: 60, position: "absolute", top: -20, left: 10}}/>
         </View>
     )

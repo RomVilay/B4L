@@ -62,7 +62,7 @@ import LogoMin from '../../assets/logoMin';
 import Fleche from '../../assets/fleche';
 import avatar from '../../assets/avatar.png';
 import NavApp from '../navigation/NavApp';
-
+import Avatar from "./Avatar";
 
 export default function Parametres(props) {
   const [state, setState] = useContext(Context);
@@ -137,7 +137,6 @@ export default function Parametres(props) {
       }
     }
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />
@@ -154,7 +153,6 @@ export default function Parametres(props) {
           <View style={styles.midTop}>
             <TouchableOpacity
               onPress={() => {
-
                 switch (selection){
                   case "Visage":
                     let s = ""
@@ -189,6 +187,7 @@ export default function Parametres(props) {
                         : s = avatar.charAt(0)+"7"+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
                     setAvatar(s)
                       s=""
+                      console.log(avatar+"  "+state.user.avatar)
                       break;
                   default:
                         break;
@@ -196,14 +195,7 @@ export default function Parametres(props) {
               }}>
               <Fleche />
             </TouchableOpacity>
-            <View>
-              <Image source={couleurs[avatar.charAt(0)]} style={{width:80, height:80}}/>
-              <Image source={tenues[avatar.charAt(1)]} style={{width:80, height:32,position:"absolute", top:47, left:0}}/>
-              <Image source={visages[avatar.charAt(4)]} style={{width:35, height:25, position:"absolute", top:10, left:22}}/>
-              <Image source={coupes[avatar.charAt(3)]} style={{width:60, height:60, position:"absolute", top:-22, left:10}}/>
-              <Image source={casques[avatar.charAt(2)]} style={{width:60, height:60, position:"absolute", top:-20, left:10}}/>
-
-            </View>
+            <Avatar code={state.user.avatar}/>
             {/*<Image source={avatar} flèche drouate />*/}
             <TouchableOpacity
               onPress={() => {

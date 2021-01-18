@@ -16,6 +16,7 @@ import Cercle from '../../assets/Accueil/cercle';
 import NavApp from '../navigation/NavApp';
 import {getUser} from '../../functions/user';
 var avatar = require('../../assets/avatar.png');
+import Avatar from "./Avatar";
 
 export default function Accueil(props) {
   const [state, setState] = useContext(Context);
@@ -62,7 +63,7 @@ export default function Accueil(props) {
           <View style={styles.midItem}>
             <TouchableOpacity
               onPress={() => props.navigation.navigate('Classements')}>
-              <Image source={avatar} />
+             <Avatar />
             </TouchableOpacity>
           </View>
           <View style={[styles.midItem]}>
