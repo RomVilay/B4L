@@ -80,6 +80,6 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     fontFamily: 'TallFilms',
     position: 'absolute',
-    top: 550,
+    top: "75%",
   },
 });

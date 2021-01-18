@@ -85,7 +85,7 @@ export default function Parametres(props) {
   );
   const [tempTaille, setTempTaille] = useState(state.user.taille || '');
   const [tempPoids, setTempPoids] = useState(state.user.poids || '');
-  const [avatar, setAvatar] = useState("07540")
+  const [avatar, setAvatar] = useState("03940")
 
   const checkFields = () => {
     if (
@@ -148,35 +148,47 @@ export default function Parametres(props) {
         </View>
         {/* FIN HEADER */}
 
-        {/* MID */}
+        {/* MID  flèche gauche*/}
         <View style={styles.middle}>
           <View style={styles.midTop}>
             <TouchableOpacity
               onPress={() => {
-               // console.log('gauche');
-                console.log(selection)
                 switch (selection){
-                  case "Couleur":
+                  case "Visage":
                     let s = ""
-                   avatar.charAt(0) == 0 ?
-                       s = "1"+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
-                       :  s = "0"+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
+                    avatar.charAt(4) > 0 ?
+                        s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+(parseInt(avatar.charAt(4))-1)
+                        :  s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+"3"
+                    setAvatar(s)
+                    break;
+                  case "Coupe":
+                     s = ""
+                    avatar.charAt(3) > 0 ?
+                        s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+(parseInt(avatar.charAt(3))-1)+avatar.charAt(4)
+                        :  s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+"8"+avatar.charAt(4)
+                    setAvatar(s)
+                    break;
+                  case "Couleur":
+                     s = ""
+                   avatar.charAt(0) > 0 ?
+                       s = (parseInt(avatar.charAt(0))-1)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
+                       :  s = "2"+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
                       setAvatar(s)
                         break;
                   case 'Accessoire':
-                    console.log(avatar.charAt(1))
-                    avatar.charAt(2) == 0 ?  s = avatar.charAt(0)+avatar.charAt(1)+"1"+avatar.charAt(3)+avatar.charAt(4) : s = avatar.charAt(0)+avatar.charAt(1)+"0"+avatar.charAt(3)+avatar.charAt(4)
+                    avatar.charAt(2) > 0 ?
+                        s = avatar.charAt(0)+avatar.charAt(1)+(parseInt(avatar.charAt(2))-1)+avatar.charAt(3)+avatar.charAt(4) :
+                        s = avatar.charAt(0)+avatar.charAt(1)+"2"+avatar.charAt(3)+avatar.charAt(4)
                     setAvatar(s)
-                      console.log(s)
                     break;
                   case   'Tenue':
-                    avatar.charAt(1) == 0 ?  s = avatar.charAt(0)+"1"+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4) : s = avatar.charAt(0)+"0"+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
+                    avatar.charAt(1) > 0 ?
+                        s = avatar.charAt(0)+(parseInt(avatar.charAt(1))-1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
+                        : s = avatar.charAt(0)+"7"+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
                     setAvatar(s)
                       s=""
-                    console.log(s)
                       break;
                   default:
-                    console.log(selection)
                         break;
                 }
               }}>
@@ -190,33 +202,49 @@ export default function Parametres(props) {
               <Image source={casques[avatar.charAt(2)]} style={{width:60, height:60, position:"absolute", top:-20, left:10}}/>
 
             </View>
-            {/*<Image source={avatar} />*/}
+            {/*<Image source={avatar} flèche drouate />*/}
             <TouchableOpacity
               onPress={() => {
                 switch (selection){
-                  case "Couleur":
+                  case "Visage":
                     let s = ""
-                    avatar.charAt(0) == 0 ?
-                        s = "1"+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
+                    avatar.charAt(4) < 3?
+                        s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+(parseInt(avatar.charAt(4))+1)
+                        :  s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+"0"
+                    setAvatar(s)
+                    break;
+                  case "Coupe":
+                    let c = parseInt(avatar.charAt(3))+1
+                    avatar.charAt(3) < 8 ?
+                        s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+(parseInt(avatar.charAt(3))+1)+avatar.charAt(4)
+                        :  s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+"0"+avatar.charAt(4)
+                    setAvatar(s)
+                    break;
+                  case "Couleur":
+                    s = ""
+                    avatar.charAt(0) < 2  ?
+                        s = (parseInt(avatar.charAt(0))+1)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
                         :  s = "0"+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
                     setAvatar(s)
                     break;
                   case 'Accessoire':
-                    console.log(avatar.charAt(1))
-                    avatar.charAt(2) == 0 ?  s = avatar.charAt(0)+avatar.charAt(1)+"1"+avatar.charAt(3)+avatar.charAt(4) : s = avatar.charAt(0)+avatar.charAt(1)+"0"+avatar.charAt(3)+avatar.charAt(4)
+                    avatar.charAt(2) < 7 ?  s = avatar.charAt(0)+avatar.charAt(1)+(parseInt(avatar.charAt(2))+1)+avatar.charAt(3)+avatar.charAt(4)
+                        : s = avatar.charAt(0)+avatar.charAt(1)+"0"+avatar.charAt(3)+avatar.charAt(4)
                     setAvatar(s)
-                    console.log(s)
                     break;
                   case   'Tenue':
-                    avatar.charAt(1) == 0 ?  s = avatar.charAt(0)+"1"+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4) : s = avatar.charAt(0)+"0"+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
+                    avatar.charAt(1) < 7 ?
+                        s = avatar.charAt(0)+(parseInt(avatar.charAt(1))+1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
+                        : s = avatar.charAt(0)+"0"+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
                     setAvatar(s)
                     s=""
-                    console.log(s)
                     break;
                   default:
-                    console.log(selection)
                     break;
-              }}}>
+              }
+              }
+
+              }>
               <Fleche
                 style={{
                   transform: [{rotate: '180deg'}],
