@@ -12,45 +12,38 @@ import {
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {Picker} from '@react-native-picker/picker';
 
 import {Context} from '../utils/Store';
 import {regexDateNaissance, regexTaille, regexPoids} from '../utils/constants';
 import goTo from '../utils/navFunctions';
 import {editUser} from '../../functions/user';
 
-import avatar from '../../assets/avatar.png';
 import Fleche from '../../assets/fleche';
 import LogoMin from '../../assets/logoMin';
 import NavApp from '../navigation/NavApp';
-import Avatar from "./Avatar";
+import Avatar from './Avatar';
 
 export default function Parametres(props) {
   const [state, setState] = useContext(Context);
-  const [parties] = useState([
-    'Visage',
-    'Coupe',
-    'Teint',
-    'Tenue',
-    'Casque',
-  ]);
+  const [parties] = useState(['Visage', 'Coupe', 'Couleur', 'Tenue', 'Accessoire']);
+  const unitsTaille = ['cm', 'ft', 'inch', 'yd'];
+  const unitsPoids = ['kg', 'lb'];
+  const unitsDistance = ['m', 'ft', 'yd', 'mi'];
+
   const [selection, setSelection] = useState('Visage');
   const [isLoading, setIsLoading] = useState(false);
-  const [tempDateNaissance, setTempDateNaissance] = useState(
-    state.user.dateNaissance || '',
-  );
+  const [tempDateNaissance, setTempDateNaissance] = useState(state.user.dateNaissance || '');
   const [tempTaille, setTempTaille] = useState(state.user.taille || '');
   const [tempPoids, setTempPoids] = useState(state.user.poids || '');
-  const [avatar, setAvatar] = useState(state.user.avatar ||"03940")
+  const [avatar, setAvatar] = useState(state.user.avatar || '03940');
+  const [tempUnitTaille, setTempUnitTaille] = useState(state.user.unitTaille || 'cm');
+  const [tempUnitPoids, setTempUnitPoids] = useState(state.user.unitPoids || 'kg');
+  const [tempUnitDistance, setTempUnitDistance] = useState(state.user.unitDistance || 'm');
 
   const checkFields = () => {
-    if (
-      !tempDateNaissance.match(regexDateNaissance) &&
-      tempDateNaissance.length > 0
-    ) {
-      Alert.alert(
-        'Erreur',
-        `Veuillez saisir un date de naissance valide du type AAAA-MM-JJ`,
-      );
+    if (!tempDateNaissance.match(regexDateNaissance) && tempDateNaissance.length > 0) {
+      Alert.alert('Erreur', `Veuillez saisir un date de naissance valide du type AAAA-MM-JJ`);
     } else if (!tempTaille.match(regexTaille) && tempTaille.length > 0) {
       Alert.alert('Erreur', `Veuillez saisir une taille valide`);
     } else if (!tempPoids.match(regexPoids) && tempPoids.length > 0) {
@@ -74,7 +67,10 @@ export default function Parametres(props) {
           dateNaissance: tempDateNaissance,
           poids: tempPoids,
           taille: tempTaille,
-          avatar: avatar
+          avatar: avatar,
+          unitTaille: tempUnitTaille,
+          unitPoids: tempUnitPoids,
+          unitDistance: tempUnitDistance,
         },
         state.token,
       );
@@ -104,92 +100,142 @@ export default function Parametres(props) {
           <View style={styles.midTop}>
             <TouchableOpacity
               onPress={() => {
-                switch (selection){
-                  case "Visage":
-                    let s = ""
-                    avatar.charAt(4) > 0 ?
-                        s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+(parseInt(avatar.charAt(4))-1)
-                        :  s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+"3"
-                    setAvatar(s)
+                switch (selection) {
+                  case 'Visage':
+                    let s = '';
+                    avatar.charAt(4) > 0
+                      ? (s =
+                          avatar.charAt(0) +
+                          avatar.charAt(1) +
+                          avatar.charAt(2) +
+                          avatar.charAt(3) +
+                          (parseInt(avatar.charAt(4)) - 1))
+                      : (s = avatar.charAt(0) + avatar.charAt(1) + avatar.charAt(2) + avatar.charAt(3) + '3');
+                    setAvatar(s);
                     break;
-                  case "Coupe":
-                     s = ""
-                    avatar.charAt(3) > 0 ?
-                        s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+(parseInt(avatar.charAt(3))-1)+avatar.charAt(4)
-                        :  s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+"8"+avatar.charAt(4)
-                    setAvatar(s)
+                  case 'Coupe':
+                    s = '';
+                    avatar.charAt(3) > 0
+                      ? (s =
+                          avatar.charAt(0) +
+                          avatar.charAt(1) +
+                          avatar.charAt(2) +
+                          (parseInt(avatar.charAt(3)) - 1) +
+                          avatar.charAt(4))
+                      : (s = avatar.charAt(0) + avatar.charAt(1) + avatar.charAt(2) + '8' + avatar.charAt(4));
+                    setAvatar(s);
                     break;
-                  case "Teint":
-                     s = ""
-                   avatar.charAt(0) > 0 ?
-                       s = (parseInt(avatar.charAt(0))-1)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
-                       :  s = "2"+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
-                      setAvatar(s)
-                        break;
+                  case 'Teint':
+                    s = '';
+                    avatar.charAt(0) > 0
+                      ? (s =
+                          parseInt(avatar.charAt(0)) -
+                          1 +
+                          avatar.charAt(1) +
+                          avatar.charAt(2) +
+                          avatar.charAt(3) +
+                          avatar.charAt(4))
+                      : (s = '2' + avatar.charAt(1) + avatar.charAt(2) + avatar.charAt(3) + avatar.charAt(4));
+                    setAvatar(s);
+                    break;
                   case 'Casque':
-                    avatar.charAt(2) > 0 ?
-                        s = avatar.charAt(0)+avatar.charAt(1)+(parseInt(avatar.charAt(2))-1)+avatar.charAt(3)+avatar.charAt(4) :
-                        s = avatar.charAt(0)+avatar.charAt(1)+"2"+avatar.charAt(3)+avatar.charAt(4)
-                    setAvatar(s)
+                    avatar.charAt(2) > 0
+                      ? (s =
+                          avatar.charAt(0) +
+                          avatar.charAt(1) +
+                          (parseInt(avatar.charAt(2)) - 1) +
+                          avatar.charAt(3) +
+                          avatar.charAt(4))
+                      : (s = avatar.charAt(0) + avatar.charAt(1) + '2' + avatar.charAt(3) + avatar.charAt(4));
+                    setAvatar(s);
                     break;
-                  case   'Tenue':
-                    avatar.charAt(1) > 0 ?
-                        s = avatar.charAt(0)+(parseInt(avatar.charAt(1))-1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
-                        : s = avatar.charAt(0)+"7"+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
-                    setAvatar(s)
-                      s=""
-                      console.log(avatar+"  "+state.user.avatar)
-                      break;
+                  case 'Tenue':
+                    avatar.charAt(1) > 0
+                      ? (s =
+                          avatar.charAt(0) +
+                          (parseInt(avatar.charAt(1)) - 1) +
+                          avatar.charAt(2) +
+                          avatar.charAt(3) +
+                          avatar.charAt(4))
+                      : (s = avatar.charAt(0) + '7' + avatar.charAt(2) + avatar.charAt(3) + avatar.charAt(4));
+                    setAvatar(s);
+                    s = '';
+                    console.log(avatar + '  ' + state.user.avatar);
+                    break;
                   default:
-                        break;
+                    break;
                 }
               }}>
               <Fleche />
             </TouchableOpacity>
-            <Avatar avatar={avatar}/>
+            <Avatar avatar={avatar} />
             {/*<Image source={avatar} flèche drouate />*/}
             <TouchableOpacity
               onPress={() => {
-                switch (selection){
-                  case "Visage":
-                    let s = ""
-                    avatar.charAt(4) < 3?
-                        s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+(parseInt(avatar.charAt(4))+1)
-                        :  s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+"0"
-                    setAvatar(s)
+                switch (selection) {
+                  case 'Visage':
+                    let s = '';
+                    avatar.charAt(4) < 3
+                      ? (s =
+                          avatar.charAt(0) +
+                          avatar.charAt(1) +
+                          avatar.charAt(2) +
+                          avatar.charAt(3) +
+                          (parseInt(avatar.charAt(4)) + 1))
+                      : (s = avatar.charAt(0) + avatar.charAt(1) + avatar.charAt(2) + avatar.charAt(3) + '0');
+                    setAvatar(s);
                     break;
-                  case "Coupe":
-                    let c = parseInt(avatar.charAt(3))+1
-                    avatar.charAt(3) < 8 ?
-                        s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+(parseInt(avatar.charAt(3))+1)+avatar.charAt(4)
-                        :  s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+"0"+avatar.charAt(4)
-                    setAvatar(s)
+                  case 'Coupe':
+                    avatar.charAt(3) < 8
+                      ? (s =
+                          avatar.charAt(0) +
+                          avatar.charAt(1) +
+                          avatar.charAt(2) +
+                          (parseInt(avatar.charAt(3)) + 1) +
+                          avatar.charAt(4))
+                      : (s = avatar.charAt(0) + avatar.charAt(1) + avatar.charAt(2) + '0' + avatar.charAt(4));
+                    setAvatar(s);
                     break;
-                  case "Teint":
-                    s = ""
-                    avatar.charAt(0) < 2  ?
-                        s = (parseInt(avatar.charAt(0))+1)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
-                        :  s = "0"+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
-                    setAvatar(s)
+                  case 'Teint':
+                    s = '';
+                    avatar.charAt(0) < 2
+                      ? (s =
+                          parseInt(avatar.charAt(0)) +
+                          1 +
+                          avatar.charAt(1) +
+                          avatar.charAt(2) +
+                          avatar.charAt(3) +
+                          avatar.charAt(4))
+                      : (s = '0' + avatar.charAt(1) + avatar.charAt(2) + avatar.charAt(3) + avatar.charAt(4));
+                    setAvatar(s);
                     break;
                   case 'Casque':
-                    avatar.charAt(2) < 7 ?  s = avatar.charAt(0)+avatar.charAt(1)+(parseInt(avatar.charAt(2))+1)+avatar.charAt(3)+avatar.charAt(4)
-                        : s = avatar.charAt(0)+avatar.charAt(1)+"0"+avatar.charAt(3)+avatar.charAt(4)
-                    setAvatar(s)
+                    avatar.charAt(2) < 7
+                      ? (s =
+                          avatar.charAt(0) +
+                          avatar.charAt(1) +
+                          (parseInt(avatar.charAt(2)) + 1) +
+                          avatar.charAt(3) +
+                          avatar.charAt(4))
+                      : (s = avatar.charAt(0) + avatar.charAt(1) + '0' + avatar.charAt(3) + avatar.charAt(4));
+                    setAvatar(s);
                     break;
-                  case   'Tenue':
-                    avatar.charAt(1) < 7 ?
-                        s = avatar.charAt(0)+(parseInt(avatar.charAt(1))+1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
-                        : s = avatar.charAt(0)+"0"+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
-                    setAvatar(s)
-                    s=""
+                  case 'Tenue':
+                    avatar.charAt(1) < 7
+                      ? (s =
+                          avatar.charAt(0) +
+                          (parseInt(avatar.charAt(1)) + 1) +
+                          avatar.charAt(2) +
+                          avatar.charAt(3) +
+                          avatar.charAt(4))
+                      : (s = avatar.charAt(0) + '0' + avatar.charAt(2) + avatar.charAt(3) + avatar.charAt(4));
+                    setAvatar(s);
+                    s = '';
                     break;
                   default:
                     break;
-              }
-              }
-
-              }>
+                }
+              }}>
               <Fleche
                 style={{
                   transform: [{rotate: '180deg'}],
@@ -213,42 +259,115 @@ export default function Parametres(props) {
                       <Text style={styles.linesb}>{item}</Text>
                     )}
                   </View>
-                  {item !== parties[parties.length - 1] ? (
-                    <View style={styles.separator} />
-                  ) : null}
+                  {item !== parties[parties.length - 1] ? <View style={styles.separator} /> : null}
                 </React.Fragment>
               ))}
             </View>
           </View>
           <View style={styles.midBot}>
+            <Text style={styles.inputTitle}>{'Date de naissance'}</Text>
             <View style={styles.inputContainer}>
               <TextInput
                 value={tempDateNaissance}
                 style={styles.input}
-                onChangeText={dateNaissance =>
-                  setTempDateNaissance(dateNaissance)
-                }
+                onChangeText={dateNaissance => setTempDateNaissance(dateNaissance)}
                 placeholder="Indiquez date de naissance"
                 placeholderTextColor="#b8b8b8"
               />
             </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                value={tempTaille}
-                style={styles.input}
-                onChangeText={taille => setTempTaille(taille)}
-                placeholder="Indiquez votre taille"
-                placeholderTextColor="#b8b8b8"
-              />
+            <View style={styles.horizontal}>
+              <View
+                style={{
+                  alignItems: 'center',
+                  width: '75%',
+                }}>
+                <Text style={styles.inputTitle}>{'Taille'}</Text>
+                <View style={[styles.inputContainer, {width: '100%'}]}>
+                  <TextInput
+                    value={tempTaille}
+                    style={styles.input}
+                    onChangeText={taille => setTempTaille(taille)}
+                    placeholder="Indiquez votre taille"
+                    placeholderTextColor="#b8b8b8"
+                  />
+                </View>
+              </View>
+              <View
+                style={{
+                  alignItems: 'center',
+                  width: '75%',
+                }}>
+                <Text style={styles.inputTitle}>{'Unité de taille'}</Text>
+                <View style={[styles.inputContainer, {width: '60%'}]}>
+                  <Picker
+                    selectedValue={tempUnitTaille}
+                    style={[styles.input, {width: '100%'}]}
+                    dropdownIconColor={'#5FCDFA'}
+                    mode={'dropdown'}
+                    onValueChange={itemValue => setTempUnitTaille(itemValue)}>
+                    {unitsTaille.map(item => {
+                      return <Picker.Item label={item} value={item} key={item} />;
+                    })}
+                  </Picker>
+                </View>
+              </View>
             </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                value={tempPoids}
-                style={styles.input}
-                onChangeText={poids => setTempPoids(poids)}
-                placeholder="Indiquez votre poids"
-                placeholderTextColor="#b8b8b8"
-              />
+            <View style={styles.horizontal}>
+              <View
+                style={{
+                  alignItems: 'center',
+                  width: '75%',
+                }}>
+                <Text style={styles.inputTitle}>{'Poids'}</Text>
+                <View style={[styles.inputContainer, {width: '100%'}]}>
+                  <TextInput
+                    value={tempPoids}
+                    style={[styles.input, tempPoids == '' ? 12 : 20]}
+                    onChangeText={poids => setTempPoids(poids)}
+                    placeholder="Indiquez votre poids"
+                    placeholderTextColor="#b8b8b8"
+                  />
+                </View>
+              </View>
+              <View
+                style={{
+                  alignItems: 'center',
+                  width: '75%',
+                }}>
+                <Text style={styles.inputTitle}>{'Unité de poids'}</Text>
+                <View style={[styles.inputContainer, {width: '60%'}]}>
+                  <Picker
+                    selectedValue={tempUnitPoids}
+                    style={[styles.input, {width: '100%'}]}
+                    dropdownIconColor={'#5FCDFA'}
+                    mode={'dropdown'}
+                    onValueChange={itemValue => setTempUnitPoids(itemValue)}>
+                    {unitsPoids.map(item => {
+                      return <Picker.Item label={item} value={item} key={item} />;
+                    })}
+                  </Picker>
+                </View>
+              </View>
+            </View>
+            <Text style={[styles.inputTitle, {marginTop: 20}]}>{'Unité de mesure de distance'}</Text>
+            <View
+              style={{
+                alignItems: 'center',
+                width: '75%',
+                flexDirection: 'row',
+              }}>
+              <View style={[styles.inputContainer, {width: '60%'}]}>
+                <Picker
+                  selectedValue={tempUnitDistance}
+                  style={[styles.input, {width: '100%'}]}
+                  dropdownIconColor={'#5FCDFA'}
+                  mode={'dropdown'}
+                  onValueChange={itemValue => setTempUnitDistance(itemValue)}>
+                  {unitsDistance.map(item => {
+                    return <Picker.Item label={item} value={item} key={item} />;
+                  })}
+                </Picker>
+              </View>
             </View>
           </View>
         </View>
@@ -257,11 +376,7 @@ export default function Parametres(props) {
         {/* FOOTER */}
         <View style={styles.footer}>
           {isLoading ? (
-            <ActivityIndicator
-              size="large"
-              color="#5FCDFA"
-              style={{top: '10%'}}
-            />
+            <ActivityIndicator size="large" color="#5FCDFA" style={{top: '10%'}} />
           ) : (
             <TouchableOpacity onPress={() => checkFields()}>
               <Text style={[styles.suivant]}>Enregistrer</Text>
@@ -360,12 +475,25 @@ const styles = StyleSheet.create({
     color: '#5FCDFA',
     fontFamily: 'TallFilms',
   },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 15,
+    width: '70%',
+  },
+  inputTitle: {
+    color: '#5FCDFA',
+    fontSize: 30,
+    fontFamily: 'TallFilms',
+  },
   inputContainer: {
-    width: '80%',
+    width: '50%',
     borderWidth: 1,
     borderRadius: 10,
     marginTop: 10,
-    marginBottom: 5,
+    marginBottom: '5%',
     borderColor: '#5FCDFA',
     backgroundColor: '#284462',
   },
