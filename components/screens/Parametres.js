@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {Picker} from '@react-native-picker/picker';
 
 import {Context} from '../utils/Store';
 import {regexDateNaissance, regexTaille, regexPoids} from '../utils/constants';
@@ -25,30 +26,23 @@ import NavApp from '../navigation/NavApp';
 
 export default function Parametres(props) {
   const [state, setState] = useContext(Context);
-  const [parties] = useState([
-    'Visage',
-    'Coupe',
-    'Couleur',
-    'Tenue',
-    'Accessoire',
-  ]);
+  const [parties] = useState(['Visage', 'Coupe', 'Couleur', 'Tenue', 'Accessoire']);
+  const unitsTaille = ['cm', 'ft', 'inch', 'yd'];
+  const unitsPoids = ['kg', 'lb'];
+  const unitsDistance = ['m', 'ft', 'yd', 'mi'];
+
   const [selection, setSelection] = useState('Visage');
   const [isLoading, setIsLoading] = useState(false);
-  const [tempDateNaissance, setTempDateNaissance] = useState(
-    state.user.dateNaissance || '',
-  );
+  const [tempDateNaissance, setTempDateNaissance] = useState(state.user.dateNaissance || '');
   const [tempTaille, setTempTaille] = useState(state.user.taille || '');
   const [tempPoids, setTempPoids] = useState(state.user.poids || '');
+  const [tempUnitTaille, setTempUnitTaille] = useState(state.user.unitTaille || 'cm');
+  const [tempUnitPoids, setTempUnitPoids] = useState(state.user.unitPoids || 'kg');
+  const [tempUnitDistance, setTempUnitDistance] = useState(state.user.unitDistance || 'm');
 
   const checkFields = () => {
-    if (
-      !tempDateNaissance.match(regexDateNaissance) &&
-      tempDateNaissance.length > 0
-    ) {
-      Alert.alert(
-        'Erreur',
-        `Veuillez saisir un date de naissance valide du type AAAA-MM-JJ`,
-      );
+    if (!tempDateNaissance.match(regexDateNaissance) && tempDateNaissance.length > 0) {
+      Alert.alert('Erreur', `Veuillez saisir un date de naissance valide du type AAAA-MM-JJ`);
     } else if (!tempTaille.match(regexTaille) && tempTaille.length > 0) {
       Alert.alert('Erreur', `Veuillez saisir une taille valide`);
     } else if (!tempPoids.match(regexPoids) && tempPoids.length > 0) {
@@ -72,6 +66,9 @@ export default function Parametres(props) {
           dateNaissance: tempDateNaissance,
           poids: tempPoids,
           taille: tempTaille,
+          unitTaille: tempUnitTaille,
+          unitPoids: tempUnitPoids,
+          unitDistance: tempUnitDistance,
         },
         state.token,
       );
@@ -134,42 +131,115 @@ export default function Parametres(props) {
                       <Text style={styles.linesb}>{item}</Text>
                     )}
                   </View>
-                  {item !== parties[parties.length - 1] ? (
-                    <View style={styles.separator} />
-                  ) : null}
+                  {item !== parties[parties.length - 1] ? <View style={styles.separator} /> : null}
                 </React.Fragment>
               ))}
             </View>
           </View>
           <View style={styles.midBot}>
+            <Text style={styles.inputTitle}>{'Date de naissance'}</Text>
             <View style={styles.inputContainer}>
               <TextInput
                 value={tempDateNaissance}
                 style={styles.input}
-                onChangeText={dateNaissance =>
-                  setTempDateNaissance(dateNaissance)
-                }
+                onChangeText={dateNaissance => setTempDateNaissance(dateNaissance)}
                 placeholder="Indiquez date de naissance"
                 placeholderTextColor="#b8b8b8"
               />
             </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                value={tempTaille}
-                style={styles.input}
-                onChangeText={taille => setTempTaille(taille)}
-                placeholder="Indiquez votre taille"
-                placeholderTextColor="#b8b8b8"
-              />
+            <View style={styles.horizontal}>
+              <View
+                style={{
+                  alignItems: 'center',
+                  width: '75%',
+                }}>
+                <Text style={styles.inputTitle}>{'Taille'}</Text>
+                <View style={[styles.inputContainer, {width: '100%'}]}>
+                  <TextInput
+                    value={tempTaille}
+                    style={styles.input}
+                    onChangeText={taille => setTempTaille(taille)}
+                    placeholder="Indiquez votre taille"
+                    placeholderTextColor="#b8b8b8"
+                  />
+                </View>
+              </View>
+              <View
+                style={{
+                  alignItems: 'center',
+                  width: '75%',
+                }}>
+                <Text style={styles.inputTitle}>{'Unité de taille'}</Text>
+                <View style={[styles.inputContainer, {width: '60%'}]}>
+                  <Picker
+                    selectedValue={tempUnitTaille}
+                    style={[styles.input, {width: '100%'}]}
+                    dropdownIconColor={'#5FCDFA'}
+                    mode={'dropdown'}
+                    onValueChange={itemValue => setTempUnitTaille(itemValue)}>
+                    {unitsTaille.map(item => {
+                      return <Picker.Item label={item} value={item} key={item} />;
+                    })}
+                  </Picker>
+                </View>
+              </View>
             </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                value={tempPoids}
-                style={styles.input}
-                onChangeText={poids => setTempPoids(poids)}
-                placeholder="Indiquez votre poids"
-                placeholderTextColor="#b8b8b8"
-              />
+            <View style={styles.horizontal}>
+              <View
+                style={{
+                  alignItems: 'center',
+                  width: '75%',
+                }}>
+                <Text style={styles.inputTitle}>{'Poids'}</Text>
+                <View style={[styles.inputContainer, {width: '100%'}]}>
+                  <TextInput
+                    value={tempPoids}
+                    style={[styles.input, tempPoids == '' ? 12 : 20]}
+                    onChangeText={poids => setTempPoids(poids)}
+                    placeholder="Indiquez votre poids"
+                    placeholderTextColor="#b8b8b8"
+                  />
+                </View>
+              </View>
+              <View
+                style={{
+                  alignItems: 'center',
+                  width: '75%',
+                }}>
+                <Text style={styles.inputTitle}>{'Unité de poids'}</Text>
+                <View style={[styles.inputContainer, {width: '60%'}]}>
+                  <Picker
+                    selectedValue={tempUnitPoids}
+                    style={[styles.input, {width: '100%'}]}
+                    dropdownIconColor={'#5FCDFA'}
+                    mode={'dropdown'}
+                    onValueChange={itemValue => setTempUnitPoids(itemValue)}>
+                    {unitsPoids.map(item => {
+                      return <Picker.Item label={item} value={item} key={item} />;
+                    })}
+                  </Picker>
+                </View>
+              </View>
+            </View>
+            <Text style={[styles.inputTitle, {marginTop: 20}]}>{'Unité de mesure de distance'}</Text>
+            <View
+              style={{
+                alignItems: 'center',
+                width: '75%',
+                flexDirection: 'row',
+              }}>
+              <View style={[styles.inputContainer, {width: '60%'}]}>
+                <Picker
+                  selectedValue={tempUnitDistance}
+                  style={[styles.input, {width: '100%'}]}
+                  dropdownIconColor={'#5FCDFA'}
+                  mode={'dropdown'}
+                  onValueChange={itemValue => setTempUnitDistance(itemValue)}>
+                  {unitsDistance.map(item => {
+                    return <Picker.Item label={item} value={item} key={item} />;
+                  })}
+                </Picker>
+              </View>
             </View>
           </View>
         </View>
@@ -178,11 +248,7 @@ export default function Parametres(props) {
         {/* FOOTER */}
         <View style={styles.footer}>
           {isLoading ? (
-            <ActivityIndicator
-              size="large"
-              color="#5FCDFA"
-              style={{top: '10%'}}
-            />
+            <ActivityIndicator size="large" color="#5FCDFA" style={{top: '10%'}} />
           ) : (
             <TouchableOpacity onPress={() => checkFields()}>
               <Text style={[styles.suivant]}>Enregistrer</Text>
@@ -281,12 +347,25 @@ const styles = StyleSheet.create({
     color: '#5FCDFA',
     fontFamily: 'TallFilms',
   },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 15,
+    width: '70%',
+  },
+  inputTitle: {
+    color: '#5FCDFA',
+    fontSize: 30,
+    fontFamily: 'TallFilms',
+  },
   inputContainer: {
-    width: '80%',
+    width: '50%',
     borderWidth: 1,
     borderRadius: 10,
     marginTop: 10,
-    marginBottom: 5,
+    marginBottom: '5%',
     borderColor: '#5FCDFA',
     backgroundColor: '#284462',
   },
