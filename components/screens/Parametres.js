@@ -154,6 +154,7 @@ export default function Parametres(props) {
           <View style={styles.midTop}>
             <TouchableOpacity
               onPress={() => {
+
                 switch (selection){
                   case "Visage":
                     let s = ""
@@ -169,14 +170,14 @@ export default function Parametres(props) {
                         :  s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+"8"+avatar.charAt(4)
                     setAvatar(s)
                     break;
-                  case "Couleur":
+                  case "Teint":
                      s = ""
                    avatar.charAt(0) > 0 ?
                        s = (parseInt(avatar.charAt(0))-1)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
                        :  s = "2"+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
                       setAvatar(s)
                         break;
-                  case 'Accessoire':
+                  case 'Casque':
                     avatar.charAt(2) > 0 ?
                         s = avatar.charAt(0)+avatar.charAt(1)+(parseInt(avatar.charAt(2))-1)+avatar.charAt(3)+avatar.charAt(4) :
                         s = avatar.charAt(0)+avatar.charAt(1)+"2"+avatar.charAt(3)+avatar.charAt(4)
@@ -221,14 +222,14 @@ export default function Parametres(props) {
                         :  s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+"0"+avatar.charAt(4)
                     setAvatar(s)
                     break;
-                  case "Couleur":
+                  case "Teint":
                     s = ""
                     avatar.charAt(0) < 2  ?
                         s = (parseInt(avatar.charAt(0))+1)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
                         :  s = "0"+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
                     setAvatar(s)
                     break;
-                  case 'Accessoire':
+                  case 'Casque':
                     avatar.charAt(2) < 7 ?  s = avatar.charAt(0)+avatar.charAt(1)+(parseInt(avatar.charAt(2))+1)+avatar.charAt(3)+avatar.charAt(4)
                         : s = avatar.charAt(0)+avatar.charAt(1)+"0"+avatar.charAt(3)+avatar.charAt(4)
                     setAvatar(s)
