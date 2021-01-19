@@ -140,7 +140,6 @@ export default function Parametres(props) {
                         : s = avatar.charAt(0)+"7"+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
                     setAvatar(s)
                       s=""
-                      console.log(avatar+"  "+state.user.avatar)
                       break;
                   default:
                         break;
