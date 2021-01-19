@@ -35,12 +35,11 @@ export default function Statistiques(props) {
     totalq:'5000',
   };
   const [labels,setLabels] = useState([
-    Dates[0].format("DD-MMM").toString(),
-    Dates[0].clone().add(15,"days").format("DD-MMM").toString(),
-    Dates[0].clone().add(30,"days").format("DD-MMM").toString(),
-    Dates[0].clone().add(45,"days").format("DD-MMM").toString(),
-    Dates[0].clone().add(60,"days").format("DD-MMM").toString(),
-    Dates[1].format("DD-MMM").toString(),
+    Dates[0].format("DD-MM").toString(),
+    Dates[0].clone().add(15,"days").format("DD-MM").toString(),
+    Dates[0].clone().add(30,"days").format("DD-MM").toString(),
+    Dates[0].clone().add(45,"days").format("DD-MM").toString(),
+    Dates[1].format("DD-MM").toString(),
   ]);
   const chartConfig = {
     backgroundGradientFrom: '#1E2923',
@@ -97,6 +96,7 @@ export default function Statistiques(props) {
                     tab.push(moment(date.endDate).format("DD-MMM"))
                     setLabels(tab)
                   }
+                  console.log(moment(Dates[1]).diff(moment(Dates[0]),'days'))
                 }
             }}
             endDate={Dates[1]}
@@ -142,7 +142,6 @@ export default function Statistiques(props) {
                 datasets: [
                   {
                     data: [
-                      Math.random() * 100,
                       Math.random() * 100,
                       Math.random() * 100,
                       Math.random() * 100,
