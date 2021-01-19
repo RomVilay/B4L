@@ -96,7 +96,6 @@ export default function Statistiques(props) {
                     tab.push(moment(date.endDate).format("DD-MMM"))
                     setLabels(tab)
                   }
-                  console.log(moment(Dates[1]).diff(moment(Dates[0]),'days'))
                 }
             }}
             endDate={Dates[1]}
