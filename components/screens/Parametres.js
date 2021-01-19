@@ -26,7 +26,7 @@ import Avatar from './Avatar';
 
 export default function Parametres(props) {
   const [state, setState] = useContext(Context);
-  const [parties] = useState(['Visage', 'Coupe', 'Couleur', 'Tenue', 'Accessoire']);
+  const [parties] = useState(['Visage', 'Coupe', 'Teint', 'Tenue', 'Casque']);
   const unitsTaille = ['cm', 'ft', 'inch', 'yd'];
   const unitsPoids = ['kg', 'lb'];
   const unitsDistance = ['m', 'ft', 'yd', 'mi'];
