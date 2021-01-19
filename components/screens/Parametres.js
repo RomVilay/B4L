@@ -195,7 +195,7 @@ export default function Parametres(props) {
               }}>
               <Fleche />
             </TouchableOpacity>
-            <Avatar code={state.user.avatar}/>
+            <Avatar avatar={avatar}/>
             {/*<Image source={avatar} flèche drouate />*/}
             <TouchableOpacity
               onPress={() => {

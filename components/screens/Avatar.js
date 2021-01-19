@@ -44,23 +44,24 @@ import coupe7 from '../../assets/img-avatar/coupe7.png'
 import coupe8 from '../../assets/img-avatar/coupe8.png'
 import {Context} from '../utils/Store';
 
-const Avatar = () => {
+const Avatar = (props) => {
     const [state,setState] = useContext(Context);
     const couleurs = [color0, color1, color2]
     const tenues = [tenue0, tenue1, tenue2, tenue3, tenue4, tenue5, tenue6, tenue7]
     const casques = [casque0, casque1, casque2, casque3, casque4, casque5, casque6, casque7]
     const visages = [visage0, visage1, visage2, visage3]
     const coupes = [coupe0, coupe1, coupe2, coupe3, coupe4, coupe5, coupe6, coupe7, coupe8]
+
     return (
         <View>
-            <Image source={couleurs[parseInt(state.user.avatar.charAt(0))]} style={{width: 80, height: 80}}/>
-            <Image source={tenues[parseInt(state.user.avatar.charAt(1))]}
+            <Image source={couleurs[parseInt(props.avatar.charAt(0))]} style={{width: 80, height: 80}}/>
+            <Image source={tenues[parseInt(props.avatar.charAt(1))]}
                    style={{width: 80, height: 32, position: "absolute", top: 47, left: 0}}/>
-            <Image source={visages[parseInt(state.user.avatar.charAt(4))]}
+            <Image source={visages[parseInt(props.avatar.charAt(4))]}
                    style={{width: 35, height: 25, position: "absolute", top: 10, left: 22}}/>
-            <Image source={coupes[parseInt(state.user.avatar.charAt(3))]}
+            <Image source={coupes[parseInt(props.avatar.charAt(3))]}
                    style={{width: 60, height: 60, position: "absolute", top: -22, left: 10}}/>
-            <Image source={casques[parseInt(state.user.avatar.charAt(2))]}
+            <Image source={casques[parseInt(props.avatar.charAt(2))]}
                    style={{width: 60, height: 60, position: "absolute", top: -20, left: 10}}/>
         </View>
     )

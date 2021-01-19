@@ -63,7 +63,7 @@ export default function Accueil(props) {
           <View style={styles.midItem}>
             <TouchableOpacity
               onPress={() => props.navigation.navigate('Classements')}>
-             <Avatar />
+             <Avatar avatar={state.user.avatar}/>
             </TouchableOpacity>
           </View>
           <View style={[styles.midItem]}>
