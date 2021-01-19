@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   StyleSheet,
@@ -13,24 +13,24 @@ import Navigation from '../../assets/navigation';
 import LogoMin from '../../assets/logoMin';
 import P1 from '../../assets/Classement/p1';
 import NavApp from '../navigation/NavApp';
+import Avatar from "./Avatar";
+import {Context} from '../utils/Store';
 
-var avatar = require('../../assets/avatar.png');
 var scnd = require('../../assets/Classement/scnd.png');
 var third = require('../../assets/Classement/third.png');
 
-export default class Classements extends React.Component {
-  state = {
-    name: 'Gaston',
-    categorie: 'Homme',
-    position: 212,
-    membres: 206,
-    membre1: 'Yann33',
-    membre2: 'Rémi12',
-    membre3: 'Chris',
-    avatar: avatar,
-  };
+export default function Classements(props) {
+  const [state, setState] = useContext(Context);
+  const poduim = useState([
+    'Yann33',
+    'Rémi12',
+    'Chris'
+  ])
+  const categorie = 'Homme'
+  const position =  206
+  const membres = 212
+  console.log(state.user.username)
 
-  render() {
     return (
       <SafeAreaView style={styles.container}>
         <Image style={styles.fond} source={require('../../assets/fond.png')} />
@@ -40,25 +40,25 @@ export default class Classements extends React.Component {
             <Text style={[styles.textTitle, {fontSize: 70}]}>Classement</Text>
           </View>
           <View style={[styles.middle, {width: '100%'}]}>
-            <Text style={styles.inputContainer}>Catégorie</Text>
+            <Text style={styles.inputContainer}>Catégorie {categorie}</Text>
             <View style={styles.midMid}>
               <View style={styles.midItem}>
-                <Image source={this.state.avatar} />
+                <Avatar avatar={state.user.avatar} />
               </View>
               <View style={[styles.midItem]}>
-                <Text style={[styles.username]}>{this.state.name}</Text>
+                <Text style={[styles.username]}>{state.user.username}</Text>
               </View>
             </View>
             <View style={styles.midMid}>
-              <Text style={styles.number}>{this.state.position}</Text>
+              <Text style={styles.number}>{position}</Text>
               <Text style={styles.linesb}> ème sur </Text>
-              <Text style={styles.number}>{this.state.membres} </Text>
+              <Text style={styles.number}>{membres} </Text>
               <Text style={styles.linesb}> utilisateurs</Text>
             </View>
             <View>
               <TouchableOpacity
                   onPress={() => {
-                    this.props.navigation.navigate('Statistiques');
+                    props.navigation.navigate('Statistiques');
                   }}>
                 <Text style={styles.linesw}>voir tes stats</Text>
               </TouchableOpacity>
@@ -78,13 +78,13 @@ export default class Classements extends React.Component {
                 <P1 />
                 <View>
                   <Text style={[styles.linesb, {fontSize: 20}]}>
-                    {this.state.membre1}
+                    {poduim[0]}
                   </Text>
                 </View>
                 <View>
                   <TouchableOpacity
                     onPress={() => {
-                      this.props.navigation.navigate('Statistiques');
+                      props.navigation.navigate('Statistiques');
                     }}>
                     <Text style={[styles.linesw, {fontSize: 20}]}>
                       voir ses stats
@@ -104,13 +104,13 @@ export default class Classements extends React.Component {
                 />
                 <View>
                   <Text style={[styles.linesb, {fontSize: 20}]}>
-                    {this.state.membre2}
+                    {poduim[1]}
                   </Text>
                 </View>
                 <View>
                   <TouchableOpacity
                     onPress={() => {
-                      this.props.navigation.navigate('Statistiques');
+                      props.navigation.navigate('Statistiques');
                     }}>
                     <Text style={[styles.linesw, {fontSize: 20}]}>
                       voir ses stats
@@ -128,13 +128,13 @@ export default class Classements extends React.Component {
                 />
                 <View>
                   <Text style={[styles.linesb, {fontSize: 20}]}>
-                    {this.state.membre3}
+                    {poduim[2]}
                   </Text>
                 </View>
                 <View>
                   <TouchableOpacity
                     onPress={() => {
-                      this.props.navigation.navigate('Statistiques');
+                      props.navigation.navigate('Statistiques');
                     }}>
                     <Text style={[styles.linesw, {fontSize: 20}]}>
                       voir ses stats
@@ -144,13 +144,13 @@ export default class Classements extends React.Component {
               </View>
             </View>
             <View style={styles.footer}>
-              <NavApp navigation={this.props.navigation} />
+              <NavApp navigation={props.navigation} />
             </View>
           </View>
         </View>
       </SafeAreaView>
     );
-  }
+
 }
 
 const styles = StyleSheet.create({
@@ -165,7 +165,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 100
   },
   textTitle: {
     color: '#5FCDFA',
