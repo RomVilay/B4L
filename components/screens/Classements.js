@@ -21,7 +21,7 @@ var third = require('../../assets/Classement/third.png');
 
 export default function Classements(props) {
   const [state, setState] = useContext(Context);
-  const poduim = useState([
+  const [poduim,setPoduim] = useState([
     'Yann33',
     'Rémi12',
     'Chris'
@@ -38,23 +38,23 @@ export default function Classements(props) {
             <LogoMin />
             <Text style={[styles.textTitle, {fontSize: 70}]}>Classement</Text>
           </View>
-          <View style={[styles.middle, {width: '100%'}]}>
+          <View style={[styles.middle, {width: '90%'}]}>
             <Text style={styles.inputContainer}>Catégorie {categorie}</Text>
             <View style={styles.midUser}>
-              <View style={styles.midItem}>
+              <View style={styles.avatar}>
                 <Avatar avatar={state.user.avatar} />
               </View>
               <View style={[styles.midItem]}>
-                <Text style={[styles.username]}>{state.user.username}</Text>
+                <Text style={styles.username}>{state.user.username}</Text>
               </View>
             </View>
             <View style={styles.botUser}>
-              <Text style={styles.number}>{position}</Text>
+              <Text style={[styles.number, {fontSize:50}]}>{position}</Text>
               <Text style={styles.linesb}> ème sur </Text>
-              <Text style={styles.number}>{membres} </Text>
+              <Text style={[styles.number, {fontSize:50}]}>{membres} </Text>
               <Text style={styles.linesb}> utilisateurs</Text>
             </View>
-            <View>
+            <View style={{flex:1}}>
               <TouchableOpacity
                   onPress={() => {
                     props.navigation.navigate('Statistiques');
@@ -62,7 +62,6 @@ export default function Classements(props) {
                 <Text style={styles.linesw}>voir tes stats</Text>
               </TouchableOpacity>
             </View>
-
           </View>
           <View style={[styles.bottom, {width: '100%'}]}>
             <View
@@ -76,8 +75,11 @@ export default function Classements(props) {
               <View style={styles.midItem}>
                 <P1 />
                 <View>
-                  <Text style={[styles.linesb, {fontSize: 20}]}>
-                    {poduim[0]}
+                  <Text style={[styles.linesb, {fontSize: 30}]}>
+                    N°1
+                    <Text style={[styles.linesw, {fontSize: 30}]}>
+                     {` ${poduim[0]}`}
+                  </Text>
                   </Text>
                 </View>
                 <View>
@@ -102,8 +104,11 @@ export default function Classements(props) {
                   }}
                 />
                 <View>
-                  <Text style={[styles.linesb, {fontSize: 20}]}>
-                    {poduim[1]}
+                  <Text style={[styles.linesb, {fontSize: 30}]}>
+                    N°2
+                    <Text style={[styles.linesw, {fontSize: 30}]}>
+                      {` ${poduim[1]}`}
+                    </Text>
                   </Text>
                 </View>
                 <View>
@@ -126,8 +131,11 @@ export default function Classements(props) {
                   }}
                 />
                 <View>
-                  <Text style={[styles.linesb, {fontSize: 20}]}>
-                    {poduim[2]}
+                  <Text style={[styles.linesb, {fontSize: 30}]}>
+                    N°3
+                    <Text style={[styles.linesw, {fontSize: 30}]}>
+                      {` ${poduim[2]}`}
+                    </Text>
                   </Text>
                 </View>
                 <View>
@@ -160,7 +168,8 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    flex: 1,
+
+    flex: 2,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -172,19 +181,16 @@ const styles = StyleSheet.create({
     fontFamily: 'TallFilms',
   },
   middle: {
-    flex: 2,
+    flex: 3,
     flexDirection: 'column',
     alignItems: 'center',
     zIndex: 100,
-
   },
   bottom: {
-    flex: 2,
-    marginTop:'5%',
+    flex: 5,
     flexDirection: 'column',
     alignItems: 'center',
-    zIndex: 100,
-
+    zIndex: 100
   },
   midMid: {
     flexDirection: 'row',
@@ -205,8 +211,8 @@ const styles = StyleSheet.create({
   username: {
     color: 'white',
     textTransform: 'uppercase',
-    fontSize: 70,
-    fontFamily: 'GnuolaneRG-Regular',
+    fontSize: 50,
+    fontFamily: 'GnuolaneRG-Regular'
   },
   number: {
     color: 'white',
@@ -241,12 +247,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     zIndex: 100,
+    justifyContent:'space-around'
+  },
+  avatar: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    zIndex: 100,
+    top: 15,
   },
   botUser:{
     flex:1,
     flexDirection: 'row',
     alignItems: 'center',
     zIndex: 100,
+    paddingTop:'2%'
   },
   footer: {
     flex: 1,
