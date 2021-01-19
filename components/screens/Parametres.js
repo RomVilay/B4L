@@ -23,6 +23,7 @@ import Fleche from '../../assets/fleche';
 import avatar from '../../assets/avatar.png';
 import NavApp from '../navigation/NavApp';
 import Avatar from './Avatar';
+import LogoMin from'../../assets/logoMin';
 
 export default function Parametres(props) {
   const [state, setState] = useContext(Context);
