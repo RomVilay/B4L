@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   StyleSheet,
@@ -13,24 +13,23 @@ import Navigation from '../../assets/navigation';
 import LogoMin from '../../assets/logoMin';
 import P1 from '../../assets/Classement/p1';
 import NavApp from '../navigation/NavApp';
+import Avatar from "./Avatar";
+import {Context} from '../utils/Store';
 
-var avatar = require('../../assets/avatar.png');
 var scnd = require('../../assets/Classement/scnd.png');
 var third = require('../../assets/Classement/third.png');
 
-export default class Classements extends React.Component {
-  state = {
-    name: 'Gaston',
-    categorie: 'Homme',
-    position: 212,
-    membres: 206,
-    membre1: 'Yann33',
-    membre2: 'Rémi12',
-    membre3: 'Chris',
-    avatar: avatar,
-  };
+export default function Classements(props) {
+  const [state, setState] = useContext(Context);
+  const [poduim,setPoduim] = useState([
+    'Yann33',
+    'Rémi12',
+    'Chris'
+  ])
+  const categorie = 'Homme'
+  const position =  206
+  const membres = 212
 
-  render() {
     return (
       <SafeAreaView style={styles.container}>
         <Image style={styles.fond} source={require('../../assets/fond.png')} />
@@ -39,31 +38,30 @@ export default class Classements extends React.Component {
             <LogoMin />
             <Text style={[styles.textTitle, {fontSize: 70}]}>Classement</Text>
           </View>
-          <View style={[styles.middle, {width: '100%'}]}>
-            <Text style={styles.inputContainer}>Catégorie</Text>
-            <View style={styles.midMid}>
-              <View style={styles.midItem}>
-                <Image source={this.state.avatar} />
+          <View style={[styles.middle, {width: '90%'}]}>
+            <Text style={styles.inputContainer}>Catégorie {categorie}</Text>
+            <View style={styles.midUser}>
+              <View style={styles.avatar}>
+                <Avatar avatar={state.user.avatar} />
               </View>
               <View style={[styles.midItem]}>
-                <Text style={[styles.username]}>{this.state.name}</Text>
+                <Text style={styles.username}>{state.user.username}</Text>
               </View>
             </View>
-            <View style={styles.midMid}>
-              <Text style={styles.number}>{this.state.position}</Text>
+            <View style={styles.botUser}>
+              <Text style={[styles.number, {fontSize:50}]}>{position}</Text>
               <Text style={styles.linesb}> ème sur </Text>
-              <Text style={styles.number}>{this.state.membres} </Text>
+              <Text style={[styles.number, {fontSize:50}]}>{membres} </Text>
               <Text style={styles.linesb}> utilisateurs</Text>
             </View>
-            <View>
+            <View style={{flex:1}}>
               <TouchableOpacity
                   onPress={() => {
-                    this.props.navigation.navigate('Statistiques');
+                    props.navigation.navigate('Statistiques');
                   }}>
                 <Text style={styles.linesw}>voir tes stats</Text>
               </TouchableOpacity>
             </View>
-
           </View>
           <View style={[styles.bottom, {width: '100%'}]}>
             <View
@@ -71,20 +69,23 @@ export default class Classements extends React.Component {
                 styles.midMid,
                 {borderColor: 'white', borderTopWidth: 2},
               ]}>
-              <Text style={styles.linesb}> classement dans ta catégorie </Text>
+              <Text style={styles.linesb}> Le podium dans ta catégorie </Text>
             </View>
             <View style={styles.midMid}>
               <View style={styles.midItem}>
                 <P1 />
                 <View>
-                  <Text style={[styles.linesb, {fontSize: 20}]}>
-                    {this.state.membre1}
+                  <Text style={[styles.linesb, {fontSize: 30}]}>
+                    N°1
+                    <Text style={[styles.linesw, {fontSize: 30}]}>
+                     {` ${poduim[0]}`}
+                  </Text>
                   </Text>
                 </View>
                 <View>
                   <TouchableOpacity
                     onPress={() => {
-                      this.props.navigation.navigate('Statistiques');
+                      props.navigation.navigate('Statistiques');
                     }}>
                     <Text style={[styles.linesw, {fontSize: 20}]}>
                       voir ses stats
@@ -103,14 +104,17 @@ export default class Classements extends React.Component {
                   }}
                 />
                 <View>
-                  <Text style={[styles.linesb, {fontSize: 20}]}>
-                    {this.state.membre2}
+                  <Text style={[styles.linesb, {fontSize: 30}]}>
+                    N°2
+                    <Text style={[styles.linesw, {fontSize: 30}]}>
+                      {` ${poduim[1]}`}
+                    </Text>
                   </Text>
                 </View>
                 <View>
                   <TouchableOpacity
                     onPress={() => {
-                      this.props.navigation.navigate('Statistiques');
+                      props.navigation.navigate('Statistiques');
                     }}>
                     <Text style={[styles.linesw, {fontSize: 20}]}>
                       voir ses stats
@@ -127,14 +131,17 @@ export default class Classements extends React.Component {
                   }}
                 />
                 <View>
-                  <Text style={[styles.linesb, {fontSize: 20}]}>
-                    {this.state.membre3}
+                  <Text style={[styles.linesb, {fontSize: 30}]}>
+                    N°3
+                    <Text style={[styles.linesw, {fontSize: 30}]}>
+                      {` ${poduim[2]}`}
+                    </Text>
                   </Text>
                 </View>
                 <View>
                   <TouchableOpacity
                     onPress={() => {
-                      this.props.navigation.navigate('Statistiques');
+                      props.navigation.navigate('Statistiques');
                     }}>
                     <Text style={[styles.linesw, {fontSize: 20}]}>
                       voir ses stats
@@ -144,13 +151,13 @@ export default class Classements extends React.Component {
               </View>
             </View>
             <View style={styles.footer}>
-              <NavApp navigation={this.props.navigation} />
+              <NavApp navigation={props.navigation} />
             </View>
           </View>
         </View>
       </SafeAreaView>
     );
-  }
+
 }
 
 const styles = StyleSheet.create({
@@ -161,11 +168,11 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    flex: 1,
+
+    flex: 2,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 100
   },
   textTitle: {
     color: '#5FCDFA',
@@ -174,19 +181,16 @@ const styles = StyleSheet.create({
     fontFamily: 'TallFilms',
   },
   middle: {
-    flex: 1,
+    flex: 3,
     flexDirection: 'column',
     alignItems: 'center',
     zIndex: 100,
-
   },
   bottom: {
-    flex: 2,
-    marginTop:'10%',
+    flex: 5,
     flexDirection: 'column',
     alignItems: 'center',
-    zIndex: 100,
-
+    zIndex: 100
   },
   midMid: {
     flexDirection: 'row',
@@ -207,8 +211,8 @@ const styles = StyleSheet.create({
   username: {
     color: 'white',
     textTransform: 'uppercase',
-    fontSize: 25,
-    fontFamily: 'GnuolaneRG-Regular',
+    fontSize: 50,
+    fontFamily: 'GnuolaneRG-Regular'
   },
   number: {
     color: 'white',
@@ -237,6 +241,27 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontFamily: 'GnuolaneRG-Regular',
+  },
+  midUser: {
+    flex:2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    zIndex: 100,
+    justifyContent:'space-around'
+  },
+  avatar: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    zIndex: 100,
+    top: 15,
+  },
+  botUser:{
+    flex:1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    zIndex: 100,
+    paddingTop:'2%'
   },
   footer: {
     flex: 1,

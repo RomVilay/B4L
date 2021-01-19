@@ -20,7 +20,7 @@ import goTo from '../utils/navFunctions';
 import {editUser} from '../../functions/user';
 
 import Fleche from '../../assets/fleche';
-import LogoMin from '../../assets/logoMin';
+import avatar from '../../assets/avatar.png';
 import NavApp from '../navigation/NavApp';
 import Avatar from './Avatar';
 
@@ -46,7 +46,10 @@ export default function Parametres(props) {
       Alert.alert('Erreur', `Veuillez saisir un date de naissance valide du type AAAA-MM-JJ`);
     } else if (!tempTaille.match(regexTaille) && tempTaille.length > 0) {
       Alert.alert('Erreur', `Veuillez saisir une taille valide`);
-    } else if (!tempPoids.match(regexPoids) && tempPoids.length > 0) {
+    } else if (
+      !tempPoids.match(/^[0-9]{1,4}\,{0,1}[0-9]{0,2}$/) &&
+      tempPoids.length > 0
+    ) {
       Alert.alert('Erreur', `Veuillez saisir un poids valide`);
     } else {
       updateUser();
@@ -67,11 +70,9 @@ export default function Parametres(props) {
           dateNaissance: tempDateNaissance,
           poids: tempPoids,
           taille: tempTaille,
-          avatar: avatar,
-          unitTaille: tempUnitTaille,
-          unitPoids: tempUnitPoids,
-          unitDistance: tempUnitDistance,
+          avatar: avatar
         },
+        // ADMIN_TOKEN,
         state.token,
       );
       setIsLoading(false);
@@ -149,6 +150,13 @@ export default function Parametres(props) {
                       : (s = avatar.charAt(0) + avatar.charAt(1) + '2' + avatar.charAt(3) + avatar.charAt(4));
                     setAvatar(s);
                     break;
+                  case   'Tenue':
+                    avatar.charAt(1) > 0 ?
+                        s = avatar.charAt(0)+(parseInt(avatar.charAt(1))-1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
+                        : s = avatar.charAt(0)+"7"+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
+                    setAvatar(s)
+                      s=""
+                      break;
                   case 'Tenue':
                     avatar.charAt(1) > 0
                       ? (s =
@@ -160,7 +168,6 @@ export default function Parametres(props) {
                       : (s = avatar.charAt(0) + '7' + avatar.charAt(2) + avatar.charAt(3) + avatar.charAt(4));
                     setAvatar(s);
                     s = '';
-                    console.log(avatar + '  ' + state.user.avatar);
                     break;
                   default:
                     break;
@@ -196,18 +203,12 @@ export default function Parametres(props) {
                       : (s = avatar.charAt(0) + avatar.charAt(1) + avatar.charAt(2) + '0' + avatar.charAt(4));
                     setAvatar(s);
                     break;
-                  case 'Teint':
-                    s = '';
-                    avatar.charAt(0) < 2
-                      ? (s =
-                          parseInt(avatar.charAt(0)) +
-                          1 +
-                          avatar.charAt(1) +
-                          avatar.charAt(2) +
-                          avatar.charAt(3) +
-                          avatar.charAt(4))
-                      : (s = '0' + avatar.charAt(1) + avatar.charAt(2) + avatar.charAt(3) + avatar.charAt(4));
-                    setAvatar(s);
+                  case "Teint":
+                    s = ""
+                    avatar.charAt(0) < 2  ?
+                        s = (parseInt(avatar.charAt(0))+1)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
+                        :  s = "0"+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
+                    setAvatar(s)
                     break;
                   case 'Casque':
                     avatar.charAt(2) < 7
@@ -259,115 +260,42 @@ export default function Parametres(props) {
                       <Text style={styles.linesb}>{item}</Text>
                     )}
                   </View>
-                  {item !== parties[parties.length - 1] ? <View style={styles.separator} /> : null}
+                  {item !== parties[parties.length - 1] ? (
+                    <View style={styles.separator} />
+                  ) : null}
                 </React.Fragment>
               ))}
             </View>
           </View>
           <View style={styles.midBot}>
-            <Text style={styles.inputTitle}>{'Date de naissance'}</Text>
             <View style={styles.inputContainer}>
               <TextInput
                 value={tempDateNaissance}
                 style={styles.input}
-                onChangeText={dateNaissance => setTempDateNaissance(dateNaissance)}
+                onChangeText={dateNaissance =>
+                  setTempDateNaissance(dateNaissance)
+                }
                 placeholder="Indiquez date de naissance"
                 placeholderTextColor="#b8b8b8"
               />
             </View>
-            <View style={styles.horizontal}>
-              <View
-                style={{
-                  alignItems: 'center',
-                  width: '75%',
-                }}>
-                <Text style={styles.inputTitle}>{'Taille'}</Text>
-                <View style={[styles.inputContainer, {width: '100%'}]}>
-                  <TextInput
-                    value={tempTaille}
-                    style={styles.input}
-                    onChangeText={taille => setTempTaille(taille)}
-                    placeholder="Indiquez votre taille"
-                    placeholderTextColor="#b8b8b8"
-                  />
-                </View>
-              </View>
-              <View
-                style={{
-                  alignItems: 'center',
-                  width: '75%',
-                }}>
-                <Text style={styles.inputTitle}>{'Unité de taille'}</Text>
-                <View style={[styles.inputContainer, {width: '60%'}]}>
-                  <Picker
-                    selectedValue={tempUnitTaille}
-                    style={[styles.input, {width: '100%'}]}
-                    dropdownIconColor={'#5FCDFA'}
-                    mode={'dropdown'}
-                    onValueChange={itemValue => setTempUnitTaille(itemValue)}>
-                    {unitsTaille.map(item => {
-                      return <Picker.Item label={item} value={item} key={item} />;
-                    })}
-                  </Picker>
-                </View>
-              </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                value={tempTaille}
+                style={styles.input}
+                onChangeText={taille => setTempTaille(taille)}
+                placeholder="Indiquez votre taille"
+                placeholderTextColor="#b8b8b8"
+              />
             </View>
-            <View style={styles.horizontal}>
-              <View
-                style={{
-                  alignItems: 'center',
-                  width: '75%',
-                }}>
-                <Text style={styles.inputTitle}>{'Poids'}</Text>
-                <View style={[styles.inputContainer, {width: '100%'}]}>
-                  <TextInput
-                    value={tempPoids}
-                    style={[styles.input, tempPoids == '' ? 12 : 20]}
-                    onChangeText={poids => setTempPoids(poids)}
-                    placeholder="Indiquez votre poids"
-                    placeholderTextColor="#b8b8b8"
-                  />
-                </View>
-              </View>
-              <View
-                style={{
-                  alignItems: 'center',
-                  width: '75%',
-                }}>
-                <Text style={styles.inputTitle}>{'Unité de poids'}</Text>
-                <View style={[styles.inputContainer, {width: '60%'}]}>
-                  <Picker
-                    selectedValue={tempUnitPoids}
-                    style={[styles.input, {width: '100%'}]}
-                    dropdownIconColor={'#5FCDFA'}
-                    mode={'dropdown'}
-                    onValueChange={itemValue => setTempUnitPoids(itemValue)}>
-                    {unitsPoids.map(item => {
-                      return <Picker.Item label={item} value={item} key={item} />;
-                    })}
-                  </Picker>
-                </View>
-              </View>
-            </View>
-            <Text style={[styles.inputTitle, {marginTop: 20}]}>{'Unité de mesure de distance'}</Text>
-            <View
-              style={{
-                alignItems: 'center',
-                width: '75%',
-                flexDirection: 'row',
-              }}>
-              <View style={[styles.inputContainer, {width: '60%'}]}>
-                <Picker
-                  selectedValue={tempUnitDistance}
-                  style={[styles.input, {width: '100%'}]}
-                  dropdownIconColor={'#5FCDFA'}
-                  mode={'dropdown'}
-                  onValueChange={itemValue => setTempUnitDistance(itemValue)}>
-                  {unitsDistance.map(item => {
-                    return <Picker.Item label={item} value={item} key={item} />;
-                  })}
-                </Picker>
-              </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                value={tempPoids}
+                style={styles.input}
+                onChangeText={poids => setTempPoids(poids)}
+                placeholder="Indiquez votre poids"
+                placeholderTextColor="#b8b8b8"
+              />
             </View>
           </View>
         </View>
@@ -376,7 +304,11 @@ export default function Parametres(props) {
         {/* FOOTER */}
         <View style={styles.footer}>
           {isLoading ? (
-            <ActivityIndicator size="large" color="#5FCDFA" style={{top: '10%'}} />
+            <ActivityIndicator
+              size="large"
+              color="#5FCDFA"
+              style={{top: '10%'}}
+            />
           ) : (
             <TouchableOpacity onPress={() => checkFields()}>
               <Text style={[styles.suivant]}>Enregistrer</Text>
@@ -475,25 +407,12 @@ const styles = StyleSheet.create({
     color: '#5FCDFA',
     fontFamily: 'TallFilms',
   },
-  horizontal: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingLeft: 15,
-    paddingRight: 15,
-    paddingTop: 15,
-    width: '70%',
-  },
-  inputTitle: {
-    color: '#5FCDFA',
-    fontSize: 30,
-    fontFamily: 'TallFilms',
-  },
   inputContainer: {
-    width: '50%',
+    width: '80%',
     borderWidth: 1,
     borderRadius: 10,
     marginTop: 10,
-    marginBottom: '5%',
+    marginBottom: 5,
     borderColor: '#5FCDFA',
     backgroundColor: '#284462',
   },
