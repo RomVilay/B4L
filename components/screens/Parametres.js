@@ -11,8 +11,10 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Picker} from '@react-native-picker/picker';
+import moment from 'moment';
 
 import {Context} from '../utils/Store';
 import {regexDateNaissance, regexTaille, regexPoids} from '../utils/constants';
@@ -27,24 +29,25 @@ import Avatar from './Avatar';
 export default function Parametres(props) {
   const [state, setState] = useContext(Context);
   const [parties] = useState(['Visage', 'Coupe', 'Teint', 'Tenue', 'Casque']);
-  const unitsTaille = ['cm', 'ft', 'inch', 'yd'];
-  const unitsPoids = ['kg', 'lb'];
-  const unitsDistance = ['m', 'ft', 'yd', 'mi'];
+  const [unitsTaille] = useState(['cm', 'ft', 'inch', 'yd']);
+  const [unitsPoids] = useState(['kg', 'lb']);
+  const [unitsDistance] = useState(['m', 'ft', 'yd', 'mi']);
 
   const [selection, setSelection] = useState('Visage');
   const [isLoading, setIsLoading] = useState(false);
-  const [tempDateNaissance, setTempDateNaissance] = useState(state.user.dateNaissance || '');
+  const [tempDateNaissance, setTempDateNaissance] = useState(
+    state.user.dateNaissance ? new Date(state.user.dateNaissance) : '',
+  );
   const [tempTaille, setTempTaille] = useState(state.user.taille || '');
   const [tempPoids, setTempPoids] = useState(state.user.poids || '');
   const [avatar, setAvatar] = useState(state.user.avatar || '03940');
   const [tempUnitTaille, setTempUnitTaille] = useState(state.user.unitTaille || 'cm');
   const [tempUnitPoids, setTempUnitPoids] = useState(state.user.unitPoids || 'kg');
   const [tempUnitDistance, setTempUnitDistance] = useState(state.user.unitDistance || 'm');
+  const [showCalendar, setShowCalendar] = useState(false);
 
   const checkFields = () => {
-    if (!tempDateNaissance.match(regexDateNaissance) && tempDateNaissance.length > 0) {
-      Alert.alert('Erreur', `Veuillez saisir un date de naissance valide du type AAAA-MM-JJ`);
-    } else if (!tempTaille.match(regexTaille) && tempTaille.length > 0) {
+    if (!tempTaille.match(regexTaille) && tempTaille.length > 0) {
       Alert.alert('Erreur', `Veuillez saisir une taille valide`);
     } else if (!tempPoids.match(regexPoids) && tempPoids.length > 0) {
       Alert.alert('Erreur', `Veuillez saisir un poids valide`);
@@ -160,7 +163,6 @@ export default function Parametres(props) {
                       : (s = avatar.charAt(0) + '7' + avatar.charAt(2) + avatar.charAt(3) + avatar.charAt(4));
                     setAvatar(s);
                     s = '';
-                    console.log(avatar + '  ' + state.user.avatar);
                     break;
                   default:
                     break;
@@ -169,7 +171,6 @@ export default function Parametres(props) {
               <Fleche />
             </TouchableOpacity>
             <Avatar avatar={avatar} />
-            {/*<Image source={avatar} flèche drouate />*/}
             <TouchableOpacity
               onPress={() => {
                 switch (selection) {
@@ -267,14 +268,27 @@ export default function Parametres(props) {
           <View style={styles.midBot}>
             <Text style={styles.inputTitle}>{'Date de naissance'}</Text>
             <View style={styles.inputContainer}>
-              <TextInput
-                value={tempDateNaissance}
-                style={styles.input}
-                onChangeText={dateNaissance => setTempDateNaissance(dateNaissance)}
-                placeholder="Indiquez date de naissance"
-                placeholderTextColor="#b8b8b8"
-              />
+              <TouchableOpacity onPress={() => setShowCalendar(true)}>
+                <TextInput
+                  value={tempDateNaissance ? moment(tempDateNaissance).format('DD/MM/YYYY') : ''}
+                  style={styles.input}
+                  editable={false}
+                  placeholder="Indiquez votre date de naissance"
+                  placeholderTextColor="#b8b8b8"
+                />
+              </TouchableOpacity>
             </View>
+            {showCalendar && (
+              <DateTimePicker
+                value={tempDateNaissance || new Date()}
+                onChange={(event, selectedDate) => {
+                  const currentDate = selectedDate || tempDateNaissance;
+                  setShowCalendar(Platform.OS === 'ios');
+                  setTempDateNaissance(currentDate);
+                }}
+                maximumDate={new Date()}
+              />
+            )}
             <View style={styles.horizontal}>
               <View
                 style={{
