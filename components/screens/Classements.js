@@ -29,7 +29,6 @@ export default function Classements(props) {
   const categorie = 'Homme'
   const position =  206
   const membres = 212
-  console.log(state.user.username)
 
     return (
       <SafeAreaView style={styles.container}>
@@ -41,7 +40,7 @@ export default function Classements(props) {
           </View>
           <View style={[styles.middle, {width: '100%'}]}>
             <Text style={styles.inputContainer}>Catégorie {categorie}</Text>
-            <View style={styles.midMid}>
+            <View style={styles.midUser}>
               <View style={styles.midItem}>
                 <Avatar avatar={state.user.avatar} />
               </View>
@@ -49,7 +48,7 @@ export default function Classements(props) {
                 <Text style={[styles.username]}>{state.user.username}</Text>
               </View>
             </View>
-            <View style={styles.midMid}>
+            <View style={styles.botUser}>
               <Text style={styles.number}>{position}</Text>
               <Text style={styles.linesb}> ème sur </Text>
               <Text style={styles.number}>{membres} </Text>
@@ -71,7 +70,7 @@ export default function Classements(props) {
                 styles.midMid,
                 {borderColor: 'white', borderTopWidth: 2},
               ]}>
-              <Text style={styles.linesb}> classement dans ta catégorie </Text>
+              <Text style={styles.linesb}> Le podium dans ta catégorie </Text>
             </View>
             <View style={styles.midMid}>
               <View style={styles.midItem}>
@@ -173,7 +172,7 @@ const styles = StyleSheet.create({
     fontFamily: 'TallFilms',
   },
   middle: {
-    flex: 1,
+    flex: 2,
     flexDirection: 'column',
     alignItems: 'center',
     zIndex: 100,
@@ -181,7 +180,7 @@ const styles = StyleSheet.create({
   },
   bottom: {
     flex: 2,
-    marginTop:'10%',
+    marginTop:'5%',
     flexDirection: 'column',
     alignItems: 'center',
     zIndex: 100,
@@ -206,7 +205,7 @@ const styles = StyleSheet.create({
   username: {
     color: 'white',
     textTransform: 'uppercase',
-    fontSize: 25,
+    fontSize: 70,
     fontFamily: 'GnuolaneRG-Regular',
   },
   number: {
@@ -236,6 +235,18 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontFamily: 'GnuolaneRG-Regular',
+  },
+  midUser: {
+    flex:2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    zIndex: 100,
+  },
+  botUser:{
+    flex:1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    zIndex: 100,
   },
   footer: {
     flex: 1,
