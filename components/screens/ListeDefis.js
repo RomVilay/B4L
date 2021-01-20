@@ -1,34 +1,48 @@
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
 import {FlatList, Text, View, StyleSheet, Button, ImageBackground, Image, TouchableOpacity, SafeAreaView} from 'react-native'
 import CheckBox from '@react-native-community/checkbox'
 import LogoMin from '../../assets/logoMin'
 import Fleche from "../../assets/fleche";
 import NavApp from "../navigation/NavApp";
+import listeDefis from "../../functions/defis";
+import {Context} from '../utils/Store';
+import {getUser} from "../../functions/user";
 
 /*
 *     */
 const Item = ({ item, onPress, style }) => (
   <TouchableOpacity onPress={onPress} style={[styles.defi, {style}]}>
-       <Text style={[styles.titreBlanc, { fontSize:50}]}>{item.descriptionDefis}</Text>
+       <Text style={[styles.titreBlanc, { fontSize:30}]}>{item.nomDefi}</Text>
    </TouchableOpacity>
 );
 
 export default function  ListeDefis(props) {
+    const [state, setState] = useContext(Context);
     const [ListeDefs, setListeDefs]= useState([
-        {id:"0",descriptionDefis:"faire 200km", statut:false},
-        {id:"1",descriptionDefis:"faire 300km", statut:false},
-        {id:"2",descriptionDefis:"faire 50km", statut:false},
-        {id:"3",descriptionDefis:"faire 100km", statut:false},
-        {id:"4",descriptionDefis:"faire 200km", statut:false},
-        {id:"5",descriptionDefis:"faire 200km", statut:false},
-        {id:"6",descriptionDefis:"faire 200km", statut:false},
-        {id:"7",descriptionDefis:"faire 200km", statut:false},
+        {_id:"0",nomDefi:"faire 200km", statut:false},
+        {_id:"1",nomDefi:"faire 300km", statut:false},
+        {_id:"2",nomDefi:"faire 50km", statut:false},
+        {_id:"3",nomDefi:"faire 100km", statut:false},
+        {_id:"4",nomDefi:"faire 200km", statut:false},
+        {_id:"5",nomDefi:"faire 200km", statut:false},
+        {_id:"6",nomDefi:"faire 200km", statut:false},
+        {_id:"7",nomDefi:"faire 200km", statut:false},
         ])
     const [defisSelect,setDefiSelect] = useState([])
+    const getList = async () => {
+        let list = await listeDefis( state.token);
+        if (list.message) {
+            // Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
+        } else {
+            await  setListeDefs(list)//setState({user, token: state.token});
+        }
+    };
+    getList()
+       // console.log(listeDefis(state.token))
     const render_item = ({ item }) =>{
         return (
             <Item
-                key={item.id}
+                key={item._id}
                 item={item}
                 onPress={() => {
                     item.statut = !item.statut
@@ -87,6 +101,7 @@ const styles = StyleSheet.create({
     },
     body:{
         flex:2,
+        borderWidth:3,
         alignItems: 'center',
         padding:'10%'
     },
