@@ -66,7 +66,7 @@ export default class Defis extends React.Component {
                         </View>
                     </View>
                     <View style={styles.footer}>
-                    <Text style={styles.textTitle} onPress={() => this.props.navigation.navigate("Compteur")}>Valider</Text>
+                    <Text style={styles.textTitle} onPress={() => this.props.navigation.navigate("Jumelage")}>Valider</Text>
                     </View>
                 </View>
             </SafeAreaView>

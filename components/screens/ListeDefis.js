@@ -63,7 +63,7 @@ export default function  ListeDefis(props) {
                         <Fleche style={{transform:[{rotate:'270deg'}]}}/>
                 </View>
                 <View style={styles.footer}>
-                    <TouchableOpacity style={{marginBottom:'10%'}} onPress={()=> props.navigation.navigate("Compteur")} color={'white'}>
+                    <TouchableOpacity style={{marginBottom:'10%'}} onPress={()=> props.navigation.navigate("Jumelage")} color={'white'}>
                         <Text style={styles.titreBleu}>appuyez pour continuer</Text>
                     </TouchableOpacity>
                     <NavApp  navigation={props.navigation}/>

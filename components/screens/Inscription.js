@@ -76,7 +76,7 @@ export default function Inscription(props) {
           'Email de confirmation envoyé',
           `Un email de confirmation a été envoyé à ${mail}`,
         );
-        props.navigation.navigate('Connexion', {
+        props.navigation.navigate('Objectifs', {
           username: username,
           password: password,
         });

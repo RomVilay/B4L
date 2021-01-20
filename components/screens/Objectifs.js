@@ -67,7 +67,7 @@ export default class Objectifs extends React.Component {
                         </View>
                     </View>
                     <View style={styles.footer}>
-                    <Text style={styles.textTitle} onPress={() => this.props.navigation.navigate("Home")}>Valider</Text>
+                    <Text style={styles.textTitle} onPress={() => this.props.navigation.navigate("Connexion")}>Valider</Text>
                     </View>
                 </View>
             </SafeAreaView>

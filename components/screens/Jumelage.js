@@ -30,7 +30,7 @@ export default class Jumelage extends React.Component {
         code: 'qrcode'
     }
     onSuccess = e => {
-        this.props.navigation.navigate("ListeDefis")
+        this.props.navigation.navigate("Compteur")
        /* Linking
             .openURL(e.data)
             .catch(err =>
