@@ -14,7 +14,6 @@ import {
 import NetInfo from '@react-native-community/netinfo';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-import {APP_TOKEN} from '@env';
 import {regexEmail} from '../utils/constants';
 import {forgottenPassword} from '../../functions/login';
 
@@ -46,7 +45,7 @@ export default function ForgottenPassword(props) {
       Alert.alert('Erreur', 'Vérifiez votre connexion Internet et réessayez');
       setIsLoading(false);
     } else {
-      let resetPWD = await forgottenPassword({mail: email}, APP_TOKEN);
+      let resetPWD = await forgottenPassword({mail: email});
       setIsLoading(false);
       if (resetPWD.message) {
         Alert.alert('Erreur', resetPWD.message);
@@ -55,8 +54,7 @@ export default function ForgottenPassword(props) {
       } else {
         Alert.alert(
           'Email de réinitialisation du mot de passe envoyé',
-          'Un email de réinitialisation du mot de passe a été envoyé à ' +
-            email,
+          'Un email de réinitialisation du mot de passe a été envoyé à ' + email,
         );
         props.navigation.navigate('Connexion', {username: email});
       }
@@ -91,9 +89,7 @@ export default function ForgottenPassword(props) {
             )}
           </View>
         </View>
-        <TouchableOpacity
-          style={{flex: 1}}
-          onPress={() => props.navigation.goBack()}>
+        <TouchableOpacity style={{flex: 1}} onPress={() => props.navigation.goBack()}>
           <Text style={styles.footerBtn}>Retour</Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>

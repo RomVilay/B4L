@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   TextInput,
   TouchableOpacity,
+  TouchableHighlight,
   Alert,
   ActivityIndicator,
 } from 'react-native';
@@ -383,6 +384,11 @@ export default function Parametres(props) {
                 </Picker>
               </View>
             </View>
+            <TouchableHighlight
+              style={{marginTop: 10, marginBottom: 15}}
+              onPress={() => props.navigation.navigate('Objectifs', {previousRoute: 'Parametres'})}>
+              <Text style={styles.btnObjectifs}>Modifier mes objectifs</Text>
+            </TouchableHighlight>
           </View>
         </View>
         {/* FIN MID */}
@@ -519,6 +525,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignSelf: 'center',
     color: 'white',
+  },
+  btnObjectifs: {
+    width: '120%',
+    fontSize: 30,
+    color: '#FFFF',
+    fontFamily: 'TallFilms',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 5,
+    borderColor: '#5FCDFA',
+    backgroundColor: '#284462',
   },
   footer: {
     flexDirection: 'column',

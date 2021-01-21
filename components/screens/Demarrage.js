@@ -4,7 +4,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Context} from '../utils/Store';
 import goTo from '../utils/navFunctions';
 import Logo from '../../assets/logo';
-import {APP_TOKEN} from '@env';
 import {login} from '../../functions/login';
 
 export default function Demarrage(props) {
@@ -12,7 +11,7 @@ export default function Demarrage(props) {
 
   const navigate = async () => {
     // // Pour se connecter et tester directement sur la page voulue
-    // let myLogin = await login({username: 'julooo', password: 'zzz'}, APP_TOKEN);
+    // let myLogin = await login({username: 'julooo', password: 'zzz'});
     // if (myLogin.message) {
     //   Alert.alert('Erreur', `${myLogin.message}`);
     // } else {
@@ -23,16 +22,17 @@ export default function Demarrage(props) {
       let storedUsername = await AsyncStorage.getItem('@bikeforlifeusername');
       let storedPassword = await AsyncStorage.getItem('@bikeforlifepassword');
       if (storedUsername !== null && storedPassword !== null) {
-        let myLogin = await login(
-          {username: storedUsername, password: storedPassword},
-          APP_TOKEN,
-        );
+        let myLogin = await login({username: storedUsername, password: storedPassword});
         if (myLogin.message) {
           Alert.alert('Erreur', `${myLogin.message}`);
           props.navigation.navigate('Connexion');
         } else {
           setState({user: myLogin.user, token: myLogin.token});
-          goTo(props);
+          if (myLogin.user.objectifs && myLogin.user.objectifs.length > 0) {
+            goTo(props);
+          } else {
+            goTo(props, 'Objectifs');
+          }
         }
       } else {
         props.navigation.navigate('Connexion');
@@ -45,11 +45,7 @@ export default function Demarrage(props) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
-        <Image
-          style={styles.fond}
-          source={require('../../assets/fond.png')}
-          resizeMode="cover"
-        />
+        <Image style={styles.fond} source={require('../../assets/fond.png')} resizeMode="cover" />
         <Logo style={styles.logo} />
         <Text style={styles.text} onPress={() => navigate('Connexion')}>
           Start
@@ -80,6 +76,6 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     fontFamily: 'TallFilms',
     position: 'absolute',
-    top: "75%",
+    top: '75%',
   },
 });

@@ -42,19 +42,6 @@ function AccueilNavigator() {
 }
 
 // prettier-ignore
-function HomeModalNavigator() {
-    return (
-        <Stack.Navigator initialRouteName="Home" mode="modal">
-            <Stack.Screen name="Home" component={HomeNavigator} options={{ headerShown: false }} />
-            <Stack.Screen name="NavApp" component={NavApp} options={{ headerShown: false }} />
-            <Stack.Screen name="Classements" component={Classements} options={{ headerShown: false }} />
-            <Stack.Screen name="Parametres" component={Parametres} options={{ headerShown:false }} />
-            <Stack.Screen name="Compteur" component={Compteur} options={{ headerShown: false }} />
-        </Stack.Navigator>
-    )
-}
-
-// prettier-ignore
 function InscriptionNavigator() {
     return (
         <Stack.Navigator initialRouteName="Inscription" mode="modal">
@@ -101,80 +88,32 @@ function NavAppNavigator() {
 
 // prettier-ignore
 function AppNavigator() {
-    return (
-      <NavigationContainer>
-        <StatusBar
-          barStyle="light-content"
-          hidden={false}
-          translucent={true}
-          backgroundColor="transparent"
-          networkActivityIndicatorVisible={true}
-        />
-        <Stack.Navigator initialRouteName="Demarrage">
-          <Stack.Screen
-            name="Demarrage"
-            component={Demarrage}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Connexion"
-            component={ConnexionNavigator}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Home"
-            component={AccueilNavigator}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Parametres"
-            component={Parametres}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Parametres2"
-            component={Parametres2}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="NavApp"
-            component={NavAppNavigator}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Classements"
-            component={ClassementsNavigator}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Termes"
-            component={Termes}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Jumelage"
-            component={Jumelage}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Statistiques"
-            component={Statistiques}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Compteur"
-            component={Compteur}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-              name="ListeDefis"
-              component={ListeDefis}
-              options={{headerShown: false}}
-          />
-            <Stack.Screen name="Objectifs" component={Objectifs} options={{ headerShown: false }} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
+  return (
+    <NavigationContainer>
+      <StatusBar
+        barStyle="light-content"
+        hidden={false}
+        translucent={true}
+        backgroundColor="transparent"
+        networkActivityIndicatorVisible={true}
+      />
+      <Stack.Navigator initialRouteName="Demarrage">
+        <Stack.Screen name="Demarrage" component={Demarrage} options={{headerShown: false}} />
+        <Stack.Screen name="Connexion" component={ConnexionNavigator} options={{headerShown: false}} />
+        <Stack.Screen name="Home" component={AccueilNavigator} options={{headerShown: false}} />
+        <Stack.Screen name="Parametres" component={Parametres} options={{headerShown: false}} />
+        <Stack.Screen name="Parametres2" component={Parametres2} options={{headerShown: false}} />
+        <Stack.Screen name="NavApp" component={NavAppNavigator} options={{headerShown: false}} />
+        <Stack.Screen name="Classements" component={ClassementsNavigator} options={{headerShown: false}} />
+        <Stack.Screen name="Termes" component={Termes} options={{headerShown: false}} />
+        <Stack.Screen name="Jumelage" component={Jumelage} options={{headerShown: false}} />
+        <Stack.Screen name="Statistiques" component={Statistiques} options={{headerShown: false}} />
+        <Stack.Screen name="Compteur" component={Compteur} options={{headerShown: false}} />
+        <Stack.Screen name="ListeDefis" component={ListeDefis} options={{headerShown: false}} />
+        <Stack.Screen name="Objectifs" component={Objectifs} options={{headerShown: false}} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
 
 export default AppNavigator;

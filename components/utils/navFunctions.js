@@ -7,12 +7,13 @@ import {useEffect} from 'react';
  * (si pas de paramètre page, navigue vers Home par défaut)
  * @param {*} props
  * @param {String} page [Optionnel], le nom de la page où naviguer
+ * @param {String} startPage [Optionnel], le nom de la page de base (celle sur laquelle on atterit en faisant le btn back)
  */
-export default function goTo(props, page = 'Home') {
+export default function goTo(props, page = 'Home', startPage = 'Demarrage') {
   props.navigation.dispatch(
     CommonActions.reset({
-      index: 0,
-      routes: [{name: page}],
+      index: 1,
+      routes: [{name: startPage}, {name: page}],
     }),
   );
 }

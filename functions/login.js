@@ -1,8 +1,6 @@
-import {
-  BASE_URL,
-  TIMEOUTDELAY_LOGIN as serverTimeout,
-} from '../components/utils/constants';
+import {BASE_URL, TIMEOUTDELAY_LOGIN as serverTimeout} from '../components/utils/constants';
 import {fetchWithTimeout} from './fetchWithTimeout';
+import {APP_TOKEN} from '@env';
 
 /**
  * Apppelle la route /login/register pour envoyer un mail de confirmation au nouvel user
@@ -10,7 +8,7 @@ import {fetchWithTimeout} from './fetchWithTimeout';
  * @param {String} appToken La clé d'API
  * @returns Un message indiquant que l'email a été envoyé | Un message d'erreur si les champs sont invalides
  */
-async function register(data, appToken) {
+async function register(data, appToken = APP_TOKEN) {
   let post = await fetchWithTimeout(
     `${BASE_URL}/login/register`,
     {
@@ -29,7 +27,7 @@ async function register(data, appToken) {
  * @param {String} appToken La clé d'API
  * @returns le token d'authentification | Un message d'erreur si mauvais identifiants
  */
-async function login(data, appToken) {
+async function login(data, appToken = APP_TOKEN) {
   let body;
   if (data.username) {
     body = {username: data.username, password: data.password};
@@ -54,7 +52,7 @@ async function login(data, appToken) {
  * @param {String} appToken La clé d'API
  * @returns Un message indiquant que le mail a bien été envoyé | Un message d'erreur si l'e-mail n'existe pas
  */
-async function forgottenPassword(data, appToken) {
+async function forgottenPassword(data, appToken = APP_TOKEN) {
   let post = await fetchWithTimeout(
     `${BASE_URL}/login/forgottenPassword`,
     {

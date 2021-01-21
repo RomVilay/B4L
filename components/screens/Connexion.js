@@ -1,19 +1,9 @@
 import React, {useState, useContext} from 'react';
-import {
-  Image,
-  Text,
-  TextInput,
-  View,
-  StyleSheet,
-  SafeAreaView,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
+import {Image, Text, TextInput, View, StyleSheet, SafeAreaView, Alert, ActivityIndicator} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {regexUsername, regexEmail, regexPassword} from '../utils/constants';
-import {APP_TOKEN} from '@env';
 import {Context} from '../utils/Store';
 import goTo from '../utils/navFunctions';
 import {login} from '../../functions/login';
@@ -21,8 +11,8 @@ import {login} from '../../functions/login';
 import LogoMed from '../../assets/logoMed';
 
 export default function Connexion(props) {
-  const [username, setUsername] = useState('toto24');
-  const [password, setPassword] = useState('toto');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [hasSignInInfos, setHasSignInInfos] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [state, setState] = useContext(Context);
@@ -57,35 +47,34 @@ export default function Connexion(props) {
     if (!isConnected) {
       Alert.alert('Erreur', 'Vérifiez votre connexion Internet et réessayez');
     } else {
-      const myLogin = await login({username, password}, APP_TOKEN);
+      const myLogin = await login({username, password});
       // console.log('mylogin : ', myLogin);
       if (myLogin.message) {
         Alert.alert('Erreur', `${myLogin.message}`);
         setIsLoading(false);
       } else {
         try {
-          await AsyncStorage.setItem(
-            '@bikeforlifeusername',
-            myLogin.user.username,
-          );
+          await AsyncStorage.setItem('@bikeforlifeusername', myLogin.user.username);
           await AsyncStorage.setItem('@bikeforlifepassword', password);
         } catch (e) {
           Alert.alert('Erreur', `${e}`);
         }
         await setState({user: myLogin.user, token: myLogin.token});
         setIsLoading(false);
-        goTo(props);
+
+        // Si nouveau compte, on renvoie vers la page des objectifs
+        if (myLogin.user.objectifs && myLogin.user.objectifs.length > 0) {
+          goTo(props);
+        } else {
+          goTo(props, 'Objectifs');
+        }
       }
     }
   };
 
   return (
     <SafeAreaView style={styles.main}>
-      <Image
-        style={styles.fond}
-        source={require('../../assets/fond.png')}
-        resizeMode="cover"
-      />
+      <Image style={styles.fond} source={require('../../assets/fond.png')} resizeMode="cover" />
       <LogoMed style={styles.logo} />
       <View>
         <View style={styles.top}>
@@ -117,16 +106,9 @@ export default function Connexion(props) {
               position: 'absolute',
             }}>
             {isLoading ? (
-              <ActivityIndicator
-                size="large"
-                color="#5FCDFA"
-                style={{top: '10%'}}
-              />
+              <ActivityIndicator size="large" color="#5FCDFA" style={{top: '10%'}} />
             ) : (
-              <Text
-                onPress={() => checkFields()}
-                backgroundColor="transparent"
-                style={styles.connexionText}>
+              <Text onPress={() => checkFields()} backgroundColor="transparent" style={styles.connexionText}>
                 Connexion
               </Text>
             )}
