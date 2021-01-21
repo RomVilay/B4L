@@ -1,4 +1,6 @@
 import {CommonActions} from '@react-navigation/native';
+import {getUser} from '../../functions/user';
+import {useEffect} from 'react';
 
 /**
  * Réinitialise la route à la page souhaitée (suppression des routes antérieures)
@@ -14,3 +16,16 @@ export default function goTo(props, page = 'Home') {
     }),
   );
 }
+
+export const refreshState = async (state, setState) => {
+  useEffect(() => {
+    (async () => {
+      let user = await getUser(state.user.username, state.token);
+      if (user.message) {
+        // Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
+      } else {
+        await setState({user, token: state.token});
+      }
+    })();
+  }, []);
+};

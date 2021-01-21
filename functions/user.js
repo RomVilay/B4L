@@ -1,8 +1,8 @@
-import {URL, PORT} from '@env';
+import {
+  BASE_URL,
+  TIMEOUTDELAY_USER as serverTimeout,
+} from '../components/utils/constants';
 import {fetchWithTimeout} from './fetchWithTimeout';
-
-const BASE_URL = `${URL}:${PORT}`;
-const serverTimeout = 5000;
 
 /**
  * Appelle la route /users/:username et retourne l'utilisateur

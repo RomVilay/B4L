@@ -8,13 +8,12 @@ import {
   Image,
   Text,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 // Imports Assets
 import LogoMin from '../../assets/logoMin';
 import Cercle from '../../assets/Accueil/cercle';
 import NavApp from '../navigation/NavApp';
-import {getUser} from '../../functions/user';
+import {refreshState} from '../utils/navFunctions';
 var avatar = require('../../assets/avatar.png');
 import Avatar from "./Avatar";
 
@@ -25,16 +24,7 @@ export default function Accueil(props) {
   // const [km, setKm] = useState('234.0')
   // const [watts,setWatts] = useState('4000')
 
-  const refreshState = async () => {
-    let user = await getUser(state.user.username, state.token);
-    if (user.message) {
-      // Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
-    } else {
-      await setState({user, token: state.token});
-    }
-  };
-  refreshState();
-
+  refreshState(state, setState);
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />

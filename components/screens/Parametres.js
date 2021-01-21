@@ -12,44 +12,40 @@ import {
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {Picker} from '@react-native-picker/picker';
 
 import {Context} from '../utils/Store';
+import {regexDateNaissance, regexTaille, regexPoids} from '../utils/constants';
 import goTo from '../utils/navFunctions';
 import {editUser} from '../../functions/user';
-import LogoMin from '../../assets/logoMin';
+
 import Fleche from '../../assets/fleche';
 import avatar from '../../assets/avatar.png';
 import NavApp from '../navigation/NavApp';
-import Avatar from "./Avatar";
+import Avatar from './Avatar';
+import LogoMin from'../../assets/logoMin';
 
 export default function Parametres(props) {
   const [state, setState] = useContext(Context);
-  const [parties] = useState([
-    'Visage',
-    'Coupe',
-    'Teint',
-    'Tenue',
-    'Casque',
-  ]);
+  const [parties] = useState(['Visage', 'Coupe', 'Teint', 'Tenue', 'Casque']);
+  const unitsTaille = ['cm', 'ft', 'inch', 'yd'];
+  const unitsPoids = ['kg', 'lb'];
+  const unitsDistance = ['m', 'ft', 'yd', 'mi'];
+
   const [selection, setSelection] = useState('Visage');
   const [isLoading, setIsLoading] = useState(false);
-  const [tempDateNaissance, setTempDateNaissance] = useState(
-    state.user.dateNaissance || '',
-  );
+  const [tempDateNaissance, setTempDateNaissance] = useState(state.user.dateNaissance || '');
   const [tempTaille, setTempTaille] = useState(state.user.taille || '');
   const [tempPoids, setTempPoids] = useState(state.user.poids || '');
-  const [avatar, setAvatar] = useState(state.user.avatar ||"03940")
+  const [avatar, setAvatar] = useState(state.user.avatar || '03940');
+  const [tempUnitTaille, setTempUnitTaille] = useState(state.user.unitTaille || 'cm');
+  const [tempUnitPoids, setTempUnitPoids] = useState(state.user.unitPoids || 'kg');
+  const [tempUnitDistance, setTempUnitDistance] = useState(state.user.unitDistance || 'm');
 
   const checkFields = () => {
-    if (
-      !tempDateNaissance.match(/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/) &&
-      tempDateNaissance.length > 0
-    ) {
-      Alert.alert('Erreur', `Veuillez saisir un date de naissance valide`);
-    } else if (
-      !tempTaille.match(/^[0-9]{1,4}\,{0,1}[0-9]{0,2}$/) &&
-      tempTaille.length > 0
-    ) {
+    if (!tempDateNaissance.match(regexDateNaissance) && tempDateNaissance.length > 0) {
+      Alert.alert('Erreur', `Veuillez saisir un date de naissance valide du type AAAA-MM-JJ`);
+    } else if (!tempTaille.match(regexTaille) && tempTaille.length > 0) {
       Alert.alert('Erreur', `Veuillez saisir une taille valide`);
     } else if (
       !tempPoids.match(/^[0-9]{1,4}\,{0,1}[0-9]{0,2}$/) &&
@@ -106,33 +102,54 @@ export default function Parametres(props) {
           <View style={styles.midTop}>
             <TouchableOpacity
               onPress={() => {
-                switch (selection){
-                  case "Visage":
-                    let s = ""
-                    avatar.charAt(4) > 0 ?
-                        s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+(parseInt(avatar.charAt(4))-1)
-                        :  s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+"3"
-                    setAvatar(s)
+                switch (selection) {
+                  case 'Visage':
+                    let s = '';
+                    avatar.charAt(4) > 0
+                      ? (s =
+                          avatar.charAt(0) +
+                          avatar.charAt(1) +
+                          avatar.charAt(2) +
+                          avatar.charAt(3) +
+                          (parseInt(avatar.charAt(4)) - 1))
+                      : (s = avatar.charAt(0) + avatar.charAt(1) + avatar.charAt(2) + avatar.charAt(3) + '3');
+                    setAvatar(s);
                     break;
-                  case "Coupe":
-                     s = ""
-                    avatar.charAt(3) > 0 ?
-                        s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+(parseInt(avatar.charAt(3))-1)+avatar.charAt(4)
-                        :  s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+"8"+avatar.charAt(4)
-                    setAvatar(s)
+                  case 'Coupe':
+                    s = '';
+                    avatar.charAt(3) > 0
+                      ? (s =
+                          avatar.charAt(0) +
+                          avatar.charAt(1) +
+                          avatar.charAt(2) +
+                          (parseInt(avatar.charAt(3)) - 1) +
+                          avatar.charAt(4))
+                      : (s = avatar.charAt(0) + avatar.charAt(1) + avatar.charAt(2) + '8' + avatar.charAt(4));
+                    setAvatar(s);
                     break;
-                  case "Teint":
-                     s = ""
-                   avatar.charAt(0) > 0 ?
-                       s = (parseInt(avatar.charAt(0))-1)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
-                       :  s = "2"+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
-                      setAvatar(s)
-                        break;
+                  case 'Teint':
+                    s = '';
+                    avatar.charAt(0) > 0
+                      ? (s =
+                          parseInt(avatar.charAt(0)) -
+                          1 +
+                          avatar.charAt(1) +
+                          avatar.charAt(2) +
+                          avatar.charAt(3) +
+                          avatar.charAt(4))
+                      : (s = '2' + avatar.charAt(1) + avatar.charAt(2) + avatar.charAt(3) + avatar.charAt(4));
+                    setAvatar(s);
+                    break;
                   case 'Casque':
-                    avatar.charAt(2) > 0 ?
-                        s = avatar.charAt(0)+avatar.charAt(1)+(parseInt(avatar.charAt(2))-1)+avatar.charAt(3)+avatar.charAt(4) :
-                        s = avatar.charAt(0)+avatar.charAt(1)+"2"+avatar.charAt(3)+avatar.charAt(4)
-                    setAvatar(s)
+                    avatar.charAt(2) > 0
+                      ? (s =
+                          avatar.charAt(0) +
+                          avatar.charAt(1) +
+                          (parseInt(avatar.charAt(2)) - 1) +
+                          avatar.charAt(3) +
+                          avatar.charAt(4))
+                      : (s = avatar.charAt(0) + avatar.charAt(1) + '2' + avatar.charAt(3) + avatar.charAt(4));
+                    setAvatar(s);
                     break;
                   case   'Tenue':
                     avatar.charAt(1) > 0 ?
@@ -141,30 +158,51 @@ export default function Parametres(props) {
                     setAvatar(s)
                       s=""
                       break;
+                  case 'Tenue':
+                    avatar.charAt(1) > 0
+                      ? (s =
+                          avatar.charAt(0) +
+                          (parseInt(avatar.charAt(1)) - 1) +
+                          avatar.charAt(2) +
+                          avatar.charAt(3) +
+                          avatar.charAt(4))
+                      : (s = avatar.charAt(0) + '7' + avatar.charAt(2) + avatar.charAt(3) + avatar.charAt(4));
+                    setAvatar(s);
+                    s = '';
+                    break;
                   default:
-                        break;
+                    break;
                 }
               }}>
               <Fleche />
             </TouchableOpacity>
-            <Avatar avatar={avatar}/>
+            <Avatar avatar={avatar} />
             {/*<Image source={avatar} flèche drouate />*/}
             <TouchableOpacity
               onPress={() => {
-                switch (selection){
-                  case "Visage":
-                    let s = ""
-                    avatar.charAt(4) < 3?
-                        s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+(parseInt(avatar.charAt(4))+1)
-                        :  s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+avatar.charAt(3)+"0"
-                    setAvatar(s)
+                switch (selection) {
+                  case 'Visage':
+                    let s = '';
+                    avatar.charAt(4) < 3
+                      ? (s =
+                          avatar.charAt(0) +
+                          avatar.charAt(1) +
+                          avatar.charAt(2) +
+                          avatar.charAt(3) +
+                          (parseInt(avatar.charAt(4)) + 1))
+                      : (s = avatar.charAt(0) + avatar.charAt(1) + avatar.charAt(2) + avatar.charAt(3) + '0');
+                    setAvatar(s);
                     break;
-                  case "Coupe":
-                    let c = parseInt(avatar.charAt(3))+1
-                    avatar.charAt(3) < 8 ?
-                        s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+(parseInt(avatar.charAt(3))+1)+avatar.charAt(4)
-                        :  s = avatar.charAt(0)+avatar.charAt(1)+avatar.charAt(2)+"0"+avatar.charAt(4)
-                    setAvatar(s)
+                  case 'Coupe':
+                    avatar.charAt(3) < 8
+                      ? (s =
+                          avatar.charAt(0) +
+                          avatar.charAt(1) +
+                          avatar.charAt(2) +
+                          (parseInt(avatar.charAt(3)) + 1) +
+                          avatar.charAt(4))
+                      : (s = avatar.charAt(0) + avatar.charAt(1) + avatar.charAt(2) + '0' + avatar.charAt(4));
+                    setAvatar(s);
                     break;
                   case "Teint":
                     s = ""
@@ -174,23 +212,32 @@ export default function Parametres(props) {
                     setAvatar(s)
                     break;
                   case 'Casque':
-                    avatar.charAt(2) < 7 ?  s = avatar.charAt(0)+avatar.charAt(1)+(parseInt(avatar.charAt(2))+1)+avatar.charAt(3)+avatar.charAt(4)
-                        : s = avatar.charAt(0)+avatar.charAt(1)+"0"+avatar.charAt(3)+avatar.charAt(4)
-                    setAvatar(s)
+                    avatar.charAt(2) < 7
+                      ? (s =
+                          avatar.charAt(0) +
+                          avatar.charAt(1) +
+                          (parseInt(avatar.charAt(2)) + 1) +
+                          avatar.charAt(3) +
+                          avatar.charAt(4))
+                      : (s = avatar.charAt(0) + avatar.charAt(1) + '0' + avatar.charAt(3) + avatar.charAt(4));
+                    setAvatar(s);
                     break;
-                  case   'Tenue':
-                    avatar.charAt(1) < 7 ?
-                        s = avatar.charAt(0)+(parseInt(avatar.charAt(1))+1)+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
-                        : s = avatar.charAt(0)+"0"+avatar.charAt(2)+avatar.charAt(3)+avatar.charAt(4)
-                    setAvatar(s)
-                    s=""
+                  case 'Tenue':
+                    avatar.charAt(1) < 7
+                      ? (s =
+                          avatar.charAt(0) +
+                          (parseInt(avatar.charAt(1)) + 1) +
+                          avatar.charAt(2) +
+                          avatar.charAt(3) +
+                          avatar.charAt(4))
+                      : (s = avatar.charAt(0) + '0' + avatar.charAt(2) + avatar.charAt(3) + avatar.charAt(4));
+                    setAvatar(s);
+                    s = '';
                     break;
                   default:
                     break;
-              }
-              }
-
-              }>
+                }
+              }}>
               <Fleche
                 style={{
                   transform: [{rotate: '180deg'}],

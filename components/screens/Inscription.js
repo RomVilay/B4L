@@ -1,6 +1,4 @@
 import React, {useState, useContext} from 'react';
-import {Context} from '../utils/Store';
-
 import {
   Image,
   Text,
@@ -11,11 +9,14 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-
-import {register} from '../../functions/login';
-import {APP_TOKEN} from '@env';
-import NetInfo from '@react-native-community/netinfo';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import NetInfo from '@react-native-community/netinfo';
+
+import {APP_TOKEN} from '@env';
+import {regexUsername, regexEmail, regexPassword} from '../utils/constants';
+import {Context} from '../utils/Store';
+import {register} from '../../functions/login';
+
 import LogoMed from '../../assets/logoMed';
 
 export default function Inscription(props) {
@@ -27,22 +28,14 @@ export default function Inscription(props) {
   const [state, setState] = useContext(Context);
 
   const checkFields = () => {
-    if (!username.match(/^([a-zA-Z0-9]){5,}$/) || username == 'undefined') {
+    if (!username.match(regexUsername) || username == 'undefined') {
       Alert.alert(
         'Erreur',
         `Le nom d'utilisateur doit contenir au moins 5 caractères`,
       );
-    } else if (
-      !mail.match(
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-      ) ||
-      mail == 'undefined'
-    ) {
+    } else if (!mail.match(regexEmail) || mail == 'undefined') {
       Alert.alert('Erreur', `L'adresse e-mail n'est pas valide`);
-    } else if (
-      !password.match(/^([a-zA-Z0-9]){3,}$/) ||
-      password == 'undefined'
-    ) {
+    } else if (!password.match(regexPassword) || password == 'undefined') {
       Alert.alert(
         'Erreur',
         `Le mot de passe doit contenir au moins 3 caractères`,
