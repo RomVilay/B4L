@@ -72,29 +72,36 @@ export default function Objectifs(props) {
           <View style={styles.midItem}>
             {defis.map(defi => {
               return (
-                <TouchableOpacity
-                  key={defi.id}
-                  style={styles.listItem}
-                  onPress={() => {
-                    setStatus(previousState => {
-                      const newArray = [...previousState];
-                      newArray[defi.id] = !status[defi.id];
-                      return newArray;
-                    });
-                  }}>
-                  <CheckBox
-                    onValueChange={() =>
-                      setStatus(previousState => {
-                        const newArray = [...previousState];
-                        newArray[defi.id] = !status[defi.id];
-                        return newArray;
-                      })
-                    }
-                    value={status[defi.id]}
-                    boxType={'square'}
-                  />
-                  <Text style={styles.whiteText}>{defi.nom}</Text>
-                </TouchableOpacity>
+                  <View style={styles.listItem}  key={defi.id}>
+                    <CheckBox
+                        onValueChange={() =>
+                            setStatus(previousState => {
+                              const newArray = [...previousState];
+                              newArray[defi.id] = !status[defi.id];
+                              console.log(status+'call 1')
+                              return newArray;
+                            })
+                        }
+                        value={status[defi.id]}
+                        boxType={'square'}
+                        onFillColor={"white"}
+                        onCheckColor={"#1D4465"}
+                        onTintColor={"white"}
+                        tintColor={"grey"}
+                        tintColors={{true:"white"}}
+                    />
+                    <TouchableOpacity
+                        onPress={() => {
+                          setStatus(previousState => {
+                            const newArray = [...previousState];
+                            newArray[defi.id] = !status[defi.id];
+                            console.log('call 2')
+                            return newArray;
+                          });
+                        }}>
+                      <Text style={[styles.whiteText,{marginLeft:'5%'}]}>{defi.nom}</Text>
+                    </TouchableOpacity>
+                  </View>
               );
             })}
           </View>
