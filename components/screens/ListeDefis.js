@@ -37,7 +37,9 @@ export default function  ListeDefis(props) {
             await  setListeDefs(list)//setState({user, token: state.token});
         }
     };
-    getList()
+    React.useEffect(() =>{
+        getList();
+    },[])
        // console.log(listeDefis(state.token))
     const render_item = ({ item }) =>{
         return (
