@@ -411,7 +411,7 @@ export default function Parametres(props) {
                   dropdownIconColor={'#5FCDFA'}
                   mode={'dropdown'}
                   onValueChange={itemValue => {setTempUnitDistance(itemValue)
-                    console.log(itemValue)}}>
+                   }}>
                   {unitsDistance.map(item => {
                     return <Picker.Item label={item} value={item} key={item} />;
                   })}
