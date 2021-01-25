@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   Alert,
-  ActivityIndicator,
+  Modal,
+  ActivityIndicator, Platform,
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -26,6 +27,8 @@ import Fleche from '../../assets/fleche';
 import LogoMin from '../../assets/logoMin';
 import NavApp from '../navigation/NavApp';
 import Avatar from './Avatar';
+import Icon from "react-native-vector-icons/FontAwesome5";
+import SelectIOS from "./SelectIos";
 
 export default function Parametres(props) {
   const [state, setState] = useContext(Context);
@@ -56,6 +59,19 @@ export default function Parametres(props) {
       updateUser();
     }
   };
+
+  const picker =  <Picker
+      selectedValue={tempUnitPoids}
+      style={[styles.input, {width: '100%'}]}
+      itemStyle={[styles.pickerItem,{width:115, left:-5}]}
+      dropdownIconColor={'#5FCDFA'}
+      prompt="pick something"
+      mode={'dropdown'}
+      onValueChange={itemValue => setTempUnitPoids(itemValue)}>
+    {unitsPoids.map(item => {
+      return <Picker.Item label={item} value={item} key={item} />;
+    })}
+  </Picker>
 
   const updateUser = async () => {
     setIsLoading(true);
@@ -321,6 +337,7 @@ export default function Parametres(props) {
                   <Picker
                     selectedValue={tempUnitTaille}
                     style={[styles.input, {width: '100%'}]}
+                    itemStyle={[styles.pickerItem,{width:115, left:-5}]}
                     dropdownIconColor={'#5FCDFA'}
                     mode={'dropdown'}
                     onValueChange={itemValue => setTempUnitTaille(itemValue)}>
@@ -355,16 +372,15 @@ export default function Parametres(props) {
                 }}>
                 <Text style={styles.inputTitle}>{'Unité de poids'}</Text>
                 <View style={[styles.inputContainer, {width: '60%'}]}>
-                  <Picker
-                    selectedValue={tempUnitPoids}
-                    style={[styles.input, {width: '100%'}]}
-                    dropdownIconColor={'#5FCDFA'}
-                    mode={'dropdown'}
-                    onValueChange={itemValue => setTempUnitPoids(itemValue)}>
-                    {unitsPoids.map(item => {
-                      return <Picker.Item label={item} value={item} key={item} />;
-                    })}
-                  </Picker>
+                  {Platform.select({
+                    ios: () => <Icon name="chevron-up" color="white"  size={10} style={{position:"absolute",left:'50%'}}/>,
+                    android: () => {}
+                  })() }
+                  {picker}
+                  {Platform.select({
+                    ios: () => <Icon name="chevron-down" color="white"  size={10} style={{position:"absolute",left:'40%', bottom:-3}}/>,
+                    android: () => {}
+                  })() }
                 </View>
               </View>
             </View>
@@ -375,13 +391,15 @@ export default function Parametres(props) {
                 width: '75%',
                 flexDirection: 'row',
               }}>
-              <View style={[styles.inputContainer, {width: '60%'}]}>
+              <View style={[styles.inputContainer, {width: '60%', borderWidth:3}]}>
                 <Picker
                   selectedValue={tempUnitDistance}
-                  style={[styles.input, {width: '100%'}]}
+                  style={styles.selectableInput}
+                  itemStyle={styles.pickerItem}
                   dropdownIconColor={'#5FCDFA'}
                   mode={'dropdown'}
-                  onValueChange={itemValue => setTempUnitDistance(itemValue)}>
+                  onValueChange={itemValue => {setTempUnitDistance(itemValue)
+                    console.log(itemValue)}}>
                   {unitsDistance.map(item => {
                     return <Picker.Item label={item} value={item} key={item} />;
                   })}
@@ -530,6 +548,29 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignSelf: 'center',
     color: 'white',
+  },
+  selectableInput: {
+    height: 45,
+    width: 200,
+    fontSize: 20,
+    borderRadius: 10,
+    textAlign: 'center',
+    alignSelf: 'center',
+    color: 'white',
+    ...Platform.select({
+      ios:{
+        height:50,
+        color:"white"
+      }})
+  },
+  pickerItem:{
+    ...Platform.select({
+      ios:{
+        width:200,
+        height:50,
+        color:"white"
+      }
+    })
   },
   btnObjectifs: {
     width: '120%',
