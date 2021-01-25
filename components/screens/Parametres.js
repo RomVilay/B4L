@@ -458,19 +458,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 100,
     width: '80%',
-    paddingBottom: '3%',
     marginBottom: '5%',
   },
   midBot: {
     flexDirection: 'column',
     alignItems: 'center',
     zIndex: 100,
+    borderWidth:3
   },
   inlineItems: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    height:30
   },
   separator: {
     width: 5,
