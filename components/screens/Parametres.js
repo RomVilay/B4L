@@ -334,6 +334,10 @@ export default function Parametres(props) {
                 }}>
                 <Text style={styles.inputTitle}>{'Unité de taille'}</Text>
                 <View style={[styles.inputContainer, {width: '60%'}]}>
+                  {Platform.select({
+                    ios: () => <Icon name="chevron-up" color="white"  size={20} style={{position:"absolute",left:'75%', top:'15%'}}/>,
+                    android: () => {}
+                  })() }
                   <Picker
                     selectedValue={tempUnitTaille}
                     style={[styles.input, {width: '100%'}]}
@@ -345,6 +349,10 @@ export default function Parametres(props) {
                       return <Picker.Item label={item} value={item} key={item} />;
                     })}
                   </Picker>
+                  {Platform.select({
+                    ios: () => <Icon name="chevron-down" color="white"  size={20} style={{position:"absolute",left:'75%', bottom:'5%'}}/>,
+                    android: () => {}
+                  })() }
                 </View>
               </View>
             </View>
@@ -373,12 +381,12 @@ export default function Parametres(props) {
                 <Text style={styles.inputTitle}>{'Unité de poids'}</Text>
                 <View style={[styles.inputContainer, {width: '60%'}]}>
                   {Platform.select({
-                    ios: () => <Icon name="chevron-up" color="white"  size={10} style={{position:"absolute",left:'50%'}}/>,
+                    ios: () => <Icon name="chevron-up" color="white"  size={20} style={{position:"absolute",left:'75%', top:'15%'}}/>,
                     android: () => {}
                   })() }
                   {picker}
                   {Platform.select({
-                    ios: () => <Icon name="chevron-down" color="white"  size={10} style={{position:"absolute",left:'40%', bottom:-3}}/>,
+                    ios: () => <Icon name="chevron-down" color="white"  size={20} style={{position:"absolute",left:'75%', bottom:'5%'}}/>,
                     android: () => {}
                   })() }
                 </View>
@@ -392,6 +400,10 @@ export default function Parametres(props) {
                 flexDirection: 'row',
               }}>
               <View style={[styles.inputContainer, {width: '60%', borderWidth:3}]}>
+                {Platform.select({
+                  ios: () => <Icon name="chevron-up" color="white"  size={20} style={{position:"absolute",left:'75%', top:'15%'}}/>,
+                  android: () => {}
+                })() }
                 <Picker
                   selectedValue={tempUnitDistance}
                   style={styles.selectableInput}
@@ -404,6 +416,10 @@ export default function Parametres(props) {
                     return <Picker.Item label={item} value={item} key={item} />;
                   })}
                 </Picker>
+                {Platform.select({
+                  ios: () => <Icon name="chevron-down" color="white"  size={20} style={{position:"absolute",left:'75%', bottom:'5%'}}/>,
+                  android: () => {}
+                })() }
               </View>
             </View>
             <TouchableHighlight
@@ -481,8 +497,7 @@ const styles = StyleSheet.create({
   midBot: {
     flexDirection: 'column',
     alignItems: 'center',
-    zIndex: 100,
-    borderWidth:3
+    zIndex: 100
   },
   inlineItems: {
     flex: 1,
@@ -589,7 +604,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: 100,
     width: '100%',
-    paddingBottom: '5%',
+    marginBottom:40
   },
   fond: {
     width: '100%',
