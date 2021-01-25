@@ -1,18 +1,8 @@
-import React, {useState, useContext} from 'react';
-import {
-  Image,
-  Text,
-  TextInput,
-  View,
-  StyleSheet,
-  SafeAreaView,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
+import React, {useState} from 'react';
+import {Image, Text, TextInput, View, StyleSheet, SafeAreaView, Alert, ActivityIndicator} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import NetInfo from '@react-native-community/netinfo';
 
-import {APP_TOKEN} from '@env';
 import {regexUsername, regexEmail, regexPassword} from '../utils/constants';
 import {Context} from '../utils/Store';
 import {register} from '../../functions/login';
@@ -25,25 +15,16 @@ export default function Inscription(props) {
   const [password, setPassword] = useState('zzz');
   const [password2, setPassword2] = useState('zzz');
   const [isLoading, setIsLoading] = useState(false);
-  const [state, setState] = useContext(Context);
 
   const checkFields = () => {
     if (!username.match(regexUsername) || username == 'undefined') {
-      Alert.alert(
-        'Erreur',
-        `Le nom d'utilisateur doit contenir au moins 5 caractères`,
-      );
+      Alert.alert('Erreur', `Le nom d'utilisateur doit contenir au moins 5 caractères`);
     } else if (!mail.match(regexEmail) || mail == 'undefined') {
       Alert.alert('Erreur', `L'adresse e-mail n'est pas valide`);
     } else if (!password.match(regexPassword) || password == 'undefined') {
-      Alert.alert(
-        'Erreur',
-        `Le mot de passe doit contenir au moins 3 caractères`,
-      );
+      Alert.alert('Erreur', `Le mot de passe doit contenir au moins 3 caractères`);
     } else if (password2 !== password) {
-      Alert.alert('inscription', 'veuillez saisir un mot de passe identique', [
-        {text: 'fermer'},
-      ]);
+      Alert.alert('inscription', 'veuillez saisir un mot de passe identique', [{text: 'fermer'}]);
     } else {
       sendConfirmMail();
     }
@@ -58,18 +39,15 @@ export default function Inscription(props) {
       Alert.alert('Erreur', 'Vérifiez votre connexion Internet et réessayez');
       setIsLoading(false);
     } else {
-      const myRegister = await register({username, password, mail}, APP_TOKEN);
+      const myRegister = await register({username, password, mail});
       // console.log('myRegister : ', myRegister);
       if (myRegister.message) {
         setIsLoading(false);
         Alert.alert('Erreur', `${myRegister.message}`);
       } else {
         setIsLoading(false);
-        Alert.alert(
-          'Email de confirmation envoyé',
-          `Un email de confirmation a été envoyé à ${mail}`,
-        );
-        props.navigation.navigate('Objectifs', {
+        Alert.alert('Email de confirmation envoyé', `Un email de confirmation a été envoyé à ${mail}`);
+        props.navigation.navigate('Connexion', {
           username: username,
           password: password,
         });
@@ -128,11 +106,7 @@ export default function Inscription(props) {
           </View>
           <View style={styles.loading}>
             {isLoading ? (
-              <ActivityIndicator
-                size="large"
-                color="#5FCDFA"
-                style={{bottom: '30%'}}
-              />
+              <ActivityIndicator size="large" color="#5FCDFA" style={{bottom: '30%'}} />
             ) : (
               <Text
                 onPress={() => checkFields()}
