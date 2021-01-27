@@ -22,6 +22,7 @@ import {Stopwatch} from 'react-native-stopwatch-timer';
 import SegmentedRoundDisplay from 'react-native-segmented-round-display/src';
 import Svg from 'react-native-svg';
 import AfficheurCompteur from './afficheurConpteur';
+import navigation from "../../assets/navigation";
 export default class Compteur extends React.Component {
   constructor(props) {
     super(props);
@@ -46,6 +47,7 @@ export default class Compteur extends React.Component {
       outputRange: ['0deg', '10deg'],
       seg: 0,
       up: true,
+      defis: this.props.route.params.defis
     };
     this.tab = ['rpm', 'kmh', 'kcals'];
     this.toggleStopwatch = this.toggleStopwatch.bind(this);
@@ -289,6 +291,7 @@ export default class Compteur extends React.Component {
             }}>
             <Icon name="power-settings-new" size={40} color="white" />
           </TouchableOpacity>
+          <Text>{this.state.defis[0].nomDefi}</Text>
         </View>
         <View style={styles.middle}>
           <ImageBackground

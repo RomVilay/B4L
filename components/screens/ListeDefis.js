@@ -30,7 +30,7 @@ export default function  ListeDefis(props) {
         ])
     const [defisSelect,setDefiSelect] = useState([])
     const getList = async () => {
-        let list = await listeDefis( state.token);
+        let list = await listeDefis(state.token,state.user.objectifs);
         if (list.message) {
             // Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
         } else {
@@ -40,18 +40,15 @@ export default function  ListeDefis(props) {
     React.useEffect(() =>{
         getList();
     },[])
-       // console.log(listeDefis(state.token))
     const render_item = ({ item }) =>{
         return (
             <Item
                 key={item._id}
                 item={item}
                 onPress={() => {
-                    item.statut = !item.statut
-                    let i = defisSelect
-                    item.statut ? i.push(item) : i.splice(i.indexOf(item),1)
-                    setDefiSelect(i)
+                    setDefiSelect([...defisSelect,item])
                 }}
+                style={{ }}
             />
         );
     }
@@ -79,7 +76,12 @@ export default function  ListeDefis(props) {
                         <Fleche style={{transform:[{rotate:'270deg'}]}}/>
                 </View>
                 <View style={styles.footer}>
-                    <TouchableOpacity style={{marginBottom:'10%'}} onPress={()=> props.navigation.navigate("Jumelage")} color={'white'}>
+                    <TouchableOpacity style={{marginBottom:'10%'}} onPress={()=> {
+                       // setState(...state, defisSelect)
+                       // console.log(state)
+                        //console.log(defisSelect)
+                        props.navigation.navigate("Jumelage",{defis:defisSelect})
+                    }} color={'white'}>
                         <Text style={styles.titreBleu}>appuyez pour continuer</Text>
                     </TouchableOpacity>
                     <NavApp  navigation={props.navigation}/>

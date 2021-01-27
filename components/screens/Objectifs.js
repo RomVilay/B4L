@@ -78,7 +78,6 @@ export default function Objectifs(props) {
                             setStatus(previousState => {
                               const newArray = [...previousState];
                               newArray[defi.id] = !status[defi.id];
-                              console.log(status+'call 1')
                               return newArray;
                             })
                         }
@@ -95,7 +94,6 @@ export default function Objectifs(props) {
                           setStatus(previousState => {
                             const newArray = [...previousState];
                             newArray[defi.id] = !status[defi.id];
-                            console.log('call 2')
                             return newArray;
                           });
                         }}>

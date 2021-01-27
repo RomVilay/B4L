@@ -29,8 +29,9 @@ export default class Jumelage extends React.Component {
     state = {
         code: 'qrcode'
     }
+    //fonction en cas de réussite de scan du qrcode
     onSuccess = e => {
-        this.props.navigation.navigate("Compteur")
+        this.props.navigation.navigate("Compteur",{'defis':this.props.route.params.defis})
        /* Linking
             .openURL(e.data)
             .catch(err =>
