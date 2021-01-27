@@ -80,7 +80,7 @@ export default function  ListeDefis(props) {
                        // setState(...state, defisSelect)
                        // console.log(state)
                         //console.log(defisSelect)
-                        props.navigation.navigate("Jumelage",{defis:defisSelect})
+                        props.navigation.navigate("Compteur",{defis:defisSelect})
                     }} color={'white'}>
                         <Text style={styles.titreBleu}>appuyez pour continuer</Text>
                     </TouchableOpacity>

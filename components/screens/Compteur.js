@@ -23,6 +23,7 @@ import SegmentedRoundDisplay from 'react-native-segmented-round-display/src';
 import Svg from 'react-native-svg';
 import AfficheurCompteur from './afficheurConpteur';
 import navigation from "../../assets/navigation";
+import SliderDefis from "./sliderDefis";
 export default class Compteur extends React.Component {
   constructor(props) {
     super(props);
@@ -31,12 +32,12 @@ export default class Compteur extends React.Component {
     this.kcal = new Animated.ValueXY({x: 0, y: 0});
     this.kmh = new Animated.ValueXY({x: 0, y: 0});
     this.state = {
-      kmp: 16.3,
-      kmh: 20,
-      kmc: 234,
+      kmp: 0,
+      kmh: 0,
+      kmc: 10,
       watts: 200,
-      rpm: 15,
-      kcal: 80,
+      rpm: 0,
+      kcal: 0,
       start: true,
       reset: false,
       pause: '',
@@ -99,8 +100,8 @@ export default class Compteur extends React.Component {
   componentDidMount() {
     this._isMounted = true
   this.interval = setInterval(() => {
-    this.StartImageRotateFunction()
-    this.randomRotation()
+ //   this.StartImageRotateFunction()
+  //  this.randomRotation()
   }, 1200); //mise à jour du tableau d'interpolation de la rotation, toutes les 6s
     //this._isMounted && this.StartImageRotateFunction();
     this._isMounted && this.randomRotation();
@@ -291,7 +292,9 @@ export default class Compteur extends React.Component {
             }}>
             <Icon name="power-settings-new" size={40} color="white" />
           </TouchableOpacity>
-          <Text>{this.state.defis[0].nomDefi}</Text>
+          <View style={{flexDirection:"row"}}>
+            <SliderDefis defis={this.state.defis}/>
+          </View>
         </View>
         <View style={styles.middle}>
           <ImageBackground
@@ -549,7 +552,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
   },
-
   fond: {
     position: 'absolute',
     flex: 1,
