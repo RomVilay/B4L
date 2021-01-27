@@ -10,10 +10,15 @@ import {getUser} from "../../functions/user";
 
 /*
 *     */
-const Item = ({ item, onPress, style }) => (
-  <TouchableOpacity onPress={onPress} style={[styles.defi, {style}]}>
+const Item1 = ({ item, onPress }) => (
+  <TouchableOpacity onPress={onPress} style={styles.defi}>
        <Text style={[styles.titreBlanc, { fontSize:30}]}>{item.nomDefi}</Text>
    </TouchableOpacity>
+);
+const Item2 = ({ item, onPress, style }) => (
+    <TouchableOpacity onPress={onPress} style={styles.defi2}>
+        <Text style={[styles.titreBlanc, { fontSize:30}]}>{item.nomDefi}</Text>
+    </TouchableOpacity>
 );
 
 export default function  ListeDefis(props) {
@@ -34,15 +39,27 @@ export default function  ListeDefis(props) {
         if (list.message) {
             // Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
         } else {
-            await  setListeDefs(list)//setState({user, token: state.token});
+            await setListeDefs(list.filter(defi => defi.long == undefined ))//setState({user, token: state.token});
         }
     };
     React.useEffect(() =>{
         getList();
     },[])
     const render_item = ({ item }) =>{
+        if (defisSelect.includes(item)){
+            return (
+                <Item2
+                    key={item._id}
+                    item={item}
+                    onPress={() => {
+                        setDefiSelect([...defisSelect,item])
+                    }}
+                    style={{ backgroundColor:"#56ADCE"}}
+                />
+            )
+        }
         return (
-            <Item
+            <Item1
                 key={item._id}
                 item={item}
                 onPress={() => {
@@ -57,7 +74,6 @@ export default function  ListeDefis(props) {
             <Image
                 style={styles.fond}
                 source={require('../../assets/fond.png')}/>
-
                 <View style={styles.header}>
                     <LogoMin style={{marginBottom:'5%'}}/>
                     <Text  style={[styles.titreBleu, {fontSize:100, fontWeight:'normal', fontFamily:'TallFilms'}]}>Défi</Text>
@@ -123,6 +139,16 @@ const styles = StyleSheet.create({
             borderBottomColor:"#56ADCE",
             borderBottomWidth:3
         },
+    defi2: {
+        flex: 1,
+        flexDirection: 'row',
+        alignContent: 'center',
+        zIndex: 100,
+        width: '100%',
+        marginBottom:'5%',
+        backgroundColor:"#56ADCE",
+        borderBottomWidth:3
+    },
      titreBlanc : {
             color: "white",
             textTransform: 'uppercase',

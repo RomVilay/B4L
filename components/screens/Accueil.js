@@ -7,7 +7,7 @@ import {
   SafeAreaView,
   Image,
   Text,
-  TouchableOpacity,
+  TouchableOpacity
 } from 'react-native';
 // Imports Assets
 import LogoMin from '../../assets/logoMin';
@@ -16,9 +16,11 @@ import NavApp from '../navigation/NavApp';
 import {refreshState} from '../utils/navFunctions';
 var avatar = require('../../assets/avatar.png');
 import Avatar from "./Avatar";
+import DefisLong from "./DefisLong";
 
 export default function Accueil(props) {
   const [state, setState] = useContext(Context);
+  const [defisL,setDefisL] = useState(true)
   // const [name, setName]= useState('Gaston')
   // const [kcal, setKcal]= useState('5400')
   // const [km, setKm] = useState('234.0')
@@ -28,6 +30,7 @@ export default function Accueil(props) {
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />
+      <DefisLong visible={state.user.defisLongs == undefined}/>
       {/* HEADER */}
       <View style={styles.header}>
         <View style={styles.item} />
@@ -37,7 +40,6 @@ export default function Accueil(props) {
         <View style={styles.item} />
       </View>
       {/* FIN HEADER */}
-
       {/* MIDDLE */}
       <View style={styles.middle}>
         <View style={styles.midTop}>
@@ -76,7 +78,7 @@ export default function Accueil(props) {
       <TouchableOpacity
         style={styles.footer}
         activeOpacity={0.5}
-        onPress={() => props.navigation.navigate('ListeDefis')}>
+        onPress={() => /* pop up open ici*/props.navigation.navigate('ListeDefis')}>
         <Cercle />
         <Text style={styles.go}>GO</Text>
       </TouchableOpacity>
