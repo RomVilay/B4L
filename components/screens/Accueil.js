@@ -26,7 +26,7 @@ export default function Accueil(props) {
   // const [km, setKm] = useState('234.0')
   // const [watts,setWatts] = useState('4000')
 
-
+  console.log(state.user.defisLongs)
   refreshState(state, setState);
   return (
     <SafeAreaView style={styles.container}>

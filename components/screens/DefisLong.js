@@ -1,7 +1,10 @@
 import React, {useContext} from "react";
-import { View, Modal, Text,TouchableOpacity, StyleSheet, FlatList} from "react-native";
+import {View, Modal, Text, TouchableOpacity, StyleSheet, FlatList, Alert} from "react-native";
 import {Context} from '../utils/Store';
 import {listeDefisLongs} from "../../functions/defis";
+import {editUser} from "../../functions/user";
+import NetInfo from "@react-native-community/netinfo";
+import goTo from "../utils/navFunctions";
 
 const DefisLong = (props) => {
     const [state, setState] = useContext(Context);
@@ -24,10 +27,36 @@ const DefisLong = (props) => {
                 setListeDefs(list.filter(defi => defi.long !== undefined ))//setState({user, token: state.token});
         }
     };
+    const updateUser = async () => {
+        setIsLoading(true);
+        let isConnected = await NetInfo.fetch().then(state => {
+            return state.isConnected;
+        });
+        if (!isConnected) {
+            Alert.alert('Erreur', 'Vérifiez votre connexion Internet et réessayez');
+        } else {
+            const updated = await editUser(
+                state.user.username,
+                {
+                  defisLongs:defisSelect.map((item) => item._id)
+                },
+                state.token,
+            );
+            setIsLoading(false);
+            // console.log('updated : ', updated);
+            if (updated.message) {
+                Alert.alert('Erreur', `${updated.message}`);
+            } else {
+                setState({user: updated, token: state.token});
+                goTo(props);
+            }
+        }
+    };
     const setDefisLong = (defis) =>{
         //setState([...state,defis])
         const copy = state
         copy.user.defisLongs = defis
+
         setState(copy)
         console.log(state.user.defisLongs)
     }
@@ -76,7 +105,10 @@ const DefisLong = (props) => {
                             data={listeDefs}
                             extraData={defisSelect}
                             renderItem={render_item} />
-                        <TouchableOpacity  style={{backgroundColor:"#5FCDFA", padding:'2%', borderRadius:10, color:"white", marginBottom:'5%', }} onPress={() => setDefisLong(defisSelect)/*setModalVisible(!modalVisible)*/}>
+                        <TouchableOpacity  style={{backgroundColor:"#5FCDFA", padding:'2%', borderRadius:10, color:"white", marginBottom:'5%', }}
+                                           onPress={() => {
+                                               setDefisLong(defisSelect)
+                                               setModalVisible(!modalVisible)}}>
                             <Text style={{color:"white",fontFamily: 'GnuolaneRG-Regular'}}>Valider</Text>
                         </TouchableOpacity>
                     </View>
