@@ -25,8 +25,6 @@ export default function Accueil(props) {
   // const [kcal, setKcal]= useState('5400')
   // const [km, setKm] = useState('234.0')
   // const [watts,setWatts] = useState('4000')
-
-  console.log(state.user.defisLongs)
   refreshState(state, setState);
   return (
     <SafeAreaView style={styles.container}>
@@ -48,7 +46,7 @@ export default function Accueil(props) {
         </View>
         <View style={styles.midMid}>
           <View style={[styles.midItem]}>
-            <Text style={styles.chiffres}>{state.user.kcal}</Text>
+            <Text style={styles.chiffres}>{Number.parseFloat(state.user.totalEnergie*0.239).toFixed(2)}</Text>
             <Text style={[styles.midText]}>
               kcal <Text style={{color: '#5FCDFA'}}>cumulées</Text>
             </Text>
@@ -60,14 +58,14 @@ export default function Accueil(props) {
             </TouchableOpacity>
           </View>
           <View style={[styles.midItem]}>
-            <Text style={styles.chiffres}>{state.user.km}</Text>
+            <Text style={styles.chiffres}>{state.user.totalDistance}</Text>
             <Text style={[styles.midText]}>
               km <Text style={{color: '#5FCDFA'}}>cumulés</Text>
             </Text>
           </View>
         </View>
         <View style={styles.midBot}>
-          <Text style={styles.chiffres}>{state.user.watts}</Text>
+          <Text style={styles.chiffres}>{state.user.totalEnergie}</Text>
           <Text style={[styles.midText]}>
             wh <Text style={{color: '#5FCDFA'}}>produits</Text>
           </Text>
