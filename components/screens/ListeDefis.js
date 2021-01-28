@@ -4,7 +4,7 @@ import CheckBox from '@react-native-community/checkbox'
 import LogoMin from '../../assets/logoMin'
 import Fleche from "../../assets/fleche";
 import NavApp from "../navigation/NavApp";
-import listeDefis from "../../functions/defis";
+import {listeDefis} from "../../functions/defis";
 import {Context} from '../utils/Store';
 import {getUser} from "../../functions/user";
 

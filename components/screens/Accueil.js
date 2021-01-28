@@ -26,11 +26,12 @@ export default function Accueil(props) {
   // const [km, setKm] = useState('234.0')
   // const [watts,setWatts] = useState('4000')
 
+
   refreshState(state, setState);
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />
-      <DefisLong visible={state.user.defisLongs == undefined}/>
+      <DefisLong visible={state.user.defisLongs.length == 0} />
       {/* HEADER */}
       <View style={styles.header}>
         <View style={styles.item} />

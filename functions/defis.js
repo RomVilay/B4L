@@ -30,4 +30,30 @@ async function listeDefis( authToken, objectifs) {
         return liste;
     }
 }
-export default listeDefis
+async function listeDefisLongs( authToken, objectifs) {
+    if( objectifs.length == 2){
+        let liste = await fetchWithTimeout(
+            `${BASE_URL}/defis/objectif/${objectifs[0]}/${objectifs[1]}`,
+            {
+                headers: {'auth-token': authToken, 'long':true},
+
+            },
+            serverTimeout,
+        );
+        return liste;
+    }
+    if (objectifs.length == 1){
+        let liste = await fetchWithTimeout(
+            `${BASE_URL}/defis/objectif/${objectifs[0]}`,
+            {
+                headers: {'auth-token': authToken,'long':true},
+            },
+            serverTimeout,
+        );
+        return liste;
+    }
+}
+module.exports={
+    listeDefis,
+    listeDefisLongs
+}
