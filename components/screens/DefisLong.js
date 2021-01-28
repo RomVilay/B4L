@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
 import {View, Modal, Text, TouchableOpacity, StyleSheet, FlatList, Alert} from "react-native";
 import {Context} from '../utils/Store';
 import {listeDefisLongs} from "../../functions/defis";
@@ -8,6 +8,7 @@ import goTo from "../utils/navFunctions";
 
 const DefisLong = (props) => {
     const [state, setState] = useContext(Context);
+    const [isLoading, setIsLoading] = useState(false);
     const Item1 = ({ item, onPress }) => (
         <TouchableOpacity onPress={onPress} style={styles.defi}>
             <Text style={[{ fontSize:20,  color: "white", textAlign: 'center', fontFamily: 'GnuolaneRG-Regular'}]}>{item.nomDefi}</Text>
@@ -43,7 +44,7 @@ const DefisLong = (props) => {
                 state.token,
             );
             setIsLoading(false);
-            // console.log('updated : ', updated);
+             //console.log('updated : ', updated);
             if (updated.message) {
                 Alert.alert('Erreur', `${updated.message}`);
             } else {
@@ -56,8 +57,8 @@ const DefisLong = (props) => {
         //setState([...state,defis])
         const copy = state
         copy.user.defisLongs = defis
-
         setState(copy)
+        updateUser()
         console.log(state.user.defisLongs)
     }
     const [listeDefs,setListeDefs] = React.useState([])
