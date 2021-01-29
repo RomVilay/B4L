@@ -42,7 +42,6 @@ export default function Objectifs(props) {
     } else {
       const updated = await editUser(state.user.username, {objectifs: select}, state.token);
       setIsLoading(false);
-      // console.log('updated : ', updated);
       if (updated.message) {
         Alert.alert('Erreur', `${updated.message}`);
       } else {
@@ -53,7 +52,13 @@ export default function Objectifs(props) {
           props.route.params.previousRoute == 'Parametres'
         ) {
           props.navigation.goBack();
-        } else goTo(props);
+        }
+        if (
+          state.user.poids == undefined ||state.user.taille == undefined
+        ) {
+          props.navigation.navigate('Parametres');
+        }else {
+          goTo(props)};
       }
     }
   };

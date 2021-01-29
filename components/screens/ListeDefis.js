@@ -86,7 +86,7 @@ export default function  ListeDefis(props) {
                         <FlatList
                             data={ListeDefs}
                             renderItem={render_item}
-                            keyExtractor={item => item.id}
+                            keyExtractor={item => item._id}
                             extraData={defisSelect}/>
                     </View>
                         <Fleche style={{transform:[{rotate:'270deg'}]}}/>

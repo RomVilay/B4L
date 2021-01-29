@@ -51,9 +51,9 @@ export default function Parametres(props) {
   const [showCalendar, setShowCalendar] = useState(false);
 
   const checkFields = () => {
-    if (!tempTaille.match(regexTaille) && tempTaille.length > 0) {
+    if (!tempTaille.match(regexTaille) || tempTaille.length <= 0) {
       Alert.alert('Erreur', `Veuillez saisir une taille valide`);
-    } else if (!tempPoids.match(regexPoids) && tempPoids.length > 0) {
+    } else if (!tempPoids.match(regexPoids) || tempPoids.length <= 0) {
       Alert.alert('Erreur', `Veuillez saisir un poids valide`);
     } else {
       updateUser();

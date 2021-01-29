@@ -29,7 +29,7 @@ export default function Accueil(props) {
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />
-      <DefisLong visible={state.user.defisLongs.length == 0} />
+      <DefisLong visible={state.user.defisLongs!== undefined & state.user.defisLongs.length == 0} />
       {/* HEADER */}
       <View style={styles.header}>
         <View style={styles.item} />

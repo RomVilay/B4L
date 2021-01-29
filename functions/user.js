@@ -96,7 +96,7 @@ async function editUser(username, body, authToken) {
 async function deleteUser(username, authToken) {
   let deletedUser = await fetchWithTimeout(`${BASE_URL}/users/${username}`, {
     method: 'DELETE',
-    headers: {'auth-token': authToken},
+    headers: {'Content-Type': 'application/json','auth-token': authToken},
     serverTimeout,
   });
   return deletedUser;
