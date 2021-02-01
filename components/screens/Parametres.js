@@ -29,6 +29,7 @@ import NavApp from '../navigation/NavApp';
 import Avatar from './Avatar';
 import Icon from "react-native-vector-icons/FontAwesome5";
 import SelectIOS from "./SelectIos";
+import Colors from "react-native/Libraries/NewAppScreen/components/Colors";
 
 export default function Parametres(props) {
   const [state, setState] = useContext(Context);
@@ -48,7 +49,7 @@ export default function Parametres(props) {
   const [tempUnitTaille, setTempUnitTaille] = useState(state.user.unitTaille || 'cm');
   const [tempUnitPoids, setTempUnitPoids] = useState(state.user.unitPoids || 'kg');
   const [tempUnitDistance, setTempUnitDistance] = useState(state.user.unitDistance || 'm');
-  const [showCalendar, setShowCalendar] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(true);
 
   const checkFields = () => {
     if (!tempTaille.match(regexTaille) || tempTaille.length <= 0) {
@@ -288,27 +289,58 @@ export default function Parametres(props) {
           </View>
           <View style={styles.midBot}>
             <Text style={styles.inputTitle}>{'Date de naissance'}</Text>
-            <View style={styles.inputContainer}>
+            <View style={[styles.inputContainer,{borderWidth:3, zIndex:600}]}>
               <TouchableOpacity onPress={() => setShowCalendar(true)}>
                 <TextInput
-                  value={tempDateNaissance ? moment(tempDateNaissance).format('DD/MM/YYYY') : ''}
+                  value={tempDateNaissance && Platform.OS === 'android' ? moment(tempDateNaissance).format('DD/MM/YYYY') : ''}
                   style={styles.input}
                   editable={false}
-                  placeholder="Indiquez votre date de naissance"
+                  placeholder={Platform.OS === 'android' ? "Indiquez votre date de naissance" : ''}
                   placeholderTextColor="#b8b8b8"
                 />
               </TouchableOpacity>
             </View>
             {showCalendar && (
-              <DateTimePicker
-                value={tempDateNaissance || new Date()}
-                onChange={(event, selectedDate) => {
-                  const currentDate = selectedDate || tempDateNaissance;
-                  setShowCalendar(Platform.OS === 'ios');
-                  setTempDateNaissance(currentDate);
-                }}
-                maximumDate={new Date()}
-              />
+                  Platform.OS === 'ios' ?
+                    <Modal
+                        transparent={true}
+                        visible={true}
+                    >
+                      <View style={{ justifyContent:"center", width:200, height:50, position:"absolute", top:'47%', left:'35%'}}>
+                        <DateTimePicker
+                            value={tempDateNaissance || new Date()}
+                            onChange={(event, selectedDate) => {
+                              const currentDate = selectedDate || tempDateNaissance;
+                              setShowCalendar(Platform.OS === 'ios');
+                              setTempDateNaissance(currentDate);
+                            }}
+                            maximumDate={new Date()}
+                            textColor={Colors.white}
+                            style={{
+                                textColor:"white",
+                                color:"white",
+                                flex:1
+                            }}
+
+                        />
+                      </View>
+                    </Modal>
+                  :
+                    <DateTimePicker
+                        value={tempDateNaissance || new Date()}
+                        onChange={(event, selectedDate) => {
+                          const currentDate = selectedDate || tempDateNaissance;
+                          setShowCalendar(Platform.OS === 'ios');
+                          setTempDateNaissance(currentDate);
+                        }}
+                        maximumDate={new Date()}
+                        customStyles={{
+                          datePicker:{
+                            backgroundColor:"white",
+                            width:'100%'
+                          }
+                        }}
+                    />
             )}
             <View style={styles.horizontal}>
               <View
