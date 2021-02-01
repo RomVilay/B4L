@@ -5,8 +5,9 @@ import {
   SafeAreaView,
   Image,
   Text,
-  TouchableOpacity,
+  TouchableOpacity, Platform,
 } from 'react-native';
+import DropDownPicker from "react-native-dropdown-picker"
 
 import Navigation from '../../assets/navigation';
 
@@ -26,7 +27,7 @@ export default function Classements(props) {
     'Rémi12',
     'Chris'
   ])
-  const categorie = 'Homme'
+  const [categorie,setCategorie] = useState(state.user.genre ? "homme" : "femme")
   const position =  206
   const membres = 212
 
@@ -39,7 +40,32 @@ export default function Classements(props) {
             <Text style={[styles.textTitle, {fontSize: 70}]}>Classement</Text>
           </View>
           <View style={[styles.middle, {width: '90%'}]}>
-            <Text style={styles.inputContainer}>Catégorie {categorie}</Text>
+            <View style={{
+              ...(Platform.OS !== 'android' && {
+                position:"absolute", zIndex:800, top:-20
+              }),
+              height:50
+              }}>
+            <DropDownPicker
+                items={[{label:"Classement Homme",value:0},
+                  {label:"Classement Femme",value:1},
+                  {label:"Classement junior",value:2},
+                  {label:"Classement senior",value:3}]}
+                defaultValue={state.user.genre ? 0 : 1}
+                style={[styles.inputContainer,{color: "white", height:50}]}
+                itemStyle={{
+                  justifyContent: 'center'
+                }}
+                containerStyle={{height:50}}
+                dropDownStyle={{
+                  backgroundColor: '#284462',
+                  borderTopWidth:0
+                }}
+                labelStyle={{color:"white"}}
+                onChangeItem={ item => setCategorie(item.label)}
+                />
+
+            </View>
             <View style={styles.midUser}>
               <View style={styles.avatar}>
                 <Avatar avatar={state.user.avatar} />
@@ -184,7 +210,6 @@ const styles = StyleSheet.create({
     flex: 3,
     flexDirection: 'column',
     alignItems: 'center',
-    zIndex: 100,
   },
   bottom: {
     flex: 5,
