@@ -302,11 +302,7 @@ export default function Parametres(props) {
             </View>
             {showCalendar && (
                   Platform.OS === 'ios' ?
-                    <Modal
-                        transparent={true}
-                        visible={showCalendar}
-                    >
-                      <View style={{ justifyContent:"center", width:"100%",height:50, position:"absolute",left:"35%", top:'47%', zIndex:0}}>
+                      <View style={{ justifyContent:"center", width:"100%",height:50, position:"absolute",left:"35%", top:'8%', zIndex:600}}>
                         <DateTimePicker
                             value={tempDateNaissance || new Date()}
                             onChange={(event, selectedDate) => {
@@ -318,13 +314,11 @@ export default function Parametres(props) {
                             textColor="white"
                             locale="fr-FR"
                             style={{
-                                backgroundColor:"white",
                                 flex:1
                             }}
 
                         />
                       </View>
-                    </Modal>
                   :
                     <DateTimePicker
                         value={tempDateNaissance || new Date()}
