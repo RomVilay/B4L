@@ -292,7 +292,7 @@ export default function Parametres(props) {
             <View style={[styles.inputContainer,{borderWidth:3, zIndex:600}]}>
               <TouchableOpacity onPress={() => setShowCalendar(true)}>
                 <TextInput
-                  value={tempDateNaissance && Platform.OS === 'android' ? moment(tempDateNaissance).format('DD/MM/YYYY') : ''}
+                  value={tempDateNaissance && Platform.OS === 'android'  ? moment(tempDateNaissance).format('DD/MM/YYYY') : ''}
                   style={styles.input}
                   editable={false}
                   placeholder={Platform.OS === 'android' ? "Indiquez votre date de naissance" : ''}
@@ -304,21 +304,21 @@ export default function Parametres(props) {
                   Platform.OS === 'ios' ?
                     <Modal
                         transparent={true}
-                        visible={true}
+                        visible={showCalendar}
                     >
-                      <View style={{ justifyContent:"center", width:200, height:50, position:"absolute", top:'47%', left:'35%'}}>
+                      <View style={{ justifyContent:"center", width:"100%",height:50, position:"absolute",left:"35%", top:'47%', zIndex:0}}>
                         <DateTimePicker
                             value={tempDateNaissance || new Date()}
                             onChange={(event, selectedDate) => {
                               const currentDate = selectedDate || tempDateNaissance;
-                              setShowCalendar(Platform.OS === 'ios');
                               setTempDateNaissance(currentDate);
                             }}
                             maximumDate={new Date()}
-                            textColor={Colors.white}
+                            display="compact"
+                            textColor="white"
+                            locale="fr-FR"
                             style={{
-                                textColor:"white",
-                                color:"white",
+                                backgroundColor:"white",
                                 flex:1
                             }}
 
@@ -334,12 +334,6 @@ export default function Parametres(props) {
                           setTempDateNaissance(currentDate);
                         }}
                         maximumDate={new Date()}
-                        customStyles={{
-                          datePicker:{
-                            backgroundColor:"white",
-                            width:'100%'
-                          }
-                        }}
                     />
             )}
             <View style={styles.horizontal}>
