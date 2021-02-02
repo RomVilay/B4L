@@ -52,7 +52,7 @@ export default function  ListeDefis(props) {
                     key={item._id}
                     item={item}
                     onPress={() => {
-                        setDefiSelect([...defisSelect,item])
+                        setDefiSelect(defisSelect.filter( defi => defi !== item))
                     }}
                     style={{ backgroundColor:"#56ADCE"}}
                 />
@@ -93,9 +93,6 @@ export default function  ListeDefis(props) {
                 </View>
                 <View style={styles.footer}>
                     <TouchableOpacity style={{marginBottom:'10%'}} onPress={()=> {
-                       // setState(...state, defisSelect)
-                       // console.log(state)
-                        //console.log(defisSelect)
                         props.navigation.navigate("Compteur",{defis:defisSelect})
                     }} color={'white'}>
                         <Text style={styles.titreBleu}>appuyez pour continuer</Text>
