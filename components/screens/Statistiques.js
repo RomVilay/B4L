@@ -183,7 +183,7 @@ export default function Statistiques(props) {
           {/*  </Collapsible> */}
           </View>
           <Text style={[styles.texteBlanc, {fontSize: 20}]}>
-            Avancement des objectifs sur la période{' '}
+            Avancement des défis longs sur la période{' '}
           </Text>
           <View style={{alignItems: 'center', flexDirection: 'row'}}>
             <View

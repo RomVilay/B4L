@@ -12,10 +12,11 @@ import LogoMin from '../../assets/logoMin';
 export default function Objectifs(props) {
   const [state, setState] = useContext(Context);
   const [defis] = useState([
-    {id: '0', nom: "m'amuser / me dépenser"},
-    {id: '1', nom: 'perdre du poids'},
-    {id: '2', nom: "faire des économies en produisant de l'énergie"},
+    {id: '0', nom: "m'amuser "},
+    {id: '1', nom: 'Brûler des Calories'},
+    {id: '2', nom: "Faire des économies en produisant de l'énergie"},
     {id: '3', nom: "Réduire mon impact sur l'environnement"},
+    {id: '4', nom: "Faire du sport"},
   ]);
   const [status, setStatus] = useState([
     state.user.objectifs.includes('0') || false,

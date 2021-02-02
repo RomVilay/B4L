@@ -40,12 +40,7 @@ export default function Classements(props) {
             <Text style={[styles.textTitle, {fontSize: 70}]}>Classement</Text>
           </View>
           <View style={[styles.middle, {width: '90%'}]}>
-            <View style={{
-              ...(Platform.OS !== 'android' && {
-                position:"absolute", zIndex:800, top:-20
-              }),
-              height:50
-              }}>
+            <View style={styles.selectClass}>
             <DropDownPicker
                 items={[{label:"Classement Homme",value:0},
                   {label:"Classement Femme",value:1},
@@ -75,9 +70,9 @@ export default function Classements(props) {
               </View>
             </View>
             <View style={styles.botUser}>
-              <Text style={[styles.number, {fontSize:50}]}>{position}</Text>
+              <Text style={[styles.number, {fontSize:30}]}>{position}</Text>
               <Text style={styles.linesb}> ème sur </Text>
-              <Text style={[styles.number, {fontSize:50}]}>{membres} </Text>
+              <Text style={[styles.number, {fontSize:30}]}>{membres} </Text>
               <Text style={styles.linesb}> utilisateurs</Text>
             </View>
             <View style={{flex:1}}>
@@ -206,6 +201,14 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontFamily: 'TallFilms',
   },
+  selectClass:{
+  ...(Platform.OS !== 'android' && {
+      position:"absolute", zIndex:800, top:-20
+  }),
+      flex:1,
+      height:50,
+      marginBottom:'5%'
+  },
   middle: {
     flex: 3,
     flexDirection: 'column',
@@ -286,7 +289,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     zIndex: 100,
-    paddingTop:'2%'
+    marginTop:'2%'
   },
   footer: {
     flex: 1,

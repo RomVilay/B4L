@@ -49,7 +49,7 @@ export default function Parametres(props) {
   const [tempUnitTaille, setTempUnitTaille] = useState(state.user.unitTaille || 'cm');
   const [tempUnitPoids, setTempUnitPoids] = useState(state.user.unitPoids || 'kg');
   const [tempUnitDistance, setTempUnitDistance] = useState(state.user.unitDistance || 'm');
-  const [showCalendar, setShowCalendar] = useState(true);
+  const [showCalendar, setShowCalendar] = useState(Platform.OS === 'ios');
 
   const checkFields = () => {
     if (!tempTaille.match(regexTaille) || tempTaille.length <= 0) {
