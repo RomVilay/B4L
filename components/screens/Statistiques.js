@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   FlatList,
   Text,
@@ -17,13 +17,16 @@ import LogoMin from '../../assets/logoMin';
 import {LineChart, ProgressChart} from 'react-native-chart-kit';
 import moment from 'moment';
 import DateRangePicker from 'react-native-daterange-picker';
-import Collapsible from "react-native-collapsible";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Picker } from '@react-native-picker/picker';
+import {Context} from '../utils/Store';
+import {listeDefisLongs} from "../../functions/defis";
 
 
 export default function Statistiques(props) {
+  const [state,setState] = useContext(Context)
   const [Dates, setDates] = useState([moment('2020-10-10'), moment()]);
+  const [defisLongs,setDefisLongs] = useState([])
   const [displayedDate, setdisplayedDate] = useState(moment('2020-11-10'));
   const [selector,setselector] = useState(0)
   const data = {
@@ -41,29 +44,63 @@ export default function Statistiques(props) {
     Dates[0].clone().add(45,"days").format("DD-MM").toString(),
     Dates[1].format("DD-MM").toString(),
   ]);
-  const chartConfig = {
-    backgroundGradientFrom: '#1E2923',
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: '#08130D',
-    backgroundGradientToOpacity: 0,
-    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-    strokeWidth: 1, // optional, default 3
-    barPercentage: 0.5,
-    useShadowColorFromDataset: false, // optional
-    position:"absolute",
-    zIndex: 0,
-  };
-  const chartConfig2 = {
-    backgroundGradientFrom: '#5FCDFA',
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: '#5FCDFA',
-    backgroundGradientToOpacity: 0,
-    color: (opacity = 1) => `rgba(95, 206, 250, ${opacity})`,
-    strokeWidth: 1, // optional, default 3
-    barPercentage: 0.5,
-    useShadowColorFromDataset: false, // optional
-  };
 
+  const getDefisLongs = async () => {
+    let defis = await  listeDefisLongs(state.token,state.user.objectifs)
+    if (defis.message) {
+      Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
+    } else {
+      await setDefisLongs(defis.filter(defi => state.user.defisLongs.includes(defi._id)))
+    }
+  }
+  React.useEffect( () => {
+    getDefisLongs()
+  }, [])
+  const render_item = ({ item }) =>{
+    const val = item.butUnit == "m" ? state.user.totalDistance : state.user.totalEnergie
+    const pourcentage = item.butUnit == "m" ?
+        state.user.totalDistance/item.butNumber :
+        item.butUnit == "watts" ?
+            state.user.totalEnergie/item.butNumber :
+            state.user.totalDuree/item.butNumber
+    const progress = {data:[pourcentage]}
+    const config = {
+      backgroundGradientFrom: '#1E2923',
+      backgroundGradientFromOpacity: 0,
+      backgroundGradientTo: '#08130D',
+      backgroundGradientToOpacity: 0,
+      color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+      strokeWidth: 1, // optional, default 3
+      barPercentage: pourcentage,
+      useShadowColorFromDataset: false, // optional
+      position:"absolute",
+      zIndex: 0,
+    };
+    return(
+        <View style={[styles.flatlistItem]}>
+          <Text
+              style={[
+                styles.texteBlanc,
+                {fontSize: 20, textTransform: 'none', marginLeft: 5},
+              ]}>
+            {item.nomDefi}
+          </Text>
+          <Text style={{position: 'absolute', top: 55, color: 'white', fontSize:12}}>
+            {pourcentage .toFixed(2)}%
+          </Text>
+          <ProgressChart
+              data={progress}
+              width={80}
+              height={80}
+              strokeWidth={16}
+              radius={32}
+              chartConfig={config}
+              hideLegend={true}
+          />
+          <Text style={{ color: 'white'}}>{val} / {item.butNumber} {item.butUnit}</Text>
+        </View>
+    )
+  }
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
@@ -183,71 +220,16 @@ export default function Statistiques(props) {
           {/*  </Collapsible> */}
           </View>
           <Text style={[styles.texteBlanc, {fontSize: 20}]}>
-            Avancement des défis longs sur la période{' '}
+            Avancement des défis longs sur la période
           </Text>
-          <View style={{alignItems: 'center', flexDirection: 'row'}}>
-            <View
-              style={{
-                flexDirection: 'column',
-                alignItems: 'center',
-                backgroundColor: '#FFFFFF22',
-                borderRadius: 10,
-              }}>
-              <Text
-                style={[
-                  styles.texteBlanc,
-                  {fontSize: 20, textTransform: 'none', marginLeft: 5},
-                ]}>
-                production d'énergie{' '}
-              </Text>
-              <Text style={{position: 'absolute', top: 52, color: 'white'}}>
-                {data.data * 100}%
-              </Text>
-              <ProgressChart
-                data={data}
-                width={80}
-                height={80}
-                strokeWidth={16}
-                radius={32}
-                chartConfig={chartConfig}
-                hideLegend={true}
-              />
-              <Text style={{ color: 'white'}}>{data.quantits} / {data.totalq} {data.units}</Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'column',
-                alignItems: 'center',
-                backgroundColor: '#5fcefa22',
-                borderRadius: 10,
-                marginLeft: 50,
-              }}>
-              <Text
-                style={[
-                  styles.texteBlanc,
-                  {
-                    fontSize: 20,
-                    textTransform: 'none',
-                    color: 'white',
-                    marginLeft: 5,
-                  },
-                ]}>
-                calories dépensées{' '}
-              </Text>
-              <Text style={{position: 'absolute', top: 52, color: 'white'}}>
-                {data.data * 100}%
-              </Text>
-              <ProgressChart
-                data={data}
-                width={80}
-                height={80}
-                strokeWidth={16}
-                radius={32}
-                chartConfig={chartConfig}
-                hideLegend={true}
-              />
-              <Text style={{ color: 'white'}}>{data.quantits} / {data.totalq} {data.units2}</Text>
-            </View>
+          <View style={{alignItems: 'center', flexDirection: 'row', flex:1, margin:'5%'}}>
+            <FlatList
+                horizontal={true}
+                extraData={defisLongs}
+                data={defisLongs}
+                renderItem={render_item}
+                keyExtractor={item => item._id}
+                />
           </View>
         </View>
         <View style={styles.footer}>
@@ -353,6 +335,15 @@ const styles = StyleSheet.create({
   tableView:{
     alignItems: 'center',
     zIndex: 0
+  },
+  flatlistItem:{
+    flexDirection: 'column',
+    alignItems: 'center',
+    backgroundColor: '#5fcefa22',
+    borderRadius: 10,
+    marginLeft: 50,
+    flex:1,
+    width:200
   },
   footer: {
     position:"absolute",

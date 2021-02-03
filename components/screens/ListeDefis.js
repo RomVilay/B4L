@@ -37,7 +37,7 @@ export default function  ListeDefis(props) {
     const getList = async () => {
         let list = await listeDefis(state.token,state.user.objectifs);
         if (list.message) {
-            // Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
+             Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
         } else {
             await setListeDefs(list.filter(defi => defi.long == undefined ))//setState({user, token: state.token});
         }
