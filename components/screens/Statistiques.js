@@ -21,22 +21,15 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Picker } from '@react-native-picker/picker';
 import {Context} from '../utils/Store';
 import {listeDefisLongs} from "../../functions/defis";
-
+import {getSessionsByUsername} from "../../functions/session";
 
 export default function Statistiques(props) {
   const [state,setState] = useContext(Context)
   const [Dates, setDates] = useState([moment('2020-10-10'), moment()]);
   const [defisLongs,setDefisLongs] = useState([])
+  const [sessions,setSessions] = useState([])
   const [displayedDate, setdisplayedDate] = useState(moment('2020-11-10'));
   const [selector,setselector] = useState(0)
-  const data = {
-    labels: ['Objectif'], // optional
-    data: [0.5],
-    units:"kw",
-    units2:"kcals",
-    quantits:'2500',
-    totalq:'5000',
-  };
   const [labels,setLabels] = useState([
     Dates[0].format("DD-MM").toString(),
     Dates[0].clone().add(15,"days").format("DD-MM").toString(),
@@ -44,6 +37,15 @@ export default function Statistiques(props) {
     Dates[0].clone().add(45,"days").format("DD-MM").toString(),
     Dates[1].format("DD-MM").toString(),
   ]);
+  const [data,setData] = useState( {
+    data: [
+      Math.random() * 100,
+      Math.random() * 100,
+      Math.random() * 100,
+      Math.random() * 100,
+      Math.random() * 100,
+    ],
+  })
 
   const getDefisLongs = async () => {
     let defis = await  listeDefisLongs(state.token,state.user.objectifs)
@@ -53,9 +55,44 @@ export default function Statistiques(props) {
       await setDefisLongs(defis.filter(defi => state.user.defisLongs.includes(defi._id)))
     }
   }
+  const getSessions = async (user) => {
+    let sessions = await getSessionsByUsername(user, state.token)
+    if (sessions.message) {
+      console.log(sessions.message)
+      //Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
+    } else {
+      await setSessions(sessions)
+      sessions[0] !== undefined ? setDates([moment(sessions[0].dateSession),Dates[1]]): console.log("pas de sessions")
+      DefLabels(sessions)
+      //console.log(sessions.map(session => session.dateSession))
+    }
+  }
+  const DefLabels = (s) => {
+    //console.log(s.map(session => session.vitesse.reduce((moy,val) => moy+val)/session.vitesse.length))
+    if (s.length <= 5){
+    setLabels(s.map(session => session.dateSesssion))
+  }
+  if (s.length >= 5){
+    let j = Math.round(s.length / 5)
+    let tab = []
+    let tab2 = []
+    for ( let i=0; tab.length<5; i=i+j){
+      tab.push(moment(s[i].dateSession).format("DD-MM").toString())
+      tab2.push(s[i].vitesse.reduce((moy,val) => moy+val)/s[i].vitesse.length)
+    }
+    setLabels(tab)
+    console.log(tab2)
+    setData({data:tab2})
+  }
+  }
   React.useEffect( () => {
+    getSessions(state.user.username)
+    DefLabels(sessions)
     getDefisLongs()
   }, [])
+  React.useEffect( () => {
+
+  }, [Dates])
   const render_item = ({ item }) =>{
     const val = item.butUnit == "m" ? state.user.totalDistance : state.user.totalEnergie
     const pourcentage = item.butUnit == "m" ?
@@ -131,7 +168,7 @@ export default function Statistiques(props) {
                       tab.push(btw.format("DD-MMM").toString())
                     }
                     tab.push(moment(date.endDate).format("DD-MMM"))
-                    setLabels(tab)
+                    DefLabels(sessions.filter( session => moment(session.dateSession).isBefore(Dates[1]) && moment(session.dateSession).isAfter(Dates[0]) ))
                   }
                 }
             }}
@@ -144,7 +181,7 @@ export default function Statistiques(props) {
             backdropStyle={styles.backdropStyle}
           >
             <Text style={styles.texteBlanc}>
-              Du {Dates[0].format('DD/MM')} au {Dates[1].format('DD/MM')}
+              Du {moment(Dates[0]).format('DD/MM')} au {Dates[1].format('DD/MM')}
             </Text>
           </DateRangePicker>
 
@@ -157,6 +194,8 @@ export default function Statistiques(props) {
                 mode="dropdown"
                 onValueChange={(itemValue) => {
                   setselector(itemValue)
+                  let tab = sessions.filter( session => moment(session.dateSession).isBefore(Dates[1]) && moment(session.dateSession).isAfter(Dates[0]) )
+                  DefLabels(tab)
                 }}
                 itemStyle={styles.itemStyle}
                 >
@@ -175,17 +214,7 @@ export default function Statistiques(props) {
             <LineChart
               data={{
                 labels: labels,
-                datasets: [
-                  {
-                    data: [
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                      Math.random() * 100,
-                    ],
-                  },
-                ],
+                datasets: [data],
               }}
               width={Dimensions.get('window').width - 10}
               height={190}

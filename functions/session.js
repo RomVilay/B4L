@@ -1,5 +1,8 @@
 const fetch = require("node-fetch");
-const BASE_URL = `${process.env.BASE_URL}${process.env.PORT}`;
+import {
+  BASE_URL,
+  TIMEOUTDELAY_DEFAULT as serverTimeout,
+} from '../components/utils/constants';
 
 /**
  * Apppelle la route /sessions/ pour créer un nouvel user
