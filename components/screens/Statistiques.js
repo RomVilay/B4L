@@ -11,7 +11,7 @@ import {
   SafeAreaView,
   Dimensions,
   TouchableHighlight,
-  Platform
+  Platform, Alert
 } from 'react-native';
 import LogoMin from '../../assets/logoMin';
 import {LineChart, ProgressChart} from 'react-native-chart-kit';
@@ -29,7 +29,7 @@ export default function Statistiques(props) {
   const [defisLongs,setDefisLongs] = useState([])
   const [sessions,setSessions] = useState([])
   const [displayedDate, setdisplayedDate] = useState(moment('2020-11-10'));
-  const [selector,setselector] = useState(0)
+  const [selector,setselector] = useState("km")
   const [labels,setLabels] = useState([
     Dates[0].format("DD-MM").toString(),
     Dates[0].clone().add(15,"days").format("DD-MM").toString(),
@@ -68,20 +68,51 @@ export default function Statistiques(props) {
     }
   }
   const DefLabels = (s) => {
-    //console.log(s.map(session => session.vitesse.reduce((moy,val) => moy+val)/session.vitesse.length))
-    if (s.length <= 5){
-    setLabels(s.map(session => session.dateSesssion))
-  }
-  if (s.length >= 5){
-    let j = Math.round(s.length / 5)
     let tab = []
     let tab2 = []
+    if (s.length <= 5 && s.length > 0) {
+      setLabels(s.map(session => session.dateSesssion))
+      for (let i = 0; i < s.length; i++) {
+        tab.push(moment(s[i].dateSession).format("DD-MM").toString())
+        switch (selector) {
+          case "kh/h":
+            tab2.push(Math.round(s[i].vitesse.reduce((moy, val) => moy + val) / s[i].vitesse.length))
+            break;
+          case "km":
+            tab2.push(s[i].distance / 1000)
+            break;
+          case "kw":
+            tab2.push(s[i].energie / 1000)
+            break;
+          case "%":
+            let calc = s[i].inclinaison.reduce((moy, val) => moy + val / s[i].inclinaison.length)
+            tab2.push(isNaN(calc) ? 0 : calc)
+            break;
+        }
+      }
+    }
+    if (s.length >= 5){
+    let j = Math.round(s.length / 5)
     for ( let i=0; tab.length<5; i=i+j){
       tab.push(moment(s[i].dateSession).format("DD-MM").toString())
-      tab2.push(s[i].vitesse.reduce((moy,val) => moy+val)/s[i].vitesse.length)
+      switch (selector){
+        case "kmh":
+          //console.log(s[i].vitesse.reduce((moy,val) => moy+val)/(s[i].vitesse.length))
+          tab2.push(s[i].vitesse.reduce((moy,val) => moy+val)/(s[i].vitesse.length))
+              break;
+        case "km":
+          tab2.push(s[i].distance/1000)
+              break;
+        case "kw":
+          tab2.push(s[i].energie/1000)
+              break;
+        case "%":
+          let calc = s[i].inclinaison.reduce((moy,val) => moy+val/s[i].inclinaison.length)
+          tab2.push( isNaN(calc) ? 0 : calc)
+              break;
+      }
     }
     setLabels(tab)
-    console.log(tab2)
     setData({data:tab2})
   }
   }
@@ -90,9 +121,13 @@ export default function Statistiques(props) {
     DefLabels(sessions)
     getDefisLongs()
   }, [])
-  React.useEffect( () => {
-
-  }, [Dates])
+  React.useEffect( ()=>{
+    DefLabels(sessions)
+  }, [selector])
+  const alertDate = () =>
+      Alert.alert("Sélection des dates",
+          "Aucune session n'a été enregistrée sur cette période, veuillez choisir un autre interval.",
+          [{text:"ok"}] )
   const render_item = ({ item }) =>{
     const val = item.butUnit == "m" ? state.user.totalDistance : state.user.totalEnergie
     const pourcentage = item.butUnit == "m" ?
@@ -145,7 +180,10 @@ export default function Statistiques(props) {
         source={require('../../assets/fond.png')}>
         <View style={styles.header}>
           <LogoMin />
-          <Text style={[styles.titreBleu, {height: 50}]}>Statistiques</Text>
+          <TouchableOpacity onPress={()=> alertDate()} >
+            <Text style={[styles.titreBleu, {height: 50}]}>Statistiques</Text>
+          </TouchableOpacity>
+
           {/**/}
           <DateRangePicker
             onChange={date => {
@@ -168,7 +206,9 @@ export default function Statistiques(props) {
                       tab.push(btw.format("DD-MMM").toString())
                     }
                     tab.push(moment(date.endDate).format("DD-MMM"))
-                    DefLabels(sessions.filter( session => moment(session.dateSession).isBefore(Dates[1]) && moment(session.dateSession).isAfter(Dates[0]) ))
+                    let tab2 = sessions.filter( session => moment(session.dateSession).isBefore(Dates[1]) && moment(session.dateSession).isAfter(Dates[0]) )
+                    tab2.length !== 0 ?
+                        DefLabels(tab2) : console.log("date fausse")
                   }
                 }
             }}
@@ -195,14 +235,15 @@ export default function Statistiques(props) {
                 onValueChange={(itemValue) => {
                   setselector(itemValue)
                   let tab = sessions.filter( session => moment(session.dateSession).isBefore(Dates[1]) && moment(session.dateSession).isAfter(Dates[0]) )
-                  DefLabels(tab)
+                  //console.log(tab.map(session => session._id))
+                  DefLabels(sessions)
                 }}
                 itemStyle={styles.itemStyle}
                 >
-              <Picker.Item label="Historique des distances parcourues" value="0" />
-              <Picker.Item label="Historique de l'énergie produite" value="1" />
-              <Picker.Item label="Historique des dénivelés franchis" value="2" />
-              <Picker.Item label="Historique de l'énergie économisée" value="3" />
+              <Picker.Item label="Historique des distances parcourues" value="km" />
+              <Picker.Item label="Historique de l'énergie produite" value="kw" />
+              <Picker.Item label="Historique des dénivelés franchis" value="%" />
+              <Picker.Item label="Historique des vitesses moyennes par sessions" value="kmh" />
             </Picker>
             {Platform.select({
               ios: () => <Icon name="menu-swap" color="white"  size={30} style={{position:"absolute", top: 5, left: 15}} />,
@@ -219,7 +260,7 @@ export default function Statistiques(props) {
               width={Dimensions.get('window').width - 10}
               height={190}
               yAxisLabel=""
-              yAxisSuffix={selector == 0 ? " km" : selector == 2 ? " m" : " kw"}
+              yAxisSuffix={selector}
               yAxisInterval={1} // optional, defaults to 1
               chartConfig={{
                 backgroundGradientFrom: '#FFFFFF',
