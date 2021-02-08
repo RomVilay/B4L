@@ -25,10 +25,10 @@ import {getSessionsByUsername} from "../../functions/session";
 
 export default function Statistiques(props) {
   const [state,setState] = useContext(Context)
-  const [Dates, setDates] = useState([moment('2020-10-10'), moment()]);
+  const [Dates, setDates] = useState([moment().subtract(1,'months'), moment()]);
   const [defisLongs,setDefisLongs] = useState([])
   const [sessions,setSessions] = useState([])
-  const [displayedDate, setdisplayedDate] = useState(moment('2020-11-10'));
+  const [displayedDate, setdisplayedDate] = useState(moment());
   const [selector,setselector] = useState("km")
   const [labels,setLabels] = useState([
     Dates[0].format("DD-MM").toString(),
@@ -64,7 +64,6 @@ export default function Statistiques(props) {
       await setSessions(sessions)
       sessions[0] !== undefined ? setDates([moment(sessions[0].dateSession),Dates[1]]): console.log("pas de sessions")
       DefLabels(sessions)
-      //console.log(sessions.map(session => session.dateSession))
     }
   }
   const DefLabels = (s) => {
@@ -72,11 +71,11 @@ export default function Statistiques(props) {
     let tab2 = []
     if (s.length <= 5 && s.length > 0) {
       setLabels(s.map(session => session.dateSesssion))
-      for (let i = 0; i < s.length; i++) {
+      for (let i=0; i < s.length; i++) {
         tab.push(moment(s[i].dateSession).format("DD-MM").toString())
         switch (selector) {
           case "kh/h":
-            tab2.push(Math.round(s[i].vitesse.reduce((moy, val) => moy + val) / s[i].vitesse.length))
+            tab2.push(s[i].vitesse.reduce((moy,val) => moy+val)/(s[i].vitesse.length))
             break;
           case "km":
             tab2.push(s[i].distance / 1000)
@@ -97,7 +96,6 @@ export default function Statistiques(props) {
       tab.push(moment(s[i].dateSession).format("DD-MM").toString())
       switch (selector){
         case "kmh":
-          //console.log(s[i].vitesse.reduce((moy,val) => moy+val)/(s[i].vitesse.length))
           tab2.push(s[i].vitesse.reduce((moy,val) => moy+val)/(s[i].vitesse.length))
               break;
         case "km":
@@ -122,7 +120,9 @@ export default function Statistiques(props) {
     getDefisLongs()
   }, [])
   React.useEffect( ()=>{
-    DefLabels(sessions)
+    let tab2 = sessions.filter( session => moment(session.dateSession).isBefore(Dates[1]) && moment(session.dateSession).isAfter(Dates[0]) )
+    tab2.length !== 0 ?
+        DefLabels(tab2) : console.log(tab2)
   }, [selector])
   const alertDate = () =>
       Alert.alert("Sélection des dates",
@@ -180,10 +180,7 @@ export default function Statistiques(props) {
         source={require('../../assets/fond.png')}>
         <View style={styles.header}>
           <LogoMin />
-          <TouchableOpacity onPress={()=> alertDate()} >
             <Text style={[styles.titreBleu, {height: 50}]}>Statistiques</Text>
-          </TouchableOpacity>
-
           {/**/}
           <DateRangePicker
             onChange={date => {
@@ -208,7 +205,7 @@ export default function Statistiques(props) {
                     tab.push(moment(date.endDate).format("DD-MMM"))
                     let tab2 = sessions.filter( session => moment(session.dateSession).isBefore(Dates[1]) && moment(session.dateSession).isAfter(Dates[0]) )
                     tab2.length !== 0 ?
-                        DefLabels(tab2) : console.log("date fausse")
+                        DefLabels(tab2) : alertDate()
                   }
                 }
             }}
@@ -234,9 +231,6 @@ export default function Statistiques(props) {
                 mode="dropdown"
                 onValueChange={(itemValue) => {
                   setselector(itemValue)
-                  let tab = sessions.filter( session => moment(session.dateSession).isBefore(Dates[1]) && moment(session.dateSession).isAfter(Dates[0]) )
-                  //console.log(tab.map(session => session._id))
-                  DefLabels(sessions)
                 }}
                 itemStyle={styles.itemStyle}
                 >
