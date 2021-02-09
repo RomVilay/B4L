@@ -22,25 +22,31 @@ import {Stopwatch} from 'react-native-stopwatch-timer';
 import SegmentedRoundDisplay from 'react-native-segmented-round-display/src';
 import Svg from 'react-native-svg';
 import AfficheurCompteur from './afficheurConpteur';
+import AfficheurDonnees from "./afficheurDonnees";
 import navigation from "../../assets/navigation";
 import SliderDefis from "./sliderDefis";
-export default class Compteur extends React.Component {
-  constructor(props) {
-    super(props);
-    this.RotateValueHolder = new Animated.Value(0);
-    this.rpm = new Animated.ValueXY({x: 0, y: 0});
-    this.kcal = new Animated.ValueXY({x: 0, y: 0});
-    this.kmh = new Animated.ValueXY({x: 0, y: 0});
-    this.state = {
+export default function Compteur (props) {
+    const [RotateValueHolder,setRotateValueHolder] = React.useState(new Animated.Value(0));
+    const [start,setStart] = React.useState(true)
+    const [reset,setReset] = React.useState(false)
+    const [pause,setPause] =React.useState('')
+    const [currentTime,setCTime] = React.useState('')
+    const[startPosition,setSPosition] = React.useState(-160)
+    const[endPosition,setEPosition] = React.useState(-130)
+    const outputRange = ['0deg', '10deg']
+    const [seg,setSeg] = React.useState(0)
+    const [angle,setAngle] = React.useState(-150)
+    const [up,setUp] = React.useState(true)
+    const [defis,setDefis] = React.useState(props.route.params.defis)
+    const[watts,setWatts] = React.useState(200)
+    const [time,getTime] = React.useState('')
+    const state = {
       kmp: 0,
       kmh: 0,
       kmc: 10,
       watts: 200,
       rpm: 0,
       kcal: 0,
-      start: true,
-      reset: false,
-      pause: '',
       time: '',
       angle: -150,
       startPosition: -160,
@@ -48,188 +54,76 @@ export default class Compteur extends React.Component {
       outputRange: ['0deg', '10deg'],
       seg: 0,
       up: true,
-      defis: this.props.route.params.defis
     };
-    this.tab = ['rpm', 'kmh', 'kcals'];
-    this.toggleStopwatch = this.toggleStopwatch.bind(this);
+    /*this.toggleStopwatch = this.toggleStopwatch.bind(this);
     this.resetStopwatch = this.resetStopwatch.bind(this);
-    this._isMounted = false
+    this._isMounted = false*/
+
+  const toggleStopwatch = () => {
+      setStart(!start)
+      setReset(false)
+    pause === ''
+      ? setPause( 'Pause')
+      : setPause( '');
   }
-  toggleStopwatch() {
-    this.setState({start: !this.state.start, reset: false});
-    this.state.pause == ''
-      ? this.setState({pause: 'Pause'})
-      : this.setState({pause: ''});
+  const resetStopwatch = () => {
+      setStart(false)
+      setReset(true)
   }
-  resetStopwatch() {
-    this.setState({start: false, reset: true});
-  }
-  getFormattedTime(time) {
-    this.currentTime = time;
+  const getFormattedTime = (time) => {
+    setCTime(time)
   }
 
   //fonction qui défini la rotation à effectuer
-  randomRotation() {
-   if (this.state.up) {
-        const nend = this.state.endPosition + 10;
+  const randomRotation = () => {
+   if (up) {
+        const nend = endPosition + 10;
         const ang = `${nend}deg`; //définition de la valeur de rotation
-        this.setState({
-          startPosition: this.state.endPosition,
-          endPosition: nend,
-          seg:this.state.seg+1,
-          angle: nend,
-        });
-        if (this.state.endPosition >= -100) {
-          this.state.up = false;
+        setSPosition(endPosition)
+        setEPosition(nend)
+        setSeg(seg+1)
+        setAngle(nend)
+        if (endPosition >= -100) {
+          setUp(false)
         }
       } else {
-        const nend = this.state.endPosition - 10;
+        const nend = endPosition - 10;
         const ang = `${nend}deg`; //définition de la valeur de rotation
-        this.setState({
-          startPosition: this.state.endPosition,
-          endPosition: nend,
-           seg:this.state.seg-1,
-          angle: nend,
-        });
-        if (this.state.endPosition <= -130) {
-          this.state.up = true;
+        setSPosition(endPosition)
+        setEPosition(nend)
+        setSeg(seg+1)
+        setAngle(nend)
+        if (endPosition <= -130) {
+          setUp(true);
         }
       }
   }
   //déclenchement de l'animation du compteur à l'ouverture de la page
-  componentDidMount() {
-    this._isMounted = true
-  this.interval = setInterval(() => {
-    this.StartImageRotateFunction()
-    this.randomRotation()
-  }, 1200); //mise à jour du tableau d'interpolation de la rotation, toutes les 6s
-    //this._isMounted && this.StartImageRotateFunction();
-    this._isMounted && this.randomRotation();
-  }
-  //arrêt de l'animation
-  componentWillUnmount() {
-    this._isMounted = false
-    clearInterval(this.interval)
-    //clearInterval(this.randomRotation());
-  }
+  /*React.useEffect(()=> {
+    let  interval = setInterval(() => {
+     StartImageRotateFunction()
+      randomRotation()
+    }, 1200); //mise à jour du tableau d'interpolation de la rotation, toutes les 6s
+    return() =>{
+      clearInterval(interval)
+    }
+  })*/
+
   //fonction animation
-  StartImageRotateFunction() {
-    this.RotateValueHolder.setValue(this.state.startPosition); //définition de la position de départ pour l'animation
-    Animated.timing(this.RotateValueHolder, {
-      toValue: this.state.endPosition,
+  /*const StartImageRotateFunction = () => {
+    setRotateValueHolder(RotateValueHolder.setValue(startPosition))//définition de la position de départ pour l'animation
+    Animated.timing(RotateValueHolder, {
+      toValue: endPosition,
       Easing: 'linear',
       duration: 1000,
-    }).start(() => this.StartImageRotateFunction()); // animation de la rotation, pour une durée de 3s
-  }
+    }).start(() => StartImageRotateFunction()); // animation de la rotation, pour une durée de 3s
+  }*/
   //animation de déplacement des valeur pour la flèche droite
-  StartTranslateFunction = () => {
-    // test de la première valeur du tableau pour savoir quel déplacement effectuer
-    if (this.tab[0] === 'rpm') {
-      Animated.parallel([
-        Animated.timing(this.rpm, {
-          toValue: {x: 63, y: 50},
-          duration: 1000,
-        }),
-        Animated.timing(this.kmh, {
-          toValue: {x: 45, y: -60},
-          duration: 1000,
-        }),
-        Animated.timing(this.kcal, {
-          toValue: {x: -110, y: -10},
-          duration: 1000,
-        }),
-      ]).start();
-      //lancement en parallèle de 3 déplacement avec une durée de 1s
-    }
-    if (this.tab[0] == 'kcals') {
-      Animated.parallel([
-        Animated.timing(this.kcal, {
-          toValue: {x: -39, y: 48},
-          duration: 1000,
-        }),
-        Animated.timing(this.rpm, {
-          toValue: {x: 112, y: 0},
-          duration: 1000,
-        }),
-        Animated.timing(this.kmh, {
-          toValue: {x: -65, y: -55},
-          duration: 1000,
-        }),
-      ]).start();
-    }
-    if (this.tab[0] == 'kmh') {
-      Animated.parallel([
-        Animated.timing(this.kmh, {
-          toValue: {x: 0, y: 0},
-          duration: 1000,
-        }),
-        Animated.timing(this.kcal, {
-          toValue: {x: 0, y: 0},
-          duration: 1000,
-        }),
-        Animated.timing(this.rpm, {
-          toValue: {x: 0, y: 0},
-          duration: 1000,
-        }),
-      ]).start();
-    }
-    this.tab = [this.tab[2], this.tab[0], this.tab[1]];
-  };
+
   //fonction de déplacement des valeur en sens inverse
-  ReverseSlider = () => {
-    if (this.tab[0] === 'kmh') {
-      Animated.parallel([
-        Animated.timing(this.rpm, {
-          toValue: {x: 63, y: 50},
-          duration: 1000,
-        }),
-        Animated.timing(this.kmh, {
-          toValue: {x: 45, y: -60},
-          duration: 1000,
-        }),
-        Animated.timing(this.kcal, {
-          toValue: {x: -110, y: -10},
-          duration: 1000,
-        }),
-      ]).start();
-    }
-    if (this.tab[0] == 'kcals') {
-      Animated.parallel([
-        Animated.timing(this.rpm, {
-          toValue: {x: 0, y: 0},
-          duration: 1000,
-        }),
-        Animated.timing(this.kmh, {
-          toValue: {x: 0, y: 0},
-          duration: 1000,
-        }),
-        Animated.timing(this.kcal, {
-          toValue: {x: 0, y: 0},
-          duration: 1000,
-        }),
-      ]).start();
-    }
-    if (this.tab[0] == 'rpm') {
-      Animated.parallel([
-        Animated.timing(this.kcal, {
-          toValue: {x: -39, y: 48},
-          duration: 1000,
-        }),
-        Animated.timing(this.rpm, {
-          toValue: {x: 112, y: 0},
-          duration: 1000,
-        }),
-        Animated.timing(this.kmh, {
-          toValue: {x: -65, y: -55},
-          duration: 1000,
-        }),
-      ]).start();
-    }
-    //mise à jour du tableau représentant la position des valeur, la première étant la plus à gauche et la dernière celle à droite
-    this.tab = [this.tab[1], this.tab[2], this.tab[0]];
-  };
+
   //fonction quitter la session
-  AlertQuit = () =>
+  const AlertQuit = () =>
     Alert.alert(
       '',
       'Voulez vous arrêter la session ?',
@@ -240,60 +134,43 @@ export default class Compteur extends React.Component {
         },
         {
           text: 'quitter la session',
-          onPress: () => this.props.navigation.navigate('Home'),
+          onPress: () => props.navigation.navigate('Home'),
         },
       ],
       {cancelable: false},
     );
-
-  render() {
     //définition du tableau d'interpolation pour la première rotation
-    const rotation = this.RotateValueHolder.interpolate({
+    const rotation = RotateValueHolder.interpolate({
       inputRange: [0, 10],
-      outputRange: this.state.outputRange,
+      outputRange: outputRange,
     });
     //définition des positions pour les différentes valeurs
-    const trans0 = this.rpm;
-    const trans1 = this.kcal;
-    const trans2 = this.kmh;
-    const example = {
-      displayValue: false,
-      formatValue: value => `R$ ${value.toFixed(2)}`,
-      radius: 120,
-      segments: [
-        {
-          total: 80,
-          filled: this.state.endPosition,
-        },
-      ],
-      emptyArcColor: 'transparent',
-      incompleteArcColor: '#5FCDFA',
-    };
+
     return (
       <SafeAreaView style={styles.container}>
         <Image source={require('../../assets/fond.png')} style={styles.fond} />
         <View style={styles.header}>
           <LogoMin />
           <Stopwatch
-            start={this.state.start}
-            reset={this.state.reset}
+            start={start}
+            reset={reset}
             options={options}
-            getTime={this.getFormattedTime("00:00:00")}
+            getTime={(time) => setCTime(time)}
             msec={true}
           />
           <Text
             style={{color: '#5FCDFA', fontSize: 30, fontFamily: 'TallFilms'}}>
-            {this.state.pause}
+            {pause}
           </Text>
           <TouchableOpacity
             style={{position: 'absolute', top: 30, left: 20}}
             onPress={() => {
-              this.AlertQuit();
+              AlertQuit();
             }}>
             <Icon name="power-settings-new" size={40} color="white" />
           </TouchableOpacity>
           <View style={{flexDirection:"row"}}>
-            <SliderDefis defis={this.state.defis}/>
+            <SliderDefis defis={defis}/>
           </View>
         </View>
         <View style={styles.middle}>
@@ -304,94 +181,25 @@ export default class Compteur extends React.Component {
               source={require('../../assets/Compteur/aiguille.png')}
               style={[{transform: [{rotate: rotation}]}, styles.aiguille]}
             />
-            <AfficheurCompteur style={styles.graph} i={this.state.seg} />
-            <View style={styles.midTop}>
-              <ImageBackground
-                source={require('../../assets/Accueil/fondBulle.png')}
-                style={[
-                  styles.fondBulle,
-                  {borderRadius: 50, marginLeft: '22%', textAlign: 'center'},
-                ]}>
-                <Animated.View style={[styles.textbloc, trans0.getLayout()]}>
-                  <Text style={[styles.midText, {fontSize: 30}]}>
-                    {this.state.rpm}
-                  </Text>
-                  <Text style={[styles.midText2, {fontSize: 20}]}>rpm</Text>
-                </Animated.View>
-              </ImageBackground>
-              <ImageBackground
-                source={require('../../assets/Accueil/fondBulle.png')}
-                style={[
-                  styles.fondBulle,
-                  {borderRadius: 50, marginLeft: '5%'},
-                ]}>
-                <Animated.View style={[styles.textbloc, trans1.getLayout()]}>
-                  <Text style={[styles.midText, {fontSize: 30}]}>
-                    {this.state.kcal}
-                  </Text>
-                  <Text style={[styles.midText2, {fontSize: 20}]}>kcals</Text>
-                </Animated.View>
-              </ImageBackground>
-            </View>
-            <View style={styles.midMid}>
-              <TouchableOpacity onPress={this.ReverseSlider}>
-                <Fleche style={styles.flecheG} />
-              </TouchableOpacity>
-              <Animated.View
-                style={[styles.textbloc, {margin: 10}, trans2.getLayout()]}>
-                <Text style={[styles.midText, {fontSize: 30}]}>
-                  {this.state.kmh}
-                </Text>
-                <Text style={styles.midText2}>kmh</Text>
-              </Animated.View>
-              <TouchableOpacity onPress={this.StartTranslateFunction}>
-                <Fleche style={styles.flecheD} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.midBot}>
-              <View style={styles.textbloc}>
-                <View style={{flexDirection: 'column'}}>
-                  <Text style={[styles.midText, {fontSize: 20}]}>
-                    {this.state.kmp}
-                    <Text
-                      style={[
-                        styles.midText2,
-                        {color: 'white', marginLeft: '2%'},
-                      ]}>
-                      {' '}
-                      km <Text style={{color: '#5FCDFA'}}>parcourus </Text>
-                    </Text>
-                  </Text>
-                  <Text style={[styles.midText, {fontSize: 20}]}>
-                    {this.state.kmc}{' '}
-                    <Text
-                      style={[
-                        styles.midText2,
-                        {color: 'white', marginLeft: '2%'},
-                      ]}>
-                      km <Text style={{color: '#5FCDFA'}}> cumulés</Text>
-                    </Text>
-                  </Text>
-                </View>
-              </View>
-            </View>
+            <AfficheurCompteur style={styles.graph} i={seg} />
+            <AfficheurDonnees />
           </ImageBackground>
           <View style={[{flex: 1, flexDirection: 'row', marginLeft: '25%'}]}>
             <TouchableOpacity onPress={() => {
-              this.state.watts -= 5;
+              setWatts(watts-5)
             }}>
               <Text style={[styles.midText, {fontSize: 60, marginRight: '5%', marginTop:30}]}> - </Text>
             </TouchableOpacity>
             <View style={[styles.textbloc,{marginTop:30}]}>
               <Text style={[styles.midText, {fontSize: 60}]}>
                 {' '}
-                {this.state.watts}{' '}
+                {watts}{' '}
               </Text>
               <Text style={[styles.midText2]}>watts </Text>
              </View>
             <TouchableOpacity
                 onPress={() => {
-                  this.state.watts += 5;
+                  setWatts(watts+5);
                 }}>
               <Text
                   style={[styles.midText, {fontSize: 70, marginRight: '5%', marginTop:25}]}
@@ -404,14 +212,14 @@ export default class Compteur extends React.Component {
         <View style={styles.footer}>
           <TouchableOpacity
               style={[styles.midText2, { margin:'5%', zIndex:600}]}
-              onPress={() => this.toggleStopwatch()}>
+              onPress={() => toggleStopwatch()}>
             <Text style={[styles.midText, {fontSize: 30}]}>Pause</Text>
           </TouchableOpacity>
           { /*<NavApp navigation={this.props.navigation}  style={{marginTop:20}}/>  */}
         </View>
       </SafeAreaView>
     );
-  }
+
 }
 //style compteur
 const options = {
@@ -461,7 +269,7 @@ const styles = StyleSheet.create({
     zIndex: 0,
   },
   aiguille: {
-    top: '20%',
+    top: '25%',
     bottom: '28%',
     width: 200,
     height: 235,
