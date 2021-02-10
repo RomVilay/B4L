@@ -24,13 +24,11 @@ import SegmentedRoundDisplay from "react-native-segmented-round-display/src";
 const fondBulleUri = RNimage.resolveAssetSource(fondBulle);
 import { AnimatedSVGPath } from "react-native-svg-animations";
 
-export default class AfficheurCompteur extends React.Component {
-    constructor(props) {
-        super(props);
-        this.canvas = React.createRef();
+export default function  AfficheurCompteur (props){
+        const canvas = React.createRef();
       //  this.handleCompteur = this.handleCompteur.bind(this)
-        this.state= {
-            tab :[
+    const [anim,setAnim] = React.useState("")
+    const [tab,setTab]= React.useState([
                 "M115 277 C 110 273 110 275 100 267",
                 "M93 262 C 90 258 90 260 83 253",
                 "M76 245 C 80 250 80 251 69 235",
@@ -49,30 +47,19 @@ export default class AfficheurCompteur extends React.Component {
                 "M275 97 C 280 102 280 102 295 125",
                 "M300 130 C 305 150 305 165 304 175",
                 "M305 180 C 300 220 297 220 290 230"
-            ],
-            anim:""
-        }
-    }
-
-
-    animation(){
+            ])
+    const animation =  () => {
         let svg = ""
-        for (let x = 0; x<this.props.i; x++){
-            svg+=this.state.tab[x]
+        for (let x = 0; x<props.i; x++){
+            svg+=tab[x]
         }
-        this.setState({anim: svg})
+        setAnim(svg)
     }
+    React.useEffect(()=>{
+        animation()
+    },[props.i])
 
-    componentDidMount() {
-        this.animation()
-    }
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if ( prevProps.i !== this.props.i){
-            this.animation()
-        }
-    }
 
-    render(){
         //M120,280 a125,125 0 1,1 110,10 cercle complet
         //`M120,280 a122,122 0 1,1 180,-100 ` cercle - 3/4
         //M120 280 C 92 279 66 244 72 221
@@ -132,7 +119,7 @@ export default class AfficheurCompteur extends React.Component {
                 animationDuration:6200,
             };
         return(
-            <View style={this.props.style}>
+            <View style={props.style}>
                 <Svg >
                     <AnimatedSVGPath
                         strokeColor={"#5FCDFA"}
@@ -144,7 +131,7 @@ export default class AfficheurCompteur extends React.Component {
                         delay={2500}
                         duration={1000}
                         loop={true}
-                        d={this.state.anim}
+                        d={anim}
                         />
                     {/*
                 <Path
@@ -175,7 +162,7 @@ export default class AfficheurCompteur extends React.Component {
             </View>
             )
 
-    }
+
 
 }
 const styles = StyleSheet.create({

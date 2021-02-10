@@ -26,7 +26,7 @@ import AfficheurDonnees from "./afficheurDonnees";
 import navigation from "../../assets/navigation";
 import SliderDefis from "./sliderDefis";
 export default function Compteur (props) {
-    const [RotateValueHolder,setRotateValueHolder] = React.useState(new Animated.Value(0));
+    const rotateValueHolder= React.useRef(new Animated.Value(0)).current;
     const [start,setStart] = React.useState(true)
     const [reset,setReset] = React.useState(false)
     const [pause,setPause] =React.useState('')
@@ -39,7 +39,6 @@ export default function Compteur (props) {
     const [up,setUp] = React.useState(true)
     const [defis,setDefis] = React.useState(props.route.params.defis)
     const[watts,setWatts] = React.useState(200)
-    const [time,getTime] = React.useState('')
     const state = {
       kmp: 0,
       kmh: 0,
@@ -70,28 +69,25 @@ export default function Compteur (props) {
       setStart(false)
       setReset(true)
   }
-  const getFormattedTime = (time) => {
-    setCTime(time)
-  }
 
   //fonction qui défini la rotation à effectuer
-  const randomRotation = () => {
-   if (up) {
+  function randomRotation (){
+     if (up) {
         const nend = endPosition + 10;
         const ang = `${nend}deg`; //définition de la valeur de rotation
         setSPosition(endPosition)
         setEPosition(nend)
-        setSeg(seg+1)
         setAngle(nend)
-        if (endPosition >= -100) {
+        seg >= 4 ? setUp(false) : setSeg(seg => seg+1)
+        /*if (endPosition >= -100) {
           setUp(false)
-        }
+        }*/
       } else {
         const nend = endPosition - 10;
         const ang = `${nend}deg`; //définition de la valeur de rotation
         setSPosition(endPosition)
         setEPosition(nend)
-        setSeg(seg+1)
+       setSeg(seg => seg-1)
         setAngle(nend)
         if (endPosition <= -130) {
           setUp(true);
@@ -99,25 +95,27 @@ export default function Compteur (props) {
       }
   }
   //déclenchement de l'animation du compteur à l'ouverture de la page
-  /*React.useEffect(()=> {
-    let  interval = setInterval(() => {
-     StartImageRotateFunction()
-      randomRotation()
-    }, 1200); //mise à jour du tableau d'interpolation de la rotation, toutes les 6s
+  React.useEffect(()=> {
+    //StartImageRotateFunction()
+    //randomRotation()
+    StartImageRotateFunction()
+    const  interval = setInterval(() => {
+     randomRotation()
+    }, 900); //mise à jour du tableau d'interpolation de la rotation, toutes les 6s
     return() =>{
       clearInterval(interval)
     }
-  })*/
+  },[seg,endPosition,startPosition,angle,up])
 
   //fonction animation
-  /*const StartImageRotateFunction = () => {
-    setRotateValueHolder(RotateValueHolder.setValue(startPosition))//définition de la position de départ pour l'animation
-    Animated.timing(RotateValueHolder, {
+  const StartImageRotateFunction = () => {
+    rotateValueHolder.setValue(startPosition)//définition de la position de départ pour l'animation
+    Animated.timing(rotateValueHolder, {
       toValue: endPosition,
       Easing: 'linear',
       duration: 1000,
-    }).start(() => StartImageRotateFunction()); // animation de la rotation, pour une durée de 3s
-  }*/
+    }).start(); // animation de la rotation
+  }
   //animation de déplacement des valeur pour la flèche droite
 
   //fonction de déplacement des valeur en sens inverse
@@ -140,7 +138,7 @@ export default function Compteur (props) {
       {cancelable: false},
     );
     //définition du tableau d'interpolation pour la première rotation
-    const rotation = RotateValueHolder.interpolate({
+    const rotation = rotateValueHolder.interpolate({
       inputRange: [0, 10],
       outputRange: outputRange,
     });

@@ -11,13 +11,13 @@ export default function AfficheurDonnees (props) {
         rpm: 0,
         kcal: 0,
     })
-    const prpm = new Animated.ValueXY({x: 0, y: 0});
-    const pkcal = new Animated.ValueXY({x: 0, y: 0});
-    const pkmh = new Animated.ValueXY({x: 0, y: 0});
+    const prpm = React.useRef(new Animated.ValueXY({x: 0, y: 0})).current;
+    const pkcal = React.useRef(new Animated.ValueXY({x: 0, y: 0})).current;
+    const pkmh = React.useRef(new Animated.ValueXY({x: 0, y: 0})).current;
     const trans0 = prpm;
     const trans1 = pkcal;
     const trans2 = pkmh;
-    let  tab = ['rpm', 'kmh', 'kcals'];
+    const[tab,setTab] = React.useState(['rpm', 'kmh', 'kcals']);
     //animation de déplacement des valeur pour la flèche droite
     const StartTranslateFunction = () => {
         // test de la première valeur du tableau pour savoir quel déplacement effectuer
@@ -70,7 +70,8 @@ export default function AfficheurDonnees (props) {
                 }),
             ]).start();
         }
-        tab = [tab[2], tab[0], tab[1]];
+        setTab([tab[2], tab[0], tab[1]]);
+        console.log(tab)
     };
    const ReverseSlider = () => {
         if (tab[0] === 'kmh') {
@@ -122,10 +123,10 @@ export default function AfficheurDonnees (props) {
             ]).start();
         }
         //mise à jour du tableau représentant la position des valeur, la première étant la plus à gauche et la dernière celle à droite
-        tab = [tab[1], tab[2], tab[0]];
+        setTab([tab[1], tab[2], tab[0]]);
     };
     return(
-        <View style={{selfAlign:"center", flex:1, width:500, borderWidth:3}}>
+        <View style={{selfAlign:"center", flex:1, width:500}}>
             <View style={styles.midTop}>
                 <ImageBackground
                     source={require('../../assets/Accueil/fondBulle.png')}
