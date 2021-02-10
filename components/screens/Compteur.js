@@ -38,6 +38,8 @@ export default function Compteur (props) {
     const [angle,setAngle] = React.useState(-150)
     const [up,setUp] = React.useState(true)
     const [defis,setDefis] = React.useState(props.route.params.defis)
+    const [defisValid,setDefisValid] = React.useState([])
+    const [defic,setDefic] = React.useState(0)
     const[watts,setWatts] = React.useState(200)
     const state = {
       kmp: 0,
@@ -96,8 +98,6 @@ export default function Compteur (props) {
   }
   //déclenchement de l'animation du compteur à l'ouverture de la page
   React.useEffect(()=> {
-    //StartImageRotateFunction()
-    //randomRotation()
     StartImageRotateFunction()
     const  interval = setInterval(() => {
      randomRotation()
@@ -144,6 +144,10 @@ export default function Compteur (props) {
     });
     //définition des positions pour les différentes valeurs
 
+   function ValiderDefis () {
+     setDefisValid([...defisValid,defis[defic]])
+     setDefic(defic => defic+1)
+   }
     return (
       <SafeAreaView style={styles.container}>
         <Image source={require('../../assets/fond.png')} style={styles.fond} />
@@ -168,7 +172,10 @@ export default function Compteur (props) {
             <Icon name="power-settings-new" size={40} color="white" />
           </TouchableOpacity>
           <View style={{flexDirection:"row"}}>
-            <SliderDefis defis={defis}/>
+            <SliderDefis defis={defis} defisV={defisValid} current={defic}/>
+            <TouchableOpacity onPress={() => ValiderDefis() } >
+              <Text>valid</Text>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.middle}>
@@ -189,7 +196,7 @@ export default function Compteur (props) {
               <Text style={[styles.midText, {fontSize: 60, marginRight: '5%', marginTop:30}]}> - </Text>
             </TouchableOpacity>
             <View style={[styles.textbloc,{marginTop:30}]}>
-              <Text style={[styles.midText, {fontSize: 60}]}>
+              <Text style={[styles.midText, {fontSize: 60, marginTop:10}]}>
                 {' '}
                 {watts}{' '}
               </Text>
@@ -238,7 +245,7 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    flex: 1,
+    flex: 2,
     flexDirection: 'column',
     alignItems: 'center',
     zIndex: 100,
@@ -258,29 +265,28 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   compteur: {
-    flex: 3,
-    width: '110%',
-    height: '110%',
-    right: '10%',
-    resizeMode: 'cover',
+    height:300,
+    width:400,
+    flex: 2,
+    resizeMode: 'contain',
     justifyContent: 'center',
     zIndex: 0,
   },
   aiguille: {
-    top: '25%',
+    top: '20%',
     bottom: '28%',
     width: 200,
     height: 235,
     position: 'absolute',
     resizeMode: 'stretch',
-    marginLeft: '29%',
+    marginLeft: '22%',
     alignContent: 'center',
     zIndex: 0,
   },
   graph: {
     position: 'absolute',
     top: 0,
-    left: 65,
+    left: 30,
     width: Dimensions.get('window').width - 55,
     height: 350,
     zIndex: 0,

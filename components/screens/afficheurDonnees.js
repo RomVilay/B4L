@@ -1,5 +1,5 @@
 import React from "react";
-import {View, ImageBackground, Animated, Text, StyleSheet, TouchableOpacity} from "react-native";
+import {View, ImageBackground, Animated, Text, StyleSheet, TouchableOpacity, Platform} from "react-native";
 import Fleche from "../../assets/fleche";
 
 export default function AfficheurDonnees (props) {
@@ -24,11 +24,11 @@ export default function AfficheurDonnees (props) {
         if (tab[0] === 'rpm') {
             Animated.parallel([
                 Animated.timing(prpm, {
-                    toValue: {x: 63, y: 70},
+                    toValue: {x: 55, y: 55},
                     duration: 1000,
                 }),
                 Animated.timing(pkmh, {
-                    toValue: {x: 65, y: -55},
+                    toValue: {x: 50, y: -52},
                     duration: 1000,
                 }),
                 Animated.timing(pkcal, {
@@ -41,15 +41,15 @@ export default function AfficheurDonnees (props) {
         if (tab[0] === 'kcals') {
             Animated.parallel([
                 Animated.timing(pkcal, {
-                    toValue: {x: -47, y: 72},
+                    toValue: {x: -52, y: 53},
                     duration: 1000,
                 }),
                 Animated.timing(prpm, {
-                    toValue: {x: 112, y: 0},
+                    toValue: {x: 108, y: 0},
                     duration: 1000,
                 }),
                 Animated.timing(pkmh, {
-                    toValue: {x: -65, y: -80},
+                    toValue: {x: -50, y: -55},
                     duration: 1000,
                 }),
             ]).start();
@@ -71,17 +71,16 @@ export default function AfficheurDonnees (props) {
             ]).start();
         }
         setTab([tab[2], tab[0], tab[1]]);
-        console.log(tab)
     };
    const ReverseSlider = () => {
         if (tab[0] === 'kmh') {
             Animated.parallel([
                 Animated.timing(prpm, {
-                    toValue: {x: 63, y: 50},
+                    toValue: {x: 53, y: 50},
                     duration: 1000,
                 }),
                 Animated.timing(pkmh, {
-                    toValue: {x: 45, y: -60},
+                    toValue: {x: 55, y: -55},
                     duration: 1000,
                 }),
                 Animated.timing(pkcal, {
@@ -109,15 +108,15 @@ export default function AfficheurDonnees (props) {
         if (tab[0] == 'rpm') {
             Animated.parallel([
                 Animated.timing(pkcal, {
-                    toValue: {x: -39, y: 48},
+                    toValue: {x: -52, y: 52},
                     duration: 1000,
                 }),
                 Animated.timing(prpm, {
-                    toValue: {x: 112, y: 0},
+                    toValue: {x: 105, y: 0},
                     duration: 1000,
                 }),
                 Animated.timing(pkmh, {
-                    toValue: {x: -65, y: -55},
+                    toValue: {x: -55, y: -50},
                     duration: 1000,
                 }),
             ]).start();
@@ -132,7 +131,7 @@ export default function AfficheurDonnees (props) {
                     source={require('../../assets/Accueil/fondBulle.png')}
                     style={[
                         styles.fondBulle,
-                        { marginLeft: 80, textAlign: 'center'},
+                        { marginLeft: 75, textAlign: 'center'},
                     ]}>
                     <Animated.View style={[styles.textbloc, trans0.getLayout()]}>
                         <Text style={[styles.midText, {fontSize: 30}]}>
@@ -145,7 +144,7 @@ export default function AfficheurDonnees (props) {
                     source={require('../../assets/Accueil/fondBulle.png')}
                     style={[
                         styles.fondBulle,
-                        { marginLeft: '5%'},
+                        { marginLeft: 15},
                     ]}>
                     <Animated.View style={[styles.textbloc, trans1.getLayout()]}>
                         <Text style={[styles.midText, {fontSize: 30}]}>
@@ -160,11 +159,11 @@ export default function AfficheurDonnees (props) {
                     <Fleche style={styles.flecheG} />
                 </TouchableOpacity>
                 <Animated.View
-                    style={[styles.textbloc, {margin: 5}, trans2.getLayout()]}>
+                    style={[styles.textbloc, {margin: 8}, trans2.getLayout()]}>
                     <Text style={[styles.midText, {fontSize: 30}]}>
                         {state.kmh}
                     </Text>
-                    <Text style={styles.midText2}>kmh</Text>
+                    <Text style={[styles.midText2,{fontSize:20}]}>kmh</Text>
                 </Animated.View>
                 <TouchableOpacity onPress={StartTranslateFunction}>
                     <Fleche style={styles.flecheD} />
@@ -178,7 +177,7 @@ export default function AfficheurDonnees (props) {
                             <Text
                                 style={[
                                     styles.midText2,
-                                    {color: 'white', marginLeft: '2%'},
+                                    {color: 'white'},
                                 ]}>
                                 {' '}
                                 km <Text style={{color: '#5FCDFA'}}>parcourus </Text>
@@ -189,7 +188,7 @@ export default function AfficheurDonnees (props) {
                             <Text
                                 style={[
                                     styles.midText2,
-                                    {color: 'white', marginLeft: '2%'},
+                                    {color: 'white'},
                                 ]}>
                                 km <Text style={{color: '#5FCDFA'}}> cumulés</Text>
                             </Text>
@@ -203,21 +202,19 @@ export default function AfficheurDonnees (props) {
 const styles = StyleSheet.create(
     {
         flecheG: {
-            marginTop: '5%',
             transform: [{scale: 2}],
             marginRight: 50,
         },
         flecheD: {
-            marginTop: '5%',
             transform: [{scale: 2}, {rotate: '180deg'}],
             marginLeft: 60,
             right: '5%',
         },
         fondBulle: {
-            borderRadius:50,
+            borderRadius:20,
             width: 90,
             height: 90,
-            resizeMode: 'cover',
+            resizeMode: 'center',
             justifyContent: 'center',
         },
         textbloc: {
@@ -241,24 +238,31 @@ const styles = StyleSheet.create(
             flexDirection: 'row',
             alignItems: 'center',
             zIndex: 100,
-            marginLeft: '10%',
-            paddingTop: '20%',
+            marginLeft: 25,
+            marginTop:85
         },
         midMid: {
             flex: 1,
             flexDirection: 'row',
             alignItems: 'center',
             zIndex: 100,
-            paddingTop: '5%',
-            paddingBottom: 20,
-            paddingLeft:150,
+            marginTop: '2%',
+            paddingLeft:112,
         },
         midBot: {
-            flex: 1,
+            flex: 2,
             alignItems: 'center',
+            width: 420,
             zIndex: 100,
-            marginLeft: 5,
-            paddingBottom: '10%'
+            marginLeft: 0,
+                ...Platform.select({
+                    ios:{
+                        marginTop:5
+                    },
+                    android:{
+                        paddingTop:15
+                    }
+                })
         }
     }
 )

@@ -1,18 +1,21 @@
-import React from "react";
-import {SafeAreaView, View, FlatList, Text, StyleSheet} from "react-native";
+import React, {useRef} from "react";
+import {SafeAreaView, View, FlatList, Text, StyleSheet, TouchableWithoutFeedback, TouchableOpacity} from "react-native";
 
 const SliderDefis = (props) => {
-    const[currentDefis,setCurent] = React.useState(props.defis[0])
-    const[valid,setValid] = React.useState([])
-    const renderItem = ({item}) =>{
-       if (item === currentDefis){
+    const flist = useRef()
+    const[currentDefis,setCurent] = React.useState(props.defis[props.current])
+    const[valid,setValid] = React.useState(props.defisV)
+    const renderItem = ({item,index}) =>{
+       if (item === props.defis[props.current]){
            return(
-               <View style={styles.defisCardBlue}>
+               <TouchableWithoutFeedback onPress={()=>{}}>
+               <View style={[styles.defisCardBlue,{marginLeft:index === 0 ? 100:0, marginRight:index === props.defis.length-1 ? 200:0}]}>
                    <Text style={styles.text}>{item.nomDefi}</Text>
                </View>
+               </TouchableWithoutFeedback>
            )
        }
-       if (valid.includes(item)){
+       if (props.defisV.includes(item)){
            return(
                <View style={styles.defisCardGreen}>
                    <Text style={styles.text}>{item.nomDefi}</Text>
@@ -21,20 +24,30 @@ const SliderDefis = (props) => {
        }
        else{
            return(
+               <TouchableWithoutFeedback onPress={()=>{}}>
                <View style={styles.defisCardYellow}>
                    <Text style={styles.text}>{item.nomDefi}</Text>
                </View>
+               </TouchableWithoutFeedback>
            )
        }
     }
+    React.useEffect(() => {
+        if (props.current-1 > -1){flist.current.scrollToIndex({'index':props.current-1})}
+    },[flist,props.current])
     return(
         <>
         <FlatList
+            ref={flist}
+            extraData={props.defisV}
             data={props.defis}
             renderItem={renderItem}
             horizontal={true}
             keyExtractor={item => item._id}
             />
+            <TouchableOpacity onPress={() => { flist.current.scrollToIndex({'index':props.current-1})}}>
+                <Text>next</Text>
+            </TouchableOpacity>
         </>
     )
 }
