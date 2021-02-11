@@ -26,7 +26,6 @@ import { AnimatedSVGPath } from "react-native-svg-animations";
 
 export default function  AfficheurCompteur (props){
         const canvas = React.createRef();
-      //  this.handleCompteur = this.handleCompteur.bind(this)
     const [anim,setAnim] = React.useState("")
     const [tab,setTab]= React.useState([
                 "M115 277 C 110 273 110 275 100 267",
