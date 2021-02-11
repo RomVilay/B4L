@@ -25,25 +25,25 @@ import {height} from "react-native-daterange-picker/src/modules";
 // Imports Components
 
 
-export default class Jumelage extends React.Component {
+export default function Jumelage (props) {
     state = {
         code: 'qrcode'
     }
     //fonction en cas de réussite de scan du qrcode
-    onSuccess = e => {
-        this.props.navigation.navigate("Compteur",{'defis':this.props.route.params.defis})
+    const onSuccess = e => {
+        console.log(e.data.slice(7,10)+" - "+e.data.slice(19,e.data.length-2))
+        //props.navigation.navigate("Compteur",{'defis':props.route.params.defis})
        /* Linking
             .openURL(e.data)
             .catch(err =>
             console.error('An error occured', err)
         );*/
     }
-    render() {
         return (
             <SafeAreaView style={styles.container}>
                 <Image source={require('../../assets/fond.png')} style={styles.fond} />
                             <QRCodeScanner
-                                    onRead={this.onSuccess.bind(this)}
+                                    onRead={onSuccess}
                                     containerStyle={styles.cameracontainer}
                                     topContent={  <View style={{alignItems:"center"}}>
                                         <LogoMin /><Text style={[styles.textTitle, {fontSize:70, marginTop:5}]}>Jumelage</Text>
@@ -57,7 +57,7 @@ export default class Jumelage extends React.Component {
                                     bottomContent={
                                         <View style={{alignItems:'center'}}>
                                             <Text style={[styles.midText, {marginBottom:'10%'}]}>Scannez le qrcode pour associer l'appareil.</Text>
-                                            <NavApp navigation={this.props.navigation} />
+                                            <NavApp navigation={props.navigation} />
                                         </View>
                                        }
                                     bottomViewStyle={styles.footer}
@@ -65,7 +65,6 @@ export default class Jumelage extends React.Component {
 
             </SafeAreaView>
         )
-    }
 }
 
 const styles = StyleSheet.create({
