@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   View,
   StyleSheet,
@@ -13,6 +13,7 @@ import {
   Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import moment from "moment";
 // Imports Assets
 import LogoMin from '../../assets/logoMin';
 import NavApp from '../navigation/NavApp';
@@ -25,7 +26,10 @@ import AfficheurCompteur from './afficheurConpteur';
 import AfficheurDonnees from "./afficheurDonnees";
 import navigation from "../../assets/navigation";
 import SliderDefis from "./sliderDefis";
+import {createSession} from '../../functions/session';
+import {Context} from "../utils/Store";
 export default function Compteur (props) {
+  const [state, setState] = useContext(Context);
     const rotateValueHolder= React.useRef(new Animated.Value(0)).current;
     const [start,setStart] = React.useState(true)
     const [reset,setReset] = React.useState(false)
@@ -42,9 +46,15 @@ export default function Compteur (props) {
     const [defic,setDefic] = React.useState(0)
     const[watts,setWatts] = React.useState(200)
     const [vitesses,setVitesses] = React.useState([])
+    const [inclinaison,setInclinaison] = React.useState([])
+    const [energie,setEnergie] = React.useState(0)
+    const [distance,setDistance] = React.useState(0)
     /*this.toggleStopwatch = this.toggleStopwatch.bind(this);
     this.resetStopwatch = this.resetStopwatch.bind(this);
     this._isMounted = false*/
+
+
+  ///faire calcul points défis
 
   const toggleStopwatch = () => {
       setStart(!start)
@@ -57,6 +67,27 @@ export default function Compteur (props) {
       setStart(false)
       setReset(true)
   }
+  const saveSession = async () => {
+    const data = {
+      "defis":defisValid,
+      "vitesse":vitesses,
+      "inclinaison":inclinaison,
+      "idUser":state.user.username,
+      "points":1000,
+      "distance":distance,
+      "energie":energie,
+      "dateSession":moment(),
+      "dureeSession":currentTime,
+
+    }
+    const session = await createSession(data,state.token)
+    if (session.message) {
+      Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
+    } else {
+      console.log("session créée")
+    }
+
+  }
 
   //fonction qui défini la rotation à effectuer
   function randomRotation (){
@@ -67,6 +98,9 @@ export default function Compteur (props) {
         setEPosition(nend)
         setAngle(nend)
         setVitesses([...vitesses,seg])
+        setInclinaison([...inclinaison,1])
+        setEnergie(energie=>energie+100)
+       setDistance(distance=>distance+10)
         /*if (endPosition >= -100) {
           setUp(false)
         }*/
@@ -76,6 +110,8 @@ export default function Compteur (props) {
         setSPosition(endPosition)
         setEPosition(nend)
        setVitesses([...vitesses,seg])
+       setInclinaison([...inclinaison,1])
+       setEnergie(energie=>energie+100)
        setAngle(nend)
        /* if (endPosition <= -130) {
           setUp(true);
@@ -116,7 +152,9 @@ export default function Compteur (props) {
         {
           text: 'quitter la session',
           onPress: () => {props.navigation.navigate('Home')
-            console.log(vitesses)},
+            console.log(vitesses)
+            //saveSession()
+          },
         },
       ],
       {cancelable: false},
