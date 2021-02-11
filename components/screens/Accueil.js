@@ -18,9 +18,48 @@ var avatar = require('../../assets/avatar.png');
 import Avatar from "./Avatar";
 import DefisLong from "./DefisLong";
 
+
 export default function Accueil(props) {
   const [state, setState] = useContext(Context);
   const [defisL,setDefisL] = useState(true)
+  const [indices,setIndices] = useState([["KCAL","dépensés"],["WH","produits"],["KM","cumulés"]])
+  const [datacumul,setDatacumul] = useState([0,0,0])
+  React.useEffect(()=>{
+    if (state.user !== undefined){
+      switch (state.user.objectifs[0]){
+        case "0":
+          setIndices([["KCAL","dépensés"],["WH","produits"],["KM","cumulés"]])
+          let kcals = Number.parseFloat(state.user.totalEnergie*0.239).toFixed(2)
+          setDatacumul([kcals,state.user.totalEnergie,state.user.totalDistance])
+          console.log("m'amuser");
+          break;
+        case "1":
+          console.log("Brûler des calories");
+          setIndices([["WH","produits"],["KCAL","brulées"],["KM","cumulés"]])
+          kcals = Number.parseFloat(state.user.totalEnergie*0.239).toFixed(2)
+          setDatacumul([state.user.totalEnergie,kcals,state.user.totalDistance])
+          break;
+        case "2":
+          let tCo2 = Number.parseFloat(state.user.totalEnergie*Math.pow(10,-6)).toFixed(2)
+          setDatacumul([state.user.totalEnergie,tCo2,state.user.totalDistance])
+          setIndices([["WH","produits"],["tonnes CO2","économisées"],["KM","cumulés"]])
+          console.log("economies");
+          break;
+        case "3":
+          tCo2 = Number.parseFloat(state.user.totalEnergie*Math.pow(10,-6)).toFixed(2)
+          setDatacumul([tCo2,state.user.totalEnergie,state.user.totalDistance])
+          setIndices([["tonnes CO2","économisées"],["WH","produits"],["KM","cumulés"]])
+          console.log("environment");
+          break;
+        case "4":
+          kcals = Number.parseFloat(state.user.totalEnergie*0.239).toFixed(2)
+          setDatacumul([kcals,state.user.totalEnergie,state.user.totalDistance])
+          setIndices([["KCAL","dépensés"],["WH","générés"],["KM","cumulés"]])
+          console.log("sport");
+          break;
+      }
+    }
+  },[])
   // const [name, setName]= useState('Gaston')
   // const [kcal, setKcal]= useState('5400')
   // const [km, setKm] = useState('234.0')
@@ -48,9 +87,9 @@ export default function Accueil(props) {
         </View>
         <View style={styles.midMid}>
           <View style={[styles.midItem]}>
-            <Text style={styles.chiffres}>{Number.parseFloat(state.user.totalEnergie*0.239).toFixed(2)}</Text>
+            <Text style={styles.chiffres}>{datacumul[0]}</Text>
             <Text style={[styles.midText]}>
-              kcal <Text style={{color: '#5FCDFA'}}>cumulées</Text>
+              {indices[0][0]} <Text style={{color: '#5FCDFA'}}>{indices[0][1]}</Text>
             </Text>
           </View>
           <View style={styles.midItem}>
@@ -60,16 +99,16 @@ export default function Accueil(props) {
             </TouchableOpacity>
           </View>
           <View style={[styles.midItem]}>
-            <Text style={styles.chiffres}>{state.user.totalDistance}</Text>
+            <Text style={styles.chiffres}>{datacumul[2]}</Text>
             <Text style={[styles.midText]}>
-              km <Text style={{color: '#5FCDFA'}}>cumulés</Text>
+              {indices[2][0]} <Text style={{color: '#5FCDFA'}}>{indices[2][1]}</Text>
             </Text>
           </View>
         </View>
         <View style={styles.midBot}>
-          <Text style={styles.chiffres}>{state.user.totalEnergie}</Text>
+          <Text style={styles.chiffres}>{datacumul[1]}</Text>
           <Text style={[styles.midText]}>
-            wh <Text style={{color: '#5FCDFA'}}>produits</Text>
+            {indices[1][0]} <Text style={{color: '#5FCDFA'}}>{indices[1][1]}</Text>
           </Text>
         </View>
       </View>

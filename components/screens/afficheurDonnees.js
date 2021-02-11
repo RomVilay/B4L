@@ -160,8 +160,8 @@ export default function AfficheurDonnees (props) {
                 </TouchableOpacity>
                 <Animated.View
                     style={[styles.textbloc, {margin: 8}, trans2.getLayout()]}>
-                    <Text style={[styles.midText, {fontSize: 30}]}>
-                        {state.kmh}
+                    <Text style={[styles.midText, {fontSize: 30, width:25}]}>
+                        {props.kmh}
                     </Text>
                     <Text style={[styles.midText2,{fontSize:20}]}>kmh</Text>
                 </Animated.View>

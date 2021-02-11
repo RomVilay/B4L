@@ -12,9 +12,9 @@ import {
     ImageBackground,
     AppRegistry,
     Platform,
-    Button
+    Button,
+    PermissionsAndroid
 } from 'react-native'
-
 // Imports Assets
 import LogoMin from '../../assets/logoMin'
 import Navigation from '../../assets/navigation'
@@ -23,16 +23,50 @@ import { RNCamera } from 'react-native-camera';
 import NavApp from "../navigation/NavApp";
 import {height} from "react-native-daterange-picker/src/modules";
 // Imports Components
-
+import WifiManager from "react-native-wifi-reborn"
 
 export default function Jumelage (props) {
     state = {
         code: 'qrcode'
     }
     //fonction en cas de réussite de scan du qrcode
+    const requestLocationPermission = async (ssid,psw) => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                {
+                    title: "React Native Wifi Reborn App Permission",
+                    message:
+                        "Location permission is required to connect with or scan for Wifi networks. ",
+                    buttonNeutral: "Ask Me Later",
+                    buttonNegative: "Cancel",
+                    buttonPositive: "OK"
+                }
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                WifiManager.connectToProtectedSSID(ssid, psw, false).then(
+                    () => {
+                        console.log("Connected successfully!");
+                        props.navigation.navigate("Compteur",{'defis':props.route.params.defis})
+                    },
+                    () => {
+                        console.log(ssid)
+                        console.log("Connection failed!");
+                        props.navigation.navigate("Compteur",{'defis':props.route.params.defis})
+                    }
+                );
+            } else {
+                console.log("Location permission denied");
+            }
+        } catch (err) {
+            console.warn(err);
+        }
+    };
     const onSuccess = e => {
+        let ssid = e.data.slice(7,10)
+        let psw = e.data.slice(19,e.data.length-2)
         console.log(e.data.slice(7,10)+" - "+e.data.slice(19,e.data.length-2))
-        //props.navigation.navigate("Compteur",{'defis':props.route.params.defis})
+        requestLocationPermission(ssid,psw)
        /* Linking
             .openURL(e.data)
             .catch(err =>

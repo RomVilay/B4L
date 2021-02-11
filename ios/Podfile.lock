@@ -257,6 +257,8 @@ PODS:
     - React
   - RNVectorIcons (7.1.0):
     - React
+  - RNWifi (4.3.7):
+    - React-Core
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -304,6 +306,7 @@ DEPENDENCIES:
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - RNWifi (from `../node_modules/react-native-wifi-reborn`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -393,6 +396,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-svg"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
+  RNWifi:
+    :path: "../node_modules/react-native-wifi-reborn"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -439,6 +444,7 @@ SPEC CHECKSUMS:
   RNScreens: 45c457af3d2ee9e08fc01e70da87e653d46b1198
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
+  RNWifi: f90afd1653c6d625542c4ecbb843c2e6adc94828
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
 PODFILE CHECKSUM: 5a77bbf599fd4da876eb5500baacc2c39e95f542

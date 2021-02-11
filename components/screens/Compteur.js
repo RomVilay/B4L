@@ -41,6 +41,7 @@ export default function Compteur (props) {
     const [defisValid,setDefisValid] = React.useState([])
     const [defic,setDefic] = React.useState(0)
     const[watts,setWatts] = React.useState(200)
+    const [vitesses,setVitesses] = React.useState([])
     /*this.toggleStopwatch = this.toggleStopwatch.bind(this);
     this.resetStopwatch = this.resetStopwatch.bind(this);
     this._isMounted = false*/
@@ -65,7 +66,7 @@ export default function Compteur (props) {
         setSPosition(endPosition)
         setEPosition(nend)
         setAngle(nend)
-
+        setVitesses([...vitesses,seg])
         /*if (endPosition >= -100) {
           setUp(false)
         }*/
@@ -74,6 +75,7 @@ export default function Compteur (props) {
         const nend = endPosition - 10;
         setSPosition(endPosition)
         setEPosition(nend)
+       setVitesses([...vitesses,seg])
        setAngle(nend)
        /* if (endPosition <= -130) {
           setUp(true);
@@ -113,7 +115,8 @@ export default function Compteur (props) {
         },
         {
           text: 'quitter la session',
-          onPress: () => props.navigation.navigate('Home'),
+          onPress: () => {props.navigation.navigate('Home')
+            console.log(vitesses)},
         },
       ],
       {cancelable: false},
@@ -168,7 +171,7 @@ export default function Compteur (props) {
               style={[{transform: [{rotate: rotation}]}, styles.aiguille]}
             />
             <AfficheurCompteur style={styles.graph} i={seg} />
-            <AfficheurDonnees />
+            <AfficheurDonnees kmh={seg}/>
           </ImageBackground>
           <View style={[{flex: 1, flexDirection: 'row', marginLeft: '25%'}]}>
             <TouchableOpacity onPress={() => {
