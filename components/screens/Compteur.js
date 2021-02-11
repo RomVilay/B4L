@@ -32,30 +32,15 @@ export default function Compteur (props) {
     const [pause,setPause] =React.useState('')
     const [currentTime,setCTime] = React.useState('')
     const[startPosition,setSPosition] = React.useState(-160)
-    const[endPosition,setEPosition] = React.useState(-130)
+    const[endPosition,setEPosition] = React.useState(-125)
     const outputRange = ['0deg', '10deg']
-    const [seg,setSeg] = React.useState(0)
+    const [seg,setSeg] = React.useState(10)
     const [angle,setAngle] = React.useState(-150)
     const [up,setUp] = React.useState(true)
     const [defis,setDefis] = React.useState(props.route.params.defis)
     const [defisValid,setDefisValid] = React.useState([])
     const [defic,setDefic] = React.useState(0)
     const[watts,setWatts] = React.useState(200)
-    const state = {
-      kmp: 0,
-      kmh: 0,
-      kmc: 10,
-      watts: 200,
-      rpm: 0,
-      kcal: 0,
-      time: '',
-      angle: -150,
-      startPosition: -160,
-      endPosition: -130,
-      outputRange: ['0deg', '10deg'],
-      seg: 0,
-      up: true,
-    };
     /*this.toggleStopwatch = this.toggleStopwatch.bind(this);
     this.resetStopwatch = this.resetStopwatch.bind(this);
     this._isMounted = false*/
@@ -75,25 +60,24 @@ export default function Compteur (props) {
   //fonction qui défini la rotation à effectuer
   function randomRotation (){
      if (up) {
+       endPosition > -100 ? setUp(false) : setSeg(seg => seg+7)
         const nend = endPosition + 10;
-        const ang = `${nend}deg`; //définition de la valeur de rotation
         setSPosition(endPosition)
         setEPosition(nend)
         setAngle(nend)
-        seg >= 4 ? setUp(false) : setSeg(seg => seg+1)
+
         /*if (endPosition >= -100) {
           setUp(false)
         }*/
       } else {
+       endPosition < -118 ? setUp(true) : setSeg(seg => seg-7)
         const nend = endPosition - 10;
-        const ang = `${nend}deg`; //définition de la valeur de rotation
         setSPosition(endPosition)
         setEPosition(nend)
-       setSeg(seg => seg-1)
-        setAngle(nend)
-        if (endPosition <= -130) {
+       setAngle(nend)
+       /* if (endPosition <= -130) {
           setUp(true);
-        }
+        }*/
       }
   }
   //déclenchement de l'animation du compteur à l'ouverture de la page
@@ -107,18 +91,15 @@ export default function Compteur (props) {
     }
   },[seg,endPosition,startPosition,angle,up])
 
-  //fonction animation
+  //fonction animation aiguille
   const StartImageRotateFunction = () => {
     rotateValueHolder.setValue(startPosition)//définition de la position de départ pour l'animation
     Animated.timing(rotateValueHolder, {
       toValue: endPosition,
       Easing: 'linear',
-      duration: 1000,
+      duration: 900,
     }).start(); // animation de la rotation
   }
-  //animation de déplacement des valeur pour la flèche droite
-
-  //fonction de déplacement des valeur en sens inverse
 
   //fonction quitter la session
   const AlertQuit = () =>
@@ -273,7 +254,7 @@ const styles = StyleSheet.create({
     zIndex: 0,
   },
   aiguille: {
-    top: '20%',
+    top: 30,
     bottom: '28%',
     width: 200,
     height: 235,
@@ -285,9 +266,9 @@ const styles = StyleSheet.create({
   },
   graph: {
     position: 'absolute',
-    top: 0,
-    left: 30,
-    width: Dimensions.get('window').width - 55,
+    top: 7,
+    left: 55,
+    width: 400,
     height: 350,
     zIndex: 0,
   },

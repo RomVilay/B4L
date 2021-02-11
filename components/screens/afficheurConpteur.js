@@ -20,7 +20,7 @@ const fondUri = RNimage.resolveAssetSource(fond).uri;
 import aiguille from '../../assets/Compteur/aiguille.png';
 const aiguilleUri = RNimage.resolveAssetSource(aiguille).uri;
 import fondBulle from '../../assets/Accueil/fondBulle.png';
-import SegmentedRoundDisplay from "react-native-segmented-round-display/src";
+import SegmentedRoundDisplay from "react-native-segmented-round-display";
 const fondBulleUri = RNimage.resolveAssetSource(fondBulle);
 import { AnimatedSVGPath } from "react-native-svg-animations";
 
@@ -39,7 +39,7 @@ export default function  AfficheurCompteur (props){
                 "M60 140 C 65 125 69 120 69 120",
                 "M73 115 C 77 110 77 110 86 100",
                 "M90 97 C 95 90 95 90 105 82",
-                "M107 79 C 117 70 117 70 130 65",
+                "M107 82 C 130 70 130 85 130 70",
                 "M135 63 C 150 53 158 55 160 55",
                 "M165 57 C 170 55 180 55 190 57",
                 "M195 57 C 210 60 210 60 230 67",
@@ -107,20 +107,22 @@ export default function  AfficheurCompteur (props){
             {
                 displayValue: false,
                 formatValue: (value) => `R$ ${value.toFixed(2)}`,
-                radius:120,
+                radius:100,
                 segments: [
                     {
                         total: 200,
-                        filled: 70,
+                        filled: props.i,
                     },
                 ],
                 emptyArcColor:'transparent',
                 incompleteArcColor:'#5FCDFA',
-                animationDuration:6200,
+                animated:false,
+                //animationDuration:6200,
             };
         return(
             <View style={props.style}>
-                <Svg >
+                <SegmentedRoundDisplay {...example} />
+                {/*  <Svg >
                     <AnimatedSVGPath
                         strokeColor={"#5FCDFA"}
                         duration={2500}
@@ -133,32 +135,7 @@ export default function  AfficheurCompteur (props){
                         loop={true}
                         d={anim}
                         />
-                    {/*
-                <Path
-                        d="M76 245 C 80 250 80 251 69 235"
-                        stroke="#5FCDFA"
-                        strokeWidth="3"
-                        strokeLinecap="square"
-                />
-                <Path
-                        d="M66 229 C 59 215 59 214 60 216"
-                        stroke="#5FCD00"
-                        strokeWidth="3"
-                        strokeLinecap="square"
-                />
-                <Path
-                        d="M57 208 C 54 195 54 195 54 192"
-                        stroke="#5FCDFA"
-                        strokeWidth="3"
-                        strokeLinecap="square"
-                />
-                <Path
-                        d="M53 185 C 52 175 52 175 52 170"
-                        stroke="#5FCD00"
-                        strokeWidth="3"
-                        strokeLinecap="square"
-                /> */}
-            </Svg>
+            </Svg>*/}
             </View>
             )
 
@@ -167,9 +144,10 @@ export default function  AfficheurCompteur (props){
 }
 const styles = StyleSheet.create({
     compteur:{
+        borderWidth:3,
         flex: 3,
-        width:'110%',
-        height:'110%',
+        width:400,
+        height:200,
         resizeMode: "cover",
         justifyContent: "center",
         zIndex:0,
