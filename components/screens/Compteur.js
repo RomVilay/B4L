@@ -27,7 +27,11 @@ import AfficheurDonnees from "./afficheurDonnees";
 import navigation from "../../assets/navigation";
 import SliderDefis from "./sliderDefis";
 import {createSession} from '../../functions/session';
+import {editUser} from '../../functions/user';
+import {refreshState} from '../utils/navFunctions';
 import {Context} from "../utils/Store";
+import goTo from '../utils/navFunctions';
+import go from "../../assets/Accueil/go";
 export default function Compteur (props) {
   const [state, setState] = useContext(Context);
     const rotateValueHolder= React.useRef(new Animated.Value(0)).current;
@@ -68,6 +72,7 @@ export default function Compteur (props) {
       setReset(true)
   }
   const saveSession = async () => {
+    if (defisValid.length>=0){
     const data = {
       "defis":defisValid.map(defi => defi._id),
       "vitesse":vitesses,
@@ -88,7 +93,21 @@ export default function Compteur (props) {
     } else {
       console.log("session créée")
     }
-
+      const userdata = {
+        "totalDuree":state.user.totalDuree+moment.duration(currentTime).asSeconds(),
+        "totalEnergie":isNaN(state.user.totalEnergie+energie) ? 1 : state.user.totalEnergie+energie,
+        "totalDistance":state.user.totalDistance+distance
+      }
+      const updated  = await  editUser(state.user.username,userdata,state.token)
+      if (updated.message) {
+        Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
+        console.log(updated.message)
+      } else {
+        //console.log(userdata)
+        //console.log(updated)
+        setState({user: updated, token: state.token})
+      }
+    }
   }
 
   //fonction qui défini la rotation à effectuer
@@ -153,9 +172,10 @@ export default function Compteur (props) {
         },
         {
           text: 'quitter la session',
-          onPress: () => {props.navigation.navigate('Home')
-            console.log(vitesses)
+          onPress: () => {
+            //console.log(vitesses)
             saveSession()
+            goTo(props)
           },
         },
       ],
