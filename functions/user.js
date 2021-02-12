@@ -27,10 +27,13 @@ async function getUser(username, authToken) {
  * @returns La liste des users | Un message d'erreur si pas admin
  */
 async function getAllUsers(authToken) {
-  let get = await fetchWithTimeout(`${BASE_URL}/users`, {
-    headers: {'auth-token': authToken},
-    serverTimeout,
-  });
+  let get = await fetchWithTimeout(
+      `${BASE_URL}/users`,
+      {
+         headers: {'auth-token': authToken},
+    },
+  serverTimeout,
+  );
   return get;
 }
 

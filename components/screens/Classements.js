@@ -5,7 +5,7 @@ import {
   SafeAreaView,
   Image,
   Text,
-  TouchableOpacity, Platform,
+  TouchableOpacity, Platform, Alert,
 } from 'react-native';
 import DropDownPicker from "react-native-dropdown-picker"
 
@@ -16,6 +16,7 @@ import P1 from '../../assets/Classement/p1';
 import NavApp from '../navigation/NavApp';
 import Avatar from "./Avatar";
 import {Context} from '../utils/Store';
+import {getAllUsers} from '../../functions/user';
 
 var scnd = require('../../assets/Classement/scnd.png');
 var third = require('../../assets/Classement/third.png');
@@ -30,7 +31,27 @@ export default function Classements(props) {
   const [categorie,setCategorie] = useState(state.user.genre ? "homme" : "femme")
   const position =  206
   const membres = 212
-
+  function compare(user1,user2) {
+    if (user1.totalDistance<user2.totalDistance)
+      return -1;
+    if (user1.totalDistance>user2.totalDistance)
+      return 1;
+    // a doit être égal à b
+    return 0;
+  }
+  const getClassement = async => {
+    const listUsers = getAllUsers(state.token)
+    if (listUsers.message) {
+      Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
+      console.log(listUsers.message)
+    } else {
+      console.log(listUsers)
+      //console.log(listUsers.sort(compare).map(user=>user.username))
+    }
+  }
+  React.useEffect(()=>{
+  //  getClassement()
+  },[categorie])
     return (
       <SafeAreaView style={styles.container}>
         <Image style={styles.fond} source={require('../../assets/fond.png')} />
