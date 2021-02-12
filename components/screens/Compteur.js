@@ -133,6 +133,7 @@ export default function Compteur (props) {
        setVitesses([...vitesses,seg])
        setInclinaison([...inclinaison,1])
        setEnergie(energie=>energie+100)
+       setDistance(distance=>distance+10)
        setAngle(nend)
        /* if (endPosition <= -130) {
           setUp(true);
@@ -174,7 +175,9 @@ export default function Compteur (props) {
           text: 'quitter la session',
           onPress: () => {
             //console.log(vitesses)
-            saveSession()
+            if(defisValid.length > 0){
+              saveSession()
+            }
             goTo(props)
           },
         },
@@ -192,6 +195,22 @@ export default function Compteur (props) {
      setDefisValid([...defisValid,defis[defic]])
      setDefic(defic => defic+1)
    }
+   function testWbSckt(message){
+     const ws = new WebSocket("ws://localhost:8100");
+     ws.onopen = () => {
+       ws.send(`{"type":"text","content":"${message}"}`);
+     }
+     ws.onclose = (e) =>{
+       console.log(e.code,e.reason);
+     }
+     ws.onmessage = (e) => {
+       console.log(e.data)
+     }
+     ws.onerror = (e) => {
+       console.log(e.message)
+     }
+   }
+  //testWbSckt()
     return (
       <SafeAreaView style={styles.container}>
         <Image source={require('../../assets/fond.png')} style={styles.fond} />
@@ -231,7 +250,7 @@ export default function Compteur (props) {
               style={[{transform: [{rotate: rotation}]}, styles.aiguille]}
             />
             <AfficheurCompteur style={styles.graph} i={seg} />
-            <AfficheurDonnees kmh={seg}/>
+            <AfficheurDonnees kmh={seg} energie={energie} distance={distance} cumulD={state.user.totalDistance}/>
           </ImageBackground>
           <View style={[{flex: 1, flexDirection: 'row', marginLeft: '25%'}]}>
             <TouchableOpacity onPress={() => {

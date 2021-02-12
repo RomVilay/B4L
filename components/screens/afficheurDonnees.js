@@ -135,7 +135,7 @@ export default function AfficheurDonnees (props) {
                     ]}>
                     <Animated.View style={[styles.textbloc, trans0.getLayout()]}>
                         <Text style={[styles.midText, {fontSize: 30}]}>
-                            {state.rpm}
+                            {Number.parseFloat(props.kmh*0.226).toFixed(2)}
                         </Text>
                         <Text style={[styles.midText2, {fontSize: 20}]}>rpm</Text>
                     </Animated.View>
@@ -148,7 +148,7 @@ export default function AfficheurDonnees (props) {
                     ]}>
                     <Animated.View style={[styles.textbloc, trans1.getLayout()]}>
                         <Text style={[styles.midText, {fontSize: 30}]}>
-                            {state.kcal}
+                            {Number.parseFloat(props.energie*0.239).toFixed(2)}
                         </Text>
                         <Text style={[styles.midText2, {fontSize: 20}]}>kcals</Text>
                     </Animated.View>
@@ -173,24 +173,23 @@ export default function AfficheurDonnees (props) {
                 <View style={styles.textbloc}>
                     <View style={{flexDirection: 'column'}}>
                         <Text style={[styles.midText, {fontSize: 20}]}>
-                            {state.kmp}
+                            {props.distance}
                             <Text
                                 style={[
                                     styles.midText2,
                                     {color: 'white'},
                                 ]}>
-                                {' '}
-                                km <Text style={{color: '#5FCDFA'}}>parcourus </Text>
+                                m <Text style={{color: '#5FCDFA'}}>parcourus </Text>
                             </Text>
                         </Text>
                         <Text style={[styles.midText, {fontSize: 20}]}>
-                            {state.kmc}{' '}
+                            {props.cumulD+props.distance}
                             <Text
                                 style={[
                                     styles.midText2,
                                     {color: 'white'},
                                 ]}>
-                                km <Text style={{color: '#5FCDFA'}}> cumulés</Text>
+                                m <Text style={{color: '#5FCDFA'}}> cumulés</Text>
                             </Text>
                         </Text>
                     </View>
