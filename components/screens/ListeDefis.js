@@ -39,6 +39,7 @@ export default function  ListeDefis(props) {
         if (list.message) {
              Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
         } else {
+            console.log(list)
             await setListeDefs(list.filter(defi => defi.long == undefined ))//setState({user, token: state.token});
         }
     };

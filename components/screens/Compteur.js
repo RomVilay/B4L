@@ -69,20 +69,22 @@ export default function Compteur (props) {
   }
   const saveSession = async () => {
     const data = {
-      "defis":defisValid,
+      "defis":defisValid.map(defi => defi._id),
       "vitesse":vitesses,
       "inclinaison":inclinaison,
       "idUser":state.user.username,
-      "points":1000,
+      "dateSession":moment(),
+      "dureeSession":moment.duration(currentTime).asSeconds(),
+      "points":defisValid.map(defi=>defi.points).reduce((total,defi)=>total+defi.points),
       "distance":distance,
       "energie":energie,
-      "dateSession":moment(),
-      "dureeSession":currentTime,
 
     }
+    console.log(JSON.stringify(data))
     const session = await createSession(data,state.token)
     if (session.message) {
       Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
+      console.log(session.message)
     } else {
       console.log("session créée")
     }
@@ -153,7 +155,7 @@ export default function Compteur (props) {
           text: 'quitter la session',
           onPress: () => {props.navigation.navigate('Home')
             console.log(vitesses)
-            //saveSession()
+            saveSession()
           },
         },
       ],
