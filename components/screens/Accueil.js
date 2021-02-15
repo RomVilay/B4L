@@ -7,7 +7,7 @@ import {
   SafeAreaView,
   Image,
   Text,
-  TouchableOpacity
+  TouchableOpacity, Platform
 } from 'react-native';
 // Imports Assets
 import LogoMin from '../../assets/logoMin';
@@ -26,40 +26,76 @@ export default function Accueil(props) {
   const [datacumul,setDatacumul] = useState([0,0,0])
   React.useEffect(()=>{
     if (Object.keys(state.user).length !== 0){
+      let dist = formatDistance(state.user.totalDistance)
+      let energie = formatEnergie(state.user.totalEnergie, "wh")
       switch (state.user.objectifs[0]){
         case "0":
-          setIndices([["KCAL","dépensés"],["WH","produits"],["KM","cumulés"]])
-          let kcals = Number.parseFloat(state.user.totalEnergie*0.239).toFixed(2)
-          setDatacumul([kcals,state.user.totalEnergie,state.user.totalDistance])
+          let e2 = formatEnergie(state.user.totalEnergie, "cals")
+          setIndices([[e2[1],"dépensés"],[energie[1],"produits"],[dist[1],"cumulés"]])
+          setDatacumul([e2[0],energie[0],dist[0]])
           break;
         case "1":
-          setIndices([["WH","produits"],["KCAL","brulées"],["KM","cumulés"]])
-          kcals = Number.parseFloat(state.user.totalEnergie*0.239).toFixed(2)
-          setDatacumul([state.user.totalEnergie,kcals,state.user.totalDistance])
+          e2 = formatEnergie(state.user.totalEnergie, "cals")
+          setIndices([[energie[1],"produits"],[e2[1],"brulées"],[dist[1],"cumulés"]])
+          setDatacumul([energie[0],e2[0],dist[0]])
           break;
         case "2":
-          let tCo2 = Number.parseFloat(state.user.totalEnergie*Math.pow(10,-6)).toFixed(2)
-          setDatacumul([state.user.totalEnergie,tCo2,state.user.totalDistance])
-          setIndices([["WH","produits"],["tonnes CO2","économisées"],["KM","cumulés"]])
+          e2 = formatEnergie(state.user.totalEnergie, "co2")
+          setDatacumul([energie[0],e2[0],dist[0]])
+          setIndices([[energie[0],"produits"],[e2[1],"économisées"],[dist[1],"cumulés"]])
           break;
         case "3":
-          tCo2 = Number.parseFloat(state.user.totalEnergie*Math.pow(10,-6)).toFixed(2)
-          setDatacumul([tCo2,state.user.totalEnergie,state.user.totalDistance])
-          setIndices([["tonnes CO2","économisées"],["WH","produits"],["KM","cumulés"]])
+          e2 = formatEnergie(state.user.totalEnergie, "co2")
+          setDatacumul([e2[0],energie[0],dist[0]])
+          setIndices([[e2[1],"économisées"],[energie[1],"produits"],[dist[1],"cumulés"]])
           break;
         case "4":
-          kcals = Number.parseFloat(state.user.totalEnergie*0.239).toFixed(2)
-          setDatacumul([kcals,state.user.totalEnergie,state.user.totalDistance])
-          setIndices([["KCAL","dépensés"],["WH","générés"],["KM","cumulés"]])
+          //kcals = Number.parseFloat(state.user.totalEnergie*0.239).toFixed(2)
+          e2 = formatEnergie(state.user.totalEnergie, "cals")
+          setDatacumul([e2[0],energie[0],dist[0]])
+          setIndices([[e2[1],"dépensés"],[energie[1],"générés"],[dist[1],"cumulés"]])
           break;
       }
     }
   },[state.user])
+
   // const [name, setName]= useState('Gaston')
   // const [kcal, setKcal]= useState('5400')
   // const [km, setKm] = useState('234.0')
   // const [watts,setWatts] = useState('4000')
   refreshState(state, setState);
+
+  function formatDistance (distance){
+    if(state.user.unitDistance === "m" ){
+      if (distance < 1000){
+        return [distance, 'm']
+      } else {
+        return [distance*Math.pow(10,-3) , "km"]
+      }
+    }
+    if ( state.user.unitDistance === "ft") {
+        return [Math.round(distance/0.302), "ft"]
+    }
+    if ( state.user.unitDistance === "yd") {
+      return [Math.round(distance/0.9144), "yd"]
+    }
+    if ( state.user.unitDistance === "mi") {
+      return [Math.round(distance/1609.3472), "mi"]
+    }
+  }
+  function formatEnergie (energie,unit) {
+    let resp = []
+    if (unit === "wh"){
+      energie < 1000 ? resp = [energie,unit] : resp = [energie*Math.pow(10,-3),"KWH"]
+    }
+    if (unit === "cals"){
+      energie/860.8321 < 1000 ? resp = [Math.round(energie/860.8321),"CALS"] : resp = [Math.round(energie/860.8321)*Math.pow(10,-3),"KCALS"]
+    }
+    if (unit === "co2"){
+      energie*Math.pow(10,-3)/72 < 1000 ? resp = [ Number.parseFloat(energie*Math.pow(10,-3)/72).toFixed(2),"gCO2"] : resp = [Math.round(energie*Math.pow(10,-3)/72*Math.pow(10,-3)),"kgCO2"]
+    }
+    return resp
+  }
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />
@@ -83,7 +119,7 @@ export default function Accueil(props) {
         <View style={styles.midMid}>
           <View style={[styles.midItem]}>
             <Text style={styles.chiffres}>{isNaN(datacumul[0]) ? 0: datacumul[0]}</Text>
-            <Text style={[styles.midText]}>
+            <Text style={[styles.midText,{marginLeft:Platform.OS === 'android' ? '27%' : '5%'}]}>
               {indices[0][0]} <Text style={{color: '#5FCDFA'}}>{indices[0][1]}</Text>
             </Text>
           </View>

@@ -23,23 +23,13 @@ const Item2 = ({ item, onPress, style }) => (
 
 export default function  ListeDefis(props) {
     const [state, setState] = useContext(Context);
-    const [ListeDefs, setListeDefs]= useState([
-        {_id:"0",nomDefi:"faire 200km", statut:false},
-        {_id:"1",nomDefi:"faire 300km", statut:false},
-        {_id:"2",nomDefi:"faire 50km", statut:false},
-        {_id:"3",nomDefi:"faire 100km", statut:false},
-        {_id:"4",nomDefi:"faire 200km", statut:false},
-        {_id:"5",nomDefi:"faire 200km", statut:false},
-        {_id:"6",nomDefi:"faire 200km", statut:false},
-        {_id:"7",nomDefi:"faire 200km", statut:false},
-        ])
+    const [ListeDefs, setListeDefs]= useState([])
     const [defisSelect,setDefiSelect] = useState([])
     const getList = async () => {
         let list = await listeDefis(state.token,state.user.objectifs);
         if (list.message) {
              Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
         } else {
-            console.log(list)
             await setListeDefs(list.filter(defi => defi.long == undefined ))//setState({user, token: state.token});
         }
     };
