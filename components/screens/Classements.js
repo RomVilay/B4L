@@ -51,11 +51,42 @@ export default function Classements(props) {
       //console.log(listUsers.sort(compare).map(user=>user.username))
     }
   }
+  function formatDistance (distance){
+    if(state.user.unitDistance === "m" ){
+      if (distance < 1000){
+        return `${distance} m `
+      } else {
+        return `${distance*Math.pow(10,-3)} km`
+      }
+    }
+    if ( state.user.unitDistance === "ft") {
+      return `${Math.round(distance/0.302)} ft`
+    }
+    if ( state.user.unitDistance === "yd") {
+      return `${Math.round(distance/0.9144)} yd`
+    }
+    if ( state.user.unitDistance === "mi") {
+      return `${Math.round(distance/1609.3472)} mi`
+    }
+  }
+  function formatEnergie (energie,unit) {
+    let resp = ""
+    if (unit === "wh"){
+      energie < 1000 ? resp = `${energie} ${unit}` : resp = `${energie*Math.pow(10,-3)} kwh`
+    }
+    if (unit === "cals"){
+      energie/860.8321 < 1000 ? resp = [Math.round(energie/860.8321),"CALS"] : resp = [Math.round(energie/860.8321)*Math.pow(10,-3),"KCALS"]
+    }
+    if (unit === "co2"){
+      energie*Math.pow(10,-3)/72 < 1000 ? resp = [ Number.parseFloat(energie*Math.pow(10,-3)/72).toFixed(2),"gCO2"] : resp = [Math.round(energie*Math.pow(10,-3)/72*Math.pow(10,-3)),"kgCO2"]
+    }
+    return resp
+  }
 
   const AlertStats = (user) =>
       Alert.alert(
           `Statistiques de ${user.username}`,
-          `distances totales parcourues ${user.totalDistance} \n énergie produite ${user.totalEnergie} \n temps passé sur l'application ${moment(user.totalDuree).format("HH:mm:ss")}`,
+          `distances totales parcourues ${formatDistance(state.user.totalDistance)} \n énergie produite ${formatEnergie(user.totalEnergie,"wh")} \n temps passé sur l'application ${moment(user.totalDuree).format("HH:mm:ss")}`,
           [
             {
               text: 'fermer',
