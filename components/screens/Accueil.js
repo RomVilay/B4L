@@ -70,7 +70,7 @@ export default function Accueil(props) {
       if (distance < 1000){
         return [distance, 'm']
       } else {
-        return [distance*Math.pow(10,-3) , "km"]
+        return [Number.parseFloat(distance*Math.pow(10,-3)).toFixed(2), "km"]
       }
     }
     if ( state.user.unitDistance === "ft") {
@@ -86,7 +86,7 @@ export default function Accueil(props) {
   function formatEnergie (energie,unit) {
     let resp = []
     if (unit === "wh"){
-      energie < 1000 ? resp = [energie,unit] : resp = [energie*Math.pow(10,-3),"KWH"]
+      energie < 1000 ? resp = [energie,unit] : resp = [Math.round(energie*Math.pow(10,-3)),"KWH"]
     }
     if (unit === "cals"){
       energie/860.8321 < 1000 ? resp = [Math.round(energie/860.8321),"CALS"] : resp = [Math.round(energie/860.8321)*Math.pow(10,-3),"KCALS"]

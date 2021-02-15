@@ -85,13 +85,10 @@ export default function Compteur (props) {
       "energie":energie,
 
     }
-    console.log(JSON.stringify(data))
     const session = await createSession(data,state.token)
     if (session.message) {
       Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
       console.log(session.message)
-    } else {
-      console.log("session créée")
     }
       const userdata = {
         "totalDuree":state.user.totalDuree+moment.duration(currentTime).asSeconds(),
@@ -210,6 +207,16 @@ export default function Compteur (props) {
        console.log(e.message)
      }
    }
+   React.useEffect(() =>{
+     /*if (defis[defic] !== undefined)
+     {
+       if ((defis[defic].butUnit === "m" && distance === defis[defic].butNumber)
+           || (defis[defic].butUnit === "watts" && energie === defis[defic].butNumber) )
+       {
+         ValiderDefis()
+       }
+    }*/
+   },[distance,energie])
   //testWbSckt()
     return (
       <SafeAreaView style={styles.container}>

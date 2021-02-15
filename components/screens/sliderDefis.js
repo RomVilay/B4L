@@ -33,8 +33,9 @@ const SliderDefis = (props) => {
        }
     }
     React.useEffect(() => {
+        console.log(props.current-1 > -1)
         if (props.current-1 > -1){flist.current.scrollToIndex({'index':props.current-1})}
-    },[flist,props.current])
+    },[props.current,flist.current])
     return(
         <>
         <FlatList
