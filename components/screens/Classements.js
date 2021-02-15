@@ -17,6 +17,8 @@ import NavApp from '../navigation/NavApp';
 import Avatar from "./Avatar";
 import {Context} from '../utils/Store';
 import {getAllUsers} from '../../functions/user';
+import moment from "moment";
+import goTo from "../utils/navFunctions";
 
 var scnd = require('../../assets/Classement/scnd.png');
 var third = require('../../assets/Classement/third.png');
@@ -49,6 +51,19 @@ export default function Classements(props) {
       //console.log(listUsers.sort(compare).map(user=>user.username))
     }
   }
+
+  const AlertStats = (user) =>
+      Alert.alert(
+          `Statistiques de ${user.username}`,
+          `distances totales parcourues ${user.totalDistance} \n énergie produite ${user.totalEnergie} \n temps passé sur l'application ${moment(user.totalDuree).format("HH:mm:ss")}`,
+          [
+            {
+              text: 'fermer',
+              style: 'cancel',
+            }
+          ],
+          {cancelable: false},
+      );
   React.useEffect(()=>{
   //  getClassement()
   },[categorie])
@@ -127,7 +142,7 @@ export default function Classements(props) {
                 <View>
                   <TouchableOpacity
                     onPress={() => {
-                      props.navigation.navigate('Statistiques');
+                     AlertStats(state.user)
                     }}>
                     <Text style={[styles.linesw, {fontSize: 20}]}>
                       voir ses stats
@@ -156,7 +171,7 @@ export default function Classements(props) {
                 <View>
                   <TouchableOpacity
                     onPress={() => {
-                      props.navigation.navigate('Statistiques');
+                      AlertStats(state.user)
                     }}>
                     <Text style={[styles.linesw, {fontSize: 20}]}>
                       voir ses stats
@@ -183,7 +198,7 @@ export default function Classements(props) {
                 <View>
                   <TouchableOpacity
                     onPress={() => {
-                      props.navigation.navigate('Statistiques');
+                      AlertStats(state.user)
                     }}>
                     <Text style={[styles.linesw, {fontSize: 20}]}>
                       voir ses stats
