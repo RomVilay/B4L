@@ -194,6 +194,8 @@ PODS:
     - React-Core
   - react-native-netinfo (5.9.9):
     - React-Core
+  - react-native-notification-sounds (0.5.2):
+    - React
   - react-native-safe-area-context (0.7.3):
     - React
   - react-native-webview (11.0.2):
@@ -281,6 +283,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-camera (from `../node_modules/react-native-camera`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
+  - react-native-notification-sounds (from `../node_modules/react-native-notification-sounds`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -348,6 +351,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-camera"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
+  react-native-notification-sounds:
+    :path: "../node_modules/react-native-notification-sounds"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-webview:
@@ -420,6 +425,7 @@ SPEC CHECKSUMS:
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
   react-native-camera: 5c1fbfecf63b802b8ca4a71c60d30a71550fb348
   react-native-netinfo: 77d133105df525d4a11f10fcaa8d0b8883ea6429
+  react-native-notification-sounds: 0fe85658a782d77b3f92749f58b659ac1ef16a40
   react-native-safe-area-context: 8260e5157617df4b72865f44006797f895b2ada7
   react-native-webview: b2542d6fd424bcc3e3b2ec5f854f0abb4ec86c87
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76

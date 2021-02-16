@@ -32,6 +32,7 @@ import {refreshState} from '../utils/navFunctions';
 import {Context} from "../utils/Store";
 import goTo from '../utils/navFunctions';
 import go from "../../assets/Accueil/go";
+import NotificationSounds, {playSampleSound} from 'react-native-notification-sounds'
 export default function Compteur (props) {
   const [state, setState] = useContext(Context);
     const rotateValueHolder= React.useRef(new Animated.Value(0)).current;
@@ -243,7 +244,19 @@ export default function Compteur (props) {
           </TouchableOpacity>
           <View style={{flexDirection:"row"}}>
             <SliderDefis defis={defis} defisV={defisValid} current={defic}/>
-            <TouchableOpacity onPress={() => ValiderDefis() } >
+            <TouchableOpacity onPress={() => {ValiderDefis()
+              /*NotificationSounds.getNotifications('notification').then(soundsList  => {
+                console.warn('SOUNDS', JSON.stringify(soundsList[1]));
+                /*
+                Play the notification sound.
+                pass the complete sound object.
+                This function can be used for playing the sample sound
+
+                playSampleSound(soundsList[1]);
+                // if you want to stop any playing sound just call:
+                // stopSampleSound();
+              });*/
+            }} >
               <Text>valid</Text>
             </TouchableOpacity>
           </View>
