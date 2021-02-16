@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -11,6 +11,7 @@ import {
   Alert,
   Button,
   Dimensions,
+  ActivityIndicator
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from "moment";
@@ -35,6 +36,7 @@ import go from "../../assets/Accueil/go";
 import NotificationSounds, {playSampleSound} from 'react-native-notification-sounds'
 export default function Compteur (props) {
   const [state, setState] = useContext(Context);
+  const [isLoading, setIsLoading] = useState(false);
     const rotateValueHolder= React.useRef(new Animated.Value(0)).current;
     const [start,setStart] = React.useState(true)
     const [reset,setReset] = React.useState(false)
@@ -261,6 +263,9 @@ export default function Compteur (props) {
             </TouchableOpacity>
           </View>
         </View>
+        {isLoading ? (
+            <ActivityIndicator size="large" color="#5FCDFA" style={{top: '10%'}} />
+        ) : (
         <View style={styles.middle}>
           <ImageBackground
             source={require('../../assets/Compteur/compteur.png')}
@@ -296,7 +301,7 @@ export default function Compteur (props) {
               </Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </View> )}
         <View style={styles.footer}>
           <TouchableOpacity
               style={[styles.midText2, { margin:'5%', zIndex:600}]}

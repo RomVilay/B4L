@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react'
-import {FlatList, Text, View, StyleSheet, Button, ImageBackground, Image, TouchableOpacity, SafeAreaView} from 'react-native'
+import {FlatList, Text, View, StyleSheet, Button, ImageBackground, Image, TouchableOpacity, SafeAreaView,ActivityIndicator, Alert} from 'react-native'
 import CheckBox from '@react-native-community/checkbox'
 import LogoMin from '../../assets/logoMin'
 import Fleche from "../../assets/fleche";
@@ -22,16 +22,19 @@ const Item2 = ({ item, onPress, style }) => (
 );
 
 export default function  ListeDefis(props) {
+    const [isLoading, setIsLoading] = useState(false);
     const [state, setState] = useContext(Context);
     const [ListeDefs, setListeDefs]= useState([])
     const [defisSelect,setDefiSelect] = useState([])
     const getList = async () => {
+        setIsLoading(true)
         let list = await listeDefis(state.token,state.user.objectifs);
         if (list.message) {
              Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
         } else {
             await setListeDefs(list.filter(defi => defi.long == undefined ).sort((defi1,defi2) => defi1.butNumber - defi2.butNumber))//setState({user, token: state.token});
         }
+        setIsLoading(false)
     };
     React.useEffect(() =>{
         getList();
@@ -73,6 +76,10 @@ export default function  ListeDefis(props) {
                 </View>
                 <View style={styles.body}>
                     <Fleche style={{transform:[{rotate:'90deg'}]}} />
+                    {isLoading ? (
+                        <ActivityIndicator size="large" color="#5FCDFA" style={{top: '10%'}} />
+                    ) : (
+
                     <View style={{height:'120%'}}>
                         <FlatList
                             data={ListeDefs}
@@ -80,7 +87,8 @@ export default function  ListeDefis(props) {
                             keyExtractor={item => item._id}
                             extraData={defisSelect}/>
                     </View>
-                        <Fleche style={{transform:[{rotate:'270deg'}]}}/>
+                        )}
+                    <Fleche style={{transform:[{rotate:'270deg'}]}}/>
                 </View>
                 <View style={styles.footer}>
                     <TouchableOpacity style={{marginBottom:'10%'}} onPress={()=> {

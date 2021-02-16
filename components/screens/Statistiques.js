@@ -11,7 +11,8 @@ import {
   SafeAreaView,
   Dimensions,
   TouchableHighlight,
-  Platform, Alert
+  Platform, Alert,
+  ActivityIndicator
 } from 'react-native';
 import LogoMin from '../../assets/logoMin';
 import {LineChart, ProgressChart} from 'react-native-chart-kit';
@@ -25,6 +26,7 @@ import {getSessionsByUsername} from "../../functions/session";
 
 export default function Statistiques(props) {
   const [state,setState] = useContext(Context)
+  const [isLoading, setIsLoading] = useState(false);
   const [Dates, setDates] = useState([moment().subtract(1,'months'), moment()]);
   const [defisLongs,setDefisLongs] = useState([])
   const [sessions,setSessions] = useState([])
@@ -48,14 +50,17 @@ export default function Statistiques(props) {
   })
 
   const getDefisLongs = async () => {
+    setIsLoading(true)
     let defis = await  listeDefisLongs(state.token,state.user.objectifs)
     if (defis.message) {
       Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
     } else {
       await setDefisLongs(defis.filter(defi => state.user.defisLongs.includes(defi._id)))
     }
+    setIsLoading(false)
   }
   const getSessions = async (user) => {
+    setIsLoading(true)
     let sessions = await getSessionsByUsername(user, state.token)
     if (sessions.message) {
       console.log(sessions.message)
@@ -65,6 +70,7 @@ export default function Statistiques(props) {
       sessions[0] !== undefined ? setDates([moment(sessions[0].dateSession),Dates[1]]): console.log("pas de sessions")
       DefLabels(sessions)
     }
+    setIsLoading(false)
   }
   const DefLabels = (s) => {
     let tab = []
@@ -221,8 +227,10 @@ export default function Statistiques(props) {
               Du {moment(Dates[0]).format('DD/MM')} au {Dates[1].format('DD/MM')}
             </Text>
           </DateRangePicker>
-
         </View>
+        {isLoading ? (
+            <ActivityIndicator size="large" color="#5FCDFA" style={{top: '10%'}} />
+        ) : (
         <View style={[styles.body, {}]}>
           <View style={styles.picker}>
             <Picker
@@ -295,7 +303,7 @@ export default function Statistiques(props) {
                 keyExtractor={item => item._id}
                 />
           </View>
-        </View>
+        </View> )}
         <View style={styles.footer}>
           <TouchableHighlight
             onPress={() => props.navigation.navigate('Classements')}>

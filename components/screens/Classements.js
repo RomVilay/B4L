@@ -5,7 +5,7 @@ import {
   SafeAreaView,
   Image,
   Text,
-  TouchableOpacity, Platform, Alert,
+  TouchableOpacity, Platform, Alert, ActivityIndicator,
 } from 'react-native';
 import DropDownPicker from "react-native-dropdown-picker"
 
@@ -24,6 +24,7 @@ var scnd = require('../../assets/Classement/scnd.png');
 var third = require('../../assets/Classement/third.png');
 
 export default function Classements(props) {
+  const [isLoading, setIsLoading] = useState(false);
   const [state, setState] = useContext(Context);
   const [poduim,setPoduim] = useState([
     'Yann33',
@@ -128,6 +129,9 @@ export default function Classements(props) {
                 />
 
             </View>
+            {isLoading ? (
+                <ActivityIndicator size="large" color="#5FCDFA" style={{top: '10%'}} />
+            ) : (
             <View style={styles.midUser}>
               <View style={styles.avatar}>
                 <Avatar avatar={state.user.avatar} />
@@ -136,6 +140,7 @@ export default function Classements(props) {
                 <Text style={styles.username}>{state.user.username}</Text>
               </View>
             </View>
+            )}
             <View style={styles.botUser}>
               <Text style={[styles.number, {fontSize:30}]}>{position}</Text>
               <Text style={styles.linesb}> ème sur </Text>
