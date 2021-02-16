@@ -208,14 +208,14 @@ export default function Compteur (props) {
      }
    }
    React.useEffect(() =>{
-     /*if (defis[defic] !== undefined)
+     if (defis[defic] !== undefined)
      {
-       if ((defis[defic].butUnit === "m" && distance === defis[defic].butNumber)
-           || (defis[defic].butUnit === "watts" && energie === defis[defic].butNumber) )
+       if ((defis[defic].butUnit === "m" && distance >= defis[defic].butNumber)
+           || (defis[defic].butUnit === "watts" && energie >= defis[defic].butNumber) )
        {
          ValiderDefis()
        }
-    }*/
+    }
    },[distance,energie])
   //testWbSckt()
     return (

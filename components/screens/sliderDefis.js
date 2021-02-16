@@ -17,7 +17,7 @@ const SliderDefis = (props) => {
        }
        if (props.defisV.includes(item)){
            return(
-               <View style={styles.defisCardGreen}>
+               <View style={[styles.defisCardGreen,{marginRight:index === props.defis.length-1 ? 200:0}]}>
                    <Text style={styles.text}>{item.nomDefi}</Text>
                </View>
            )
@@ -33,9 +33,11 @@ const SliderDefis = (props) => {
        }
     }
     React.useEffect(() => {
-        console.log(props.current-1 > -1)
-        if (props.current-1 > -1){flist.current.scrollToIndex({'index':props.current-1})}
-    },[props.current,flist.current])
+        console.log(props.current)
+        if (props.current-1 > -1 && props.current < props.defis.length){
+            flist.current.scrollToIndex({'index':props.current})
+        }
+    },[props])
     return(
         <>
         <FlatList

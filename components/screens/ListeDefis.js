@@ -30,7 +30,7 @@ export default function  ListeDefis(props) {
         if (list.message) {
              Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
         } else {
-            await setListeDefs(list.filter(defi => defi.long == undefined ))//setState({user, token: state.token});
+            await setListeDefs(list.filter(defi => defi.long == undefined ).sort((defi1,defi2) => defi1.butNumber - defi2.butNumber))//setState({user, token: state.token});
         }
     };
     React.useEffect(() =>{
