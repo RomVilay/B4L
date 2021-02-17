@@ -29,6 +29,7 @@ import navigation from "../../assets/navigation";
 import SliderDefis from "./sliderDefis";
 import {createSession} from '../../functions/session';
 import {editUser} from '../../functions/user';
+import {getDefi} from '../../functions/defis';
 import {refreshState} from '../utils/navFunctions';
 import {Context} from "../utils/Store";
 import goTo from '../utils/navFunctions';
@@ -93,10 +94,12 @@ export default function Compteur (props) {
       Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
       console.log(session.message)
     }
+      let tab = defisValid.filter(defi => defi.long !== undefined).map(defi=>defi._id)
       const userdata = {
         "totalDuree":state.user.totalDuree+moment.duration(currentTime).asSeconds(),
         "totalEnergie":isNaN(state.user.totalEnergie+energie) ? 1 : state.user.totalEnergie+energie,
-        "totalDistance":state.user.totalDistance+distance
+        "totalDistance":state.user.totalDistance+distance,
+        "defisLongs":state.user.defisLongs.filter(id=>!tab.includes(id))
       }
       const updated  = await  editUser(state.user.username,userdata,state.token)
       if (updated.message) {
@@ -193,7 +196,23 @@ export default function Compteur (props) {
 
    function ValiderDefis () {
      setDefisValid([...defisValid,defis[defic]])
+     /*if (defis[defic].long !== undefined){
+
+     }*/
      setDefic(defic => defic+1)
+   }
+   async function getDefiLong() {
+     let tab = []
+     for (let i = 0; i < state.user.defisLongs.length;i++)
+     {
+       const defi = await getDefi(state.token,state.user.defisLongs[i])
+       if(defi.message){
+         Alert.alert('Erreur serveur', defi.message);
+       } else {
+         tab.push(defi.defi)
+       }
+     }
+     setDefis([...defis,...tab])
    }
    function testWbSckt(message){
      const ws = new WebSocket("ws://localhost:8100");
@@ -213,13 +232,26 @@ export default function Compteur (props) {
    React.useEffect(() =>{
      if (defis[defic] !== undefined)
      {
-       if ((defis[defic].butUnit === "m" && distance >= defis[defic].butNumber)
-           || (defis[defic].butUnit === "watts" && energie >= defis[defic].butNumber) )
-       {
-         ValiderDefis()
+       if (defis[defic].long === undefined){
+         if ((defis[defic].butUnit === "m" && distance >= defis[defic].butNumber)
+             || (defis[defic].butUnit === "watts" && energie >= defis[defic].butNumber) )
+         {
+           ValiderDefis()
+         }
+       } else {
+         if ((defis[defic].butUnit === "m" && state.user.totalDistance+distance >= defis[defic].butNumber)
+             || (defis[defic].butUnit === "watts" && state.user.totalEnergie+energie >= defis[defic].butNumber) )
+         {
+           ValiderDefis()
+
+         }
        }
     }
    },[distance,energie])
+  React.useEffect(()=>{
+    getDefiLong()
+  },[])
+
   //testWbSckt()
     return (
       <SafeAreaView style={styles.container}>

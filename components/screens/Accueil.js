@@ -96,11 +96,12 @@ export default function Accueil(props) {
     }
     return resp
   }
+  console.log(state.user.defisLongs)
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />
       {
-        Object.keys(state.user).length === 0 ? <></> : <DefisLong visible={state.user.defisLongs.length == 0} />
+        Object.keys(state.user).length === 0 || state.user.defisLongs.length !== 0 ? <></> : <DefisLong visible={state.user.defisLongs.length == 0} />
       }
       {/* HEADER */}
       <View style={styles.header}>

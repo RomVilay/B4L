@@ -53,7 +53,17 @@ async function listeDefisLongs( authToken, objectifs) {
         return liste;
     }
 }
+async function getDefi(authToken,id) {
+    let defi = await fetchWithTimeout(
+        `${BASE_URL}/defis/${id}`,
+        {
+            headers:{'auth-token':authToken,'Content-Type':'application/json'}
+        }
+    )
+    return defi
+}
 module.exports={
+    getDefi,
     listeDefis,
     listeDefisLongs
 }

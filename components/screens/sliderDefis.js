@@ -33,7 +33,6 @@ const SliderDefis = (props) => {
        }
     }
     React.useEffect(() => {
-        console.log(props.current)
         if (props.current-1 > -1 && props.current < props.defis.length){
             flist.current.scrollToIndex({'index':props.current})
         }
