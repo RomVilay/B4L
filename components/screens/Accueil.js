@@ -96,7 +96,6 @@ export default function Accueil(props) {
     }
     return resp
   }
-  console.log(state.user.defisLongs)
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />
