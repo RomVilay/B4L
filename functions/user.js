@@ -46,10 +46,12 @@ async function getClassement(username,authToken,categorie){
    let get = await fetchWithTimeout(
        `${BASE_URL}/users/${username}/classement/${categorie}`,
        {
-         header:{'auth-token':authToken},
+         headers:{'auth-token':authToken,
+                'Content-Type':'application/json'},
        },
        serverTimeout,
    );
+   console.log(get)
    return get
 }
 
@@ -128,4 +130,5 @@ module.exports = {
   editUser,
   deleteUser,
   isValidPassword,
+  getClassement
 };
