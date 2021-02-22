@@ -56,8 +56,8 @@ async function getSession(idSession, authToken) {
  * @param {String} authToken Le token d'identification
  * @returns les sessions correspondantes | un message d'erreur si mauvaise authentification
  */
-async function getSessionsByUsername(username, authToken) {
-  let get = await fetch(`${BASE_URL}/sessions/user/${username}`, {
+async function getSessionsByUsername(id, authToken) {
+  let get = await fetch(`${BASE_URL}/sessions/user/${id}`, {
     headers: { "auth-token": authToken },
   }).then((res) => {
     return res.json();

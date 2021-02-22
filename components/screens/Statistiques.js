@@ -121,7 +121,7 @@ export default function Statistiques(props) {
   }
   }
   React.useEffect( () => {
-    getSessions(state.user.username)
+    getSessions(state.user._id)
     DefLabels(sessions)
     getDefisLongs()
   }, [])

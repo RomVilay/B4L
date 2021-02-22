@@ -38,6 +38,22 @@ async function getAllUsers(authToken) {
 }
 
 /**
+ * Renvoie le classement d'un utilisateur avec sa position et les 3 premiers de sa catégorie
+ * @param {String} id l'id utilisateur, auth token le token d'identification et la catégorie
+ * @return la position de l'utilisateur et les 3 premiers membres de sa catégorie
+ */
+async function getClassement(username,authToken,categorie){
+   let get = await fetchWithTimeout(
+       `${BASE_URL}/users/${username}/classement/${categorie}`,
+       {
+         header:{'auth-token':authToken},
+       },
+       serverTimeout,
+   );
+   return get
+}
+
+/**
  * Renvoie le nombre d'users contenus en base (accessible par admin)
  * @param {String} authToken Le token d'identification
  * @returns Le nombre d'users | Un message d'erreur si pas admin

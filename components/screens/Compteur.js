@@ -98,8 +98,8 @@ export default function Compteur (props) {
       const userdata = {
         "totalDuree":state.user.totalDuree+moment.duration(currentTime).asSeconds(),
         "totalEnergie":isNaN(state.user.totalEnergie+energie) ? 1 : state.user.totalEnergie+energie,
-        "totalDistance":state.user.totalDistance+distance,
-        "defisLongs":state.user.defisLongs.filter(id=>!tab.includes(id))
+        "totalDistance":state.user.totalDistance+distance/*,
+        "defisLongs":state.user.defisLongs.filter(id=>!tab.includes(id))*/
       }
       const updated  = await  editUser(state.user.username,userdata,state.token)
       if (updated.message) {
@@ -252,7 +252,7 @@ export default function Compteur (props) {
     getDefiLong()
   },[])
 
-  //testWbSckt()
+  testWbSckt("bonjour")
     return (
       <SafeAreaView style={styles.container}>
         <Image source={require('../../assets/fond.png')} style={styles.fond} />
