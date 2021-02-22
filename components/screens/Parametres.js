@@ -11,6 +11,7 @@ import {
   Alert,
   Modal,
   ActivityIndicator, Platform,
+    Switch
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -50,12 +51,15 @@ export default function Parametres(props) {
   const [tempUnitPoids, setTempUnitPoids] = useState(state.user.unitPoids || 'kg');
   const [tempUnitDistance, setTempUnitDistance] = useState(state.user.unitDistance || 'm');
   const [showCalendar, setShowCalendar] = useState(Platform.OS === 'ios');
+  const [genre, setGenre] = useState(state.user.genre)
 
   const checkFields = () => {
     if (!tempTaille.match(regexTaille) || tempTaille.length <= 0) {
       Alert.alert('Erreur', `Veuillez saisir une taille valide`);
     } else if (!tempPoids.match(regexPoids) || tempPoids.length <= 0) {
       Alert.alert('Erreur', `Veuillez saisir un poids valide`);
+    } else if (moment().diff(moment(tempDateNaissance),"years") < 6){
+      Alert.alert('Erreur','Veuillez entrer une date de naissance valide')
     } else {
       updateUser();
     }
@@ -92,6 +96,7 @@ export default function Parametres(props) {
           unitTaille: tempUnitTaille,
           unitPoids: tempUnitPoids,
           unitDistance: tempUnitDistance,
+          genre:genre
         },
         state.token,
       );
@@ -105,6 +110,7 @@ export default function Parametres(props) {
       }
     }
   };
+  console.log()
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />
@@ -330,6 +336,16 @@ export default function Parametres(props) {
                         maximumDate={new Date()}
                     />
             )}
+            <View style={[styles.horizontal,{justifyContent:"space-around"}]}>
+              <Text style={styles.linesb}>Femme</Text>
+              <Switch
+                  trackColor={{ false: "#5FCDFA", true: "#5FCDFA" }}
+                  thumbColor={genre ? "black" : "#5FCDFA"}
+                  onValueChange={() => setGenre(!genre)}
+                  ios_backgroundColor="black"
+                  value={genre} />
+              <Text style={styles.linesb}>homme</Text>
+            </View>
             <View style={styles.horizontal}>
               <View
                 style={{

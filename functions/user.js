@@ -47,11 +47,11 @@ async function getClassement(username,authToken,categorie){
        `${BASE_URL}/users/${username}/classement/${categorie}`,
        {
          headers:{'auth-token':authToken,
-                'Content-Type':'application/json'},
+                'Content-Type':'application/json',
+                'number':100},
        },
        serverTimeout,
    );
-   console.log(get)
    return get
 }
 

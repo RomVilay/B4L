@@ -16,7 +16,7 @@ import P1 from '../../assets/Classement/p1';
 import NavApp from '../navigation/NavApp';
 import Avatar from "./Avatar";
 import {Context} from '../utils/Store';
-import {getAllUsers} from '../../functions/user';
+import {getClassement} from '../../functions/user';
 import moment from "moment";
 import goTo from "../utils/navFunctions";
 
@@ -31,24 +31,52 @@ export default function Classements(props) {
     'Rémi12',
     'Chris'
   ])
-  const [categorie,setCategorie] = useState(state.user.genre ? "homme" : "femme")
-  const position =  206
-  const membres = 212
-  function compare(user1,user2) {
-    if (user1.totalDistance<user2.totalDistance)
-      return -1;
-    if (user1.totalDistance>user2.totalDistance)
-      return 1;
-    // a doit être égal à b
-    return 0;
-  }
-  const getClassement = async => {
-    const listUsers = getAllUsers(state.token)
+  const [categorie,setCategorie] = useState("")
+  const [position,setPosition] =  useState(206)
+  const [membres,setMembres] = useState(212)
+  const labls = state.user.genre ?
+      [{label:"Classement Général",value:""},
+        {label:"Classement Homme",value:"homme"},
+        {label:"Classement junior homme",value:"homme/junior"},
+        {label:"Classement senior homme",value:"homme/senior"},
+        {label:"Classement espoir homme",value:"homme/espoir"},
+        {label:"classement master1 homme",value:"homme/master1"},
+        {label:"classement master2 homme",value:"homme/master2"},
+        {label:"classement master3 homme",value:"homme/master3"},
+        {label:"Classement Femme",value:"femme"},
+        {label:"Classement junior femme",value:"femme/junior"},
+        {label:"Classement senior femme",value:"homme/senior"},
+        {label:"Classement espoir femme",value:"femme/espoir"},
+        {label:"classement master1 femme",value:"femme/master1"},
+        {label:"classement master2 femme",value:"femme/master2"},
+        {label:"classement master3 femme",value:"femme/master3"},
+      ] : [{label:"Classement Général",value:""},
+        {label:"Classement Femme",value:"femme"},
+        {label:"Classement junior femme",value:"femme/junior"},
+        {label:"Classement senior femme",value:"homme/senior"},
+        {label:"Classement espoir femme",value:"femme/espoir"},
+        {label:"classement master1 femme",value:"femme/master1"},
+        {label:"classement master2 femme",value:"femme/master2"},
+        {label:"classement master3 femme",value:"femme/master3"},
+        {label:"Classement Homme",value:"homme"},
+        {label:"Classement junior homme",value:"homme/junior"},
+        {label:"Classement senior homme",value:"homme/senior"},
+        {label:"Classement espoir homme",value:"homme/espoir"},
+        {label:"classement master1 homme",value:"homme/master1"},
+        {label:"classement master2 homme",value:"homme/master2"},
+        {label:"classement master3 homme",value:"homme/master3"},
+      ]
+  async function classement (classement){
+    const listUsers = await getClassement(state.user.username,state.token,classement)
     if (listUsers.message) {
       Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
       console.log(listUsers.message)
     } else {
-      console.log(listUsers)
+      //console.log(listUsers)
+      setPosition(listUsers.position)
+      let tab= listUsers.classement.map(user=>user.username)
+      setPoduim([tab[0],tab[1],tab[2]])
+      setMembres(listUsers.classement.length)
       //console.log(listUsers.sort(compare).map(user=>user.username))
     }
   }
@@ -98,6 +126,8 @@ export default function Classements(props) {
       );
   React.useEffect(()=>{
   //  getClassement()
+    console.log(categorie)
+    classement(categorie)
   },[categorie])
     return (
       <SafeAreaView style={styles.container}>
@@ -110,11 +140,8 @@ export default function Classements(props) {
           <View style={[styles.middle, {width: '90%'}]}>
             <View style={styles.selectClass}>
             <DropDownPicker
-                items={[{label:"Classement Homme",value:0},
-                  {label:"Classement Femme",value:1},
-                  {label:"Classement junior",value:2},
-                  {label:"Classement senior",value:3}]}
-                defaultValue={state.user.genre ? 0 : 1}
+                items={labls}
+                defaultValue={""}
                 style={[styles.inputContainer,{color: "white", height:50}]}
                 itemStyle={{
                   justifyContent: 'center'
@@ -125,7 +152,7 @@ export default function Classements(props) {
                   borderTopWidth:0
                 }}
                 labelStyle={{color:"white"}}
-                onChangeItem={ item => setCategorie(item.label)}
+                onChangeItem={ item => setCategorie(item.value)}
                 />
 
             </View>
@@ -188,6 +215,7 @@ export default function Classements(props) {
               </View>
             </View>
             <View style={styles.midMid}>
+              { poduim[1]!== undefined ?
               <View style={styles.midItem}>
                 <Image
                   source={scnd}
@@ -214,7 +242,8 @@ export default function Classements(props) {
                     </Text>
                   </TouchableOpacity>
                 </View>
-              </View>
+              </View> : <></> }
+              { poduim[2]!== undefined ?
               <View style={styles.midItem}>
                 <Image
                   source={require('../../assets/Classement/third.png')}
@@ -227,7 +256,7 @@ export default function Classements(props) {
                   <Text style={[styles.linesb, {fontSize: 30}]}>
                     N°3
                     <Text style={[styles.linesw, {fontSize: 30}]}>
-                      {` ${poduim[2]}`}
+                      {poduim[2]}
                     </Text>
                   </Text>
                 </View>
@@ -242,6 +271,7 @@ export default function Classements(props) {
                   </TouchableOpacity>
                 </View>
               </View>
+                  : <></> }
             </View>
             <View style={styles.footer}>
               <NavApp navigation={props.navigation} />
