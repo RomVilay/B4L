@@ -6,6 +6,7 @@ import {
   Image,
   Text,
   TouchableOpacity, Platform, Alert, ActivityIndicator,
+    ScrollView
 } from 'react-native';
 import DropDownPicker from "react-native-dropdown-picker"
 
@@ -35,7 +36,7 @@ export default function Classements(props) {
   const [position,setPosition] =  useState(206)
   const [membres,setMembres] = useState(212)
   const labls = state.user.genre ?
-      [{label:"Classement Général",value:""},
+      [{label:"Classement Général",value:"general"},
         {label:"Classement Homme",value:"homme"},
         {label:"Classement junior homme",value:"homme/junior"},
         {label:"Classement senior homme",value:"homme/senior"},
@@ -50,7 +51,7 @@ export default function Classements(props) {
         {label:"classement master1 femme",value:"femme/master1"},
         {label:"classement master2 femme",value:"femme/master2"},
         {label:"classement master3 femme",value:"femme/master3"},
-      ] : [{label:"Classement Général",value:""},
+      ] : [{label:"Classement Général",value:"general"},
         {label:"Classement Femme",value:"femme"},
         {label:"Classement junior femme",value:"femme/junior"},
         {label:"Classement senior femme",value:"homme/senior"},
@@ -74,8 +75,8 @@ export default function Classements(props) {
     } else {
       //console.log(listUsers)
       setPosition(listUsers.position)
-      let tab= listUsers.classement.map(user=>user.username)
-      setPoduim([tab[0],tab[1],tab[2]])
+      console.log(listUsers.classement)
+      setPoduim(listUsers.classement)
       setMembres(listUsers.classement.length)
       //console.log(listUsers.sort(compare).map(user=>user.username))
     }
@@ -115,7 +116,7 @@ export default function Classements(props) {
   const AlertStats = (user) =>
       Alert.alert(
           `Statistiques de ${user.username}`,
-          `distances totales parcourues ${formatDistance(state.user.totalDistance)} \n énergie produite ${formatEnergie(user.totalEnergie,"wh")} \n temps passé sur l'application ${moment(user.totalDuree).format("HH:mm:ss")}`,
+          `distances totales parcourues ${user.totalDistance !== null && !isNaN(user.totalDistance) ? formatDistance(user.totalDistance) : 0} \n énergie produite ${user.totalEnergie !== null && !isNaN(user.totalEnergie) ? formatEnergie(user.totalEnergie,"wh") : 0} \n temps passé sur l'application ${user.totalDuree !== null && !isNaN(user.totalDuree)? moment(user.totalDuree).format("HH:mm:ss"):0}`,
           [
             {
               text: 'fermer',
@@ -129,10 +130,18 @@ export default function Classements(props) {
     console.log(categorie)
     classement(categorie)
   },[categorie])
+
+  function renderTable(item,index) {
+    return <View style={[{flexDirection:"row", justifyContent:"space-between", borderBottomColor:'#5FCDFA', borderBottomWidth:1, flex:1}]}>
+      <Text style={[styles.linesw,{width:100}]}>{index}</Text>
+      <Text style={styles.linesw}>{item.username}</Text>
+      <Text style={[styles.linesw,{width:100, textAlign:"right"}]}>{item.totalPoints !== null && !isNaN(item.totalPoints) ? item.totalPoints : 0}</Text>
+    </View>
+  }
     return (
       <SafeAreaView style={styles.container}>
         <Image style={styles.fond} source={require('../../assets/fond.png')} />
-        <View style={styles.container}>
+        <ScrollView style={styles.scrollview} contentContainerStyle={styles.contentContainerStyle}>
           <View style={styles.header}>
             <LogoMin />
             <Text style={[styles.textTitle, {fontSize: 70}]}>Classement</Text>
@@ -141,7 +150,7 @@ export default function Classements(props) {
             <View style={styles.selectClass}>
             <DropDownPicker
                 items={labls}
-                defaultValue={""}
+                defaultValue="general"
                 style={[styles.inputContainer,{color: "white", height:50}]}
                 itemStyle={{
                   justifyContent: 'center'
@@ -191,6 +200,7 @@ export default function Classements(props) {
               ]}>
               <Text style={styles.linesb}> Le podium dans ta catégorie </Text>
             </View>
+            { poduim[0]!== undefined ?
             <View style={styles.midMid}>
               <View style={styles.midItem}>
                 <P1 />
@@ -198,14 +208,14 @@ export default function Classements(props) {
                   <Text style={[styles.linesb, {fontSize: 30}]}>
                     N°1
                     <Text style={[styles.linesw, {fontSize: 30}]}>
-                     {` ${poduim[0]}`}
+                     {` ${poduim[0].username}`}
                   </Text>
                   </Text>
                 </View>
                 <View>
                   <TouchableOpacity
                     onPress={() => {
-                     AlertStats(state.user)
+                     AlertStats(poduim[0])
                     }}>
                     <Text style={[styles.linesw, {fontSize: 20}]}>
                       voir ses stats
@@ -213,7 +223,7 @@ export default function Classements(props) {
                   </TouchableOpacity>
                 </View>
               </View>
-            </View>
+            </View> : <></> }
             <View style={styles.midMid}>
               { poduim[1]!== undefined ?
               <View style={styles.midItem}>
@@ -228,14 +238,14 @@ export default function Classements(props) {
                   <Text style={[styles.linesb, {fontSize: 30}]}>
                     N°2
                     <Text style={[styles.linesw, {fontSize: 30}]}>
-                      {` ${poduim[1]}`}
+                      {` ${poduim[1].username}`}
                     </Text>
                   </Text>
                 </View>
                 <View>
                   <TouchableOpacity
                     onPress={() => {
-                      AlertStats(state.user)
+                      AlertStats(poduim[1])
                     }}>
                     <Text style={[styles.linesw, {fontSize: 20}]}>
                       voir ses stats
@@ -256,14 +266,14 @@ export default function Classements(props) {
                   <Text style={[styles.linesb, {fontSize: 30}]}>
                     N°3
                     <Text style={[styles.linesw, {fontSize: 30}]}>
-                      {poduim[2]}
+                      {poduim[2].username}
                     </Text>
                   </Text>
                 </View>
                 <View>
                   <TouchableOpacity
                     onPress={() => {
-                      AlertStats(state.user)
+                      AlertStats(poduim[2])
                     }}>
                     <Text style={[styles.linesw, {fontSize: 20}]}>
                       voir ses stats
@@ -273,11 +283,17 @@ export default function Classements(props) {
               </View>
                   : <></> }
             </View>
+            <View style={styles.table}>
+              <Text style={[styles.textTitle,{alignSelf:"center", fontSize:40}]}> Classement de la catégorie</Text>
+              {
+                poduim.map((value, index) => renderTable(value,index+1))
+              }
+            </View>
             <View style={styles.footer}>
               <NavApp navigation={props.navigation} />
             </View>
           </View>
-        </View>
+        </ScrollView>
       </SafeAreaView>
     );
 
@@ -286,12 +302,16 @@ export default function Classements(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  scrollview: {
+    flex: 1,
+  },
+  contentContainerStyle:{
+    alignItems:"center"
   },
 
   header: {
-
+    marginTop:'5%',
     flex: 2,
     flexDirection: 'column',
     alignItems: 'center',
@@ -304,9 +324,6 @@ const styles = StyleSheet.create({
     fontFamily: 'TallFilms',
   },
   selectClass:{
-  ...(Platform.OS !== 'android' && {
-      position:"absolute", zIndex:800, top:-20
-  }),
       flex:1,
       height:50,
       marginBottom:'5%'
@@ -393,11 +410,20 @@ const styles = StyleSheet.create({
     zIndex: 100,
     marginTop:'2%'
   },
+  table:{
+    flex:1,
+    borderWidth: 2,
+    borderRadius: 10,
+    width:"80%",
+    padding:"5%",
+    borderColor: '#5FCDFA',
+    height:400
+  },
   footer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 30
+    marginTop: "15%"
   },
   fond: {
     position: 'absolute',
