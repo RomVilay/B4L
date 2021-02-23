@@ -81,7 +81,7 @@ export default function Compteur (props) {
       "defis":defisValid.map(defi => defi._id),
       "vitesse":vitesses,
       "inclinaison":inclinaison,
-      "idUser":state.user.idUser,
+      "idUser":state.user._id,
       "dateSession":moment(),
       "dureeSession":moment.duration(currentTime).asSeconds(),
       "points":defisValid.map(defi=>defi.points).reduce((total,defi)=>total+defi.points),
