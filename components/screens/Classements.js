@@ -131,7 +131,7 @@ export default function Classements(props) {
 
   function renderTable(item,index) {
     return <View style={[{flexDirection:"row", justifyContent:"space-between", borderBottomColor:'#5FCDFA', borderBottomWidth:1, flex:1}]}>
-      <Text style={[styles.linesw,{width:100}]}>{index}</Text>
+      <Text style={[styles.linesw,{width:50}]}>{index}</Text>
       <Text style={styles.linesw}>{item.username}</Text>
       <Text style={[styles.linesw,{width:100, textAlign:"right"}]}>{item.totalPoints !== null && !isNaN(item.totalPoints) ? item.totalPoints : 0}</Text>
     </View>
@@ -411,7 +411,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     zIndex: 100,
-    marginTop:'2%'
+    marginTop:'5%'
   },
   table:{
     flex:1,
