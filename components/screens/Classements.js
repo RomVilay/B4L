@@ -75,7 +75,6 @@ export default function Classements(props) {
     } else {
       //console.log(listUsers)
       setPosition(listUsers.position)
-      console.log(listUsers.classement)
       setPoduim(listUsers.classement)
       setMembres(listUsers.classement.length)
       //console.log(listUsers.sort(compare).map(user=>user.username))
@@ -127,8 +126,7 @@ export default function Classements(props) {
       );
   React.useEffect(()=>{
   //  getClassement()
-    console.log(categorie)
-    classement(categorie)
+    classement(categorie == "general" ? "":categorie)
   },[categorie])
 
   function renderTable(item,index) {
@@ -198,7 +196,7 @@ export default function Classements(props) {
                 styles.midMid,
                 {borderColor: 'white', borderTopWidth: 2},
               ]}>
-              <Text style={styles.linesb}> Le podium dans ta catégorie </Text>
+              {poduim.length>0 ? <Text style={styles.linesb}> Le podium dans ta catégorie </Text> : <></> }
             </View>
             { poduim[0]!== undefined ?
             <View style={styles.midMid}>
@@ -252,7 +250,7 @@ export default function Classements(props) {
                     </Text>
                   </TouchableOpacity>
                 </View>
-              </View> : <></> }
+              </View> : <Text style={[styles.linesb,{alignSelf:"center"}]}>pas de classement disponible</Text> }
               { poduim[2]!== undefined ?
               <View style={styles.midItem}>
                 <Image
@@ -283,12 +281,14 @@ export default function Classements(props) {
               </View>
                   : <></> }
             </View>
+            {poduim.length > 0 ?
             <View style={styles.table}>
               <Text style={[styles.textTitle,{alignSelf:"center", fontSize:40}]}> Classement de la catégorie</Text>
               {
                 poduim.map((value, index) => renderTable(value,index+1))
               }
             </View>
+                : <></> }
             <View style={styles.footer}>
               <NavApp navigation={props.navigation} />
             </View>
@@ -416,14 +416,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width:"80%",
     padding:"5%",
+    marginTop:"10%",
     borderColor: '#5FCDFA',
-    height:400
+    backgroundColor: '#284462',
   },
   footer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: "15%"
+    marginTop: "15%",
+    paddingBottom:"5%"
   },
   fond: {
     position: 'absolute',
