@@ -81,7 +81,7 @@ export default function Compteur (props) {
       "defis":defisValid.map(defi => defi._id),
       "vitesse":vitesses,
       "inclinaison":inclinaison,
-      "idUser":state.user.username,
+      "idUser":state.user.idUser,
       "dateSession":moment(),
       "dureeSession":moment.duration(currentTime).asSeconds(),
       "points":defisValid.map(defi=>defi.points).reduce((total,defi)=>total+defi.points),
@@ -91,7 +91,7 @@ export default function Compteur (props) {
     }
     const session = await createSession(data,state.token)
     if (session.message) {
-      Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
+      Alert.alert('Erreur session', 'Veuillez rééssayer plus tard');
       console.log(session.message)
     }
       let tab = defisValid.filter(defi => defi.long !== undefined).map(defi=>defi._id)
@@ -103,7 +103,7 @@ export default function Compteur (props) {
       }
       const updated  = await  editUser(state.user.username,userdata,state.token)
       if (updated.message) {
-        Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
+        Alert.alert('Erreur update', 'Veuillez rééssayer plus tard');
         console.log(updated.message)
       } else {
         //console.log(userdata)
@@ -252,7 +252,7 @@ export default function Compteur (props) {
     getDefiLong()
   },[])
 
-  testWbSckt("bonjour")
+  //testWbSckt("bonjour")
     return (
       <SafeAreaView style={styles.container}>
         <Image source={require('../../assets/fond.png')} style={styles.fond} />
