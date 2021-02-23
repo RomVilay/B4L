@@ -324,6 +324,9 @@ const styles = StyleSheet.create({
     fontFamily: 'TallFilms',
   },
   selectClass:{
+    ...(Platform.OS !== 'android' && {
+      zIndex:800,
+    }),
       flex:1,
       height:50,
       marginBottom:'5%'
