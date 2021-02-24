@@ -98,8 +98,8 @@ export default function Compteur (props) {
       const userdata = {
         "totalDuree":state.user.totalDuree+moment.duration(currentTime).asSeconds(),
         "totalEnergie":isNaN(state.user.totalEnergie+energie) ? 1 : state.user.totalEnergie+energie,
-        "totalDistance":state.user.totalDistance+distance/*,
-        "defisLongs":state.user.defisLongs.filter(id=>!tab.includes(id))*/
+        "totalDistance":state.user.totalDistance+distance//,
+        //"defisLongs":state.user.defisLongs.filter(id=>!tab.includes(id))
       }
       const updated  = await  editUser(state.user.username,userdata,state.token)
       if (updated.message) {
@@ -215,7 +215,7 @@ export default function Compteur (props) {
      setDefis([...defis,...tab])
    }
    function testWbSckt(message){
-     const ws = new WebSocket("ws://localhost:8100");
+     const ws = new WebSocket("ws://192.168.5.26:8080");
      ws.onopen = () => {
        ws.send(`{"type":"text","content":"${message}"}`);
      }
@@ -243,13 +243,13 @@ export default function Compteur (props) {
              || (defis[defic].butUnit === "watts" && state.user.totalEnergie+energie >= defis[defic].butNumber) )
          {
            ValiderDefis()
-
          }
        }
     }
    },[distance,energie])
   React.useEffect(()=>{
     getDefiLong()
+    //testWbSckt("bonjour")
   },[])
 
   //testWbSckt("bonjour")

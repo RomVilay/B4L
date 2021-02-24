@@ -26,35 +26,22 @@ import {height} from "react-native-daterange-picker/src/modules";
 import WifiManager from "react-native-wifi-reborn"
 
 export default function Jumelage (props) {
-    state = {
-        code: 'qrcode'
-    }
     //fonction en cas de réussite de scan du qrcode
     const requestLocationPermission = async (ssid,psw) => {
         try {
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
                 {
-                    title: "React Native Wifi Reborn App Permission",
+                    title: "Bike For Life app permission",
                     message:
-                        "Location permission is required to connect with or scan for Wifi networks. ",
-                    buttonNeutral: "Ask Me Later",
-                    buttonNegative: "Cancel",
-                    buttonPositive: "OK"
+                        "Bike for life a besoin de l'accès à la localisation pour détecter le wifi. ",
+                    buttonNeutral: "me demander ultérieurment",
+                    buttonNegative: "bloquer",
+                    buttonPositive: "autoriser"
                 }
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                WifiManager.connectToProtectedSSID(ssid, psw, false).then(
-                    () => {
-                        console.log("Connected successfully!");
-                        props.navigation.navigate("Compteur",{'defis':props.route.params.defis})
-                    },
-                    () => {
-                        console.log(ssid)
-                        console.log("Connection failed!");
-                        props.navigation.navigate("Compteur",{'defis':props.route.params.defis})
-                    }
-                );
+               connect(ssid,psw)
             } else {
                 console.log("Location permission denied");
             }
@@ -62,10 +49,20 @@ export default function Jumelage (props) {
             console.warn(err);
         }
     };
+
+    const connect = async (ssid,psw) => {
+        try{
+            const data = await WifiManager.connectToProtectedSSID(ssid, psw, false);
+                    console.log("Connected successfully!");
+                    props.navigation.navigate("Compteur",{'defis':props.route.params.defis})
+        }catch (error){
+            console.log("Connection failed!",{error});
+        }
+    }
     const onSuccess = e => {
         let ssid = e.data.slice(7,10)
         let psw = e.data.slice(19,e.data.length-2)
-        console.log(e.data.slice(7,10)+" - "+e.data.slice(19,e.data.length-2))
+        //console.log(e.data.slice(7,10)+" - "+e.data.slice(19,e.data.length-2))
         requestLocationPermission(ssid,psw)
        /* Linking
             .openURL(e.data)
@@ -73,6 +70,7 @@ export default function Jumelage (props) {
             console.error('An error occured', err)
         );*/
     }
+
         return (
             <SafeAreaView style={styles.container}>
                 <Image source={require('../../assets/fond.png')} style={styles.fond} />

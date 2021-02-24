@@ -92,7 +92,7 @@ export default function  ListeDefis(props) {
                 </View>
                 <View style={styles.footer}>
                     <TouchableOpacity style={{marginBottom:'10%'}} onPress={()=> {
-                        props.navigation.navigate("Compteur",{defis:defisSelect})
+                        props.navigation.navigate("Jumelage",{defis:defisSelect})
                     }} color={'white'}>
                         <Text style={styles.titreBleu}>appuyez pour continuer</Text>
                     </TouchableOpacity>
