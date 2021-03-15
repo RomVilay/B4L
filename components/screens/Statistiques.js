@@ -127,8 +127,8 @@ export default function Statistiques(props) {
   }, [])
   React.useEffect( ()=>{
     let tab2 = sessions.filter( session => moment(session.dateSession).isBefore(Dates[1]) && moment(session.dateSession).isAfter(Dates[0]) )
-    tab2.length !== 0 ?
-        DefLabels(tab2) : console.log(tab2)
+    tab2.length > 0 ?
+        DefLabels(tab2) : console.log(selector)
   }, [selector])
   const alertDate = () =>
       Alert.alert("Sélection des dates",
@@ -210,7 +210,7 @@ export default function Statistiques(props) {
                     }
                     tab.push(moment(date.endDate).format("DD-MMM"))
                     let tab2 = sessions.filter( session => moment(session.dateSession).isBefore(Dates[1]) && moment(session.dateSession).isAfter(Dates[0]) )
-                    tab2.length !== 0 ?
+                    tab2.length > 0 ?
                         DefLabels(tab2) : alertDate()
                   }
                 }

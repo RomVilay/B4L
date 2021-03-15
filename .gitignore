@@ -61,3 +61,5 @@ buck-out/
 /ios/Pods/
 /wstest.js
 /wstest.js
+/test/stest.js
+/test/ctest.js

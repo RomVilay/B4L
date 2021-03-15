@@ -11,7 +11,8 @@ import {
   Alert,
   Button,
   Dimensions,
-  ActivityIndicator
+  ActivityIndicator,
+    Modal
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from "moment";
@@ -27,7 +28,7 @@ import AfficheurCompteur from './afficheurConpteur';
 import AfficheurDonnees from "./afficheurDonnees";
 import navigation from "../../assets/navigation";
 import SliderDefis from "./sliderDefis";
-import {createSession} from '../../functions/session';
+import {createSession, editSession} from '../../functions/session';
 import {editUser} from '../../functions/user';
 import {getDefi} from '../../functions/defis';
 import {refreshState} from '../utils/navFunctions';
@@ -35,28 +36,32 @@ import {Context} from "../utils/Store";
 import goTo from '../utils/navFunctions';
 import go from "../../assets/Accueil/go";
 import NotificationSounds, {playSampleSound} from 'react-native-notification-sounds'
+
 export default function Compteur (props) {
   const [state, setState] = useContext(Context);
+  const [modal,setModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
-    const rotateValueHolder= React.useRef(new Animated.Value(0)).current;
-    const [start,setStart] = React.useState(true)
-    const [reset,setReset] = React.useState(false)
-    const [pause,setPause] =React.useState('')
-    const [currentTime,setCTime] = React.useState('')
-    const[startPosition,setSPosition] = React.useState(-160)
-    const[endPosition,setEPosition] = React.useState(-125)
-    const outputRange = ['0deg', '10deg']
-    const [seg,setSeg] = React.useState(10)
-    const [angle,setAngle] = React.useState(-150)
-    const [up,setUp] = React.useState(true)
-    const [defis,setDefis] = React.useState(props.route.params.defis)
-    const [defisValid,setDefisValid] = React.useState([])
-    const [defic,setDefic] = React.useState(0)
-    const[watts,setWatts] = React.useState(200)
+  const rotateValueHolder= React.useRef(new Animated.Value(0)).current;
+  const [start,setStart] = React.useState(true)
+  const [reset,setReset] = React.useState(false)
+  const [pause,setPause] =React.useState('')
+  const [currentTime,setCTime] = React.useState('')
+  const [startPosition,setSPosition] = React.useState(-160)
+  const [endPosition,setEPosition] = React.useState(-125)
+  const outputRange = ['0deg', '10deg']
+  const [seg,setSeg] = React.useState(10)
+  const [angle,setAngle] = React.useState(-150)
+  const [up,setUp] = React.useState(true)
+  const [defis,setDefis] = React.useState(props.route.params.defis)
+  const [defisValid,setDefisValid] = React.useState([])
+  const [defic,setDefic] = React.useState(0)
+    const [watts,setWatts] = React.useState(200)
     const [vitesses,setVitesses] = React.useState([])
     const [inclinaison,setInclinaison] = React.useState([])
     const [energie,setEnergie] = React.useState(0)
     const [distance,setDistance] = React.useState(0)
+    const [ws,setWs] = React.useState(new WebSocket("ws://localhost:8100"))
+  const [erreur,setErreur] = React.useState()
     /*this.toggleStopwatch = this.toggleStopwatch.bind(this);
     this.resetStopwatch = this.resetStopwatch.bind(this);
     this._isMounted = false*/
@@ -124,7 +129,7 @@ export default function Compteur (props) {
         setVitesses([...vitesses,seg])
         setInclinaison([...inclinaison,1])
         setEnergie(energie=>energie+100)
-       setDistance(distance=>distance+10)
+       setDistance(distance=>Math.round(distance+seg*0.0001*moment.duration(currentTime).asSeconds()))
         /*if (endPosition >= -100) {
           setUp(false)
         }*/
@@ -149,10 +154,13 @@ export default function Compteur (props) {
     const  interval = setInterval(() => {
      randomRotation()
     }, 900); //mise à jour du tableau d'interpolation de la rotation, toutes les 6s
+    if (modal == true){
+      clearInterval(interval)
+    }
     return() =>{
       clearInterval(interval)
     }
-  },[seg,endPosition,startPosition,angle,up])
+  },[seg,endPosition,startPosition,angle,up,modal])
 
   //fonction animation aiguille
   const StartImageRotateFunction = () => {
@@ -181,6 +189,7 @@ export default function Compteur (props) {
             if(defisValid.length > 0){
               saveSession()
             }
+            ws.close()
             goTo(props)
           },
         },
@@ -214,16 +223,29 @@ export default function Compteur (props) {
      }
      setDefis([...defis,...tab])
    }
-   function testWbSckt(message){
-     const ws = new WebSocket("ws://192.168.5.26:8080");
-     ws.onopen = () => {
-       ws.send(`{"type":"text","content":"${message}"}`);
-     }
+   function testWbSckt(){
+     //const ws = new WebSocket("ws://localhost:8100");
+       ws.onopen = () => {
+         ws.send(`{"type":"text","content":"Bonjour"}`);
+       }
      ws.onclose = (e) =>{
        console.log(e.code,e.reason);
+       console.log("déconnecter")
      }
      ws.onmessage = (e) => {
        console.log(e.data)
+       var message = JSON.parse(e.data)
+       if (message.code !== undefined){
+         switch (message.code){
+           case 1:
+             console.log(message)
+             break;
+           case 2:
+             setErreur(message.msg)
+               //ws.close()
+             break;
+         }
+       }
      }
      ws.onerror = (e) => {
        console.log(e.message)
@@ -249,13 +271,32 @@ export default function Compteur (props) {
    },[distance,energie])
   React.useEffect(()=>{
     getDefiLong()
-    //testWbSckt("bonjour")
+    testWbSckt()
   },[])
+  React.useEffect(()=>{
+    //testWbSckt()
+  }, [])
 
   //testWbSckt("bonjour")
     return (
       <SafeAreaView style={styles.container}>
         <Image source={require('../../assets/fond.png')} style={styles.fond} />
+          <Modal
+            visible={modal}
+            transparent={true}
+            animationType="slide"
+          ><View
+            style={{backgroundColor:"#FF0000AA", flex:1,justifyContent:"center", alignItems:"center"}}
+          >
+            <Text style={[styles.midText,{fontSize:50}]}>Erreur</Text>
+            <Text style={[styles.midText,{fontSize:20}]}>{erreur}</Text>
+            <TouchableOpacity onPress={() => {goTo(props)}}>
+              <View style={{ backgroundColor:"white", borderRadius:20, padding:10}}>
+                <Text style={[{fontSize:20, fontFamily:"GnuolaneRG-Regular", color:"red"}]}>Retour accueil</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          </Modal>
         <View style={styles.header}>
           <LogoMin />
           <Stopwatch
@@ -278,7 +319,11 @@ export default function Compteur (props) {
           </TouchableOpacity>
           <View style={{flexDirection:"row"}}>
             <SliderDefis defis={defis} defisV={defisValid} current={defic}/>
-            <TouchableOpacity onPress={() => {ValiderDefis()
+            <TouchableOpacity onPress={() => {
+              ws.send('{"code":2,"msg":"une erreur avec le vélo a été rencontrée."}')
+              toggleStopwatch()
+              setModal(true)
+              //ValiderDefis()
               /*NotificationSounds.getNotifications('notification').then(soundsList  => {
                 console.warn('SOUNDS', JSON.stringify(soundsList[1]));
                 /*
@@ -291,7 +336,7 @@ export default function Compteur (props) {
                 // stopSampleSound();
               });*/
             }} >
-              <Text>valid</Text>
+              <Text style={styles.midText}> error</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -325,6 +370,7 @@ export default function Compteur (props) {
             <TouchableOpacity
                 onPress={() => {
                   setWatts(watts+5);
+                  ws.send(`{"code":3,"watts":${watts}}`)
                 }}>
               <Text
                   style={[styles.midText, {fontSize: 70, marginRight: '5%', marginTop:25}]}
