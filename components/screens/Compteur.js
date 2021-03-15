@@ -55,13 +55,14 @@ export default function Compteur (props) {
   const [defis,setDefis] = React.useState(props.route.params.defis)
   const [defisValid,setDefisValid] = React.useState([])
   const [defic,setDefic] = React.useState(0)
-    const [watts,setWatts] = React.useState(200)
-    const [vitesses,setVitesses] = React.useState([])
-    const [inclinaison,setInclinaison] = React.useState([])
-    const [energie,setEnergie] = React.useState(0)
-    const [distance,setDistance] = React.useState(0)
-    const [ws,setWs] = React.useState(new WebSocket("ws://localhost:8100"))
+  const [watts,setWatts] = React.useState(200)
+  const [vitesses,setVitesses] = React.useState([])
+  const [inclinaison,setInclinaison] = React.useState([])
+  const [energie,setEnergie] = React.useState(0)
+  const [distance,setDistance] = React.useState(0)
+  const [ws,setWs] = React.useState(new WebSocket("ws://localhost:8100"))
   const [erreur,setErreur] = React.useState()
+  const [session,setSession] = React.useState()
     /*this.toggleStopwatch = this.toggleStopwatch.bind(this);
     this.resetStopwatch = this.resetStopwatch.bind(this);
     this._isMounted = false*/
@@ -89,21 +90,34 @@ export default function Compteur (props) {
       "idUser":state.user._id,
       "dateSession":moment(),
       "dureeSession":moment.duration(currentTime).asSeconds(),
-      "points":defisValid.map(defi=>defi.points).reduce((total,defi)=>total+defi.points),
       "distance":distance,
       "energie":energie,
 
     }
-    const session = await createSession(data,state.token)
-    if (session.message) {
-      Alert.alert('Erreur session', 'Veuillez rééssayer plus tard');
-      console.log(session.message)
+    if (session == undefined){
+      const s = await createSession(data,state.token)
+      if (s.message) {
+        Alert.alert('Erreur création session', s.message);
+        console.log(s.message)
+      } else {
+        setSession(s)
+      }
+    }
+    else {
+      const s = await editSession(session._id,data,state.token)
+      if (s.message) {
+        Alert.alert('Erreur session', s.message);
+        console.log(s.message)
+      } else {
+        setSession(s)
+      }
     }
       let tab = defisValid.filter(defi => defi.long !== undefined).map(defi=>defi._id)
       const userdata = {
         "totalDuree":state.user.totalDuree+moment.duration(currentTime).asSeconds(),
         "totalEnergie":isNaN(state.user.totalEnergie+energie) ? 1 : state.user.totalEnergie+energie,
-        "totalDistance":state.user.totalDistance+distance//,
+        "totalDistance":state.user.totalDistance+distance,
+        "totalPoints":defisValid.length > 0 ? defisValid.map(defi=>defi.points).reduce((total,defi)=>total+defi.points) : 0
         //"defisLongs":state.user.defisLongs.filter(id=>!tab.includes(id))
       }
       const updated  = await  editUser(state.user.username,userdata,state.token)
@@ -268,6 +282,7 @@ export default function Compteur (props) {
          }
        }
     }
+     saveSession()
    },[distance,energie])
   React.useEffect(()=>{
     getDefiLong()
