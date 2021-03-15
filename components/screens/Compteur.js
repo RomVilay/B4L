@@ -307,8 +307,8 @@ export default function Compteur (props) {
     return (
       <SafeAreaView style={styles.container}>
         <Image source={require('../../assets/fond.png')} style={styles.fond} />
-        {//<ModalError stylemodal={styleModal} erreur={erreur} setModal={setModal} modal={modal}/>}
-        }<Modal
+        <ModalError styleModal={styleModal} erreur={erreur} setModal={setModal} modal={modal} t={t} />
+        {/*<Modal
             visible={modal}
             transparent={true}
             animationType="slide"
@@ -336,7 +336,7 @@ export default function Compteur (props) {
                 </View>
             }
           </View>
-          </Modal>
+          </Modal>*/}
         <View style={styles.header}>
           <LogoMin />
           <Stopwatch
