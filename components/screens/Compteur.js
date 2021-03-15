@@ -118,15 +118,12 @@ export default function Compteur (props) {
         "totalEnergie":isNaN(state.user.totalEnergie+energie) ? 1 : state.user.totalEnergie+energie,
         "totalDistance":state.user.totalDistance+distance,
         "totalPoints":defisValid.length > 0 ? defisValid.map(defi=>defi.points).reduce((total,defi)=>total+defi.points) : 0
-        //"defisLongs":state.user.defisLongs.filter(id=>!tab.includes(id))
       }
       const updated  = await  editUser(state.user.username,userdata,state.token)
       if (updated.message) {
-        Alert.alert('Erreur update', 'Veuillez rééssayer plus tard');
+        Alert.alert('Erreur update', updated.message);
         console.log(updated.message)
       } else {
-        //console.log(userdata)
-        //console.log(updated)
         setState({user: updated, token: state.token})
       }
     }
