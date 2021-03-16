@@ -22,26 +22,31 @@ export const ModalError = (props) => {
             animationType="slide"
         >
             <View style={props.styleModal}>
-                <Text style={[styles.midText,{fontSize:50}]}>Erreur</Text>
-                <Text style={[styles.midText,{fontSize:20,height:150, textAlign:"justify", marginLeft:"10%", marginRight:"10%", textTransform:"none"}]}>{props.erreur}</Text>
+                <Text style={[styles.midText,{fontSize:30}]}>Erreur</Text>
                 {props.styleModal.backgroundColor == styles.dangerModal.backgroundColor ?
-                    <TouchableOpacity onPress={() => {
-                        goTo(props.nav)
-                    }}>
-                        <View style={{backgroundColor: "white", borderRadius: 20, padding: 10, width: "40%"}}>
-                            <Text style={[{fontSize: 20, fontFamily: "GnuolaneRG-Regular", color: "red"}]}>Retour accueil</Text>
-                        </View>
-                    </TouchableOpacity>
-                    :
-                    <View>
-                        <View style={{borderColor: "white", width: 180, height: 20,borderWidth:2, borderRadius:10}}/>
-                        <View style={{ backgroundColor:"white",width: 180*(props.t/30), height: 20,position:"absolute", borderRadius:10 }}/>
+                    <>
+                        <Text style={[styles.midText,{fontSize:20, textAlign:"justify", marginLeft:"10%", marginRight:"10%", textTransform:"none"}]}>{props.erreur}</Text>
                         <TouchableOpacity onPress={() => {
-                            props.setModal(false)
+                            goTo(props.nav)
                         }}>
-                            <Text style={[{fontSize: 20, fontFamily: "GnuolaneRG-Regular", color: "#FFB748", marginLeft:"30%", position:"absolute",top:-22}]}>continuer</Text>
+                            <View style={{backgroundColor: "white", borderRadius: 20, padding: 10, width: "40%"}}>
+                                <Text style={[{fontSize: 20, fontFamily: "GnuolaneRG-Regular", color: "red"}]}>Retour accueil</Text>
+                            </View>
                         </TouchableOpacity>
-                    </View>
+                    </>
+                    :
+                    <>
+                        <Text style={[styles.midText,{fontSize:15,height:"50%", textAlign:"justify", marginLeft:"10%", marginRight:"10%", textTransform:"none"}]}>{props.erreur}</Text>
+                        <View>
+                            <View style={{borderColor: "white", width: 180, height: 20,borderWidth:2, borderRadius:10}}/>
+                            <View style={{ backgroundColor:"white",width: 180*(props.t/30), height: 20,position:"absolute", borderRadius:10 }}/>
+                            <TouchableOpacity onPress={() => {
+                                props.setModal(false)
+                            }}>
+                                <Text style={[{fontSize: 20, fontFamily: "GnuolaneRG-Regular", color: "#FFB748", marginLeft:"30%", position:"absolute",top:-22}]}>continuer</Text>
+                            </TouchableOpacity>
+                        </View>
+                        </>
                 }
             </View>
         </Modal>
@@ -59,7 +64,7 @@ const styles = StyleSheet.create({
         marginTop:"50%",
         marginLeft:"10%",
         paddingTop:"5%",
-        height:400,
+        height:100,
         width:"75%",
         backgroundColor:"#FFED50AA",
         justifyContent:"center",

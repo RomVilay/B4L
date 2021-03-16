@@ -303,6 +303,22 @@ export default function Compteur (props) {
     //testWbSckt()
   }, [])
 
+  function readData(message){
+     switch (message.code){
+       case 0:
+         let content = message.msg
+         let vitesse = content.rp*(3/25)*Math.PI*0.622 // vitesse linéaire pour un rayon de 622mm (roue 26")
+         let ps = content.US*content.IS //puissance en sortie de génératrice
+         let pu = rp*(Math.PI/30)*735*50 //puissance développée par le pédalier pour un couple de 50Nm converti en watts
+         let pe = content.UE*content.IE //puissance demandée à la génératrice
+         let temp = content.temp //température du capteur
+         if (temp >= 35){
+           setStyleModal(styles.dangerModal)
+           setErreur("Attention surchauffe détectée, veuillez cesser de pédaler")
+           setModal(true)
+         }
+     }
+  }
   //testWbSckt("bonjour")
     return (
       <SafeAreaView style={styles.container}>
@@ -360,7 +376,7 @@ export default function Compteur (props) {
           <View style={{flexDirection:"row"}}>
             <SliderDefis defis={defis} defisV={defisValid} current={defic}/>
             <TouchableOpacity onPress={() => {
-              ws.send('{"code":2,"msg":"une erreur avec le vélo a été rencontrée."}')
+              ws.send('{"code":2,"msg":"Un problème a été détecté. Veuillez cessez de pédaler ."}')
               toggleStopwatch()
               setStyleModal(styles.dangerModal)
               setModal(true)
@@ -384,8 +400,8 @@ export default function Compteur (props) {
                   'Adaptez votre allure ou réduisez la puissance demandée."}')
               toggleStopwatch()
               setStyleModal(styles.warningModal)
-              setT(30)
-              showWarning()
+              //setT(30)
+              //showWarning()
               setModal(true)
 
             }} >
@@ -469,13 +485,13 @@ const styles = StyleSheet.create({
     alignItems:"center"
   },
   warningModal:{
-    top:"20%",
+    top:"28%",
     marginLeft:"10%",
     width:"75%",
-    height:250,
     backgroundColor:"#FFED50AA",
-    justifyContent:"center",
-    alignItems:"center"
+    justifyContent:"flex-start",
+    height:"17%",
+    alignItems:"center",
   },
   header: {
     flex: 2,
