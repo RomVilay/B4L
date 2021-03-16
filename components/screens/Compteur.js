@@ -65,7 +65,7 @@ export default function Compteur (props) {
   const [erreur,setErreur] = React.useState()
   const [session,setSession] = React.useState()
   const [styleModal,setStyleModal] = React.useState(styles.dangerModal)
-  let [t,setT] = React.useState(30)
+  let [t,setT] = React.useState(15)
     /*this.toggleStopwatch = this.toggleStopwatch.bind(this);
     this.resetStopwatch = this.resetStopwatch.bind(this);
     this._isMounted = false*/
@@ -238,11 +238,12 @@ export default function Compteur (props) {
      setDefis([...defis,...tab])
    }
    function showWarning(){
-     const timer = setInterval(()=>{
+     const timer = setInterval( () => {
        if (t<0){
          setModal(false)
+         setT(15)
          clearInterval(timer)
-        } else {
+       } else {
          setT(t--)
        }
      },500)
@@ -299,9 +300,7 @@ export default function Compteur (props) {
     getDefiLong()
     testWbSckt()
   },[])
-  React.useEffect(()=>{
-    //testWbSckt()
-  }, [])
+
 
   function readData(message){
      switch (message.code){
@@ -323,36 +322,7 @@ export default function Compteur (props) {
     return (
       <SafeAreaView style={styles.container}>
         <Image source={require('../../assets/fond.png')} style={styles.fond} />
-        <ModalError styleModal={styleModal} erreur={erreur} setModal={setModal} modal={modal} t={t} nav={props} />
-        {/*<Modal
-            visible={modal}
-            transparent={true}
-            animationType="slide"
-          >
-        <View style={styleModal}>
-            <Text style={[styles.midText,{fontSize:50}]}>Erreur</Text>
-            <Text style={[styles.midText,{fontSize:20,height:150, textAlign:"justify", marginLeft:"10%", marginRight:"10%", textTransform:"none"}]}>{erreur}</Text>
-            {styleModal == styles.dangerModal ?
-                <TouchableOpacity onPress={() => {
-                  goTo(props)
-                }}>
-                  <View style={{backgroundColor: "white", borderRadius: 20, padding: 10, width: "40%"}}>
-                    <Text style={[{fontSize: 20, fontFamily: "GnuolaneRG-Regular", color: "red"}]}>Retour accueil</Text>
-                  </View>
-                </TouchableOpacity>
-                :
-                <View>
-                  <View style={{borderColor: "white", width: 180, height: 20,borderWidth:2}}/>
-                  <View style={{ backgroundColor:"white",width: 180*(t/30), height: 20,position:"absolute" }}/>
-                  <TouchableOpacity onPress={() => {
-                    setModal(false)
-                  }}>
-                      <Text style={[{fontSize: 20, fontFamily: "GnuolaneRG-Regular", color: "#FFED50", marginLeft:"30%", position:"absolute",top:-22}]}>continuer</Text>
-                  </TouchableOpacity>
-                </View>
-            }
-          </View>
-          </Modal>*/}
+        <ModalError styleModal={styleModal} erreur={erreur} setModal={setModal} modal={modal} t={t} nav={props} setT={setT} />
         <View style={styles.header}>
           <LogoMin />
           <Stopwatch
@@ -377,9 +347,9 @@ export default function Compteur (props) {
             <SliderDefis defis={defis} defisV={defisValid} current={defic}/>
             <TouchableOpacity onPress={() => {
               ws.send('{"code":2,"msg":"Un problème a été détecté. Veuillez cessez de pédaler ."}')
-              toggleStopwatch()
               setStyleModal(styles.dangerModal)
               setModal(true)
+              toggleStopwatch()
               /*NotificationSounds.getNotifications('notification').then(soundsList  => {
                 console.warn('SOUNDS', JSON.stringify(soundsList[1]));
                 /*
@@ -399,11 +369,8 @@ export default function Compteur (props) {
                   'produire la puissance que vous demandez. ' +
                   'Adaptez votre allure ou réduisez la puissance demandée."}')
               setStyleModal(styles.warningModal)
-              console.log(erreur)
-              setT(30)
-              showWarning()
               setModal(true)
-
+              showWarning()
             }} >
               <Text style={styles.midText}> error 2</Text>
             </TouchableOpacity>

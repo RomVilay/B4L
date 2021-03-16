@@ -39,15 +39,15 @@ export const ModalError = (props) => {
                     :
                     <>
                         <Text style={[styles.midText,{fontSize:15,height:"54%", textAlign:"justify", marginLeft:"10%", marginRight:"10%", textTransform:"none"}]}>{props.erreur}</Text>
+                        <TouchableOpacity onPress={() => {
+                            props.setModal(false)
+                        }}>
                         <View>
                             <View style={{borderColor: "white", width: 180, height: 20,borderWidth:2, borderRadius:10}}/>
-                            <View style={{ backgroundColor:"white",width: 180*(props.t/30), height: 20,position:"absolute", borderRadius:10 }}/>
-                            <TouchableOpacity onPress={() => {
-                                props.setModal(false)
-                            }}>
-                                <Text style={[{fontSize: 20, fontFamily: "GnuolaneRG-Regular", color: "#FFB748", marginLeft:"30%", position:"absolute",top:-22}]}>continuer</Text>
-                            </TouchableOpacity>
+                            <View style={{ backgroundColor:"white",width: 180*(props.t/15), height: 20,position:"absolute", borderRadius:10 }}/>
+                                <Text style={[{fontSize: 20, fontFamily: "GnuolaneRG-Regular", color: "#FFB748", marginLeft:"30%", position:"absolute", top:-2}]}>continuer</Text>
                         </View>
+                        </TouchableOpacity>
                         </>
                 }
             </View>
