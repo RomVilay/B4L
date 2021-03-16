@@ -47,9 +47,6 @@ const SliderDefis = (props) => {
             horizontal={true}
             keyExtractor={item => item._id}
             />
-            <TouchableOpacity onPress={() => { flist.current.scrollToIndex({'index':props.current-1})}}>
-                <Text>next</Text>
-            </TouchableOpacity>
         </>
     )
 }

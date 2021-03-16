@@ -66,6 +66,7 @@ export default function Compteur (props) {
   const [session,setSession] = React.useState()
   const [styleModal,setStyleModal] = React.useState(styles.dangerModal)
   let [t,setT] = React.useState(15)
+  const[timeModal,setTimeModal] = React.useState()
     /*this.toggleStopwatch = this.toggleStopwatch.bind(this);
     this.resetStopwatch = this.resetStopwatch.bind(this);
     this._isMounted = false*/
@@ -238,16 +239,12 @@ export default function Compteur (props) {
      setDefis([...defis,...tab])
    }
    function showWarning(){
-     const timer = setInterval( () => {
        if (t<0){
          setModal(false)
          setT(15)
-         clearInterval(timer)
        } else {
          setT(t--)
        }
-     },500)
-
    }
    function testWbSckt(){
      //const ws = new WebSocket("ws://localhost:8100");
@@ -301,7 +298,12 @@ export default function Compteur (props) {
     testWbSckt()
   },[])
 
-
+ React.useEffect(()=>{
+   if (modal == false) {
+     clearInterval(timeModal)
+     setT(15)
+   }
+ },[modal])
   function readData(message){
      switch (message.code){
        case 0:
@@ -370,7 +372,8 @@ export default function Compteur (props) {
                   'Adaptez votre allure ou réduisez la puissance demandée."}')
               setStyleModal(styles.warningModal)
               setModal(true)
-              showWarning()
+              const timer = setInterval(showWarning, 500)
+              setTimeModal(timer)
             }} >
               <Text style={styles.midText}> error 2</Text>
             </TouchableOpacity>
