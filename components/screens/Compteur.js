@@ -12,7 +12,7 @@ import {
   Button,
   Dimensions,
   ActivityIndicator,
-    Modal
+  Modal, Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from "moment";
@@ -61,7 +61,7 @@ export default function Compteur (props) {
   const [inclinaison,setInclinaison] = React.useState([])
   const [energie,setEnergie] = React.useState(0)
   const [distance,setDistance] = React.useState(0)
-  const [ws,setWs] = React.useState(new WebSocket("ws://localhost:8100"))
+  const [ws,setWs] = React.useState(Platform.OS === "ios" ? new WebSocket("ws://localhost:8100") : new WebSocket("ws://echo.websocket.org"))
   const [erreur,setErreur] = React.useState()
   const [session,setSession] = React.useState()
   const [styleModal,setStyleModal] = React.useState(styles.dangerModal)
@@ -398,10 +398,10 @@ export default function Compteur (props) {
               ws.send('{"code":2,"msg":"Attention, votre rythme ne permet pas de ' +
                   'produire la puissance que vous demandez. ' +
                   'Adaptez votre allure ou réduisez la puissance demandée."}')
-              toggleStopwatch()
               setStyleModal(styles.warningModal)
-              //setT(30)
-              //showWarning()
+              console.log(erreur)
+              setT(30)
+              showWarning()
               setModal(true)
 
             }} >
@@ -490,7 +490,7 @@ const styles = StyleSheet.create({
     width:"75%",
     backgroundColor:"#FFED50AA",
     justifyContent:"flex-start",
-    height:"17%",
+    height:"20%",
     alignItems:"center",
   },
   header: {

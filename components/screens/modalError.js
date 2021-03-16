@@ -13,7 +13,9 @@ import goTo from "../utils/navFunctions";
 
 
 export const ModalError = (props) => {
-    //console.log(styleM)
+    useEffect(()=>{
+        //console.log(props)
+    },[props])
     return(
         <View>
         <Modal
@@ -36,7 +38,7 @@ export const ModalError = (props) => {
                     </>
                     :
                     <>
-                        <Text style={[styles.midText,{fontSize:15,height:"50%", textAlign:"justify", marginLeft:"10%", marginRight:"10%", textTransform:"none"}]}>{props.erreur}</Text>
+                        <Text style={[styles.midText,{fontSize:15,height:"54%", textAlign:"justify", marginLeft:"10%", marginRight:"10%", textTransform:"none"}]}>{props.erreur}</Text>
                         <View>
                             <View style={{borderColor: "white", width: 180, height: 20,borderWidth:2, borderRadius:10}}/>
                             <View style={{ backgroundColor:"white",width: 180*(props.t/30), height: 20,position:"absolute", borderRadius:10 }}/>
