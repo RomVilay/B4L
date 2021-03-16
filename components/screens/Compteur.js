@@ -307,7 +307,7 @@ export default function Compteur (props) {
     return (
       <SafeAreaView style={styles.container}>
         <Image source={require('../../assets/fond.png')} style={styles.fond} />
-        <ModalError styleModal={styleModal} erreur={erreur} setModal={setModal} modal={modal} t={t} />
+        <ModalError styleModal={styleModal} erreur={erreur} setModal={setModal} modal={modal} t={t} nav={props} />
         {/*<Modal
             visible={modal}
             transparent={true}

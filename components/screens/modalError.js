@@ -13,11 +13,7 @@ import goTo from "../utils/navFunctions";
 
 
 export const ModalError = (props) => {
-    const [styleM,setStyleM] = React.useState(styles.dangerModal)
-    console.log(styleM)
-    useEffect(() => { setStyleM(props.styleModal)
-            console.log(styleM)
-        }, [props.styleModal])
+    //console.log(styleM)
     return(
         <View>
         <Modal
@@ -28,9 +24,9 @@ export const ModalError = (props) => {
             <View style={props.styleModal}>
                 <Text style={[styles.midText,{fontSize:50}]}>Erreur</Text>
                 <Text style={[styles.midText,{fontSize:20,height:150, textAlign:"justify", marginLeft:"10%", marginRight:"10%", textTransform:"none"}]}>{props.erreur}</Text>
-                {styleM == styles.dangerModal ?
+                {props.styleModal.backgroundColor == styles.dangerModal.backgroundColor ?
                     <TouchableOpacity onPress={() => {
-                        goTo(props)
+                        goTo(props.nav)
                     }}>
                         <View style={{backgroundColor: "white", borderRadius: 20, padding: 10, width: "40%"}}>
                             <Text style={[{fontSize: 20, fontFamily: "GnuolaneRG-Regular", color: "red"}]}>Retour accueil</Text>
@@ -38,8 +34,8 @@ export const ModalError = (props) => {
                     </TouchableOpacity>
                     :
                     <View>
-                        <View style={{borderColor: "white", width: 180, height: 20,borderWidth:2}}/>
-                        <View style={{ backgroundColor:"white",width: 180*(props.t/30), height: 20,position:"absolute" }}/>
+                        <View style={{borderColor: "white", width: 180, height: 20,borderWidth:2, borderRadius:10}}/>
+                        <View style={{ backgroundColor:"white",width: 180*(props.t/30), height: 20,position:"absolute", borderRadius:10 }}/>
                         <TouchableOpacity onPress={() => {
                             props.setModal(false)
                         }}>
