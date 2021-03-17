@@ -63,3 +63,9 @@ buck-out/
 /wstest.js
 /test/stest.js
 /test/ctest.js
+/test/serverTestSocket.js
+/test/clientTestSocket.js
+/test/ServerTest.c
+/test/serverTestC
+/test/clientC
+/test/clientC.c

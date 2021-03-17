@@ -1,5 +1,6 @@
 PODS:
   - boost-for-react-native (1.63.0)
+  - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.5)
   - FBReactNativeSpec (0.61.5):
@@ -198,6 +199,9 @@ PODS:
     - React
   - react-native-safe-area-context (0.7.3):
     - React
+  - react-native-tcp-socket (5.2.0):
+    - CocoaAsyncSocket
+    - React-Core
   - react-native-webview (11.0.2):
     - React-Core
   - React-RCTActionSheet (0.61.5):
@@ -285,6 +289,7 @@ DEPENDENCIES:
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-notification-sounds (from `../node_modules/react-native-notification-sounds`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-tcp-socket (from `../node_modules/react-native-tcp-socket`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -315,6 +320,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - boost-for-react-native
+    - CocoaAsyncSocket
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -355,6 +361,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-notification-sounds"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-tcp-socket:
+    :path: "../node_modules/react-native-tcp-socket"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-RCTActionSheet:
@@ -408,6 +416,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+  CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
@@ -427,6 +436,7 @@ SPEC CHECKSUMS:
   react-native-netinfo: 77d133105df525d4a11f10fcaa8d0b8883ea6429
   react-native-notification-sounds: 0fe85658a782d77b3f92749f58b659ac1ef16a40
   react-native-safe-area-context: 8260e5157617df4b72865f44006797f895b2ada7
+  react-native-tcp-socket: c752d16fd5300dc96fc4a749c4db7c2a3886cd52
   react-native-webview: b2542d6fd424bcc3e3b2ec5f854f0abb4ec86c87
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360

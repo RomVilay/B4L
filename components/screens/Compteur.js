@@ -9,33 +9,30 @@ import {
   Animated,
   TouchableOpacity,
   Alert,
-  Button,
-  Dimensions,
   ActivityIndicator,
-  Modal, Platform
+   Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from "moment";
 // Imports Assets
 import LogoMin from '../../assets/logoMin';
-import NavApp from '../navigation/NavApp';
 // Imports Components
-import Fleche from '../../assets/fleche';
+
 import {Stopwatch} from 'react-native-stopwatch-timer';
-import SegmentedRoundDisplay from 'react-native-segmented-round-display/src';
-import Svg from 'react-native-svg';
+
 import AfficheurCompteur from './afficheurConpteur';
 import AfficheurDonnees from "./afficheurDonnees";
-import navigation from "../../assets/navigation";
+
 import SliderDefis from "./sliderDefis";
 import {createSession, editSession} from '../../functions/session';
 import {editUser} from '../../functions/user';
 import {getDefi} from '../../functions/defis';
-import {refreshState} from '../utils/navFunctions';
+
 import {Context} from "../utils/Store";
 import goTo from '../utils/navFunctions';
 import {ModalError} from './modalError'
-import go from "../../assets/Accueil/go";
+import TcpSocket from 'react-native-tcp-socket';
+
 import NotificationSounds, {playSampleSound} from 'react-native-notification-sounds'
 
 export default function Compteur (props) {
@@ -61,12 +58,13 @@ export default function Compteur (props) {
   const [inclinaison,setInclinaison] = React.useState([])
   const [energie,setEnergie] = React.useState(0)
   const [distance,setDistance] = React.useState(0)
-  const [ws,setWs] = React.useState(Platform.OS === "ios" ? new WebSocket("ws://localhost:8100") : new WebSocket("ws://echo.websocket.org"))
+  //const [ws,setWs] = React.useState(Platform.OS === "ios" ? new WebSocket("ws://localhost:8100") : new WebSocket("ws://echo.websocket.org"))
   const [erreur,setErreur] = React.useState()
   const [session,setSession] = React.useState()
   const [styleModal,setStyleModal] = React.useState(styles.dangerModal)
   let [t,setT] = React.useState(15)
   const[timeModal,setTimeModal] = React.useState()
+  const [server,setServer] = React.useState(new TcpSocket.Socket());
     /*this.toggleStopwatch = this.toggleStopwatch.bind(this);
     this.resetStopwatch = this.resetStopwatch.bind(this);
     this._isMounted = false*/
@@ -205,6 +203,7 @@ export default function Compteur (props) {
               saveSession()
             }
             ws.close()
+
             goTo(props)
           },
         },
@@ -274,6 +273,41 @@ export default function Compteur (props) {
        console.log(e.message)
      }
    }
+   function socketServer(){
+     server.connect({
+           port: 8080,
+           host: '127.0.0.1',
+           localAddress: '127.0.0.1',
+           reuseAddress: true
+         },
+         () => {
+           server.write('{"code":0,"msg":"Bonjour"}');
+         });
+     server.on('data', (data) => {
+       console.log(data.toString())
+       let s = JSON.parse(data.toString('utf-8'))
+       console.log(s);
+       if (s.code !== undefined && s.code == 2){
+        setErreur(s.msg)
+       }
+     });
+     setServer(server)
+     /*server.onmessage = () => {
+       console.log(e.data)
+       var message = JSON.parse(e.data)
+       if (message.code !== undefined){
+         switch (message.code){
+           case 1:
+             console.log(message)
+             break;
+           case 2:
+             setErreur(message.msg)
+             //ws.close()
+             break;
+         }
+       }
+     }*/
+   }
    React.useEffect(() =>{
      if (defis[defic] !== undefined)
      {
@@ -295,7 +329,8 @@ export default function Compteur (props) {
    },[distance,energie])
   React.useEffect(()=>{
     getDefiLong()
-    testWbSckt()
+    //testWbSckt()
+    socketServer()
   },[])
 
  React.useEffect(()=>{
@@ -304,6 +339,7 @@ export default function Compteur (props) {
      setT(15)
    }
  },[modal])
+
   function readData(message){
      switch (message.code){
        case 0:
@@ -348,7 +384,8 @@ export default function Compteur (props) {
           <View style={{flexDirection:"row"}}>
             <SliderDefis defis={defis} defisV={defisValid} current={defic}/>
             <TouchableOpacity onPress={() => {
-              ws.send('{"code":2,"msg":"Un problème a été détecté. Veuillez cessez de pédaler ."}')
+              server.write('{"code":2,"msg":"Un problème a été détecté. Veuillez cessez de pédaler ."}')
+              //ws.send('{"code":2,"msg":"Un problème a été détecté. Veuillez cessez de pédaler ."}')
               setStyleModal(styles.dangerModal)
               setModal(true)
               toggleStopwatch()
@@ -367,9 +404,12 @@ export default function Compteur (props) {
               <Text style={styles.midText}> error</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
-              ws.send('{"code":2,"msg":"Attention, votre rythme ne permet pas de ' +
+              server.write('{"code":2,"msg":"Attention, votre rythme ne permet pas de ' +
                   'produire la puissance que vous demandez. ' +
                   'Adaptez votre allure ou réduisez la puissance demandée."}')
+              /*ws.send('{"code":2,"msg":"Attention, votre rythme ne permet pas de ' +
+                  'produire la puissance que vous demandez. ' +
+                  'Adaptez votre allure ou réduisez la puissance demandée."}')*/
               setStyleModal(styles.warningModal)
               setModal(true)
               const timer = setInterval(showWarning, 500)
