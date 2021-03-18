@@ -75,15 +75,19 @@ int main(int argc, char const *argv[])
 	    send(new_socket,buffer,strlen(buffer),0);
 	}*/
 	while(1) {
-	read( new_socket , buffer, 1024);
+	/*read( new_socket , buffer, 1024);
 	printf("%s",buffer);
     send(new_socket,buffer,strlen(buffer),0);
-    memset(buffer, 0, sizeof buffer);
-    /*int temp = (rand() % (37 + 1 - 20 )) + 20;
-    char *rlv = "{\"code\":0,\"msg\": {\"rp\":5,\"rg\":7,\"UE\":20, \"IE\":10,\"US\":20,\"IS\":10,\"temp\":}}";
-
-    send(new_socket , rlv , strlen(rlv) , 0 );
-    delay(1000);*/
+    memset(buffer, 0, sizeof buffer);*/
+    int temp = (rand() % (37 + 1 - 20 )) + 20;
+    int
+    char *rlv = "{\"rp\":5,\"rg\":7,\"UE\":20, \"IE\":10,\"US\":20,\"IS\":10,\"temp\"";
+    char str[255];
+    //printf(str,"%s { \"temp\" :%d }",rlv,temp);
+    sprintf(str,"%s:%d}",rlv,temp);
+    send(new_socket, str, strlen(str), 0);
+    //send(new_socket , rlv , strlen(rlv) , 0 );
+    delay(1000);
             /*if ( strcmp(buffer,c) == 10){
                 close(new_socket);
                 printf("client déconnecté");

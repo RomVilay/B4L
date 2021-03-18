@@ -295,10 +295,14 @@ export default function Compteur (props) {
              server.write('{"code":0,"msg":"Bonjour"}');
            });
        server.on('data', (data) => {
+         //console.log(data.toString('utf-8'))
          let s = JSON.parse(data.toString('utf-8'))
          console.log(s);
-         if (s.code !== undefined && s.code == 2) {
-           setErreur(s.msg)
+         if (s.temp !== undefined && s.temp > 35) {
+           setErreur("Attention surchauffe détectée, veuillez cesser de pédaler")
+           setStyleModal(styles.dangerModal)
+           setModal(true)
+           toggleStopwatch()
          }
        });
        server.on('error',(error)=>{
