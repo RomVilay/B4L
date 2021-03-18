@@ -29,6 +29,7 @@ export const ModalError = (props) => {
                     <>
                         <Text style={[styles.midText,{fontSize:20, textAlign:"justify", marginLeft:"10%", marginRight:"10%", textTransform:"none"}]}>{props.erreur}</Text>
                         <TouchableOpacity onPress={() => {
+                            props.server.destroy()
                             goTo(props.nav)
                         }}>
                             <View style={{backgroundColor: "white", borderRadius: 20, padding: 10, width: "40%"}}>

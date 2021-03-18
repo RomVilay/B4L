@@ -203,7 +203,7 @@ export default function Compteur (props) {
               saveSession()
             }
             //ws.close()
-
+            server.destroy()
             goTo(props)
           },
         },
@@ -312,21 +312,6 @@ export default function Compteur (props) {
      } catch (e){
        console.log(e)
      }
-     /*server.onmessage = () => {
-       console.log(e.data)
-       var message = JSON.parse(e.data)
-       if (message.code !== undefined){
-         switch (message.code){
-           case 1:
-             console.log(message)
-             break;
-           case 2:
-             setErreur(message.msg)
-             //ws.close()
-             break;
-         }
-       }
-     }*/
    }
    React.useEffect(() =>{
      if (defis[defic] !== undefined)
@@ -361,26 +346,22 @@ export default function Compteur (props) {
  },[modal])
 
   function readData(message){
-     switch (message.code){
-       case 0:
-         let content = message.msg
-         let vitesse = content.rp*(3/25)*Math.PI*0.622 // vitesse linéaire pour un rayon de 622mm (roue 26")
-         let ps = content.US*content.IS //puissance en sortie de génératrice
-         let pu = rp*(Math.PI/30)*735*50 //puissance développée par le pédalier pour un couple de 50Nm converti en watts
-         let pe = content.UE*content.IE //puissance demandée à la génératrice
-         let temp = content.temp //température du capteur
+         let vitesse = message.rp*(3/25)*Math.PI*0.622 // vitesse linéaire pour un rayon de 622mm (roue 26")
+         let ps = message.US*meassage.IS //puissance en sortie de génératrice
+         let pu = message.rp*(Math.PI/30)*735*50 //puissance développée par le pédalier pour un couple de 50Nm converti en watts
+         let pe = message.UE*message.IE //puissance demandée à la génératrice
+         let temp = message.temp //température du capteur
          if (temp >= 35){
            setStyleModal(styles.dangerModal)
            setErreur("Attention surchauffe détectée, veuillez cesser de pédaler")
            setModal(true)
          }
-     }
   }
   //testWbSckt("bonjour")
     return (
       <SafeAreaView style={styles.container}>
         <Image source={require('../../assets/fond.png')} style={styles.fond} />
-        <ModalError styleModal={styleModal} erreur={erreur} setModal={setModal} modal={modal} t={t} nav={props} setT={setT} />
+        <ModalError styleModal={styleModal} erreur={erreur} setModal={setModal} modal={modal} t={t} nav={props} setT={setT} server={server} />
         <View style={styles.header}>
           <LogoMin />
           <Stopwatch
