@@ -202,7 +202,7 @@ export default function Compteur (props) {
             if(defisValid.length > 0){
               saveSession()
             }
-            ws.close()
+            //ws.close()
 
             goTo(props)
           },
@@ -274,24 +274,40 @@ export default function Compteur (props) {
      }
    }
    function socketServer(){
-     server.connect({
-           port: 8080,
-           host: '127.0.0.1',
-           localAddress: '127.0.0.1',
-           reuseAddress: true
-         },
-         () => {
-           server.write('{"code":0,"msg":"Bonjour"}');
-         });
-     server.on('data', (data) => {
-       console.log(data.toString())
-       let s = JSON.parse(data.toString('utf-8'))
-       console.log(s);
-       if (s.code !== undefined && s.code == 2){
-        setErreur(s.msg)
+     let config;
+     if (Platform.OS == 'ios'){
+       config ={
+         port: 8080,
+         host: '127.0.0.1',
+         localAddress:  '127.0.0.1',
+         reuseAddress: true
        }
-     });
-     setServer(server)
+     } else {
+       config = {
+         port: 8080,
+         host: '10.0.2.2',
+         reuseAddress: true
+       }
+     }
+     try {
+       server.connect(config,
+           () => {
+             server.write('{"code":0,"msg":"Bonjour"}');
+           });
+       server.on('data', (data) => {
+         let s = JSON.parse(data.toString('utf-8'))
+         console.log(s);
+         if (s.code !== undefined && s.code == 2) {
+           setErreur(s.msg)
+         }
+       });
+       server.on('error',(error)=>{
+         console.log(error)
+       })
+       setServer(server)
+     } catch (e){
+       console.log(e)
+     }
      /*server.onmessage = () => {
        console.log(e.data)
        var message = JSON.parse(e.data)

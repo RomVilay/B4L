@@ -79,6 +79,11 @@ int main(int argc, char const *argv[])
 	printf("%s",buffer);
     send(new_socket,buffer,strlen(buffer),0);
     memset(buffer, 0, sizeof buffer);
+    /*int temp = (rand() % (37 + 1 - 20 )) + 20;
+    char *rlv = "{\"code\":0,\"msg\": {\"rp\":5,\"rg\":7,\"UE\":20, \"IE\":10,\"US\":20,\"IS\":10,\"temp\":}}";
+
+    send(new_socket , rlv , strlen(rlv) , 0 );
+    delay(1000);*/
             /*if ( strcmp(buffer,c) == 10){
                 close(new_socket);
                 printf("client déconnecté");
