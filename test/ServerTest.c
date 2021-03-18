@@ -80,11 +80,11 @@ int main(int argc, char const *argv[])
     send(new_socket,buffer,strlen(buffer),0);
     memset(buffer, 0, sizeof buffer);*/
     int temp = (rand() % (37 + 1 - 20 )) + 20;
-    int
+    int rp = (rand() % (101 - 20) + 20);
     char *rlv = "{\"rp\":5,\"rg\":7,\"UE\":20, \"IE\":10,\"US\":20,\"IS\":10,\"temp\"";
     char str[255];
     //printf(str,"%s { \"temp\" :%d }",rlv,temp);
-    sprintf(str,"%s:%d}",rlv,temp);
+    sprintf(str,"{\"rp\":%d,\"rg\":%d,\"UE\":20, \"IE\":10,\"US\":20,\"IS\":10,\"temp\":%d}",rp,rp,temp);
     send(new_socket, str, strlen(str), 0);
     //send(new_socket , rlv , strlen(rlv) , 0 );
     delay(1000);
