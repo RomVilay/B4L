@@ -33,6 +33,7 @@ import goTo from '../utils/navFunctions';
 import {ModalError} from './modalError'
 import TcpSocket from 'react-native-tcp-socket';
 
+
 import NotificationSounds, {playSampleSound} from 'react-native-notification-sounds'
 
 export default function Compteur (props) {
@@ -245,6 +246,24 @@ export default function Compteur (props) {
          setT(t--)
        }
    }
+  function crc16 (buffer, start, end)
+  {
+    var crc = 0xFFFF;
+    var odd;
+    if (buffer.length <= end)
+      return 0;
+    for (var i = start; i < end; i++) {
+      crc = crc ^ buffer.readUInt8(i);
+      for (var j = 0; j < 8; j++) {
+        odd = crc & 0x0001;
+        crc = crc >> 1;
+        if (odd) {
+          crc = crc ^ 0xA001;
+        }
+      }
+    }
+    return crc;
+  };
    function testWbSckt(){
      //const ws = new WebSocket("ws://localhost:8100");
        ws.onopen = () => {
@@ -293,23 +312,27 @@ export default function Compteur (props) {
        server.connect(config,
            () => {
          let b = new Buffer.from([
-               0x00,0x00,                 // flags: 42330
-               0x00,0x00,            // id msg: incrément /16 bits
+               0xA5,0x5A,            // flags: 42330
+               0x00,0x01,            // id msg: incrément /16 bits
                0x01,                 // type msg: 1 octet
-               0x00,0x01,            // longueur du msg: 16 bits
-               0x00,0x05,            // check header, 16 bits
-               0x00,                 // message, taille dynamique
-               0x00,0x02             // chk fin, 16 bits
+               0x00,0x00,            // longueur du msg: 16 bits
+               0x00,0x00,            // check header, 16 bits
+               0x00,0x00,                 // message, taille dynamique
+               0x00,0x00             // chk fin, 16 bits
              ]);
-         b.writeUInt16BE(0xA55A, 0)
+         //b.writeUInt16BE(0xA55A, 0)
+         let l = new Buffer.from("bonjour")
          b.writeUInt8(1, 2)
          b.writeUInt16BE(1,4)
-         b.writeUInt16BE(8,5)
+         b.writeUInt16BE(l.byteLength*8,5)
+         b.writeUInt16BE(crc16(b,0,4),6)
+         b.writeUInt16BE("13w",9)
+         b.writeUInt16BE(crc16(b,7,9),11)
          console.log(b)
          server.write(b)
            });
        server.on('data', (data) => {
-         console.log(data.readUInt16BE(0).toString(16))
+         console.log(data.toString("hex"))
         /* let s = JSON.parse(data.toString('utf-8'))
          console.log(s);
          if (s.temp !== undefined && s.temp > 35) {
