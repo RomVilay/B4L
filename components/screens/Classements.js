@@ -133,7 +133,7 @@ export default function Classements(props) {
     return <View style={[{flexDirection:"row", justifyContent:"space-between", borderBottomColor:'#5FCDFA', borderBottomWidth:1, flex:1}]}>
       <Text style={[styles.linesw,{width:50}]}>{index}</Text>
       <Text style={styles.linesw}>{item.username}</Text>
-      <Text style={[styles.linesw,{width:100, textAlign:"right"}]}>{item.totalPoints !== null && !isNaN(item.totalPoints) ? item.totalPoints : 0}</Text>
+      <Text style={[styles.linesw,{width:100, textAlign:"right", fontSize:20}]}>{item.totalPoints !== null && !isNaN(item.totalPoints) ? item.totalPoints : 0} pts</Text>
     </View>
   }
     return (
