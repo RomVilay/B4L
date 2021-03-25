@@ -68,7 +68,7 @@ export default function Compteur (props) {
     /*this.toggleStopwatch = this.toggleStopwatch.bind(this);
     this.resetStopwatch = this.resetStopwatch.bind(this);
     this._isMounted = false*/
-
+  require('node-libs-react-native/globals');
 
   ///faire calcul points défis
 
@@ -292,25 +292,42 @@ export default function Compteur (props) {
      try {
        server.connect(config,
            () => {
-             server.write('{"code":0,"msg":"Bonjour"}');
+         let b = new Buffer.from([
+               0x00,0x00,                 // flags: 42330
+               0x00,0x00,            // id msg: incrément /16 bits
+               0x01,                 // type msg: 1 octet
+               0x00,0x01,            // longueur du msg: 16 bits
+               0x00,0x05,            // check header, 16 bits
+               0x00,                 // message, taille dynamique
+               0x00,0x02             // chk fin, 16 bits
+             ]);
+         b.writeUInt16BE(0xA55A, 0)
+         b.writeUInt8(1, 2)
+         b.writeUInt16BE(1,4)
+         b.writeUInt16BE(8,5)
+         console.log(b)
+         server.write(b)
            });
        server.on('data', (data) => {
-         //console.log(data.toString('utf-8'))
-         let s = JSON.parse(data.toString('utf-8'))
+         console.log(data.readUInt16BE(0).toString(16))
+        /* let s = JSON.parse(data.toString('utf-8'))
          console.log(s);
          if (s.temp !== undefined && s.temp > 35) {
            setErreur("Attention surchauffe détectée, veuillez cesser de pédaler")
            setStyleModal(styles.dangerModal)
            setModal(true)
            toggleStopwatch()
-         }
+         }*/
        });
        server.on('error',(error)=>{
-         console.log(error)
+         console.log("server error: "+error)
+         setErreur(error)
+         setStyleModal(styles.dangerModal)
+         setModal(true)
        })
        setServer(server)
      } catch (e){
-       console.log(e)
+       console.log("erreur :"+e)
      }
    }
    React.useEffect(() =>{
@@ -346,7 +363,8 @@ export default function Compteur (props) {
  },[modal])
 
   function readData(message){
-         let vitesse = message.rp*(3/25)*Math.PI*0.622 // vitesse linéaire pour un rayon de 622mm (roue 26")
+     //rpm = rp
+         let vitesse = message.rg*(3/25)*Math.PI*0.622 //  vitesse linéaire pour un diamètre intérieur de 622mm (roue 26")
          let ps = message.US*meassage.IS //puissance en sortie de génératrice
          let pu = message.rp*(Math.PI/30)*735*50 //puissance développée par le pédalier pour un couple de 50Nm converti en watts
          let pe = message.UE*message.IE //puissance demandée à la génératrice
@@ -385,7 +403,8 @@ export default function Compteur (props) {
           <View style={{flexDirection:"row"}}>
             <SliderDefis defis={defis} defisV={defisValid} current={defic}/>
             <TouchableOpacity onPress={() => {
-              server.write('{"code":2,"msg":"Un problème a été détecté. Veuillez cessez de pédaler ."}')
+              //server.write('{"code":2,"msg":"Un problème a été détecté. Veuillez cessez de pédaler ."}')
+              setErreur("Un problème a été détecté. Veuillez cessez de pédaler .")
               //ws.send('{"code":2,"msg":"Un problème a été détecté. Veuillez cessez de pédaler ."}')
               setStyleModal(styles.dangerModal)
               setModal(true)
@@ -405,12 +424,13 @@ export default function Compteur (props) {
               <Text style={styles.midText}> error</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
-              server.write('{"code":2,"msg":"Attention, votre rythme ne permet pas de ' +
+              /*server.write('{"code":2,"msg":"Attention, votre rythme ne permet pas de ' +
                   'produire la puissance que vous demandez. ' +
                   'Adaptez votre allure ou réduisez la puissance demandée."}')
               /*ws.send('{"code":2,"msg":"Attention, votre rythme ne permet pas de ' +
                   'produire la puissance que vous demandez. ' +
                   'Adaptez votre allure ou réduisez la puissance demandée."}')*/
+              setErreur("Attention, votre rythme ne permet pas de produire la puissance que vous demandez. Adaptez votre allure ou réduisez la puissance demandée.")
               setStyleModal(styles.warningModal)
               setModal(true)
               const timer = setInterval(showWarning, 500)

@@ -67,43 +67,42 @@ int main(int argc, char const *argv[])
 		perror("accept");
 		exit(EXIT_FAILURE);
 	}
-	//valread = read( new_socket , buffer, 1024);
-	//send(new_socket,buffer,strlen(buffer),0);
-	/*printf("%s\n",buffer );
-	if ( strcmp(hello,buffer) > 0 )
-	{
-	    send(new_socket,buffer,strlen(buffer),0);
-	}*/
+	/*
+	valread = read( new_socket , buffer, 1024);
+	printf("%s\n",buffer );
+	send(new_socket,buffer,strlen(buffer),0);*/
 	while(1) {
-	/*read( new_socket , buffer, 1024);
+	read( new_socket , buffer, 1024);
 	printf("%s",buffer);
     send(new_socket,buffer,strlen(buffer),0);
-    memset(buffer, 0, sizeof buffer);*/
+    memset(buffer, 0, sizeof buffer);
+    /*
+    //random relevés
     int temp = (rand() % (37 + 1 - 20 )) + 20;
-    int
+    int rp = (rand() % (101 - 20) + 20);
     char *rlv = "{\"rp\":5,\"rg\":7,\"UE\":20, \"IE\":10,\"US\":20,\"IS\":10,\"temp\"";
     char str[255];
     //printf(str,"%s { \"temp\" :%d }",rlv,temp);
-    sprintf(str,"%s:%d}",rlv,temp);
+    sprintf(str,"{\"rp\":%d,\"rg\":%d,\"UE\":20, \"IE\":10,\"US\":20,\"IS\":10,\"temp\":%d}",rp,rp,temp);
     send(new_socket, str, strlen(str), 0);
     //send(new_socket , rlv , strlen(rlv) , 0 );
     delay(1000);
-            /*if ( strcmp(buffer,c) == 10){
+            if ( strcmp(buffer,c) == 10){
                 close(new_socket);
                 printf("client déconnecté");
                 return 0;
-            }*/
+            }
     //close(new_socket);
-	/*send(new_socket,buffer,strlen(buffer),0);
+	send(new_socket,buffer,strlen(buffer),0);
         if ( strcmp(buffer,c) == 10){
             close(new_socket);
             printf("client déconnecté");
             return 0;
-        }*/
+        }
         //if (strcmp(buffer,))
 	   // char *rlv = "{\"code\":0,\"msg\": {\"rp\":5,\"rg\":7,\"UE\":20, \"IE\":10,\"US\":20,\"IS\":10,\"temp\":25}}";
-	    //send(new_socket , rlv , strlen(rlv) , 0 );
-	  //  delay(1000);
+	    //send(new_socket , rlv , strlen(rlv) , 0 );*/
+	    delay(1000);
 	}
 	//send(new_socket , hello , strlen(hello) , 0 );
 	//printf("Hello message sent\n");
