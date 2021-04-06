@@ -315,19 +315,19 @@ export default function Compteur (props) {
                0xA5,0x5A,            // flags: 42330
                0x00,0x01,            // id msg: incrément /16 bits
                0x01,                 // type msg: 1 octet
-               0x00,0x00,            // longueur du msg: 16 bits
+               0x00,0x01,            // longueur du msg: 16 bits
                0x00,0x00,            // check header, 16 bits
-               0x00,0x00,                 // message, taille dynamique
+               0x00,0x00,            // message, taille dynamique
                0x00,0x00             // chk fin, 16 bits
              ]);
          //b.writeUInt16BE(0xA55A, 0)
          let l = new Buffer.from("bonjour")
-         b.writeUInt8(1, 2)
-         b.writeUInt16BE(1,4)
-         b.writeUInt16BE(l.byteLength*8,5)
-         b.writeUInt16BE(crc16(b,0,4),6)
-         b.writeUInt16BE("13w",9)
-         b.writeUInt16BE(crc16(b,7,9),11)
+         b.writeUInt16BE(1, 2)//incrément
+         b.writeUInt8(1,4) //type de message
+         b.writeUInt16BE(l.byteLength*8,5) //longueur du message
+         b.writeUInt16BE(crc16(b,0,4),6) //checksum header 16 bits
+         b.writeUInt16BE("13w",9) //message taille variable
+         b.writeUInt16BE(crc16(b,7,9),11) // checksum message, 16 bits
          console.log(b)
          server.write(b)
            });
