@@ -200,11 +200,12 @@ export default function Compteur (props) {
           text: 'quitter la session',
           onPress: () => {
             //console.log(vitesses)
-            if(defisValid.length > 0){
+            /*if(defisValid.length > 0){
               saveSession()
-            }
+            }*/
+            stopSession(watts)
             //ws.close()
-            server.destroy()
+            //server.destroy()
             goTo(props)
           },
         },
@@ -293,26 +294,41 @@ export default function Compteur (props) {
        console.log(e.message)
      }
    }
-   function sendWatts(){     // commande de la puissance injectée par le vélo
-     let b = new Buffer.from([
-       0xA5,0x5A,            // flags: 42330
-       0x01,0x01,            // id msg: incrément /16 bits
-       0x01,                 // type msg: 1 octet
-       0x01,0x01,            // longueur du msg: 16 bits
-       0x01,0x01,            // check header, 16 bits
-       0x01,0x01,            // message, taille dynamique
-       0x01,0x01             // chk fin, 16 bits
+   function sendMessage(type,msg){     // commande de la puissance injectée par le vélo
+     let contenu = new Buffer.from([
+       0x00,0x00,            // message, taille dynamique
      ]);
      //b.writeUInt16BE(0xA55A, 0)
-     let l = new Buffer.from("bonjour")
-     b.writeUInt16BE(1, 2)//incrément
-     b.writeUInt8(3,4) //type de message
-     b.writeUInt16BE(l.byteLength*8,5) //longueur du message
-     b.writeUInt16BE(crc16(b,0,4),6) //checksum header 16 bits
-     b.writeUInt16BE(watts,9) //message taille variable
-     b.writeUInt16BE(crc16(b,7,9),11) // checksum message, 16 bits
-     console.log(b)
-     server.write(b)
+     let message = new Buffer.from([
+       0xA5,0x5A,            // flags: 42330
+       0x00,0x00,            // id msg: incrément /16 bits
+       0x02,                 // type msg: 1 octet
+       0x00,0x00,            // longueur du msg: 16 bits
+       0x00,0x00,            // check header, 16 bits
+       0x00,0x00,            // message, taille dynamique
+       0x00,0x00             // chk fin, 16 bits
+     ])
+     message.writeUInt16BE(1, 2)//incrément 16 bits
+     message.writeUInt8(type,4) //type de message 8 bits
+     message.writeUInt16BE(crc16(message,0,4),6) //checksum header 16 bits
+     message.writeUInt16BE(msg,9) //message taille variable sur 16 bits
+     message.writeUInt16BE(crc16(message,7,9),11) // checksum message, 16 bits
+     message.writeUInt8(contenu.byteLength*8,5) //longueur du message 16bits
+     console.log(message.toString("hex",0,12))
+     server.write(message)
+   }
+   function stopSession(w){
+       //setWatts(watts - 50 )
+       let t = setInterval(()=>{
+         if (w == 0){
+           console.log("end")
+           clearInterval(t)
+         }
+         w=w-50
+         sendMessage(2,`watts:${w}`)
+         console.log(w+" - "+watts)
+       },1000)
+
    }
    function socketServer(){
      let config;
@@ -333,25 +349,7 @@ export default function Compteur (props) {
      try {
        server.connect(config,
            () => {
-         let b = new Buffer.from([
-               0xA5,0x5A,            // flags: 42330
-               0x01,0x01,            // id msg: incrément /16 bits
-               0x01,                 // type msg: 1 octet
-               0x01,0x01,            // longueur du msg: 16 bits
-               0x01,0x01,            // check header, 16 bits
-               0x01,0x01,            // message, taille dynamique
-               0x01,0x01             // chk fin, 16 bits
-             ]);
-         //b.writeUInt16BE(0xA55A, 0)
-         let l = new Buffer.from("bonjour")
-         b.writeUInt16BE(1, 2)//incrément
-         b.writeUInt8(1,4) //type de message
-         b.writeUInt16BE(l.byteLength*8,5) //longueur du message
-         b.writeUInt16BE(crc16(b,0,4),6) //checksum header 16 bits
-         b.writeUInt16BE("13w",9) //message taille variable
-         b.writeUInt16BE(crc16(b,7,9),11) // checksum message, 16 bits
-          console.log(b)
-         server.write(b)
+             sendMessage(1,"watts:100")
            });
        server.on('data', (data) => {
          console.log(data.toString("hex"))
@@ -409,10 +407,10 @@ export default function Compteur (props) {
 
   function readData(message){
      //rpm = rp
-         let vitesse = message.rg*(3/25)*Math.PI*0.622 //  vitesse linéaire pour un diamètre intérieur de 622mm (roue 26")
+         let vitesse = message.rg/5*(3/25)*Math.PI*0.622 //  vitesse linéaire pour un diamètre intérieur de 622mm (roue 29")
          let ps = message.US*meassage.IS //puissance en sortie de génératrice
-         let pu = message.rp*(Math.PI/30)*735*50 //puissance développée par le pédalier pour un couple de 50Nm converti en watts
-         let pe = message.UE*message.IE //puissance demandée à la génératrice
+         let pu = 0 //puissance développée par le pédalier pour un couple de 50Nm converti en watts déduite depuis la rg
+         let pe = message.UE*message.IE //puissance demandée à la génératrice entier
          let temp = message.temp //température du capteur
          if (temp >= 35){
            setStyleModal(styles.dangerModal)

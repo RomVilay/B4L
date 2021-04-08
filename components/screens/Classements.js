@@ -115,7 +115,10 @@ export default function Classements(props) {
   const AlertStats = (user) =>
       Alert.alert(
           `Statistiques de ${user.username}`,
-          `distances totales parcourues ${user.totalDistance !== null && !isNaN(user.totalDistance) ? formatDistance(user.totalDistance) : 0} \n énergie produite ${user.totalEnergie !== null && !isNaN(user.totalEnergie) ? formatEnergie(user.totalEnergie,"wh") : 0} \n temps passé sur l'application ${user.totalDuree !== null && !isNaN(user.totalDuree)? moment(user.totalDuree).format("HH:mm:ss"):0}`,
+          `distances totales parcourues ${user.totalDistance !== null && !isNaN(user.totalDistance) ? formatDistance(user.totalDistance) : 0} 
+          \n énergie produite ${user.totalEnergie !== null && !isNaN(user.totalEnergie) ? formatEnergie(user.totalEnergie,"wh") : 0} 
+          \n temps passé sur l'application ${user.totalDuree !== null && !isNaN(user.totalDuree)? moment(user.totalDuree).format("HH:mm:ss"):0} 
+          \n nombre de points gagnés ${user.totalPoints !== null && !isNaN(user.totalPoints) ? user.totalPoints : 0}`,
           [
             {
               text: 'fermer',
