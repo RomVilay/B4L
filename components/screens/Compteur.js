@@ -38,34 +38,36 @@ import NotificationSounds, {playSampleSound} from 'react-native-notification-sou
 
 export default function Compteur (props) {
   const [state, setState] = useContext(Context);
-  const [modal,setModal] = useState(false)
+  const [modal,setModal] = useState(false)                //affichage du modal (défaut: caché)
   const [isLoading, setIsLoading] = useState(false);
-  const rotateValueHolder= React.useRef(new Animated.Value(0)).current;
+  //variables pause timer
   const [start,setStart] = React.useState(true)
   const [reset,setReset] = React.useState(false)
   const [pause,setPause] =React.useState('')
   const [currentTime,setCTime] = React.useState('')
-  const [startPosition,setSPosition] = React.useState(-160)
-  const [endPosition,setEPosition] = React.useState(-125)
-  const outputRange = ['0deg', '10deg']
-  const [seg,setSeg] = React.useState(10)
-  const [angle,setAngle] = React.useState(-150)
-  const [up,setUp] = React.useState(true)
-  const [defis,setDefis] = React.useState(props.route.params.defis)
-  const [defisValid,setDefisValid] = React.useState([])
-  const [defic,setDefic] = React.useState(0)
-  const [watts,setWatts] = React.useState(200)
-  const [vitesses,setVitesses] = React.useState([])
-  const [inclinaison,setInclinaison] = React.useState([])
-  const [energie,setEnergie] = React.useState(0)
-  const [distance,setDistance] = React.useState(0)
+  //variables animation
+  const rotateValueHolder= React.useRef(new Animated.Value(0)).current;
+  const [startPosition,setSPosition] = React.useState(-160) //position initiale de l'image
+  const [endPosition,setEPosition] = React.useState(-125)   //position finale de la première itération
+  const outputRange = ['0deg', '10deg']                               //écart entre chaque rotation
+  const [seg,setSeg] = React.useState(10)                   //vitesse
+  const [angle,setAngle] = React.useState(-150)             // angle de rotation initial
+  const [up,setUp] = React.useState(true)                   // simulation: augmente ou diminue la vitesse
+  const [defis,setDefis] = React.useState(props.route.params.defis)   // tableau des défis choisis
+  const [defisValid,setDefisValid] = React.useState([])     // tableaux des défis réalisés
+  const [defic,setDefic] = React.useState(0)                // défis cours
+  const [watts,setWatts] = React.useState(200)              // consigne de production
+  const [vitesses,setVitesses] = React.useState([])         // relevés de vitesse
+  const [inclinaison,setInclinaison] = React.useState([])   // relevés inclinaison
+  const [energie,setEnergie] = React.useState(0)            // relevés énergie produite
+  const [distance,setDistance] = React.useState(0)          // cumul de distance pour la session
   //const [ws,setWs] = React.useState(Platform.OS === "ios" ? new WebSocket("ws://localhost:8100") : new WebSocket("ws://echo.websocket.org"))
-  const [erreur,setErreur] = React.useState()
-  const [session,setSession] = React.useState()
-  const [styleModal,setStyleModal] = React.useState(styles.dangerModal)
-  let [t,setT] = React.useState(15)
-  const[timeModal,setTimeModal] = React.useState()
-  const [server,setServer] = React.useState(new TcpSocket.Socket());
+  const [erreur,setErreur] = React.useState([0,0])          // tableau pour une erreur [titre, message]
+  const [session,setSession] = React.useState()                       // copie de la session actuelle
+  const [styleModal,setStyleModal] = React.useState(styles.dangerModal)// style d'erreur à afficher (dangerModal,warningModal)
+  let [t,setT] = React.useState(15)                         // timer pour l'écoulement de la barre de chargement
+  const[timeModal,setTimeModal] = React.useState()                    //
+  const [server,setServer] = React.useState(new TcpSocket.Socket());  // initialisation de la variable du socket
     /*this.toggleStopwatch = this.toggleStopwatch.bind(this);
     this.resetStopwatch = this.resetStopwatch.bind(this);
     this._isMounted = false*/
@@ -200,13 +202,12 @@ export default function Compteur (props) {
           text: 'quitter la session',
           onPress: () => {
             //console.log(vitesses)
-            /*if(defisValid.length > 0){
+            if(defisValid.length > 0){
               saveSession()
-            }*/
+            }
             stopSession(watts)
             //ws.close()
-            //server.destroy()
-            goTo(props)
+
           },
         },
       ],
@@ -266,34 +267,12 @@ export default function Compteur (props) {
     }
     return crc;
   };
-   function testWbSckt(){
-     //const ws = new WebSocket("ws://localhost:8100");
-       ws.onopen = () => {
-         ws.send(`{"type":"text","content":"Bonjour"}`);
-       }
-     ws.onclose = (e) =>{
-       console.log(e.code,e.reason);
-       console.log("déconnecter")
-     }
-     ws.onmessage = (e) => {
-       console.log(e.data)
-       var message = JSON.parse(e.data)
-       if (message.code !== undefined){
-         switch (message.code){
-           case 1:
-             console.log(message)
-             break;
-           case 2:
-             setErreur(message.msg)
-               //ws.close()
-             break;
-         }
-       }
-     }
-     ws.onerror = (e) => {
-       console.log(e.message)
-     }
-   }
+
+  /**
+   * fonction d'envoi des messages à la carte
+   * @param type type de message (1 : réception de données, 2: erreurs, 3: consigne
+   * @param msg contenu du message ("watts : x", "US:x,IS:y...","erreur:déconnection du réseau")
+   */
    function sendMessage(type,msg){     // commande de la puissance injectée par le vélo
      let contenu = new Buffer.from([
        0x00,0x00,            // message, taille dynamique
@@ -301,45 +280,64 @@ export default function Compteur (props) {
      //b.writeUInt16BE(0xA55A, 0)
      let message = new Buffer.from([
        0xA5,0x5A,            // flags: 42330
-       0x00,0x00,            // id msg: incrément /16 bits
+       0x01,0x01,            // id msg: incrément /16 bits
        0x02,                 // type msg: 1 octet
-       0x00,0x00,            // longueur du msg: 16 bits
-       0x00,0x00,            // check header, 16 bits
-       0x00,0x00,            // message, taille dynamique
-       0x00,0x00             // chk fin, 16 bits
+       0x01,0x01,            // longueur du msg: 16 bits
+       0x01,0x01,            // check header, 16 bits
+       0x01,0x01,            // message, taille dynamique
+       0x01,0x01,            // chk fin, 16 bits
      ])
-     message.writeUInt16BE(1, 2)//incrément 16 bits
+     /*message.writeUInt16BE(1, 2)//incrément 16 bits
      message.writeUInt8(type,4) //type de message 8 bits
      message.writeUInt16BE(crc16(message,0,4),6) //checksum header 16 bits
      message.writeUInt16BE(msg,9) //message taille variable sur 16 bits
      message.writeUInt16BE(crc16(message,7,9),11) // checksum message, 16 bits
-     message.writeUInt8(contenu.byteLength*8,5) //longueur du message 16bits
-     console.log(message.toString("hex",0,12))
+     message.writeUInt8(contenu.byteLength*8,5) //longueur du message 16bits*/
+     //console.log(message.toString("hex",0,12))
      server.write(message)
    }
+
+  /**
+   * fonction qui envoie des valeurs de puissance afin de libérer progressivement la génératrice
+   * @param w puissance de consigne actuelle
+   */
    function stopSession(w){
        //setWatts(watts - 50 )
+    setErreur(["Fin de Session","Arrêt de la session, ralentissez progressivement avant l'arrêt du système."])
+    setStyleModal(styles.warningModal)
+    setModal(true)
+    const timer = setInterval(showWarning, 1250)
+    setTimeModal(timer)
        let t = setInterval(()=>{
-         if (w == 0){
+         if (w <= 2){
+           w=0
+           sendMessage(3,`watts:${w}`)
            console.log("end")
            clearInterval(t)
+           server.destroy()
+           goTo(props)
          }
-         w=w-50
-         sendMessage(2,`watts:${w}`)
-         console.log(w+" - "+watts)
+         else{
+           w=w-Math.round(w*0.20)
+           sendMessage(3,`watts:${w}`)
+           console.log(w)
+         }
        },1000)
-
    }
-   function socketServer(){
+
+  /**
+   * fonction d'initialisation du socket tcp
+   */
+  function socketServer(){
      let config;
-     if (Platform.OS == 'ios'){
+     if (Platform.OS == 'ios'){ //configuration iphone
        config ={
          port: 8080,
          host: '127.0.0.1',
          localAddress:  '127.0.0.1',
          reuseAddress: true
        }
-     } else {
+     } else { //configuration android
        config = {
          port: 8080,
          host: '10.0.2.2',
@@ -349,10 +347,13 @@ export default function Compteur (props) {
      try {
        server.connect(config,
            () => {
-             sendMessage(1,"watts:100")
+            //envoi d'une première consigne
+             sendMessage(3,"watts:100")
            });
        server.on('data', (data) => {
-         console.log(data.toString("hex"))
+         //traitement des données renvoyées par la carte
+         console.log(data)
+
         /* let s = JSON.parse(data.toString('utf-8'))
          console.log(s);
          if (s.temp !== undefined && s.temp > 35) {
@@ -363,6 +364,7 @@ export default function Compteur (props) {
          }*/
        });
        server.on('error',(error)=>{
+         // traitement des erreurs en provenance du socket, affichage dans la console et sur le mobile
          console.log("server error: "+error)
          setErreur(error)
          setStyleModal(styles.dangerModal)
@@ -373,6 +375,7 @@ export default function Compteur (props) {
        console.log("erreur :"+e)
      }
    }
+   // validation et mise à jour des défis sélectionnés
    React.useEffect(() =>{
      if (defis[defic] !== undefined)
      {
@@ -392,6 +395,7 @@ export default function Compteur (props) {
     }
      //saveSession()
    },[distance,energie])
+   // réccupération des défis longs
   React.useEffect(()=>{
     getDefiLong()
     //testWbSckt()
@@ -405,18 +409,28 @@ export default function Compteur (props) {
    }
  },[modal])
 
+  /**
+   * fonction de lecture des données de la carte
+   * @param messsage données en provenance de la carte, type de message 1
+   * @set vitesses/rpm/energie/produite
+   */
   function readData(message){
-     //rpm = rp
-         let vitesse = message.rg/5*(3/25)*Math.PI*0.622 //  vitesse linéaire pour un diamètre intérieur de 622mm (roue 29")
-         let ps = message.US*meassage.IS //puissance en sortie de génératrice
-         let pu = 0 //puissance développée par le pédalier pour un couple de 50Nm converti en watts déduite depuis la rg
-         let pe = message.UE*message.IE //puissance demandée à la génératrice entier
+     if (message.rg !== null) {
+       let vitesse = message.rg / 5 * (3 / 25) * Math.PI * 0.622 //  vitesse linéaire pour un diamètre intérieur de 622mm (roue 29")
+       let rpm = message.rg * 9.5495 // conversion des rotations par minutes de rad/s en tr/min
+       setVitesses([...vitesses,vitesse])
+     }
+     if (message.US!== null && message.IS!== null) {
+       let ps = message.US*meassage.IS //puissance en sortie de génératrice
+       setEnergie(energie+ps)
+     }
          let temp = message.temp //température du capteur
          if (temp >= 35){
            setStyleModal(styles.dangerModal)
            setErreur("Attention surchauffe détectée, veuillez cesser de pédaler")
            setModal(true)
          }
+
   }
   //testWbSckt("bonjour")
     return (
@@ -447,7 +461,7 @@ export default function Compteur (props) {
             <SliderDefis defis={defis} defisV={defisValid} current={defic}/>
             <TouchableOpacity onPress={() => {
               //server.write('{"code":2,"msg":"Un problème a été détecté. Veuillez cessez de pédaler ."}')
-              setErreur("Un problème a été détecté. Veuillez cessez de pédaler .")
+              setErreur(["erreur","Un problème a été détecté. Veuillez cessez de pédaler ."])
               //ws.send('{"code":2,"msg":"Un problème a été détecté. Veuillez cessez de pédaler ."}')
               setStyleModal(styles.dangerModal)
               setModal(true)
@@ -473,7 +487,7 @@ export default function Compteur (props) {
               /*ws.send('{"code":2,"msg":"Attention, votre rythme ne permet pas de ' +
                   'produire la puissance que vous demandez. ' +
                   'Adaptez votre allure ou réduisez la puissance demandée."}')*/
-              setErreur("Attention, votre rythme ne permet pas de produire la puissance que vous demandez. Adaptez votre allure ou réduisez la puissance demandée.")
+              setErreur(["Attention","Votre rythme ne permet pas de produire la puissance que vous demandez. Adaptez votre allure ou réduisez la puissance demandée."])
               setStyleModal(styles.warningModal)
               setModal(true)
               const timer = setInterval(showWarning, 500)

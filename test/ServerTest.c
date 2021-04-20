@@ -65,18 +65,18 @@ int main(int argc, char const *argv[])
 		perror("accept");
 		exit(EXIT_FAILURE);
 	}
-	/*  // original code
+	  // original code
 	valread = read( new_socket , buffer, 1024);
-
+    //recv(new_socket, buffer, sizeof buffer - 1, 0);
 	printf("%s\n",buffer );
-	send(new_socket,buffer,strlen(buffer),0); */
+	send(new_socket,buffer,strlen(buffer),0);
 
 	//loop for in messages
-	while(1) {
-	read( new_socket , buffer, 1024);
+	/*while(1) {
+	//read( new_socket , buffer, 1024);
 	printf("%s",buffer);
     send(new_socket,buffer,strlen(buffer),0);
-    memset(buffer, 0, sizeof buffer);
+    memset(buffer, 0, sizeof buffer);*/
 
     /* //random relevés
     int temp = (rand() % (37 + 1 - 20 )) + 20;
@@ -97,11 +97,11 @@ int main(int argc, char const *argv[])
             return 0;
         }
         */
-	    delay(1000);
+	/*    delay(1000);
 	}
 	//send(new_socket , hello , strlen(hello) , 0 );
 	//printf("Hello message sent\n");
 	close(new_socket);
-	close(server_fd);
+	close(server_fd);*/
 	return 0;
 }

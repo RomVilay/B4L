@@ -24,10 +24,10 @@ export const ModalError = (props) => {
             animationType="slide"
         >
             <View style={props.styleModal}>
-                <Text style={[styles.midText,{fontSize:30}]}>Erreur</Text>
+                <Text style={[styles.midText,{fontSize:30}]}>{props.erreur[0]}</Text>
                 {props.styleModal.backgroundColor == styles.dangerModal.backgroundColor ?
                     <>
-                        <Text style={[styles.midText,{fontSize:20, textAlign:"justify", marginLeft:"10%", marginRight:"10%", textTransform:"none"}]}>{props.erreur}</Text>
+                        <Text style={[styles.midText,{fontSize:20, textAlign:"justify", marginLeft:"10%", marginRight:"10%", textTransform:"none"}]}>{props.erreur[1]}</Text>
                         <TouchableOpacity onPress={() => {
                             props.server.destroy()
                             goTo(props.nav)
@@ -39,7 +39,7 @@ export const ModalError = (props) => {
                     </>
                     :
                     <>
-                        <Text style={[styles.midText,{fontSize:15,height:"54%", textAlign:"justify", marginLeft:"10%", marginRight:"10%", textTransform:"none"}]}>{props.erreur}</Text>
+                        <Text style={[styles.midText,{fontSize:15,height:"54%", textAlign:"justify", marginLeft:"10%", marginRight:"10%", textTransform:"none"}]}>{props.erreur[1]}</Text>
                         <TouchableOpacity onPress={() => {
                             props.setModal(false)
                         }}>
