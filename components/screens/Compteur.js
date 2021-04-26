@@ -231,6 +231,14 @@ export default function Compteur (props) {
      /*if (defis[defic].long !== undefined){
      }*/
      setDefic(defic => defic+1)
+       if (defis[defic+1].typeDefi == "pente") {
+           let ps = defis[defic+1].butNumber * 9.81 * state.user.poids * vitesses[vitesses.length-1]
+           if (ps <= energie-10 || ps >= energie+10) {
+               sendMessage(3, `watts: ${ps}`)
+               setErreur(["Mode Defi Pente","Attention, vous avez choisi un défi pente," +
+               " pendant la durée de ce défi vous ne pouvez pas modifier la puissance demandée."])
+           }
+       }
    }
    async function getDefiLong() {
      let tab = []
@@ -415,8 +423,7 @@ export default function Compteur (props) {
    * @set vitesses/rpm/energie produite
    */
    function readData(message){
-       if (modal == false && ( erreur[0] !== "Fin de Session"))
-       {
+       if (modal == false && ( erreur[0] !== "Fin de Session")) {
     console.log(message.readUInt8([4]))
     let type = message.readUInt8([4])
     let contenu = message.toString("utf8",8,message.length-1)
@@ -435,8 +442,10 @@ export default function Compteur (props) {
           setEnergie(energie => energie + ps)
           if (defic.typeDefis == "pente") {
               if (ps !== state.user.poids * defi.butNumber * vitesses[vitesses.length-1] * 9.81) {
-                  let i =  ps /state.user.poids * vitesses[vitesses.length-1] * 9.81  //prise en compte de l'inclinaison inclinaison = puissance totale / poids de l'utilisateur(kg) * sa vitesse (m/s) * gravité (9.81)
-                  setInclinaison([...inclinaison,i])
+
+                  //let i =  ps /state.user.poids * vitesses[vitesses.length-1] * 9.81  //prise en compte de l'inclinaison inclinaison = puissance totale / poids de l'utilisateur(kg) * sa vitesse (m/s) * gravité (9.81)
+              } else {
+                  setInclinaison([...inclinaison,defi.butNumber])
               }
             }
         }
