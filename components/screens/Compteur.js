@@ -68,7 +68,8 @@ export default function Compteur (props) {
   let [t,setT] = React.useState(15)                         // timer pour l'écoulement de la barre de chargement
   const[timeModal,setTimeModal] = React.useState()                    //
   const [server,setServer] = React.useState(new TcpSocket.Socket());  // initialisation de la variable du socket
-    /*this.toggleStopwatch = this.toggleStopwatch.bind(this);
+  const [donnees,setDonnees] = React.useState()
+  /*this.toggleStopwatch = this.toggleStopwatch.bind(this);
     this.resetStopwatch = this.resetStopwatch.bind(this);
     this._isMounted = false*/
   require('node-libs-react-native/globals');
@@ -142,23 +143,29 @@ export default function Compteur (props) {
         setSPosition(endPosition)
         setEPosition(nend)
         setAngle(nend)
-        setVitesses([...vitesses,seg])
+        //setVitesses([...vitesses,seg])
+       //sendMessage(1,`{"rg":${seg*2.6525}}`)
         setInclinaison([...inclinaison,1])
-        setEnergie(energie=>energie+100)
-       setDistance(distance=>Math.round(distance+seg*0.0001*moment.duration(currentTime).asSeconds()))
-        /*if (endPosition >= -100) {
-          setUp(false)
-        }*/
+        //setEnergie(energie=>energie+100)
+       sendMessage(1,`{"US":10,"IS":20}`)
+       //console.log(distance+seg*0.0001*moment.duration(currentTime).asSeconds())
+       //setDistance(distance=>Math.round(distance+seg*moment.duration(currentTime).asSeconds()))
+       //sendMessage(1,`{"Temp":25}`)
       } else {
        endPosition < -118 ? setUp(true) : setSeg(seg => seg-7)
         const nend = endPosition - 10;
         setSPosition(endPosition)
         setEPosition(nend)
-       setVitesses([...vitesses,seg])
+       //setVitesses([...vitesses,seg])
+       sendMessage(1,`{"rg":${seg*2.6525}}`)
        setInclinaison([...inclinaison,1])
-       setEnergie(energie=>energie+100)
-       setDistance(distance=>distance+10)
+       //console.log(distance+seg*0.0001*moment.duration(currentTime).asSeconds())
+       //setEnergie(energie=>energie+100)
+       //sendMessage(1,`{"US":10,"IS":20}`)
+       //sendMessage(1,`{"rg":${seg*2.6525},"US":10,"IS":20,"Temp":25}`)
+       //setDistance(distance=>distance+10)
        setAngle(nend)
+       //sendMessage(1,`{"Temp":25}`)
        /* if (endPosition <= -130) {
           setUp(true);
         }*/
@@ -169,7 +176,7 @@ export default function Compteur (props) {
     StartImageRotateFunction()
     const  interval = setInterval(() => {
      randomRotation()
-    }, 900); //mise à jour du tableau d'interpolation de la rotation, toutes les 6s
+    }, 900); //mise à jour du tableau d'interpolation de la rotation
     if (modal == true){
       clearInterval(interval)
     }
@@ -273,28 +280,25 @@ export default function Compteur (props) {
    * @param type type de message (1 : réception de données, 2: erreurs, 3: consigne
    * @param msg contenu du message ("watts : x", "US:x,IS:y...","erreur:déconnection du réseau")
    */
-   function sendMessage(type,msg){     // commande de la puissance injectée par le vélo
-     let contenu = new Buffer.from([
-       0x00,0x00,            // message, taille dynamique
-     ]);
+   async function sendMessage(type,msg){     // commande de la puissance injectée par le vélo
      //b.writeUInt16BE(0xA55A, 0)
-     let message = new Buffer.from([
+     let head = new Buffer.from([
        0xA5,0x5A,            // flags: 42330
        0x01,0x01,            // id msg: incrément /16 bits
        0x02,                 // type msg: 1 octet
        0x01,0x01,            // longueur du msg: 16 bits
        0x01,0x01,            // check header, 16 bits
-       0x01,0x01,            // message, taille dynamique
-       0x01,0x01,            // chk fin, 16 bits
      ])
-     /*message.writeUInt16BE(1, 2)//incrément 16 bits
-     message.writeUInt8(type,4) //type de message 8 bits
-     message.writeUInt16BE(crc16(message,0,4),6) //checksum header 16 bits
-     message.writeUInt16BE(msg,9) //message taille variable sur 16 bits
-     message.writeUInt16BE(crc16(message,7,9),11) // checksum message, 16 bits
-     message.writeUInt8(contenu.byteLength*8,5) //longueur du message 16bits*/
-     //console.log(message.toString("hex",0,12))
+    let contenu = new Buffer.from(msg)
+    head.writeUInt8(1, 2)//incrément 9 bits
+    head.writeUInt8(type,4) //type de message 8 bits
+    head.writeUInt8(contenu.byteLength*8,5) //longueur du message 16bits*/
+    head.writeUInt16BE(crc16(head,0,4),6) //checksum header 16 bits
+    let chkf = new Buffer.from([crc16(contenu,0,contenu.length-1)])
+    let message = new Buffer.concat([head,contenu,chkf])
+     //console.log(message.toString("hex",0,message.length-1))
      server.write(message)
+    //console.log("time:"+moment.duration(currentTime).asMilliseconds())
    }
 
   /**
@@ -304,8 +308,9 @@ export default function Compteur (props) {
    function stopSession(w){
        //setWatts(watts - 50 )
     setErreur(["Fin de Session","Arrêt de la session, ralentissez progressivement avant l'arrêt du système."])
-    setStyleModal(styles.warningModal)
+    setStyleModal(styles.endingModal)
     setModal(true)
+    console.log(erreur[0])
     const timer = setInterval(showWarning, 1250)
     setTimeModal(timer)
        let t = setInterval(()=>{
@@ -348,25 +353,16 @@ export default function Compteur (props) {
        server.connect(config,
            () => {
             //envoi d'une première consigne
-             sendMessage(3,"watts:100")
+             sendMessage(3,'{"watts":100}')
            });
-       server.on('data', (data) => {
-         //traitement des données renvoyées par la carte
-         console.log(data)
-
-        /* let s = JSON.parse(data.toString('utf-8'))
-         console.log(s);
-         if (s.temp !== undefined && s.temp > 35) {
-           setErreur("Attention surchauffe détectée, veuillez cesser de pédaler")
-           setStyleModal(styles.dangerModal)
-           setModal(true)
-           toggleStopwatch()
-         }*/
-       });
+         server.on('data', (data) => {
+             //traitement des données renvoyées par la carte
+             setDonnees(data)
+         });
        server.on('error',(error)=>{
          // traitement des erreurs en provenance du socket, affichage dans la console et sur le mobile
          console.log("server error: "+error)
-         setErreur(error)
+         setErreur(["erreur de connexion",error+". Veuillez réessayer."])
          setStyleModal(styles.dangerModal)
          setModal(true)
        })
@@ -408,28 +404,54 @@ export default function Compteur (props) {
      setT(15)
    }
  },[modal])
+  React.useEffect(
+      () => {if (donnees !== undefined) {
+          readData(donnees)
+      }
+      },[donnees]
+  )
 
   /**
    * fonction de lecture des données de la carte
    * @param messsage données en provenance de la carte, type de message 1
-   * @set vitesses/rpm/energie/produite
+   * @set vitesses/rpm/energie produite
    */
-  function readData(message){
-     if (message.rg !== null) {
-       let vitesse = message.rg / 5 * (3 / 25) * Math.PI * 0.622 //  vitesse linéaire pour un diamètre intérieur de 622mm (roue 29")
-       let rpm = message.rg * 9.5495 // conversion des rotations par minutes de rad/s en tr/min
-       setVitesses([...vitesses,vitesse])
-     }
-     if (message.US!== null && message.IS!== null) {
-       let ps = message.US*meassage.IS //puissance en sortie de génératrice
-       setEnergie(energie+ps)
-     }
-         let temp = message.temp //température du capteur
-         if (temp >= 35){
-           setStyleModal(styles.dangerModal)
-           setErreur("Attention surchauffe détectée, veuillez cesser de pédaler")
-           setModal(true)
-         }
+   function readData(message){
+     console.log("time:"+moment.duration(currentTime).asHours())
+    console.log(message.readUInt8([4]))
+    let type = message.readUInt8([4])
+    let contenu = message.toString("utf8",8,message.length-1)
+    contenu = JSON.parse(contenu.substring(contenu.lastIndexOf("{"),contenu.lastIndexOf("}")+1))
+    switch (type) {
+      case 1:
+        console.log(contenu)
+        if (contenu.rg !== undefined) {
+          let vitesse = contenu.rg  * (3 / 25) * Math.PI * 0.622 //  vitesse linéaire pour un diamètre intérieur de 622mm (roue 29") à partir des rotations par minutes de la génératrice
+          setVitesses([...vitesses,vitesse])
+          let d = distance+vitesse *moment.duration(currentTime).asHours()
+          setDistance(d)
+
+        }
+        if (contenu.US!== undefined && contenu.IS!== undefined) {
+          let ps = contenu.US*contenu.IS //puissance en sortie de génératrice
+            set
+        }
+        if (contenu.temp !== undefined) {
+          let temp = contenu.temp //température du capteur
+          if (temp >= 35){
+            setStyleModal(styles.dangerModal)
+            setErreur(["Erreur","Attention surchauffe détectée, veuillez cesser de pédaler"])
+            setModal(true)
+          }
+        }
+        break;
+      case 2:
+        setStyleModal(styles.dangerModal)
+        setErreur(["Erreur",content.msg])
+        setModal(true)
+        break;
+    }
+    console.log(`vitesse : ${vitesses[vitesses.length-1]}, energie : ${energie}, distance : ${distance}`)
 
   }
   //testWbSckt("bonjour")
@@ -461,7 +483,7 @@ export default function Compteur (props) {
             <SliderDefis defis={defis} defisV={defisValid} current={defic}/>
             <TouchableOpacity onPress={() => {
               //server.write('{"code":2,"msg":"Un problème a été détecté. Veuillez cessez de pédaler ."}')
-              setErreur(["erreur","Un problème a été détecté. Veuillez cessez de pédaler ."])
+              setErreur(["Erreur","Un problème a été détecté. Veuillez cessez de pédaler ."])
               //ws.send('{"code":2,"msg":"Un problème a été détecté. Veuillez cessez de pédaler ."}')
               setStyleModal(styles.dangerModal)
               setModal(true)
@@ -514,6 +536,8 @@ export default function Compteur (props) {
           <View style={[{flex: 1, flexDirection: 'row', marginLeft: '25%'}]}>
             <TouchableOpacity onPress={() => {
               if (watts > 0) {
+                //console.log(`{"watts":${watts-5}}`)
+                sendMessage(3,`{"watts":${watts-5}}`)
                 setWatts(watts-5)
                 //sendWatts(watts)
               }
@@ -530,9 +554,8 @@ export default function Compteur (props) {
             <TouchableOpacity
                 onPress={() => {
                   if (watts < 750) {
+                    sendMessage(3,`{"watts":${watts+5}}`)
                     setWatts(watts+5);
-                    //sendWatts(watts)
-                    //ws.send(`{"code":3,"watts":${watts}}`)
                   }
                 }}>
               <Text
@@ -586,6 +609,16 @@ const styles = StyleSheet.create({
     justifyContent:"flex-start",
     height:"20%",
     alignItems:"center",
+  },
+  endingModal:{
+    marginTop:"50%",
+    marginLeft:"10%",
+    paddingTop:"5%",
+    height:100,
+    width:"75%",
+    backgroundColor:"#5FCDFAAA",
+    justifyContent:"center",
+    alignItems:"center"
   },
   header: {
     flex: 2,

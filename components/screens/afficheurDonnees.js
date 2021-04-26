@@ -135,8 +135,8 @@ export default function AfficheurDonnees (props) {
                     ]}>
                     <Animated.View style={[styles.textbloc, trans0.getLayout()]}>
                         <Text style={[styles.midText, {fontSize: 30}]}>
-                            {Number.parseFloat(props.kmh*0.226).toFixed(2)}
-                        </Text>
+                            {Number.parseFloat(props.kmh * (25 / (3 * Math.PI * 0.622))).toFixed(2)  /* conversion des rotations par minutes en tr/min à partir de la vitesse en kmh */ }
+                            </Text>
                         <Text style={[styles.midText2, {fontSize: 20}]}>rpm</Text>
                     </Animated.View>
                 </ImageBackground>
@@ -173,23 +173,23 @@ export default function AfficheurDonnees (props) {
                 <View style={styles.textbloc}>
                     <View style={{flexDirection: 'column'}}>
                         <Text style={[styles.midText, {fontSize: 20}]}>
-                            {props.distance}
+                            {props.distance < 1 ? Math.round(props.distance * 1000) : Number.parseFloat(props.distance).toFixed(2)}
                             <Text
                                 style={[
                                     styles.midText2,
                                     {color: 'white'},
                                 ]}>
-                                m <Text style={{color: '#5FCDFA'}}>parcourus </Text>
+                                {props.distance < 1 ? 'm' : 'km'} <Text style={{color: '#5FCDFA'}}>parcourus </Text>
                             </Text>
                         </Text>
                         <Text style={[styles.midText, {fontSize: 20}]}>
-                            {props.cumulD+props.distance}
+                            {Math.round(props.cumulD+props.distance)}
                             <Text
                                 style={[
                                     styles.midText2,
                                     {color: 'white'},
                                 ]}>
-                                m <Text style={{color: '#5FCDFA'}}> cumulés</Text>
+                                km <Text style={{color: '#5FCDFA'}}> cumulés</Text>
                             </Text>
                         </Text>
                     </View>
