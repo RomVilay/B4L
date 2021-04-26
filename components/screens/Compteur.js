@@ -144,22 +144,21 @@ export default function Compteur (props) {
         setEPosition(nend)
         setAngle(nend)
         //setVitesses([...vitesses,seg])
-       //sendMessage(1,`{"rg":${seg*2.6525}}`)
-        setInclinaison([...inclinaison,1])
+       sendMessage(1,`{"rg":${seg*2.6525}}`)
+        //setInclinaison([...inclinaison,1])
         //setEnergie(energie=>energie+100)
        sendMessage(1,`{"US":10,"IS":20}`)
        //console.log(distance+seg*0.0001*moment.duration(currentTime).asSeconds())
        //setDistance(distance=>Math.round(distance+seg*moment.duration(currentTime).asSeconds()))
-       //sendMessage(1,`{"Temp":25}`)
+       sendMessage(1,`{"Temp":25}`)
       } else {
        endPosition < -118 ? setUp(true) : setSeg(seg => seg-7)
         const nend = endPosition - 10;
         setSPosition(endPosition)
         setEPosition(nend)
        //setVitesses([...vitesses,seg])
-       sendMessage(1,`{"rg":${seg*2.6525}}`)
-       setInclinaison([...inclinaison,1])
-       //console.log(distance+seg*0.0001*moment.duration(currentTime).asSeconds())
+       //sendMessage(1,`{"rg":${seg*2.6525}}`)
+       //setInclinaison([...inclinaison,1])
        //setEnergie(energie=>energie+100)
        //sendMessage(1,`{"US":10,"IS":20}`)
        //sendMessage(1,`{"rg":${seg*2.6525},"US":10,"IS":20,"Temp":25}`)
@@ -426,15 +425,14 @@ export default function Compteur (props) {
       case 1:
         console.log(contenu)
         if (contenu.rg !== undefined) {
-          let vitesse = contenu.rg  * (3 / 25) * Math.PI * 0.622 //  vitesse linéaire pour un diamètre intérieur de 622mm (roue 29") à partir des rotations par minutes de la génératrice
+          let vitesse = contenu.rg / 2.6525   //  * (3 / 25) * Math.PI * 0.622  vitesse linéaire pour un diamètre intérieur de 622mm (roue 29") à partir des rotations par minutes de la génératrice
           setVitesses([...vitesses,vitesse])
-          let d = distance+vitesse *moment.duration(currentTime).asHours()
+          let d = distance+vitesse * moment.duration(currentTime).asHours()
           setDistance(d)
-
         }
         if (contenu.US!== undefined && contenu.IS!== undefined) {
           let ps = contenu.US*contenu.IS //puissance en sortie de génératrice
-            set
+            setEnergie(energie => energie + ps)
         }
         if (contenu.temp !== undefined) {
           let temp = contenu.temp //température du capteur
@@ -531,7 +529,7 @@ export default function Compteur (props) {
               style={[{transform: [{rotate: rotation}]}, styles.aiguille]}
             />
             <AfficheurCompteur style={styles.graph} i={seg} />
-            <AfficheurDonnees kmh={seg} energie={energie} distance={distance} cumulD={state.user.totalDistance}/>
+            <AfficheurDonnees kmh={vitesses[vitesses.length-1]} energie={energie} distance={distance} cumulD={state.user.totalDistance}/>
           </ImageBackground>
           <View style={[{flex: 1, flexDirection: 'row', marginLeft: '25%'}]}>
             <TouchableOpacity onPress={() => {
