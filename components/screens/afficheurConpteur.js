@@ -106,7 +106,7 @@ export default function  AfficheurCompteur (props){
             {
                 displayValue: false,
                 formatValue: (value) => `R$ ${value.toFixed(2)}`,
-                radius:100,
+                radius:112,
                 segments: [
                     {
                         total: 200,
@@ -151,6 +151,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         zIndex:0,
         position:'absolute',
-        top:0
+        top:0,
     }
 })

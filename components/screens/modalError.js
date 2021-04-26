@@ -40,11 +40,11 @@ export const ModalError = (props) => {
                     :
                     props.styleModal.backgroundColor == styles.endingModal.backgroundColor ?
                         <>
-                            <Text>truc</Text>
-                            <Text style={[styles.midText,{fontSize:15, textAlign:"justify", marginLeft:"10%", marginRight:"10%", textTransform:"none"}]}>{props.erreur[1]}</Text>
+                            <Text style={[styles.midText,{fontSize:15, textAlign:"justify", marginTop:"5%",marginLeft:"5%", marginRight:"5%", textTransform:"none", height:50, padding:5}]}>{props.erreur[1]}</Text>
                             <TouchableOpacity onPress={() => {
                                 props.setModal(false)
-                            }}>
+                            }}
+                            >
                                 <View>
                                     <View style={{borderColor: "white", width: 180, height: 20,borderWidth:2, borderRadius:10}}/>
                                     <View style={{ backgroundColor:"white",width: 180*(props.t/15), height: 20,position:"absolute", borderRadius:10 }}/>
@@ -53,10 +53,10 @@ export const ModalError = (props) => {
                         </>
                         :
                         <>
-                        <Text style={[styles.midText,{fontSize:15,height:"54%", textAlign:"justify", marginLeft:"10%", marginRight:"10%", textTransform:"none"}]}>{props.erreur[1]}</Text>
-                        <TouchableOpacity onPress={() => {
-                            props.setModal(false)
-                        }}>
+                            <Text style={[styles.midText,{fontSize:15,height:"54%", textAlign:"justify", marginLeft:"10%", marginRight:"10%", textTransform:"none"}]}>{props.erreur[1]}</Text>
+                            <TouchableOpacity onPress={() => {
+                                props.setModal(false)
+                            }}>
                         <View>
                             <View style={{borderColor: "white", width: 180, height: 20,borderWidth:2, borderRadius:10}}/>
                             <View style={{ backgroundColor:"white",width: 180*(props.t/15), height: 20,position:"absolute", borderRadius:10 }}/>

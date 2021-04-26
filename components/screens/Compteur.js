@@ -96,9 +96,8 @@ export default function Compteur (props) {
       "idUser":state.user._id,
       "dateSession":moment(),
       "dureeSession":moment.duration(currentTime).asSeconds(),
-      "distance":distance,
+      "distance":distance*1000,
       "energie":energie,
-
     }
     if (session == undefined){
       const s = await createSession(data,state.token)
@@ -146,20 +145,20 @@ export default function Compteur (props) {
         //setVitesses([...vitesses,seg])
        sendMessage(1,`{"rg":${seg*2.6525}}`)
         //setInclinaison([...inclinaison,1])
-        //setEnergie(energie=>energie+100)
-       sendMessage(1,`{"US":10,"IS":20}`)
+        setEnergie(energie=>energie+100)
+       //sendMessage(1,`{"US":10,"IS":20}`)
        //console.log(distance+seg*0.0001*moment.duration(currentTime).asSeconds())
        //setDistance(distance=>Math.round(distance+seg*moment.duration(currentTime).asSeconds()))
-       sendMessage(1,`{"Temp":25}`)
+       //sendMessage(1,`{"Temp":25}`)
       } else {
        endPosition < -118 ? setUp(true) : setSeg(seg => seg-7)
         const nend = endPosition - 10;
         setSPosition(endPosition)
         setEPosition(nend)
        //setVitesses([...vitesses,seg])
-       //sendMessage(1,`{"rg":${seg*2.6525}}`)
+       sendMessage(1,`{"rg":${seg*2.6525}}`)
        //setInclinaison([...inclinaison,1])
-       //setEnergie(energie=>energie+100)
+       setEnergie(energie=>energie+100)
        //sendMessage(1,`{"US":10,"IS":20}`)
        //sendMessage(1,`{"rg":${seg*2.6525},"US":10,"IS":20,"Temp":25}`)
        //setDistance(distance=>distance+10)
@@ -211,6 +210,7 @@ export default function Compteur (props) {
             if(defisValid.length > 0){
               saveSession()
             }
+
             stopSession(watts)
             //ws.close()
 
@@ -229,7 +229,6 @@ export default function Compteur (props) {
    function ValiderDefis () {
      setDefisValid([...defisValid,defis[defic]])
      /*if (defis[defic].long !== undefined){
-
      }*/
      setDefic(defic => defic+1)
    }
@@ -375,7 +374,7 @@ export default function Compteur (props) {
      if (defis[defic] !== undefined)
      {
        if (defis[defic].long === undefined){
-         if ((defis[defic].butUnit === "m" && distance >= defis[defic].butNumber)
+         if ((defis[defic].butUnit === "m" && distance*1000 >= defis[defic].butNumber)
              || (defis[defic].butUnit === "watts" && energie >= defis[defic].butNumber) )
          {
            ValiderDefis()
@@ -416,7 +415,8 @@ export default function Compteur (props) {
    * @set vitesses/rpm/energie produite
    */
    function readData(message){
-     console.log("time:"+moment.duration(currentTime).asHours())
+       if (modal == false && ( erreur[0] !== "Fin de Session"))
+       {
     console.log(message.readUInt8([4]))
     let type = message.readUInt8([4])
     let contenu = message.toString("utf8",8,message.length-1)
@@ -432,7 +432,13 @@ export default function Compteur (props) {
         }
         if (contenu.US!== undefined && contenu.IS!== undefined) {
           let ps = contenu.US*contenu.IS //puissance en sortie de génératrice
-            setEnergie(energie => energie + ps)
+          setEnergie(energie => energie + ps)
+          if (defic.typeDefis == "pente") {
+              if (ps !== state.user.poids * defi.butNumber * vitesses[vitesses.length-1] * 9.81) {
+                  let i =  ps /state.user.poids * vitesses[vitesses.length-1] * 9.81  //prise en compte de l'inclinaison inclinaison = puissance totale / poids de l'utilisateur(kg) * sa vitesse (m/s) * gravité (9.81)
+                  setInclinaison([...inclinaison,i])
+              }
+            }
         }
         if (contenu.temp !== undefined) {
           let temp = contenu.temp //température du capteur
@@ -450,7 +456,7 @@ export default function Compteur (props) {
         break;
     }
     console.log(`vitesse : ${vitesses[vitesses.length-1]}, energie : ${energie}, distance : ${distance}`)
-
+       }
   }
   //testWbSckt("bonjour")
     return (
@@ -529,7 +535,7 @@ export default function Compteur (props) {
               style={[{transform: [{rotate: rotation}]}, styles.aiguille]}
             />
             <AfficheurCompteur style={styles.graph} i={seg} />
-            <AfficheurDonnees kmh={vitesses[vitesses.length-1]} energie={energie} distance={distance} cumulD={state.user.totalDistance}/>
+            <AfficheurDonnees style={{backgroundColor:"white"}} kmh={vitesses[vitesses.length-1]} energie={energie} distance={distance} cumulD={state.user.totalDistance}/>
           </ImageBackground>
           <View style={[{flex: 1, flexDirection: 'row', marginLeft: '25%'}]}>
             <TouchableOpacity onPress={() => {
@@ -639,15 +645,17 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   compteur: {
-    height:300,
-    width:400,
+    height:400,
+    width:450,
     flex: 2,
     resizeMode: 'contain',
     justifyContent: 'center',
+    right: 30,
+    top:-50,
     zIndex: 0,
   },
   aiguille: {
-    top: 30,
+    top: 80,
     bottom: '28%',
     width: 200,
     height: 235,
@@ -659,9 +667,9 @@ const styles = StyleSheet.create({
   },
   graph: {
     position: 'absolute',
-    top: 7,
-    left: 55,
-    width: 400,
+    top: 43,
+    left: 67,
+    width: 500,
     height: 350,
     zIndex: 0,
   },

@@ -125,7 +125,7 @@ export default function AfficheurDonnees (props) {
         setTab([tab[1], tab[2], tab[0]]);
     };
     return(
-        <View style={{selfAlign:"center", flex:1, width:500}}>
+        <View style={{selfAlign:"center", flex:1, width:500, marginLeft:20,marginTop:"10%"}}>
             <View style={styles.midTop}>
                 <ImageBackground
                     source={require('../../assets/Accueil/fondBulle.png')}
@@ -159,7 +159,7 @@ export default function AfficheurDonnees (props) {
                     <Fleche style={styles.flecheG} />
                 </TouchableOpacity>
                 <Animated.View
-                    style={[styles.textbloc, {margin: 8}, trans2.getLayout()]}>
+                    style={[styles.textbloc, {margin: 4}, trans2.getLayout()]}>
                     <Text style={[styles.midText, {fontSize: 30, width:25}]}>
                         {props.kmh}
                     </Text>
