@@ -535,7 +535,7 @@ export default function Compteur (props) {
               style={[{transform: [{rotate: rotation}]}, styles.aiguille]}
             />
             <AfficheurCompteur style={styles.graph} i={seg} />
-            <AfficheurDonnees style={{backgroundColor:"white"}} kmh={vitesses[vitesses.length-1]} energie={energie} distance={distance} cumulD={state.user.totalDistance}/>
+            <AfficheurDonnees kmh={vitesses[vitesses.length-1]} energie={energie} distance={distance} cumulD={state.user.totalDistance}/>
           </ImageBackground>
           <View style={[{flex: 1, flexDirection: 'row', marginLeft: '25%'}]}>
             <TouchableOpacity onPress={() => {
