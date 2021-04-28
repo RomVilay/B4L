@@ -231,14 +231,15 @@ export default function Compteur (props) {
      /*if (defis[defic].long !== undefined){
      }*/
      setDefic(defic => defic+1)
-       if (defis[defic+1].typeDefi == "pente") {
+       //cas des défis de pente
+       /*if (defis[defic+1].typeDefi == "pente") {
            let ps = defis[defic+1].butNumber * 9.81 * state.user.poids * vitesses[vitesses.length-1]
            if (ps <= energie-10 || ps >= energie+10) {
                sendMessage(3, `watts: ${ps}`)
                setErreur(["Mode Defi Pente","Attention, vous avez choisi un défi pente," +
                " pendant la durée de ce défi vous ne pouvez pas modifier la puissance demandée."])
            }
-       }
+       }*/
    }
    async function getDefiLong() {
      let tab = []
@@ -313,7 +314,7 @@ export default function Compteur (props) {
    */
    function stopSession(w){
        //setWatts(watts - 50 )
-    setErreur(["Fin de Session","Arrêt de la session, ralentissez progressivement avant l'arrêt du système."])
+    setErreur(["Fin de Session","Ralentissez progressivement avant la fin de la session."])
     setStyleModal(styles.endingModal)
     setModal(true)
     console.log(erreur[0])
@@ -440,14 +441,19 @@ export default function Compteur (props) {
         if (contenu.US!== undefined && contenu.IS!== undefined) {
           let ps = contenu.US*contenu.IS //puissance en sortie de génératrice
           setEnergie(energie => energie + ps)
-          if (defic.typeDefis == "pente") {
+            //cas d'un défis de pente
+          /*if (defic.typeDefis == "pente") {
               if (ps !== state.user.poids * defi.butNumber * vitesses[vitesses.length-1] * 9.81) {
-
+                      if (ps <= energie-10 || ps >= energie+10) {
+                          sendMessage(3, `watts: ${ps}`)
+                          setErreur(["Mode Defi Pente","Attention, vous avez choisi un défi pente," +
+                          " pendant la durée de ce défi vous ne pouvez pas modifier la puissance demandée."])
+                      }
                   //let i =  ps /state.user.poids * vitesses[vitesses.length-1] * 9.81  //prise en compte de l'inclinaison inclinaison = puissance totale / poids de l'utilisateur(kg) * sa vitesse (m/s) * gravité (9.81)
               } else {
                   setInclinaison([...inclinaison,defi.butNumber])
               }
-            }
+            }*/
         }
         if (contenu.temp !== undefined) {
           let temp = contenu.temp //température du capteur
@@ -546,7 +552,7 @@ export default function Compteur (props) {
             <AfficheurCompteur style={styles.graph} i={seg} />
             <AfficheurDonnees kmh={vitesses[vitesses.length-1]} energie={energie} distance={distance} cumulD={state.user.totalDistance}/>
           </ImageBackground>
-          <View style={[{flex: 1, flexDirection: 'row', marginLeft: '25%'}]}>
+          <View style={[{flex: 1, flexDirection: 'row', marginLeft: '25%', marginTop:Platform.OS === "android" ? "12%": 0}]}>
             <TouchableOpacity onPress={() => {
               if (watts > 0) {
                 //console.log(`{"watts":${watts-5}}`)
@@ -624,7 +630,7 @@ const styles = StyleSheet.create({
     alignItems:"center",
   },
   endingModal:{
-    marginTop:"50%",
+    marginTop: Platform.OS === "ios" ? "60%": "30%",
     marginLeft:"10%",
     paddingTop:"5%",
     height:100,

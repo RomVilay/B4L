@@ -7,7 +7,7 @@ import {
     StyleSheet,
     TouchableWithoutFeedback,
     TouchableOpacity,
-    Modal
+    Modal, Platform
 } from "react-native";
 import goTo from "../utils/navFunctions";
 
@@ -24,9 +24,9 @@ export const ModalError = (props) => {
             animationType="slide"
         >
             <View style={props.styleModal}>
-                <Text style={[styles.midText,{fontSize:30}]}>{props.erreur[0]}</Text>
                 {props.styleModal.backgroundColor == styles.dangerModal.backgroundColor ?
                     <>
+                        <Text style={[styles.midText,{fontSize:30}]}>{props.erreur[0]}</Text>
                         <Text style={[styles.midText,{fontSize:20, textAlign:"justify", marginLeft:"10%", marginRight:"10%", textTransform:"none"}]}>{props.erreur[1]}</Text>
                         <TouchableOpacity onPress={() => {
                             props.server.destroy()
@@ -40,7 +40,8 @@ export const ModalError = (props) => {
                     :
                     props.styleModal.backgroundColor == styles.endingModal.backgroundColor ?
                         <>
-                            <Text style={[styles.midText,{fontSize:15, textAlign:"justify", marginTop:"5%",marginLeft:"5%", marginRight:"5%", textTransform:"none", height:50, padding:5}]}>{props.erreur[1]}</Text>
+                            <Text style={[styles.midText,{fontSize:25,marginTop:35, height:25}]}>{props.erreur[0]}</Text>
+                            <Text style={[styles.midText,{fontSize:15, textAlign:"justify",marginLeft:"5%", marginRight:"5%", textTransform:"none", height:50, padding:5}]}>{props.erreur[1]}</Text>
                             <TouchableOpacity onPress={() => {
                                 props.setModal(false)
                             }}
@@ -53,6 +54,7 @@ export const ModalError = (props) => {
                         </>
                         :
                         <>
+                            <Text style={[styles.midText,{fontSize:30}]}>{props.erreur[0]}</Text>
                             <Text style={[styles.midText,{fontSize:15,height:"54%", textAlign:"justify", marginLeft:"10%", marginRight:"10%", textTransform:"none"}]}>{props.erreur[1]}</Text>
                             <TouchableOpacity onPress={() => {
                                 props.setModal(false)
@@ -88,9 +90,7 @@ const styles = StyleSheet.create({
         alignItems:"center"
     },
     endingModal:{
-        marginTop:"50%",
         marginLeft:"10%",
-        paddingTop:"5%",
         height:100,
         width:"75%",
         backgroundColor:"#5FCDFAAA",
