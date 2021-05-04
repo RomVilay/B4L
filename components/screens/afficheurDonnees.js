@@ -170,7 +170,7 @@ export default function AfficheurDonnees (props) {
                 </TouchableOpacity>
             </View>
             <View style={styles.midBot}>
-                <View style={styles.textbloc}>
+                <View style={[styles.textbloc,{marginTop:Platform.OS =="android" ? 40 : 0} ]}>
                     <View style={{flexDirection: 'column'}}>
                         <Text style={[styles.midText, {fontSize: 20}]}>
                             {props.distance < 1 ? Math.round(props.distance * 1000) : Number.parseFloat(props.distance).toFixed(2)}
@@ -245,7 +245,7 @@ const styles = StyleSheet.create(
             flexDirection: 'row',
             alignItems: 'center',
             zIndex: 100,
-            marginTop: '2%',
+            marginTop: '8%',
             paddingLeft:112,
         },
         midBot: {
@@ -259,7 +259,7 @@ const styles = StyleSheet.create(
                         marginTop:5
                     },
                     android:{
-                        paddingTop:15
+                        marginTop:15
                     }
                 })
         }

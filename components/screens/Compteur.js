@@ -59,7 +59,7 @@ export default function Compteur (props) {
   const [watts,setWatts] = React.useState(200)              // consigne de production
   const [vitesses,setVitesses] = React.useState([])         // relevés de vitesse
   const [inclinaison,setInclinaison] = React.useState([])   // relevés inclinaison
-  const [energie,setEnergie] = React.useState(0)            // relevés énergie produite
+  const [energie,setEnergie] = React.useState([])            // relevés énergie produite
   const [distance,setDistance] = React.useState(0)          // cumul de distance pour la session
   //const [ws,setWs] = React.useState(Platform.OS === "ios" ? new WebSocket("ws://localhost:8100") : new WebSocket("ws://echo.websocket.org"))
   const [erreur,setErreur] = React.useState([0,0])          // tableau pour une erreur [titre, message]
@@ -97,7 +97,7 @@ export default function Compteur (props) {
       "dateSession":moment(),
       "dureeSession":moment.duration(currentTime).asSeconds(),
       "distance":distance*1000,
-      "energie":energie,
+      "energie":energie.reduce((a,b)=>a+b),
     }
     if (session == undefined){
       const s = await createSession(data,state.token)
@@ -118,12 +118,16 @@ export default function Compteur (props) {
       }
     }
       let tab = defisValid.filter(defi => defi.long !== undefined).map(defi=>defi._id)
+          //defisValid.length > 0 && !state.user.totalPoints ? defisValid.map(defi=>defi.points).reduce((total,defi)=>total+defi.points)+state.user.totalPoints : defisValid.map(defi=>defi.points).reduce((total,defi)=>total+defi.points)
+        //defisValid.length > 0  ? console.log("total points "+defisValid.map(defi=>defi.points).reduce((a,b)=>a+b) + state.user.totalPoints) : console.log("points usr:"+state.user.totalPoints)
       const userdata = {
         "totalDuree":state.user.totalDuree+moment.duration(currentTime).asSeconds(),
-        "totalEnergie":isNaN(state.user.totalEnergie+energie) ? 1 : state.user.totalEnergie+energie,
+        "totalEnergie":isNaN(state.user.totalEnergie+energie.reduce((a,b)=>a+b)) ? 1 : state.user.totalEnergie+energie.reduce((a,b)=>a+b),
         "totalDistance":state.user.totalDistance+distance,
-        "totalPoints":defisValid.length > 0 ? defisValid.map(defi=>defi.points).reduce((total,defi)=>total+defi.points) : 0
+        "totalPoints":defisValid.length > 0  ? defisValid.map(defi=>defi.points).reduce((a,b)=>a+b) + state.user.totalPoints : state.user.totalPoints
+
       }
+      console.log(defisValid.map(defi=>defi.points).reduce((a,b)=>a+b))
       const updated  = await  editUser(state.user.username,userdata,state.token)
       if (updated.message) {
         Alert.alert('Erreur update', updated.message);
@@ -145,7 +149,7 @@ export default function Compteur (props) {
         //setVitesses([...vitesses,seg])
        sendMessage(1,`{"rg":${seg*2.6525}}`)
         //setInclinaison([...inclinaison,1])
-        setEnergie(energie=>energie+100)
+        setEnergie([...energie,100])
        //sendMessage(1,`{"US":10,"IS":20}`)
        //console.log(distance+seg*0.0001*moment.duration(currentTime).asSeconds())
        //setDistance(distance=>Math.round(distance+seg*moment.duration(currentTime).asSeconds()))
@@ -158,7 +162,7 @@ export default function Compteur (props) {
        //setVitesses([...vitesses,seg])
        sendMessage(1,`{"rg":${seg*2.6525}}`)
        //setInclinaison([...inclinaison,1])
-       setEnergie(energie=>energie+100)
+       setEnergie([...energie,100])
        //sendMessage(1,`{"US":10,"IS":20}`)
        //sendMessage(1,`{"rg":${seg*2.6525},"US":10,"IS":20,"Temp":25}`)
        //setDistance(distance=>distance+10)
@@ -227,9 +231,14 @@ export default function Compteur (props) {
     //définition des positions pour les différentes valeurs
 
    function ValiderDefis () {
-     setDefisValid([...defisValid,defis[defic]])
+       //console.log(`pts ${state.user.totalPoints} + ${defis[defic].points} = ${state.user.totalPoints+defis[defic].points}`)
+       //defisValid.length > 0  ? console.log("total points "+defisValid.map(defi=>defi.points).reduce((a,b)=>a+b) + state.user.totalPoints) : console.log("points usr:"+state.user.totalPoints)
+       /*let defi = defis[defic]
+       defi.points = defi.points * ( (energie.reduce((a,b) => a+b) / energie.length) / 250 ) //calcul du ratio de points à attribuer en fonction de la performance de l'utilisateur
+       setDefisValid([...defisValid,defi])*/
      /*if (defis[defic].long !== undefined){
      }*/
+     setDefisValid([...defisValid,defis[defic] ])
      setDefic(defic => defic+1)
        //cas des défis de pente
        /*if (defis[defic+1].typeDefi == "pente") {
@@ -316,7 +325,9 @@ export default function Compteur (props) {
        //setWatts(watts - 50 )
     setErreur(["Fin de Session","Ralentissez progressivement avant la fin de la session."])
     setStyleModal(styles.endingModal)
-    setModal(true)
+    server.destroy()
+    goTo(props)
+    /*setModal(true)
     console.log(erreur[0])
     const timer = setInterval(showWarning, 1250)
     setTimeModal(timer)
@@ -334,7 +345,7 @@ export default function Compteur (props) {
            sendMessage(3,`watts:${w}`)
            console.log(w)
          }
-       },1000)
+       },1000)*/
    }
 
   /**

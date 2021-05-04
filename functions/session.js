@@ -144,6 +144,12 @@ async function deleteSessionByUsername(username, authToken) {
   return deletedSession;
 }
 
+/**
+ * Appelle la route /sessions/user/:id_user
+ *@param {String} id_user l'id de base de donnée de l'utilisateur
+ * @returns toutes les sessions de l'utilisateur
+ */
+
 module.exports = {
   createSession,
   getAllSessions,
