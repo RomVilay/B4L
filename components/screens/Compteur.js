@@ -118,8 +118,7 @@ export default function Compteur (props) {
       }
     }
       let tab = defisValid.filter(defi => defi.long !== undefined).map(defi=>defi._id)
-          //defisValid.length > 0 && !state.user.totalPoints ? defisValid.map(defi=>defi.points).reduce((total,defi)=>total+defi.points)+state.user.totalPoints : defisValid.map(defi=>defi.points).reduce((total,defi)=>total+defi.points)
-        //defisValid.length > 0  ? console.log("total points "+defisValid.map(defi=>defi.points).reduce((a,b)=>a+b) + state.user.totalPoints) : console.log("points usr:"+state.user.totalPoints)
+        //defisValid.length > 0 && !state.user.totalPoints ? defisValid.map(defi=>defi.points).reduce((total,defi)=>total+defi.points)+state.user.totalPoints : defisValid.map(defi=>defi.points).reduce((total,defi)=>total+defi.points)
       const userdata = {
         "totalDuree":state.user.totalDuree+moment.duration(currentTime).asSeconds(),
         "totalEnergie":isNaN(state.user.totalEnergie+energie.reduce((a,b)=>a+b)) ? 1 : state.user.totalEnergie+energie.reduce((a,b)=>a+b),
@@ -238,7 +237,12 @@ export default function Compteur (props) {
        setDefisValid([...defisValid,defi])*/
      /*if (defis[defic].long !== undefined){
      }*/
-     setDefisValid([...defisValid,defis[defic] ])
+       var defi = defis[defic]
+       var ratioEffort = (energie.reduce((a,b) => a+b) / energie.length) / 250
+       if (ratioEffort > 0.5){
+           ratioEffort > 0.75 ? defi.points = defi.points + defi.points * (ratioEffort-0.5) : defi.points = defi.points+defi.points * (ratioEffort-0.25)
+       }
+     setDefisValid([...defisValid,defi])
      setDefic(defic => defic+1)
        //cas des défis de pente
        /*if (defis[defic+1].typeDefi == "pente") {
@@ -325,9 +329,9 @@ export default function Compteur (props) {
        //setWatts(watts - 50 )
     setErreur(["Fin de Session","Ralentissez progressivement avant la fin de la session."])
     setStyleModal(styles.endingModal)
-    server.destroy()
-    goTo(props)
-    /*setModal(true)
+    /*server.destroy()
+    goTo(props)*/
+    setModal(true)
     console.log(erreur[0])
     const timer = setInterval(showWarning, 1250)
     setTimeModal(timer)
@@ -345,7 +349,7 @@ export default function Compteur (props) {
            sendMessage(3,`watts:${w}`)
            console.log(w)
          }
-       },1000)*/
+       },1000)
    }
 
   /**
@@ -393,6 +397,7 @@ export default function Compteur (props) {
    React.useEffect(() =>{
      if (defis[defic] !== undefined)
      {
+         if (defis[defic])
        if (defis[defic].long === undefined){
          if ((defis[defic].butUnit === "m" && distance*1000 >= defis[defic].butNumber)
              || (defis[defic].butUnit === "watts" && energie >= defis[defic].butNumber) )
