@@ -239,13 +239,14 @@ const styles = StyleSheet.create(
             zIndex: 100,
             marginLeft: 25,
             marginTop:85
+
         },
         midMid: {
             flex: 1,
             flexDirection: 'row',
             alignItems: 'center',
             zIndex: 100,
-            marginTop: '8%',
+            marginTop: Platform.OS === "android" ? '8%' :'2%',
             paddingLeft:112,
         },
         midBot: {

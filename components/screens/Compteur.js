@@ -20,7 +20,7 @@ import LogoMin from '../../assets/logoMin';
 
 import {Stopwatch} from 'react-native-stopwatch-timer';
 
-import AfficheurCompteur from './afficheurConpteur';
+import AfficheurCompteur from './afficheurCompteur';
 import AfficheurDonnees from "./afficheurDonnees";
 
 import SliderDefis from "./sliderDefis";
@@ -74,8 +74,9 @@ export default function Compteur (props) {
     this._isMounted = false*/
   require('node-libs-react-native/globals');
 
-  ///faire calcul points défis
-
+    /**
+     * fonction de démarrage/arrêt du minuteur
+     */
   const toggleStopwatch = () => {
       setStart(!start)
       setReset(false)
@@ -83,10 +84,17 @@ export default function Compteur (props) {
       ? setPause( 'Pause')
       : setPause( '');
   }
+    /**
+     * fonction de remise à zero minuteur
+     */
   const resetStopwatch = () => {
       setStart(false)
       setReset(true)
   }
+    /**
+     * fonction de sauvegarde de la session
+     * @param : defis, vitesse, inclinaison, idUtilisateur,dateSession,dureeSession,distance,energie
+     */
   const saveSession = async () => {
     if (defisValid.length>=0){
     const data = {
@@ -99,7 +107,7 @@ export default function Compteur (props) {
       "distance":distance*1000,
       "energie":energie.reduce((a,b)=>a+b),
     }
-    if (session == undefined){
+    if (session == undefined){ //initialisation de la session
       const s = await createSession(data,state.token)
       if (s.message) {
         Alert.alert('Erreur création session', s.message);
@@ -108,7 +116,7 @@ export default function Compteur (props) {
         setSession(s)
       }
     }
-    else {
+    else { //mise à jour de la session
       const s = await editSession(session._id,data,state.token)
       if (s.message) {
         Alert.alert('Erreur session', s.message);
@@ -117,7 +125,7 @@ export default function Compteur (props) {
         setSession(s)
       }
     }
-      let tab = defisValid.filter(defi => defi.long !== undefined).map(defi=>defi._id)
+      let tab = defisValid.filter(defi => defi.long !== undefined).map(defi=>defi._id) //copie des id des défis validés
         //defisValid.length > 0 && !state.user.totalPoints ? defisValid.map(defi=>defi.points).reduce((total,defi)=>total+defi.points)+state.user.totalPoints : defisValid.map(defi=>defi.points).reduce((total,defi)=>total+defi.points)
       const userdata = {
         "totalDuree":state.user.totalDuree+moment.duration(currentTime).asSeconds(),
@@ -126,7 +134,7 @@ export default function Compteur (props) {
         "totalPoints":defisValid.length > 0  ? defisValid.map(defi=>defi.points).reduce((a,b)=>a+b) + state.user.totalPoints : state.user.totalPoints
 
       }
-      console.log(defisValid.map(defi=>defi.points).reduce((a,b)=>a+b))
+    //mise à jour de l'utilisateur ( distance parcourue, points, energie produite, temps passé )
       const updated  = await  editUser(state.user.username,userdata,state.token)
       if (updated.message) {
         Alert.alert('Erreur update', updated.message);
@@ -137,7 +145,7 @@ export default function Compteur (props) {
     }
   }
 
-  //fonction qui défini la rotation à effectuer
+  //fonction qui défini la rotation à effectuer pour l'animation
   function randomRotation (){
      if (up) {
        endPosition > -100 ? setUp(false) : setSeg(seg => seg+7)
@@ -145,13 +153,10 @@ export default function Compteur (props) {
         setSPosition(endPosition)
         setEPosition(nend)
         setAngle(nend)
-        //setVitesses([...vitesses,seg])
        sendMessage(1,`{"rg":${seg*2.6525}}`)
         //setInclinaison([...inclinaison,1])
         setEnergie([...energie,100])
        //sendMessage(1,`{"US":10,"IS":20}`)
-       //console.log(distance+seg*0.0001*moment.duration(currentTime).asSeconds())
-       //setDistance(distance=>Math.round(distance+seg*moment.duration(currentTime).asSeconds()))
        //sendMessage(1,`{"Temp":25}`)
       } else {
        endPosition < -118 ? setUp(true) : setSeg(seg => seg-7)
@@ -164,7 +169,6 @@ export default function Compteur (props) {
        setEnergie([...energie,100])
        //sendMessage(1,`{"US":10,"IS":20}`)
        //sendMessage(1,`{"rg":${seg*2.6525},"US":10,"IS":20,"Temp":25}`)
-       //setDistance(distance=>distance+10)
        setAngle(nend)
        //sendMessage(1,`{"Temp":25}`)
        /* if (endPosition <= -130) {
@@ -230,20 +234,38 @@ export default function Compteur (props) {
     //définition des positions pour les différentes valeurs
 
    function ValiderDefis () {
-       //console.log(`pts ${state.user.totalPoints} + ${defis[defic].points} = ${state.user.totalPoints+defis[defic].points}`)
-       //defisValid.length > 0  ? console.log("total points "+defisValid.map(defi=>defi.points).reduce((a,b)=>a+b) + state.user.totalPoints) : console.log("points usr:"+state.user.totalPoints)
-       /*let defi = defis[defic]
-       defi.points = defi.points * ( (energie.reduce((a,b) => a+b) / energie.length) / 250 ) //calcul du ratio de points à attribuer en fonction de la performance de l'utilisateur
-       setDefisValid([...defisValid,defi])*/
-     /*if (defis[defic].long !== undefined){
-     }*/
+       //for ( let d = 0; d < defis[defic].butUnit.length; d++){}  pour les défis avec plusieurs objectifs (durée, distance, ect...)
        var defi = defis[defic]
-       var ratioEffort = (energie.reduce((a,b) => a+b) / energie.length) / 250
+       /*var ratioEffort = (energie.reduce((a,b) => a+b) / energie.length) / 250 //bonus d'effort
        if (ratioEffort > 0.5){
            ratioEffort > 0.75 ? defi.points = defi.points + defi.points * (ratioEffort-0.5) : defi.points = defi.points+defi.points * (ratioEffort-0.25)
+       }*/
+       //var incli = (energie.reduce((a,b) => a+b) / energie.length) / (state.user.poids * 9.81 * vitesses[vitesses.length-1])
+       if (defis[defic] !== undefined)
+       {
+           //validation des défis longs
+           if (defis[defic].long === undefined){
+               if ((defis[defic].butUnit === "m" && distance*1000 >= defis[defic].butNumber)
+                   || (defis[defic].butUnit === "watts" && energie >= defis[defic].butNumber) )
+               {
+                   setDefisValid([...defisValid,defi])
+                   setDefic(defic => defic+1)
+               }
+           } else {
+               if ((defis[defic].butUnit === "m" && state.user.totalDistance+distance >= defis[defic].butNumber)
+                   || (defis[defic].butUnit === "watts" && state.user.totalEnergie+energie >= defis[defic].butNumber))
+               {
+                   setDefisValid([...defisValid,defi])
+                   setDefic(defic => defic+1)
+               }
+               /*if (defis[defic].butUnit[d] === "%"
+                    && defis[defic].butNumber[d] === incli && defis[defic].butUnit[d+1] === "temps"
+                    && defis[defic].butNumber[d+1] === moment.duration(currentTime).asSeconds()){
+                        setDefisValid([...defisValid,defi])
+                        setDefic(defic => defic+1)
+               }*/
+           }
        }
-     setDefisValid([...defisValid,defi])
-     setDefic(defic => defic+1)
        //cas des défis de pente
        /*if (defis[defic+1].typeDefi == "pente") {
            let ps = defis[defic+1].butNumber * 9.81 * state.user.poids * vitesses[vitesses.length-1]
@@ -395,23 +417,7 @@ export default function Compteur (props) {
    }
    // validation et mise à jour des défis sélectionnés
    React.useEffect(() =>{
-     if (defis[defic] !== undefined)
-     {
-         if (defis[defic])
-       if (defis[defic].long === undefined){
-         if ((defis[defic].butUnit === "m" && distance*1000 >= defis[defic].butNumber)
-             || (defis[defic].butUnit === "watts" && energie >= defis[defic].butNumber) )
-         {
-           ValiderDefis()
-         }
-       } else {
-         if ((defis[defic].butUnit === "m" && state.user.totalDistance+distance >= defis[defic].butNumber)
-             || (defis[defic].butUnit === "watts" && state.user.totalEnergie+energie >= defis[defic].butNumber) )
-         {
-           ValiderDefis()
-         }
-       }
-    }
+        ValiderDefis()
      //saveSession()
    },[distance,energie])
    // réccupération des défis longs
