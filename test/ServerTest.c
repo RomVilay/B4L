@@ -73,7 +73,7 @@ int main(int argc, char const *argv[])
 
 	//loop for in messages
 	while(1) {
-	//read( new_socket , buffer, 1024);
+	read( new_socket , buffer, 1024);
 	printf("%s",buffer);
     send(new_socket,buffer,strlen(buffer),0);
     memset(buffer, 0, sizeof buffer);

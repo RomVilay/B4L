@@ -69,9 +69,7 @@ export default function Compteur (props) {
   const[timeModal,setTimeModal] = React.useState()                    //
   const [server,setServer] = React.useState(new TcpSocket.Socket());  // initialisation de la variable du socket
   const [donnees,setDonnees] = React.useState()
-  /*this.toggleStopwatch = this.toggleStopwatch.bind(this);
-    this.resetStopwatch = this.resetStopwatch.bind(this);
-    this._isMounted = false*/
+
   require('node-libs-react-native/globals');
 
     /**
@@ -155,7 +153,7 @@ export default function Compteur (props) {
         setAngle(nend)
        sendMessage(1,`{"rg":${seg*2.6525}}`)
         //setInclinaison([...inclinaison,1])
-        setEnergie([...energie,100])
+       // setEnergie([...energie,100])
        //sendMessage(1,`{"US":10,"IS":20}`)
        //sendMessage(1,`{"Temp":25}`)
       } else {
@@ -217,10 +215,7 @@ export default function Compteur (props) {
             if(defisValid.length > 0){
               saveSession()
             }
-
             stopSession(watts)
-            //ws.close()
-
           },
         },
       ],
@@ -462,7 +457,7 @@ export default function Compteur (props) {
         }
         if (contenu.US!== undefined && contenu.IS!== undefined) {
           let ps = contenu.US*contenu.IS //puissance en sortie de génératrice
-          setEnergie(energie => energie + ps)
+          setEnergie([...energie,ps])
             //cas d'un défis de pente
           /*if (defic.typeDefis == "pente") {
               if (ps !== state.user.poids * defi.butNumber * vitesses[vitesses.length-1] * 9.81) {
@@ -492,7 +487,7 @@ export default function Compteur (props) {
         setModal(true)
         break;
     }
-    console.log(`vitesse : ${vitesses[vitesses.length-1]}, energie : ${energie}, distance : ${distance}`)
+    console.log(`vitesse : ${vitesses[vitesses.length-1]}, energie : ${energie[energie.length-1]}, distance : ${distance}`)
        }
   }
   //testWbSckt("bonjour")
@@ -572,7 +567,7 @@ export default function Compteur (props) {
               style={[{transform: [{rotate: rotation}]}, styles.aiguille]}
             />
             <AfficheurCompteur style={styles.graph} i={seg} />
-            <AfficheurDonnees kmh={vitesses[vitesses.length-1]} energie={energie} distance={distance} cumulD={state.user.totalDistance}/>
+            <AfficheurDonnees kmh={vitesses[vitesses.length-1]} energie={energie[energie.length-1]} distance={distance} cumulD={state.user.totalDistance}/>
           </ImageBackground>
           <View style={[{flex: 1, flexDirection: 'row', marginLeft: '25%', marginTop:Platform.OS === "android" ? "12%": 0}]}>
             <TouchableOpacity onPress={() => {

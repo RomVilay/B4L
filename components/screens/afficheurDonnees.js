@@ -148,7 +148,7 @@ export default function AfficheurDonnees (props) {
                     ]}>
                     <Animated.View style={[styles.textbloc, trans1.getLayout()]}>
                         <Text style={[styles.midText, {fontSize: 30}]}>
-                            {Number.parseFloat(props.energie*0.239).toFixed(2)}
+                            {Number.parseFloat(props.energie*0.239).toFixed(2) /* conversion des watts en kcalorie/s*/ }
                         </Text>
                         <Text style={[styles.midText2, {fontSize: 20}]}>kcals</Text>
                     </Animated.View>
