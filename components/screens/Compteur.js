@@ -32,7 +32,7 @@ import {Context} from "../utils/Store";
 import goTo from '../utils/navFunctions';
 import {ModalError} from './modalError'
 import TcpSocket from 'react-native-tcp-socket';
-
+import { LogBox } from 'react-native';
 
 import NotificationSounds, {playSampleSound} from 'react-native-notification-sounds'
 
@@ -69,6 +69,10 @@ export default function Compteur (props) {
   const[timeModal,setTimeModal] = React.useState()                    //
   const [server,setServer] = React.useState(new TcpSocket.Socket());  // initialisation de la variable du socket
   const [donnees,setDonnees] = React.useState()
+
+    React.useEffect(() => {
+        LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
+    }, [])
 
   require('node-libs-react-native/globals');
 
@@ -211,7 +215,7 @@ export default function Compteur (props) {
     const  interval = setInterval(() => {
      randomRotation()
     }, 900); //mise à jour du tableau d'interpolation de la rotation
-    if (modal == true){
+    if (modal == true || start == false){
       clearInterval(interval)
     }
     return() =>{
@@ -618,7 +622,7 @@ export default function Compteur (props) {
             <AfficheurCompteur style={styles.graph} i={seg} />
             <AfficheurDonnees kmh={vitesses[vitesses.length-1]} energie={energie[energie.length-1]} distance={distance} cumulD={state.user.totalDistance}/>
           </ImageBackground>
-          <View style={[{flex: 1, flexDirection: 'row', marginLeft: '25%', marginTop:Platform.OS === "android" ? "12%": 0}]}>
+          <View style={[{flex: 1, flexDirection: 'row', marginLeft: '25%', marginTop:Platform.OS === "android" ? 0: 0 }]}>
             <TouchableOpacity onPress={() => {
               if (watts > 0) {
                 //console.log(`{"watts":${watts-5}}`)

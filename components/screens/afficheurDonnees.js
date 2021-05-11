@@ -125,7 +125,7 @@ export default function AfficheurDonnees (props) {
         setTab([tab[1], tab[2], tab[0]]);
     };
     return(
-        <View style={{selfAlign:"center", flex:1, width:500, marginLeft:20,marginTop:"10%"}}>
+        <View style={{selfAlign:"center",flex:3, width:500, marginLeft:25,marginTop:"12%" }}>
             <View style={styles.midTop}>
                 <ImageBackground
                     source={require('../../assets/Accueil/fondBulle.png')}
@@ -159,7 +159,7 @@ export default function AfficheurDonnees (props) {
                     <Fleche style={styles.flecheG} />
                 </TouchableOpacity>
                 <Animated.View
-                    style={[styles.textbloc, {margin: 4}, trans2.getLayout()]}>
+                    style={[styles.textbloc, {width:25, height:35}, trans2.getLayout()]}>
                     <Text style={[styles.midText, {fontSize: 30, width:25}]}>
                         {props.kmh}
                     </Text>
@@ -170,7 +170,7 @@ export default function AfficheurDonnees (props) {
                 </TouchableOpacity>
             </View>
             <View style={styles.midBot}>
-                <View style={[styles.textbloc,{marginTop:Platform.OS =="android" ? 40 : 0} ]}>
+                <View style={[styles.textbloc,{paddingTop:Platform.OS =="android" ? 18 : 0} ]}>
                     <View style={{flexDirection: 'column'}}>
                         <Text style={[styles.midText, {fontSize: 20}]}>
                             {props.distance < 1 ? Math.round(props.distance * 1000) : Number.parseFloat(props.distance).toFixed(2)}
