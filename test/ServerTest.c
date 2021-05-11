@@ -8,6 +8,39 @@
 #include <time.h>
 #define PORT 8080
 
+struct packet_header
+{
+	u_int16_t flag;
+	u_int16_t id_message;
+	u_int8_t type;
+	u_int16_t length;
+	u_int16_t cs_header;
+};
+
+
+unsigned short csum(unsigned short *ptr,int nbytes)
+{
+	register long sum;
+	unsigned short oddbyte;
+	register short answer;
+
+	sum=0;
+	while(nbytes>1) {
+		sum+=*ptr++;
+		nbytes-=2;
+	}
+	if(nbytes==1) {
+		oddbyte=0;
+		*((u_char*)&oddbyte)=*(u_char*)ptr;
+		sum+=oddbyte;
+	}
+
+	sum = (sum>>16)+(sum & 0xffff);
+	sum = sum + (sum>>16);
+	answer=(short)~sum;
+
+	return(answer);
+}
 void delay(int number_of_seconds)
 {
     // Converting time into milli_seconds
@@ -25,6 +58,7 @@ int main(int argc, char const *argv[])
 {
 	int server_fd, new_socket, valread;
 	struct sockaddr_in address;
+	struct packet_header head;
 	int opt = 1;
 	int addrlen = sizeof(address);
 	char buffer[1024] = {0};
@@ -73,18 +107,30 @@ int main(int argc, char const *argv[])
 
 	//loop for in messages
 	while(1) {
-	read( new_socket , buffer, 1024);
-	printf("%s",buffer);
+	//read( new_socket , buffer, 1024);
+	valread = read( new_socket , buffer, 1024);
+	//printf("%i",valread);
     send(new_socket,buffer,strlen(buffer),0);
-    memset(buffer, 0, sizeof buffer);
+    //memset(buffer, 0, sizeof buffer);
+     //random relevés
 
-    /* //random relevés
     int temp = (rand() % (37 + 1 - 20 )) + 20;
     int rp = (rand() % (101 - 20) + 20);
-    char str[255];
-    sprintf(str,"{\"rp\":%d,\"rg\":%d,\"UE\":20, \"IE\":10,\"US\":20,\"IS\":10,\"temp\":%d}",rp,rp,temp);
-    send(new_socket, str, strlen(str), 0);
-
+    char *str;
+    sprintf(str,"{\"rp\":%d,\"US\":20,\"IS\":10,\"temp\":%d}",rp,temp);
+    head.flag = 0xA55A;
+    head.id_message = buffer[5] + 1;
+    head.type = 0x01;
+    head.length = sizeof(str);
+    head.cs_header = csum ((unsigned short *) head, *head->length);
+    ptr = malloc(sizeof ( struct packet_header));
+    ptr = (struct packet_header *) head;
+    unsigned short cs = csum((unsigned short *) str, sizeof(str) );
+    buffer[0] = ptr;
+    buffer[1] = str;
+    buffer[2] = cs & 0xFF;
+    send(new_socket, buffer, strlen(buffer), 0);
+    /*
             if ( strcmp(buffer,c) == 10){
                 close(new_socket);
                 printf("client déconnecté");
@@ -95,9 +141,8 @@ int main(int argc, char const *argv[])
             close(new_socket);
             printf("client déconnecté");
             return 0;
-        }
-        */
-	//    delay(1000);
+        }*/
+    delay(1000);
 	}
 	//send(new_socket , hello , strlen(hello) , 0 );
 	//printf("Hello message sent\n");

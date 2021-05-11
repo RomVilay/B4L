@@ -46,11 +46,11 @@ export default function Compteur (props) {
   const [pause,setPause] =React.useState('')
   const [currentTime,setCTime] = React.useState('')
   //variables animation
-  const rotateValueHolder= React.useRef(new Animated.Value(0)).current;
+  const rotateValueHolder= React.useRef(new Animated.Value(0)).current;//initalisation de la valeur de rotation
   const [startPosition,setSPosition] = React.useState(-160) //position initiale de l'image
   const [endPosition,setEPosition] = React.useState(-125)   //position finale de la première itération
   const outputRange = ['0deg', '10deg']                               //écart entre chaque rotation
-  const [seg,setSeg] = React.useState(10)                   //vitesse
+  const [seg,setSeg] = React.useState(10)                   //nombre de segment affichés pour l'animation du cercle
   const [angle,setAngle] = React.useState(-150)             // angle de rotation initial
   const [up,setUp] = React.useState(true)                   // simulation: augmente ou diminue la vitesse
   const [defis,setDefis] = React.useState(props.route.params.defis)   // tableau des défis choisis
@@ -123,15 +123,16 @@ export default function Compteur (props) {
         setSession(s)
       }
     }
-      let tab = defisValid.filter(defi => defi.long !== undefined).map(defi=>defi._id) //copie des id des défis validés
-        //defisValid.length > 0 && !state.user.totalPoints ? defisValid.map(defi=>defi.points).reduce((total,defi)=>total+defi.points)+state.user.totalPoints : defisValid.map(defi=>defi.points).reduce((total,defi)=>total+defi.points)
+      let tab = defisValid.filter(defi => defi.long !== undefined).map(defi=>defi._id) //copie des id des défis longs validés
       const userdata = {
         "totalDuree":state.user.totalDuree+moment.duration(currentTime).asSeconds(),
         "totalEnergie":isNaN(state.user.totalEnergie+energie.reduce((a,b)=>a+b)) ? 1 : state.user.totalEnergie+energie.reduce((a,b)=>a+b),
         "totalDistance":state.user.totalDistance+distance,
-        "totalPoints":defisValid.length > 0  ? defisValid.map(defi=>defi.points).reduce((a,b)=>a+b) + state.user.totalPoints : state.user.totalPoints
-
+        "totalPoints":defisValid.length > 0  ?
+            defisValid.map(defi=>defi.points).reduce((a,b)=>a+b) + state.user.totalPoints :
+            state.user.totalPoints
       }
+    // defis longs : console.log(tab.length+" - "+tab.length > 0 ? defisValid.filter(defi => defi.long !== undefined).map(defi=>defi._id) : state.user.defisLongs)
     //mise à jour de l'utilisateur ( distance parcourue, points, energie produite, temps passé )
       const updated  = await  editUser(state.user.username,userdata,state.token)
       if (updated.message) {
@@ -145,31 +146,61 @@ export default function Compteur (props) {
 
   //fonction qui défini la rotation à effectuer pour l'animation
   function randomRotation (){
+      /*let v1 = vitesses[vitesses.length-1]
+      if ( v1 > vitesses[vitesses.length-2]) {
+      cas où la vitesse est supérieure
+          setSeg((v1/180)*200)
+          let end = endPosition +
+      }
+      else {
+      cas où la vitesse est inférieure
+
+      }*/
+    var nend;
      if (up) {
-       endPosition > -100 ? setUp(false) : setSeg(seg => seg+7)
-        const nend = endPosition + 10;
-        setSPosition(endPosition)
+       if (endPosition > -100) {
+           setUp(false)
+       }
+        nend = endPosition + 10;
         setEPosition(nend)
+        setSPosition(endPosition)
         setAngle(nend)
+         /*if (vitesses.length > 0 && vitesses[vitesses.length-2] < vitesses [vitesses.length-1]){
+             let variation = (vitesses[vitesses.length-1]/180) * 200 - seg
+             setSeg(seg + Math.round(v))
+             console.log("seg: "+seg)
+         }*/
+       setSeg(seg => seg+7)
        sendMessage(1,`{"rg":${seg*2.6525}}`)
-        //setInclinaison([...inclinaison,1])
-       // setEnergie([...energie,100])
-       //sendMessage(1,`{"US":10,"IS":20}`)
-       //sendMessage(1,`{"Temp":25}`)
+       setEnergie([...energie,100+seg])
+       /*setInclinaison([...inclinaison,1])
+       setEnergie([...energie,100])
+       sendMessage(1,`{"US":10,"IS":20}`)
+       sendMessage(1,`{"Temp":25}`)*/
       } else {
-       endPosition < -118 ? setUp(true) : setSeg(seg => seg-7)
-        const nend = endPosition - 10;
+       if (endPosition < -118) {
+           setUp(true)
+       }
+        nend = endPosition - 10;
         setSPosition(endPosition)
         setEPosition(nend)
+        setEnergie([...energie,100-seg])
+        setAngle(nend)
+        setSeg(seg => seg-7)
+        //setTimeout(()=>{setSeg(seg => seg-7)},500)
        //setVitesses([...vitesses,seg])
        sendMessage(1,`{"rg":${seg*2.6525}}`)
        //setInclinaison([...inclinaison,1])
-       setEnergie([...energie,100])
+        /* calcul segment / vitesse
+        if (vitesses.length > 0 && vitesses[vitesses.length-2] > vitesses [vitesses.length-1]){
+             let variation = seg - (vitesses[vitesses.length-1]/180) * 200
+             setSeg(seg - Math.round(v))
+           console.log("seg: "+seg)
+         }
        //sendMessage(1,`{"US":10,"IS":20}`)
        //sendMessage(1,`{"rg":${seg*2.6525},"US":10,"IS":20,"Temp":25}`)
-       setAngle(nend)
        //sendMessage(1,`{"Temp":25}`)
-       /* if (endPosition <= -130) {
+        if (endPosition <= -130) {
           setUp(true);
         }*/
       }
@@ -198,7 +229,12 @@ export default function Compteur (props) {
     }).start(); // animation de la rotation
   }
 
-  //fonction quitter la session
+    /**
+     * fonction d'arrêt de session
+     * enregistre la session actuelle
+     * et envoie le signal de fin à la génératrice
+     * @constructor
+     */
   const AlertQuit = () =>
     Alert.alert(
       '',
@@ -211,7 +247,6 @@ export default function Compteur (props) {
         {
           text: 'quitter la session',
           onPress: () => {
-            //console.log(vitesses)
             if(defisValid.length > 0){
               saveSession()
             }
@@ -228,8 +263,13 @@ export default function Compteur (props) {
     });
     //définition des positions pour les différentes valeurs
 
+    /**
+     * fonction de validation des défis
+     * utilise la ou les objectifs de chaque défis (distance en m, énergie en w, inclinaison en % et durée en s)
+     * @constructor
+     */
    function ValiderDefis () {
-       //for ( let d = 0; d < defis[defic].butUnit.length; d++){}  pour les défis avec plusieurs objectifs (durée, distance, ect...)
+       //for ( let d = 0; d < defis[defic].butUnit.length; d++){}  pour les défis avec plusieurs objectifs (durée, distance, ect...) sélection d'un objectif par défi
        var defi = defis[defic]
        /*var ratioEffort = (energie.reduce((a,b) => a+b) / energie.length) / 250 //bonus d'effort
        if (ratioEffort > 0.5){
@@ -238,7 +278,7 @@ export default function Compteur (props) {
        //var incli = (energie.reduce((a,b) => a+b) / energie.length) / (state.user.poids * 9.81 * vitesses[vitesses.length-1])
        if (defis[defic] !== undefined)
        {
-           //validation des défis longs
+           //validation des défis courts
            if (defis[defic].long === undefined){
                if ((defis[defic].butUnit === "m" && distance*1000 >= defis[defic].butNumber)
                    || (defis[defic].butUnit === "watts" && energie >= defis[defic].butNumber) )
@@ -247,30 +287,35 @@ export default function Compteur (props) {
                    setDefic(defic => defic+1)
                }
            } else {
+               //validation des défis longs
                if ((defis[defic].butUnit === "m" && state.user.totalDistance+distance >= defis[defic].butNumber)
                    || (defis[defic].butUnit === "watts" && state.user.totalEnergie+energie >= defis[defic].butNumber))
                {
                    setDefisValid([...defisValid,defi])
                    setDefic(defic => defic+1)
                }
-               /*if (defis[defic].butUnit[d] === "%"
+               /* defis de pente
+               if (defis[defic].butUnit[d] === "%"
                     && defis[defic].butNumber[d] === incli && defis[defic].butUnit[d+1] === "temps"
                     && defis[defic].butNumber[d+1] === moment.duration(currentTime).asSeconds()){
                         setDefisValid([...defisValid,defi])
                         setDefic(defic => defic+1)
+
+                        let ps = defis[defic+1].butNumber * 9.81 * state.user.poids * vitesses[vitesses.length-1]
+                         if (ps <= energie-10 || ps >= energie+10) {
+                            sendMessage(3, `watts: ${ps}`)
+                            setErreur(["Mode Defi Pente","Attention, vous avez choisi un défi pente," +
+                            " pendant la durée de ce défi vous ne pouvez pas modifier la puissance demandée."])
+                        }
                }*/
            }
        }
-       //cas des défis de pente
-       /*if (defis[defic+1].typeDefi == "pente") {
-           let ps = defis[defic+1].butNumber * 9.81 * state.user.poids * vitesses[vitesses.length-1]
-           if (ps <= energie-10 || ps >= energie+10) {
-               sendMessage(3, `watts: ${ps}`)
-               setErreur(["Mode Defi Pente","Attention, vous avez choisi un défi pente," +
-               " pendant la durée de ce défi vous ne pouvez pas modifier la puissance demandée."])
-           }
-       }*/
    }
+
+    /**
+     * fonction de réccupération des défis longs  de l'utilisateur
+     * @returns {Promise<void>} ajoute la liste des défis long aux défis de la session
+     */
    async function getDefiLong() {
      let tab = []
      for (let i = 0; i < state.user.defisLongs.length;i++)
@@ -284,6 +329,10 @@ export default function Compteur (props) {
      }
      setDefis([...defis,...tab])
    }
+
+    /**
+     * fonction d'affichage avec un délais de 15 secondes d'un message
+     */
    function showWarning(){
        if (t<0){
          setModal(false)
@@ -292,7 +341,7 @@ export default function Compteur (props) {
          setT(t--)
        }
    }
-   //checksum 16 bits
+   //checksum 16 bits pour le header et les datas socket
   function crc16 (buffer, start, end)
   {
     var crc = 0xFFFF;
@@ -333,8 +382,8 @@ export default function Compteur (props) {
     head.writeUInt16BE(crc16(head,0,4),6) //checksum header 16 bits
     let chkf = new Buffer.from([crc16(contenu,0,contenu.length-1)])
     let message = new Buffer.concat([head,contenu,chkf])
-     //console.log(message.toString("hex",0,message.length-1))
-     server.write(message)
+    //console.log(message.toString("hex",0,message.length-1))
+    server.write(message)
     //console.log("time:"+moment.duration(currentTime).asMilliseconds())
    }
 
@@ -348,7 +397,7 @@ export default function Compteur (props) {
     setStyleModal(styles.endingModal)
     /*server.destroy()
     goTo(props)*/
-    setModal(true)
+   /* setModal(true)
     console.log(erreur[0])
     const timer = setInterval(showWarning, 1250)
     setTimeModal(timer)
@@ -357,16 +406,16 @@ export default function Compteur (props) {
            w=0
            sendMessage(3,`watts:${w}`)
            console.log("end")
-           clearInterval(t)
+           clearInterval(t)*/
            server.destroy()
            goTo(props)
-         }
+       /*  }
          else{
            w=w-Math.round(w*0.20)
            sendMessage(3,`watts:${w}`)
            console.log(w)
          }
-       },1000)
+       },1000)*/
    }
 
   /**
