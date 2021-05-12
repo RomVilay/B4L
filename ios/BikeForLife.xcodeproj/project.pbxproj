@@ -22,6 +22,8 @@
 		8D3103F5254C57090022BFD7 /* YanoneKaffeesatz-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8D3103F1254C57090022BFD7 /* YanoneKaffeesatz-Thin.ttf */; };
 		8D310402254C58EB0022BFD7 /* TallFilmsFine.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8D310400254C58EB0022BFD7 /* TallFilmsFine.ttf */; };
 		8D310403254C58EB0022BFD7 /* TallFilms.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8D310401254C58EB0022BFD7 /* TallFilms.ttf */; };
+		8DFBAE27264BCE21004C22C2 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFBAE26264BCE21004C22C2 /* File.swift */; };
+		8DFBAE28264BCE21004C22C2 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFBAE26264BCE21004C22C2 /* File.swift */; };
 		9E6C985232A10CD0AACD85C2 /* libPods-BikeForLife-BikeForLifeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B13DF342FBB3247DA6B2F043 /* libPods-BikeForLife-BikeForLifeTests.a */; };
 		B35B4CED395DD05E484E6846 /* libPods-BikeForLife.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0770D3B590EE4C1965E03F4C /* libPods-BikeForLife.a */; };
 /* End PBXBuildFile section */
@@ -78,6 +80,8 @@
 		8D3103F1254C57090022BFD7 /* YanoneKaffeesatz-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "YanoneKaffeesatz-Thin.ttf"; path = "../assets/fonts/YanoneKaffeesatz-Thin.ttf"; sourceTree = "<group>"; };
 		8D310400254C58EB0022BFD7 /* TallFilmsFine.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = TallFilmsFine.ttf; path = ../assets/fonts/TallFilmsFine.ttf; sourceTree = "<group>"; };
 		8D310401254C58EB0022BFD7 /* TallFilms.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = TallFilms.ttf; path = ../assets/fonts/TallFilms.ttf; sourceTree = "<group>"; };
+		8DFBAE25264BCE21004C22C2 /* BikeForLifeTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BikeForLifeTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		8DFBAE26264BCE21004C22C2 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		ACA6AEF67770F6C1C546EEB0 /* Pods-BikeForLife.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BikeForLife.release.xcconfig"; path = "Target Support Files/Pods-BikeForLife/Pods-BikeForLife.release.xcconfig"; sourceTree = "<group>"; };
 		B13DF342FBB3247DA6B2F043 /* libPods-BikeForLife-BikeForLifeTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BikeForLife-BikeForLifeTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7A3B7DBE1E1466095199738 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
@@ -151,12 +155,14 @@
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
+				8DFBAE26264BCE21004C22C2 /* File.swift */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				8D026348264A7F9300A81477 /* BikeForLife-Bridging-Header.h */,
 				8D026349264A7F9300A81477 /* BikeForLife-tvOS-Bridging-Header.h */,
+				8DFBAE25264BCE21004C22C2 /* BikeForLifeTests-Bridging-Header.h */,
 			);
 			name = BikeForLife;
 			sourceTree = "<group>";
@@ -338,12 +344,13 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 940;
+				LastUpgradeCheck = 1240;
 				ORGANIZATIONNAME = "ALF-Environnement";
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
 						DevelopmentTeam = 79MV2B72VR;
+						LastSwiftMigration = 1240;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
@@ -680,6 +687,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00E356F31AD99517003FC87E /* BikeForLifeTests.m in Sources */,
+				8DFBAE28264BCE21004C22C2 /* File.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -688,6 +696,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				8DFBAE27264BCE21004C22C2 /* File.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -741,14 +750,16 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E69BF66FB2D8139EB3AEDF68 /* Pods-BikeForLife-BikeForLifeTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 79MV2B72VR;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = BikeForLifeTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -757,6 +768,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "BikeForLifeTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BikeForLife.app/BikeForLife";
 			};
 			name = Debug;
@@ -765,11 +779,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0BF74AC113250307C87BEE82 /* Pods-BikeForLife-BikeForLifeTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 79MV2B72VR;
 				INFOPLIST_FILE = BikeForLifeTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -778,6 +794,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "BikeForLifeTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BikeForLife.app/BikeForLife";
 			};
 			name = Release;
@@ -858,7 +876,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.2;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -889,7 +907,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "BikeForLife-tvOS-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.2;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
@@ -915,7 +933,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BikeForLife-tvOS.app/BikeForLife-tvOS";
-				TVOS_DEPLOYMENT_TARGET = 10.1;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -941,7 +959,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BikeForLife-tvOS.app/BikeForLife-tvOS";
-				TVOS_DEPLOYMENT_TARGET = 10.1;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
@@ -949,6 +967,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -967,6 +986,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -992,7 +1012,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1003,6 +1023,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -1021,6 +1042,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1039,7 +1061,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
