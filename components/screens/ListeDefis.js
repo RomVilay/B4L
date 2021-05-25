@@ -1,11 +1,25 @@
-import React, {useContext, useState} from 'react'
-import {FlatList, Text, View, StyleSheet, Button, ImageBackground, Image, TouchableOpacity, SafeAreaView,ActivityIndicator, Alert} from 'react-native'
+import React, {useContext, useState, useRef} from 'react'
+import {
+    FlatList,
+    Text,
+    View,
+    StyleSheet,
+    Button,
+    ImageBackground,
+    Image,
+    TouchableOpacity,
+    SafeAreaView,
+    ActivityIndicator,
+    Alert,
+    Modal, Pressable, Animated
+} from 'react-native'
 import CheckBox from '@react-native-community/checkbox'
 import LogoMin from '../../assets/logoMin'
 import Fleche from "../../assets/fleche";
 import NavApp from "../navigation/NavApp";
 import {listeDefis} from "../../functions/defis";
 import {Context} from '../utils/Store';
+import {ModalHelp} from "./ModalHelp";
 import {getUser} from "../../functions/user";
 
 /*
@@ -13,11 +27,13 @@ import {getUser} from "../../functions/user";
 const Item1 = ({ item, onPress }) => (
   <TouchableOpacity onPress={onPress} style={styles.defi}>
        <Text style={[styles.titreBlanc, { fontSize:30}]}>{item.nomDefi}</Text>
+      {item.descriptionDefi !== undefined ? <Text style={[styles.description]}>{item.descriptionDefi}</Text> : <></> }
    </TouchableOpacity>
 );
 const Item2 = ({ item, onPress, style }) => (
     <TouchableOpacity onPress={onPress} style={styles.defi2}>
         <Text style={[styles.titreBlanc, { fontSize:30}]}>{item.nomDefi}</Text>
+        {item.descriptionDefi !== undefined ? <Text style={[styles.description]}>{item.descriptionDefi}</Text> : <></> }
     </TouchableOpacity>
 );
 
@@ -26,6 +42,7 @@ export default function  ListeDefis(props) {
     const [state, setState] = useContext(Context);
     const [ListeDefs, setListeDefs]= useState([])
     const [defisSelect,setDefiSelect] = useState([])
+    const opacity = useRef(new Animated.Value(0)).current;
     const getList = async () => {
         setIsLoading(true)
         let list = await listeDefis(state.token,state.user.objectifs);
@@ -35,6 +52,18 @@ export default function  ListeDefis(props) {
             await setListeDefs(list.filter(defi => defi.long == undefined ).sort((defi1,defi2) => defi1.butNumber - defi2.butNumber))//setState({user, token: state.token});
         }
         setIsLoading(false)
+    };
+    const showWarn = () => {
+        opacity.setValue(1)
+        setTimeout(() =>{fadeOut()},3000)
+    }
+    const fadeOut = () => {
+        // Will change fadeAnim value to 0 in 3 seconds
+        Animated.timing(opacity, {
+            toValue: 0,
+            duration: 3000,
+            useNativeDriver:true
+        }).start();
     };
     React.useEffect(() =>{
         getList();
@@ -58,6 +87,7 @@ export default function  ListeDefis(props) {
                 item={item}
                 onPress={() => {
                     setDefiSelect([...defisSelect,item])
+                    if (item.butUnit == "%"){ showWarn()}
                 }}
                 style={{ }}
             />
@@ -80,7 +110,7 @@ export default function  ListeDefis(props) {
                         <ActivityIndicator size="large" color="#5FCDFA" style={{top: '10%'}} />
                     ) : (
 
-                    <View style={{height:'120%'}}>
+                    <View>
                         <FlatList
                             data={ListeDefs}
                             renderItem={render_item}
@@ -89,6 +119,10 @@ export default function  ListeDefis(props) {
                     </View>
                         )}
                     <Fleche style={{transform:[{rotate:'270deg'}]}}/>
+                    <Animated.View style={{backgroundColor:'#5FCDFAFA', opacity:opacity, position: "absolute", borderRadius:5,padding:10}}>
+                        <Text style={{color:"white"}}>Attention, si vous choisissez d'intégrer un défi de col,
+                            vous ne pourrez plus modifier la puissance demandée pendant la durée du défi.</Text>
+                    </Animated.View>
                 </View>
                 <View style={styles.footer}>
                     <TouchableOpacity style={{marginBottom:'10%'}} onPress={()=> {
@@ -127,7 +161,7 @@ const styles = StyleSheet.create({
     },
      defi: {
             flex: 1,
-            flexDirection: 'row',
+            flexDirection: 'column',
             alignContent: 'center',
             zIndex: 100,
             width: '100%',
@@ -137,12 +171,12 @@ const styles = StyleSheet.create({
         },
     defi2: {
         flex: 1,
-        flexDirection: 'row',
         alignContent: 'center',
         zIndex: 100,
         width: '100%',
         marginBottom:'5%',
         backgroundColor:"#56ADCE",
+        borderBottomColor:"#56ADCE",
         borderBottomWidth:3
     },
      titreBlanc : {
@@ -151,6 +185,11 @@ const styles = StyleSheet.create({
             fontSize: 25,
          fontFamily: 'GnuolaneRG-Regular'
         },
+    description : {
+        color: "white",
+        fontSize: 18,
+        fontFamily: 'GnuolaneRG-Regular',
+    },
     titreBleu : {
         color: "#56ADCE",
         textTransform: 'uppercase',

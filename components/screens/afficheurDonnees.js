@@ -246,7 +246,8 @@ const styles = StyleSheet.create(
             flexDirection: 'row',
             alignItems: 'center',
             zIndex: 100,
-            marginTop: Platform.OS === "android" ? '8%' :'2%',
+            marginTop: Platform.OS === "android" ? '8%' :0,
+            paddingBottom: Platform.OS === "ios" ? '2%' :0,
             paddingLeft:112,
         },
         midBot: {

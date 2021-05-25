@@ -273,31 +273,51 @@ export default function Compteur (props) {
      * @constructor
      */
    function ValiderDefis () {
-       //for ( let d = 0; d < defis[defic].butUnit.length; d++){}  pour les défis avec plusieurs objectifs (durée, distance, ect...) sélection d'un objectif par défi
        var defi = defis[defic]
+        //console.log(defi.buts)
        /*var ratioEffort = (energie.reduce((a,b) => a+b) / energie.length) / 250 //bonus d'effort
        if (ratioEffort > 0.5){
            ratioEffort > 0.75 ? defi.points = defi.points + defi.points * (ratioEffort-0.5) : defi.points = defi.points+defi.points * (ratioEffort-0.25)
        }*/
        //var incli = (energie.reduce((a,b) => a+b) / energie.length) / (state.user.poids * 9.81 * vitesses[vitesses.length-1])
-       if (defis[defic] !== undefined)
+       var bvalid = 0
+       if (defi !== undefined)
        {
-           //validation des défis courts
-           if (defis[defic].long === undefined){
-               if ((defis[defic].butUnit === "m" && distance*1000 >= defis[defic].butNumber)
-                   || (defis[defic].butUnit === "watts" && energie >= defis[defic].butNumber) )
-               {
-                   setDefisValid([...defisValid,defi])
-                   setDefic(defic => defic+1)
+           for ( var i = 0; i < defi.buts.length; i++){
+               var but = defi.buts[i]
+               if (but.long === undefined){
+                   if ((but.unit === "m" && distance*1000 >= but.number)
+                       || (but.unit === "watts" && energie.length > 0 && energie.reduce((a,b)=>a+b) >= but.number)
+                        || (but.unit ==="secondes" && moment.duration(currentTime).asSeconds()) )
+                   {
+                       bvalid = bvalid+1
+
+                       /*setDefisValid([...defisValid,defi])
+                       setDefic(defic => defic+1)*/
+                   }
+               } else {
+                   //validation des défis longs
+                   if ((defis[defic].butUnit === "m" && state.user.totalDistance + distance >= defis[defic].butNumber)
+                       || (defis[defic].butUnit === "watts" && state.user.totalEnergie + energie >= defis[defic].butNumber)
+                            || (but.unit ==="secondes" && moment.duration(currentTime).asSeconds()) ){
+                       /*setDefisValid([...defisValid, defi])
+                       setDefic(defic => defic + 1)*/
+                       bvalid = bvalid+1
+
+                   }
                }
-           } else {
-               //validation des défis longs
-               if ((defis[defic].butUnit === "m" && state.user.totalDistance+distance >= defis[defic].butNumber)
-                   || (defis[defic].butUnit === "watts" && state.user.totalEnergie+energie >= defis[defic].butNumber))
-               {
-                   setDefisValid([...defisValid,defi])
-                   setDefic(defic => defic+1)
-               }
+           }
+           if (energie.length > 0){
+               console.log(`dist:${distance} - energie : ${energie.reduce((a,b)=>a+b)} - durée du défis : ${moment.duration(currentTime).asSeconds() - defis[defic].startTime}`)
+           }
+           console.log(`nb buts validés:${bvalid} - nb buts: ${defis[defic].buts.length}  - ${bvalid === defis[defic].buts.length}`)
+           if (bvalid === defis[defic].buts.length){
+               setDefisValid([...defisValid, defi])
+               setDefic(defic => defic + 1)
+               defis[defic].startTime = moment.duration(currentTime).asSeconds()
+               console.log(defis[defic].startTime)
+               //setDefis(defis)
+           }
                /* defis de pente
                if (defis[defic].butUnit[d] === "%"
                     && defis[defic].butNumber[d] === incli && defis[defic].butUnit[d+1] === "temps"
@@ -311,8 +331,8 @@ export default function Compteur (props) {
                             setErreur(["Mode Defi Pente","Attention, vous avez choisi un défi pente," +
                             " pendant la durée de ce défi vous ne pouvez pas modifier la puissance demandée."])
                         }
-               }*/
-           }
+               }
+           }*/
        }
    }
 
@@ -473,6 +493,8 @@ export default function Compteur (props) {
     getDefiLong()
     //testWbSckt()
     socketServer()
+      defis[defic].startTime = 0
+      setDefis(defis)
   },[])
 
  React.useEffect(()=>{
@@ -540,7 +562,7 @@ export default function Compteur (props) {
         setModal(true)
         break;
     }
-    console.log(`vitesse : ${vitesses[vitesses.length-1]}, energie : ${energie[energie.length-1]}, distance : ${distance}`)
+    //console.log(`vitesse : ${vitesses[vitesses.length-1]}, energie : ${energie[energie.length-1]}, distance : ${distance}`)
        }
   }
   //testWbSckt("bonjour")
