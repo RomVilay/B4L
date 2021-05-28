@@ -59,7 +59,7 @@ PODS:
   - glog (0.3.5)
   - libevent (2.1.12)
   - OpenSSL-Universal (1.1.180)
-  - Permission-Camera (3.0.3):
+  - Permission-Camera (3.0.4):
     - RNPermissions
   - RCT-Folly (2020.01.13.00):
     - boost-for-react-native
@@ -254,13 +254,13 @@ PODS:
     - React-jsi (= 0.64.1)
     - React-perflogger (= 0.64.1)
   - React-jsinspector (0.64.1)
-  - react-native-camera (3.43.8):
+  - react-native-camera (3.43.9):
     - React-Core
-    - react-native-camera/RCT (= 3.43.8)
-    - react-native-camera/RN (= 3.43.8)
-  - react-native-camera/RCT (3.43.8):
+    - react-native-camera/RCT (= 3.43.9)
+    - react-native-camera/RN (= 3.43.9)
+  - react-native-camera/RCT (3.43.9):
     - React-Core
-  - react-native-camera/RN (3.43.8):
+  - react-native-camera/RN (3.43.9):
     - React-Core
   - react-native-netinfo (6.0.0):
     - React-Core
@@ -271,7 +271,7 @@ PODS:
   - react-native-tcp-socket (5.2.0):
     - CocoaAsyncSocket
     - React-Core
-  - react-native-webview (11.4.4):
+  - react-native-webview (11.6.2):
     - React-Core
   - React-perflogger (0.64.1)
   - React-RCTActionSheet (0.64.1):
@@ -343,17 +343,19 @@ PODS:
     - React-Core
   - RNCMaskedView (0.1.11):
     - React
-  - RNCPicker (1.16.0):
+  - RNCPicker (1.16.1):
     - React-Core
-  - RNDateTimePicker (3.4.7):
+  - RNDateTimePicker (3.5.0):
     - React-Core
   - RNDeviceInfo (8.1.3):
     - React-Core
   - RNGestureHandler (1.10.3):
     - React-Core
-  - RNPermissions (3.0.3):
+  - RNLocalize (2.1.0):
     - React-Core
-  - RNReanimated (2.1.0):
+  - RNPermissions (3.0.4):
+    - React-Core
+  - RNReanimated (2.2.0):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -382,13 +384,14 @@ PODS:
     - React-RCTVibration
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.2.0):
+  - RNScreens (3.3.0):
     - React-Core
+    - React-RCTImage
   - RNSVG (12.1.1):
     - React
   - RNVectorIcons (8.1.0):
     - React-Core
-  - RNWifi (4.3.7):
+  - RNWifi (4.3.8):
     - React-Core
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -457,6 +460,7 @@ DEPENDENCIES:
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNLocalize (from `../node_modules/react-native-localize`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -563,6 +567,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-device-info"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNLocalize:
+    :path: "../node_modules/react-native-localize"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
   RNReanimated:
@@ -594,7 +600,7 @@ SPEC CHECKSUMS:
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
-  Permission-Camera: 6abdb054620b2f6b3bf9e0b3842db246424d4d48
+  Permission-Camera: 74dc395c37a06ebe915069c5dca954c7a2a5a2e3
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: ec2ebc96b7bfba3ca5c32740f5a0c6a014a274d2
   RCTTypeSafety: 22567f31e67c3e088c7ac23ea46ab6d4779c0ea5
@@ -606,12 +612,12 @@ SPEC CHECKSUMS:
   React-jsi: 5de8204706bd872b78ea646aee5d2561ca1214b6
   React-jsiexecutor: 124e8f99992490d0d13e0649d950d3e1aae06fe9
   React-jsinspector: 500a59626037be5b3b3d89c5151bc3baa9abf1a9
-  react-native-camera: a22b33e521dbf3f8cd886f79f3aa310f401443d5
+  react-native-camera: bf312a2c11c4150fd4f850e78778e23170d78c5b
   react-native-netinfo: e849fc21ca2f4128a5726c801a82fc6f4a6db50d
   react-native-notification-sounds: ca3b60a37bd15dc8761393d04b1b7fd384a6cbf4
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   react-native-tcp-socket: c752d16fd5300dc96fc4a749c4db7c2a3886cd52
-  react-native-webview: cc2a1fd8149a2654d1408793daa62baadfc0bd96
+  react-native-webview: 193d233c29eacce1f42ca2637dab7ba79c25a6de
   React-perflogger: aad6d4b4a267936b3667260d1f649b6f6069a675
   React-RCTActionSheet: fc376be462c9c8d6ad82c0905442fd77f82a9d2a
   React-RCTAnimation: ba0a1c3a2738be224a08092fa7f1b444ab77d309
@@ -627,16 +633,17 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: f47a7e8f927f7c9da947491fc55752eb9ce17f2d
   RNCCheckbox: d1749e6a92178ce5dbc31e63becd1f34f0c76bbd
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
-  RNCPicker: 918e98b54a141791e99614b1c320ef2e58300490
-  RNDateTimePicker: 8dcfab802edece406f4f4780130974a0e04213b4
+  RNCPicker: 61c7a0645b9e4ac67960aa7f22a3effcecfdfb8d
+  RNDateTimePicker: d4f276aabaf26386bb4dca86e8c92087e7151ba0
   RNDeviceInfo: 8d3a29207835f972bce883723882980143270d55
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
-  RNPermissions: 034db8a73d562766f990c89abbdeaa5d6e204c67
-  RNReanimated: b8c8004b43446e3c2709fe64b2b41072f87428ad
-  RNScreens: c277bfc4b5bb7c2fe977d19635df6f974f95dfd6
+  RNLocalize: 7e199e96411dce0611e07e0496b049afa882c31d
+  RNPermissions: c46788f4cd402287425983e04a4c9bb4356036eb
+  RNReanimated: 9c13c86454bfd54dab7505c1a054470bfecd2563
+  RNScreens: bf59f17fbf001f1025243eeed5f19419d3c11ef2
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
-  RNWifi: f90afd1653c6d625542c4ecbb843c2e6adc94828
+  RNWifi: 24675a1ba35b74b6fbd3a05c384154833f8f9171
   Yoga: a7de31c64fe738607e7a3803e3f591a4b1df7393
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

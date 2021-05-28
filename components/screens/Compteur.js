@@ -33,6 +33,7 @@ import goTo from '../utils/navFunctions';
 import {ModalError} from './modalError'
 import TcpSocket from 'react-native-tcp-socket';
 import { LogBox } from 'react-native';
+import RNLocalize from 'react-native-localize'
 
 import NotificationSounds, {playSampleSound} from 'react-native-notification-sounds'
 
@@ -485,6 +486,7 @@ export default function Compteur (props) {
    },[distance,energie])
    // réccupération des défis longs
   React.useEffect(()=>{
+      console.log(RNLocalize.getCountry())
     getDefiLong()
     //testWbSckt()
     socketServer()
