@@ -26,14 +26,14 @@ import {getUser} from "../../functions/user";
 *     */
 const Item1 = ({ item, onPress }) => (
   <TouchableOpacity onPress={onPress} style={styles.defi}>
-       <Text style={[styles.titreBlanc, { fontSize:30}]}>{item.nomDefi}</Text>
-      {item.descriptionDefi !== undefined ? <Text style={[styles.description]}>{item.descriptionDefi}</Text> : <></> }
+       <Text style={[styles.titreBlanc, { fontSize:30, textAlign:"center"}]}>{item.nomDefi}</Text>
+      {item.descriptionDefi !== undefined ? <Text style={[styles.description,{textAlign:"center"}]}>{item.descriptionDefi}</Text> : <></> }
    </TouchableOpacity>
 );
 const Item2 = ({ item, onPress, style }) => (
     <TouchableOpacity onPress={onPress} style={styles.defi2}>
-        <Text style={[styles.titreBlanc, { fontSize:30}]}>{item.nomDefi}</Text>
-        {item.descriptionDefi !== undefined ? <Text style={[styles.description]}>{item.descriptionDefi}</Text> : <></> }
+        <Text style={[styles.titreBlanc, { fontSize:30,textAlign:"center"}]}>{item.nomDefi}</Text>
+        {item.descriptionDefi !== undefined ? <Text style={[styles.description,{textAlign:"center"}]}>{item.descriptionDefi}</Text> : <></> }
     </TouchableOpacity>
 );
 
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     description : {
         color: "white",
         fontSize: 18,
-        fontFamily: 'GnuolaneRG-Regular',
+
     },
     titreBleu : {
         color: "#56ADCE",

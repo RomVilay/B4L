@@ -70,7 +70,7 @@ export default function Compteur (props) {
   const[timeModal,setTimeModal] = React.useState()                    //
   const [server,setServer] = React.useState(new TcpSocket.Socket());  // initialisation de la variable du socket
   const [donnees,setDonnees] = React.useState()
-
+  const [energiep,setenergiep] = React.useState([])
     React.useEffect(() => {
         LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
     }, [])
@@ -134,9 +134,9 @@ export default function Compteur (props) {
         "totalEnergie":isNaN(state.user.totalEnergie+energie.reduce((a,b)=>a+b)) ? 1 : state.user.totalEnergie+energie.reduce((a,b)=>a+b),
         "totalDistance":state.user.totalDistance+distance,
         "totalPoints":defisValid.length > 0  ?
-            defisValid.map(defi=>defi.points).reduce((a,b)=>a+b) + state.user.totalPoints :
-            state.user.totalPoints
-      }
+            defisValid.map(defi=>defi.points).reduce((a,b)=>a+b) + state.user.totalPoints : state.user.totalPoints,
+        "pma":state.user.pma ? ((energie.reduce((a,b)=>a+b)/energie.length)+state.user.pma)/2 : ((energie.reduce((a,b)=>a+b)/energie.length)+250)/2
+    }
     // defis longs : console.log(tab.length+" - "+tab.length > 0 ? defisValid.filter(defi => defi.long !== undefined).map(defi=>defi._id) : state.user.defisLongs)
     //mise à jour de l'utilisateur ( distance parcourue, points, energie produite, temps passé )
       const updated  = await  editUser(state.user.username,userdata,state.token)
@@ -277,30 +277,43 @@ export default function Compteur (props) {
        //faire calcul défis de pente
        var defi = defis[defic]
         //console.log(defi.buts)
-        if (energie.length > 0) {
-            var ratioEffort = (energie.reduce((a,b) => a+b) / energie.length) / 250 //bonus d'effort
-            if (ratioEffort > 0.5){
-                ratioEffort > 0.75 ? defi.points = defi.points + defi.points * (ratioEffort-0.5) : defi.points = defi.points+defi.points * (ratioEffort-0.25)
-            }
-        }
        //var incli = (energie.reduce((a,b) => a+b) / energie.length) / (state.user.poids * 9.81 * vitesses[vitesses.length-1])
        var bvalid = 0
        if (defi !== undefined)
        {
+           if (energie.length > 0) {
+               var ratioEffort = state.user.pma ? (energie.reduce((a,b) => a+b) / energie.length) / state.user.pma : (energie.reduce((a,b) => a+b) / energie.length) / 250 //bonus d'effort
+               if (ratioEffort > 0.5){
+                   ratioEffort > 0.75 ? defi.points = defi.points + defi.points * (ratioEffort-0.5) : defi.points = defi.points+defi.points * (ratioEffort-0.25)
+               }
+           }
            for ( var i = 0; i < defi.buts.length; i++){
                var but = defi.buts[i]
-               if (but.long === undefined){
+               if (defi.long === undefined){
                    if ((but.unit === "m" && distance*1000 >= but.number)
                        || (but.unit === "watts" && energie.length > 0 && energie.reduce((a,b)=>a+b) >= but.number)
-                        || (but.unit ==="secondes" && moment.duration(currentTime).asSeconds())
+                       || (but.unit ==="secondes" && moment.duration(currentTime).asSeconds() - defi.startTime === but.number)
+                       || (but.unit === "%" && energie.length > 0 && energiep.length > 0 && defi.startE !== null && (energie.reduce((a,b) => a+b) - defi.startE >= energiep.reduce((a,b) => a+b)  - defi.startE )  )
                         )
                    {
                        bvalid = bvalid+1
                    }
+                   if (but.unit == "%"){                                                                             //cas des défis de pentes an fonction de la durée écoulée
+                       var v = distance / (moment.duration(currentTime).asSeconds() - defi.startTime)                   //calcul de la vitesse moyenne sur la durée défis
+                       if (defi.startE == undefined){
+                           defis[defic].startE = energie.reduce((a,b) => a+b)
+                           setDefis(defis)
+                       } else {
+                           var pth = v*state.user.poids*9.81*but.number*6
+                           sendMessage(3,`{"watts":${pth}}`)
+                           setWatts(Math.round(pth))
+                           setenergiep([...energiep,pth])                                                      //calcul de l'énergie qu'aurait dû produire l'utilisateur à
+                       }                                                                                             //cette vitesse pour valider son défi au degré de pente défini
+                   }
                } else {
                    //validation des défis longs
-                   if ((defis[defic].butUnit === "m" && state.user.totalDistance + distance >= defis[defic].butNumber)
-                       || (defis[defic].butUnit === "watts" && state.user.totalEnergie + energie >= defis[defic].butNumber)
+                   if ((but.unit === "m" && state.user.totalDistance + distance >= but.number)
+                       || (but.unit === "watts" && state.user.totalEnergie + energie >= but.number)
                             || (but.unit ==="secondes" && moment.duration(currentTime).asSeconds()) ){
                        bvalid = bvalid+1
 
@@ -309,26 +322,13 @@ export default function Compteur (props) {
            }
            if (bvalid === defis[defic].buts.length){
                setDefisValid([...defisValid, defi])
-               setDefic(defic => defic + 1)
-               defis[defic].startTime = moment.duration(currentTime).asSeconds()
-               console.log(defis[defic].startTime)
-               //setDefis(defis)
-           }
-               /* defis de pente
-               if (defis[defic].butUnit[d] === "%"
-                    && defis[defic].butNumber[d] === incli && defis[defic].butUnit[d+1] === "temps"
-                    && defis[defic].butNumber[d+1] === moment.duration(currentTime).asSeconds()){
-                        setDefisValid([...defisValid,defi])
-                        setDefic(defic => defic+1)
-
-                        let ps = defis[defic+1].butNumber * 9.81 * state.user.poids * vitesses[vitesses.length-1]
-                         if (ps <= energie-10 || ps >= energie+10) {
-                            sendMessage(3, `watts: ${ps}`)
-                            setErreur(["Mode Defi Pente","Attention, vous avez choisi un défi pente," +
-                            " pendant la durée de ce défi vous ne pouvez pas modifier la puissance demandée."])
-                        }
+               if (defis.length > defic) {
+                   setDefic(defic => defic + 1)
+                   defis[defic].startTime = moment.duration(currentTime).asSeconds()
+                   setDefis(defis)
                }
-           }*/
+               //
+           }
        }
    }
 
@@ -483,7 +483,7 @@ export default function Compteur (props) {
    React.useEffect(() =>{
         ValiderDefis()
      //saveSession()
-   },[distance,energie])
+   },[distance,energie,defis])
    // réccupération des défis longs
   React.useEffect(()=>{
       console.log(RNLocalize.getCountry())
@@ -493,6 +493,12 @@ export default function Compteur (props) {
       defis[defic].startTime = 0
       setDefis(defis)
   },[])
+  React.useEffect( () => {
+        if (defis[defic] !== undefined) {
+            defis[defic].startTime = moment.duration(currentTime).asSeconds()
+            setDefis(defis)
+        }
+    }, [defic])
 
  React.useEffect(()=>{
    if (modal == false) {

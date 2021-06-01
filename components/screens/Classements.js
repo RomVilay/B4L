@@ -32,29 +32,29 @@ export default function Classements(props) {
     'Rémi12',
     'Chris'
   ])
-  const [categorie,setCategorie] = useState("")
+  const [categorie,setCategorie] = useState("general")
   const [position,setPosition] =  useState(206)
   const [membres,setMembres] = useState(212)
   const labls = state.user.genre ?
-      [{label:"Classement Général",value:"general"},
-        {label:"Classement Homme",value:"homme"},
-        {label:"Classement junior homme",value:"homme/junior"},
-        {label:"Classement senior homme",value:"homme/senior"},
-        {label:"Classement espoir homme",value:"homme/espoir"},
-        {label:"classement master1 homme",value:"homme/master1"},
-        {label:"classement master2 homme",value:"homme/master2"},
-        {label:"classement master3 homme",value:"homme/master3"},
-        {label:"Classement Femme",value:"femme"},
-        {label:"Classement junior femme",value:"femme/junior"},
-        {label:"Classement senior femme",value:"homme/senior"},
-        {label:"Classement espoir femme",value:"femme/espoir"},
-        {label:"classement master1 femme",value:"femme/master1"},
-        {label:"classement master2 femme",value:"femme/master2"},
-        {label:"classement master3 femme",value:"femme/master3"},
+      [{key:"0",label:"Classement Général",value:"general"},
+        {key:"1",label:"Classement Homme",value:"homme"},
+        {key:"2",label:"Classement junior homme",value:"homme/junior"},
+        {key:"3",label:"Classement senior homme",value:"homme/senior"},
+        {key:"4",label:"Classement espoir homme",value:"homme/espoir"},
+        {key:"5",label:"classement master1 homme",value:"homme/master1"},
+        {key:"6",label:"classement master2 homme",value:"homme/master2"},
+        {key:"7",label:"classement master3 homme",value:"homme/master3"},
+        {key:"8",label:"Classement Femme",value:"femme"},
+        {key:"9",label:"Classement junior femme",value:"femme/junior"},
+        {key:"10",label:"Classement senior femme",value:"femme/senior"},
+        {key:"11",label:"Classement espoir femme",value:"femme/espoir"},
+        {key:"12",label:"classement master1 femme",value:"femme/master1"},
+        {key:"13",label:"classement master2 femme",value:"femme/master2"},
+        {key:"14",label:"classement master3 femme",value:"femme/master3"},
       ] : [{label:"Classement Général",value:"general"},
         {label:"Classement Femme",value:"femme"},
         {label:"Classement junior femme",value:"femme/junior"},
-        {label:"Classement senior femme",value:"homme/senior"},
+        {label:"Classement senior femme",value:"femme/senior"},
         {label:"Classement espoir femme",value:"femme/espoir"},
         {label:"classement master1 femme",value:"femme/master1"},
         {label:"classement master2 femme",value:"femme/master2"},
@@ -67,6 +67,8 @@ export default function Classements(props) {
         {label:"classement master2 homme",value:"homme/master2"},
         {label:"classement master3 homme",value:"homme/master3"},
       ]
+  const[open, setOpen] = useState(false);
+  const[selected, setSelected] = useState("general");
   async function classement (classement){
     const listUsers = await getClassement(state.user.username,state.token,classement)
     if (listUsers.message) {
@@ -150,19 +152,25 @@ export default function Classements(props) {
           <View style={[styles.middle, {width: '90%'}]}>
             <View style={styles.selectClass}>
             <DropDownPicker
+                open={open}
+                setOpen={setOpen}
+                setValue={setCategorie}
                 items={labls}
-                defaultValue="general"
+                value={categorie}
                 style={[styles.inputContainer,{color: "white", height:50}]}
                 itemStyle={{
-                  justifyContent: 'center'
+                  justifyContent: 'center',
                 }}
                 containerStyle={{height:50}}
-                dropDownStyle={{
+                dropDownContainerStyle={{
                   backgroundColor: '#284462',
-                  borderTopWidth:0
+                  borderTopWidth:0,
+                  width:"80.5%",
+                  borderColor:"#5FCDFA"
                 }}
-                labelStyle={{color:"white"}}
-                onChangeItem={ item => setCategorie(item.value)}
+                textStyle={{color:"white"}}
+                onChangeValue={ (value) => {console.log(value)}}//setCategorie(item.value)}
+                listMode="SCROLLVIEW"
                 />
 
             </View>
@@ -343,7 +351,7 @@ const styles = StyleSheet.create({
     flex: 5,
     flexDirection: 'column',
     alignItems: 'center',
-    zIndex: 100
+    marginTop:"5%"
   },
   midMid: {
     flexDirection: 'row',
