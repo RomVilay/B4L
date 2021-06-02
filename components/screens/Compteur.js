@@ -58,9 +58,9 @@ export default function Compteur (props) {
   const [defisValid,setDefisValid] = React.useState([])     // tableaux des défis réalisés
   const [defic,setDefic] = React.useState(0)                // défis cours
   const [watts,setWatts] = React.useState(200)              // consigne de production
-  const [vitesses,setVitesses] = React.useState([])         // relevés de vitesse
+  const [vitesses,setVitesses] = React.useState([0])         // relevés de vitesse
   const [inclinaison,setInclinaison] = React.useState([])   // relevés inclinaison
-  const [energie,setEnergie] = React.useState([])            // relevés énergie produite
+  const [energie,setEnergie] = React.useState([0])            // relevés énergie produite
   const [distance,setDistance] = React.useState(0)          // cumul de distance pour la session
   //const [ws,setWs] = React.useState(Platform.OS === "ios" ? new WebSocket("ws://localhost:8100") : new WebSocket("ws://echo.websocket.org"))
   const [erreur,setErreur] = React.useState([0,0])          // tableau pour une erreur [titre, message]
@@ -159,9 +159,10 @@ export default function Compteur (props) {
       }
       else {
       cas où la vitesse est inférieure
-
       }*/
-    var nend;
+      //var rotation = Math.round(Math.random() * (12 - 3 + 1)) + 3
+      console.log(`départ: ${startPosition} - end: ${endPosition} - angle: ${angle}`)
+      var nend;
      if (up) {
        if (endPosition > -100) {
            setUp(false)
@@ -176,6 +177,7 @@ export default function Compteur (props) {
              console.log("seg: "+seg)
          }*/
        setSeg(seg => seg+7)
+       //RotationVitesse()
        sendMessage(1,`{"rg":${seg*2.6525}}`)
        setEnergie([...energie,100+seg])
        /*setInclinaison([...inclinaison,1])
@@ -185,16 +187,16 @@ export default function Compteur (props) {
       } else {
        if (endPosition < -118) {
            setUp(true)
-       }
+        }
         nend = endPosition - 10;
         setSPosition(endPosition)
         setEPosition(nend)
-        setEnergie([...energie,100-seg])
         setAngle(nend)
-        setSeg(seg => seg-7)
+        setSeg(seg => seg - 7)
         //setTimeout(()=>{setSeg(seg => seg-7)},500)
        //setVitesses([...vitesses,seg])
        sendMessage(1,`{"rg":${seg*2.6525}}`)
+       setEnergie([...energie,100-seg])
        //setInclinaison([...inclinaison,1])
         /* calcul segment / vitesse
         if (vitesses.length > 0 && vitesses[vitesses.length-2] > vitesses [vitesses.length-1]){
@@ -205,11 +207,22 @@ export default function Compteur (props) {
        //sendMessage(1,`{"US":10,"IS":20}`)
        //sendMessage(1,`{"rg":${seg*2.6525},"US":10,"IS":20,"Temp":25}`)
        //sendMessage(1,`{"Temp":25}`)
+       */
         if (endPosition <= -130) {
           setUp(true);
-        }*/
+        }
       }
   }
+  const RotationVitesse = () => {
+      var diff = vitesses.length >= 2 ? vitesses[vitesses.length-2] - vitesses[vitesses.length-1] : vitesses[vitesses.length-1]
+      var ang = endPosition + diff*3.5;
+      setSPosition(endPosition)
+      setEPosition(ang)
+      setAngle(ang)
+      //setSeg(seg + (diff/180)*200)
+      console.log(`diff: ${diff} - ang : ${ang} - vitesse : ${vitesses.length} - v1: ${vitesses[vitesses.length-1]}`)
+      }
+
   //déclenchement de l'animation du compteur à l'ouverture de la page
   React.useEffect(()=> {
     StartImageRotateFunction()
@@ -298,17 +311,18 @@ export default function Compteur (props) {
                    {
                        bvalid = bvalid+1
                    }
-                   if (but.unit == "%"){                                                                             //cas des défis de pentes an fonction de la durée écoulée
-                       var v = distance / (moment.duration(currentTime).asSeconds() - defi.startTime)                   //calcul de la vitesse moyenne sur la durée défis
+                   if (but.unit == "%"){                                              //cas des défis de pentes an fonction de la durée écoulée
+                       var v = vitesses[vitesses.length - 1]//vitesses.reduce((sum,item)=>sum+item) / vitesses.length
                        if (defi.startE == undefined){
                            defis[defic].startE = energie.reduce((a,b) => a+b)
                            setDefis(defis)
                        } else {
-                           var pth = v*state.user.poids*9.81*but.number*6
-                           sendMessage(3,`{"watts":${pth}}`)
-                           setWatts(Math.round(pth))
-                           setenergiep([...energiep,pth])                                                      //calcul de l'énergie qu'aurait dû produire l'utilisateur à
-                       }                                                                                             //cette vitesse pour valider son défi au degré de pente défini
+                           var pth = v*state.user.poids*9.81*but.number*0.6           //calcul de la force à demander à l'utilisateur, en fonction de sa vitesse actuelle
+                           console.log(v+" - "+pth)
+                           //sendMessage(3,`{"watts":${pth}}`)
+                           //setWatts(Math.round(pth))
+                           setenergiep([...energiep,pth])
+                       }
                    }
                } else {
                    //validation des défis longs
@@ -509,6 +523,7 @@ export default function Compteur (props) {
   React.useEffect(
       () => {if (donnees !== undefined) {
           readData(donnees)
+          //RotationVitesse()
       }
       },[donnees]
   )

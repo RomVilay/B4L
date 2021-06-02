@@ -169,7 +169,6 @@ export default function Classements(props) {
                   borderColor:"#5FCDFA"
                 }}
                 textStyle={{color:"white",textAlign: 'justify', marginLeft:"15%"}}
-                onChangeValue={ (value) => {console.log(value)}}//setCategorie(item.value)}
                 listMode="SCROLLVIEW"
                 />
 
