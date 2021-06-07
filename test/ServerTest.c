@@ -113,7 +113,7 @@ int main(int argc, char const *argv[])
     send(new_socket,buffer,strlen(buffer),0);
     //memset(buffer, 0, sizeof buffer);
      //random relevés
-
+    /*
     int temp = (rand() % (37 + 1 - 20 )) + 20;
     int rp = (rand() % (101 - 20) + 20);
     char *str;
@@ -130,7 +130,7 @@ int main(int argc, char const *argv[])
     buffer[1] = str;
     buffer[2] = cs & 0xFF;
     send(new_socket, buffer, strlen(buffer), 0);
-    /*
+
             if ( strcmp(buffer,c) == 10){
                 close(new_socket);
                 printf("client déconnecté");
