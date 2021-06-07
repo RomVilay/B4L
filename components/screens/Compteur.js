@@ -456,15 +456,17 @@ export default function Compteur(props) {
         if (Platform.OS == 'ios') { //configuration iphone
             config = {
                 port: 8080,
-                host: '127.0.0.1',
+                host: '192.168.5.2',
                 localAddress: '127.0.0.1',
-                reuseAddress: true
+                reuseAddress: true,
+                interface:'wifi'
             }
-        } else { //configuration android
+        } else { //configuration android device
             config = {
                 port: 8080,
-                host: '10.0.2.2',
-                reuseAddress: true
+                host: '192.168.5.2',
+                reuseAddress: true,
+                interface:'wifi'
             }
         }
         try {
@@ -532,7 +534,6 @@ export default function Compteur(props) {
      * @set vitesses/rpm/energie produite
      */
     function readData(message) {
-        console.log(message.readUInt8)
         if (modal == false && (erreur[0] !== "Fin de Session")) {
             console.log(message.readUInt8([4]))
             let type = message.readUInt8([4])

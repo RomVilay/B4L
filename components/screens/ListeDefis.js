@@ -125,11 +125,12 @@ export default function  ListeDefis(props) {
                     </Animated.View>
                 </View>
                 <View style={styles.footer}>
-                    <TouchableOpacity style={{marginBottom:'10%'}} onPress={()=> {
+                    {defisSelect.length > 0 ? <TouchableOpacity style={{marginBottom:'10%'}} onPress={()=> {
                         props.navigation.navigate("Compteur",{defis:defisSelect})
                     }} color={'white'}>
                         <Text style={styles.titreBleu}>appuyez pour continuer</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> : <></>}
+
                     <NavApp  navigation={props.navigation}/>
                 </View>
         </SafeAreaView>
