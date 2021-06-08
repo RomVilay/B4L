@@ -47,7 +47,25 @@ export default function  ListeDefis(props) {
         setIsLoading(true)
         let list = await listeDefis(state.token,state.user.objectifs);
         if (list.message) {
-             Alert.alert('Erreur serveur', 'Veuillez rééssayer plus tard');
+             Alert.alert('Erreur serveur', list.message);
+             setListeDefs([{
+                 "objectifs": [
+                     "1","2","3","4"
+                 ],
+                 "_id": "602a81dd8e7a4103f8366c59",
+                 "nomDefi": "Faire 50 mètres",
+                 "points": 200,
+                 "butNumber": 50,
+                 "butUnit": "m",
+                 "buts": [
+                     {
+                         "_id": "60acc575a9ed427566d526af",
+                         "unit": "m",
+                         "number": 50,
+                         "type": "distance"
+                     }
+                 ],
+             }])
         } else {
             await setListeDefs(list.filter(defi => defi.long == undefined ).sort((defi1,defi2) => defi1.butNumber - defi2.butNumber))//setState({user, token: state.token});
         }
