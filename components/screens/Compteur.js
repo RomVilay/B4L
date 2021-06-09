@@ -34,6 +34,7 @@ import {ModalError} from './modalError'
 import TcpSocket from 'react-native-tcp-socket';
 import {LogBox} from 'react-native';
 import RNLocalize from 'react-native-localize'
+import DeviceInfo from "react-native-device-info";
 
 import NotificationSounds, {playSampleSound} from 'react-native-notification-sounds'
 
@@ -132,8 +133,8 @@ export default function Compteur(props) {
                 "totalEnergie": isNaN(state.user.totalEnergie + energie.reduce((a, b) => a + b)) ? 1 : state.user.totalEnergie + energie.reduce((a, b) => a + b),
                 "totalDistance": state.user.totalDistance + distance,
                 "totalPoints": defisValid.length > 0 ?
-                    defisValid.map(defi => defi.points).reduce((a, b) => a + b) + state.user.totalPoints : state.user.totalPoints,
-                "pma": state.user.pma ? ((energie.reduce((a, b) => a + b) / energie.length) + state.user.pma) / 2 : ((energie.reduce((a, b) => a + b) / energie.length) + 250) / 2
+                    Math.round(defisValid.map(defi => defi.points).reduce((a, b) => a + b) + state.user.totalPoints) : state.user.totalPoints,
+                "pma": state.user.pma ? Math.round((energie.reduce((a, b) => a + b) / energie.length) + state.user.pma / 2 ): ((energie.reduce((a, b) => a + b) / energie.length) + 250) / 2
             }
             // defis longs : console.log(tab.length+" - "+tab.length > 0 ? defisValid.filter(defi => defi.long !== undefined).map(defi=>defi._id) : state.user.defisLongs)
             //mise à jour de l'utilisateur ( distance parcourue, points, energie produite, temps passé )
@@ -451,24 +452,58 @@ export default function Compteur(props) {
     /**
      * fonction d'initialisation du socket tcp
      */
-    function socketServer() {
-        let config;
-        if (Platform.OS == 'ios') { //configuration iphone
+    async function socketServer() {
+        /*if (Platform.OS == 'ios') {              //configuration iphone
             config = {
                 port: 8080,
-                host: '192.168.5.2',
+                host: '127.0.0.1',
                 localAddress: '127.0.0.1',
                 reuseAddress: true,
-                interface:'wifi'
             }
         } else { //configuration android device
             config = {
                 port: 8080,
-                host: '192.168.5.2',
-                reuseAddress: true,
-                interface:'wifi'
+                host: '10.0.2.2',
+                reuseAddress: true
             }
-        }
+        }*/
+        let config = await DeviceInfo.isEmulator()
+            .then((status) => {
+            if (status) {                                //configuration simulateur
+                if (Platform.OS == 'ios') {              //configuration iphone
+                    return  config = {
+                        port: 8080,
+                        host: '127.0.0.1',
+                        localAddress: '127.0.0.1',
+                        reuseAddress: true,
+                    }
+                } else { //configuration android device
+                    return config = {
+                        port: 8080,
+                        host: '10.0.2.2',
+                        reuseAddress: true
+                    }
+                }
+            } else {
+                if (Platform.OS == 'ios') {             //configuration iphone
+                    return config = {
+                        port: 8080,
+                        host: '192.168.5.2',
+                        localAddress: '127.0.0.1',
+                        reuseAddress: true,
+                        interface:'wifi'
+                    }
+                } else {                                //configuration android device
+                    return config = {
+                        port: 8080,
+                        host: '192.168.5.2',
+                        reuseAddress: true,
+                        interface:'wifi'
+                    }
+                }
+            }
+        })
+        console.log(config)
         try {
             server.connect(config,
                 () => {
