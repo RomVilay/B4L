@@ -69,7 +69,7 @@ export default function Compteur(props) {
     let [t, setT] = React.useState(15)                                         // timer pour l'écoulement de la barre de chargement
     const [timeModal, setTimeModal] = React.useState()                                   // timer pour l'affichage d'une modale
     const [server, setServer] = React.useState(new TcpSocket.Socket());                  // initialisation de la variable du socket
-    const [donnees, setDonnees] = React.useState()                                       // données renvoyées par la carte
+    const [donnees, setDonnees] = React.useState(new Buffer())                                       // données renvoyées par la carte
     const [energiep, setenergiep] = React.useState([])                         // énergie théorique nécessaire pour que l'utilisateur valide un défis de pente
     React.useEffect(() => {
         LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
@@ -406,15 +406,18 @@ export default function Compteur(props) {
             0x01, 0x01,                         // id msg: incrément /16 bits
             0x02,                               // type msg: 1 octet
             0x01, 0x01,                         // longueur du msg: 16 bits
+            0x01,                               // compte rendu
             0x01, 0x01,                         // checksum header, 16 bits
         ])
         let contenu = new Buffer.from(msg)
+        head.write(donnees.read())
         head.writeUInt8(1, 2)                   //incrément 9 bits
         head.writeUInt8(type, 4)                //type de message 8 bits
         head.writeUInt8(contenu.byteLength * 8, 5) //longueur du message 16bits*/
-        head.writeUInt16BE(crc16(head, 0, 4), 6) //checksum header 16 bits
+        head.writeUInt16BE(crc16(head, 0, 4), 8) //checksum header 16 bits
         let chkf = new Buffer.from([crc16(contenu, 0, contenu.length - 1)])
-        let message = new Buffer.concat([head, contenu, chkf])
+        let message = new Blob([head,contenu,chkf])
+        //let message = new Buffer.concat([head, contenu, chkf])
         server.write(message)
     }
 
@@ -453,20 +456,6 @@ export default function Compteur(props) {
      * fonction d'initialisation du socket tcp
      */
     async function socketServer() {
-        /*if (Platform.OS == 'ios') {              //configuration iphone
-            config = {
-                port: 8080,
-                host: '127.0.0.1',
-                localAddress: '127.0.0.1',
-                reuseAddress: true,
-            }
-        } else { //configuration android device
-            config = {
-                port: 8080,
-                host: '10.0.2.2',
-                reuseAddress: true
-            }
-        }*/
         let config = await DeviceInfo.isEmulator()
             .then((status) => {
             if (status) {                                //configuration simulateur
@@ -477,7 +466,7 @@ export default function Compteur(props) {
                         localAddress: '127.0.0.1',
                         reuseAddress: true,
                     }
-                } else { //configuration android device
+                } else {                                //configuration android device
                     return config = {
                         port: 8080,
                         host: '10.0.2.2',
@@ -534,7 +523,6 @@ export default function Compteur(props) {
     }, [distance, energie, defis])
     // réccupération des défis longs
     React.useEffect(() => {
-        console.log(RNLocalize.getCountry())
         getDefiLong()
         //testWbSckt()
         socketServer()
@@ -569,6 +557,8 @@ export default function Compteur(props) {
      * @set vitesses/rpm/energie produite
      */
     function readData(message) {
+        console.log(message)
+
         if (modal == false && (erreur[0] !== "Fin de Session")) {
             console.log(message.readUInt8([4]))
             let type = message.readUInt8([4])
