@@ -21,6 +21,7 @@ import Compteur from '../screens/Compteur';
 import ListeDefis from '../screens/ListeDefis';
 import Statistiques from '../screens/Statistiques';
 import ForgottenPassword from '../screens/ForgottenPassword';
+import Setup from '../screens/Setup';
 
 const Stack = createStackNavigator();
 
@@ -37,6 +38,7 @@ function AccueilNavigator() {
             <Stack.Screen name="Jumelage" component={Jumelage} options={{ headerShown: false }} />
             <Stack.Screen name="Statistiques" component={Statistiques} options={{ headerShown: false }} />
             <Stack.Screen name="ListeDefis" component={ListeDefis} options={{headerShown: false}} />
+
         </Stack.Navigator>
     )
 }
@@ -111,6 +113,7 @@ function AppNavigator() {
         <Stack.Screen name="Compteur" component={Compteur} options={{headerShown: false}} />
         <Stack.Screen name="ListeDefis" component={ListeDefis} options={{headerShown: false}} />
         <Stack.Screen name="Objectifs" component={Objectifs} options={{headerShown: false}} />
+        <Stack.Screen name="Setup" component={Setup} options={{headerShown: false}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

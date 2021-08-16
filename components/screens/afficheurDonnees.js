@@ -135,7 +135,8 @@ export default function AfficheurDonnees (props) {
                     ]}>
                     <Animated.View style={[styles.textbloc, trans0.getLayout()]}>
                         <Text style={[styles.midText, {fontSize: 30}]}>
-                            {Number.parseFloat(props.kmh * (25 / (3 * Math.PI * 0.622))).toFixed(2)  /* conversion des rotations par minutes en tr/min à partir de la vitesse en kmh */ }
+                            { props.rpm //Number.parseFloat(props.kmh * (25 / (3 * Math.PI * 0.622))).toFixed(2)  /* conversion des rotations par minutes en tr/min à partir de la vitesse en kmh */
+                                 }
                             </Text>
                         <Text style={[styles.midText2, {fontSize: 20}]}>rpm</Text>
                     </Animated.View>
@@ -161,7 +162,7 @@ export default function AfficheurDonnees (props) {
                 <Animated.View
                     style={[styles.textbloc, {width:25, height:35}, trans2.getLayout()]}>
                     <Text style={[styles.midText, {fontSize: 30, width:25}]}>
-                        {props.kmh}
+                        {Math.round(props.kmh)}
                     </Text>
                     <Text style={[styles.midText2,{fontSize:20}]}>kmh</Text>
                 </Animated.View>
@@ -170,7 +171,7 @@ export default function AfficheurDonnees (props) {
                 </TouchableOpacity>
             </View>
             <View style={styles.midBot}>
-                <View style={[styles.textbloc,{paddingTop:Platform.OS =="android" ? 18 : 0} ]}>
+                <View style={[styles.textbloc,{paddingTop:Platform.OS =="android" ? 18 : 15} ]}>
                     <View style={{flexDirection: 'column'}}>
                         <Text style={[styles.midText, {fontSize: 20}]}>
                             {props.distance < 1 ? Math.round(props.distance * 1000) : Number.parseFloat(props.distance).toFixed(2)}
@@ -246,7 +247,7 @@ const styles = StyleSheet.create(
             flexDirection: 'row',
             alignItems: 'center',
             zIndex: 100,
-            marginTop: Platform.OS === "android" ? '8%' :0,
+            marginTop: Platform.OS === "android" ? '8%' :30,
             paddingBottom: Platform.OS === "ios" ? '2%' :0,
             paddingLeft:112,
         },
