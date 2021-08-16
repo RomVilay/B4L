@@ -320,7 +320,8 @@ export default function Parametres(props) {
                             textColor="white"
                             locale="fr-FR"
                             style={{
-                                flex:1
+                                flex:1,
+                                color:"white"
                             }}
 
                         />
