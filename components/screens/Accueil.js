@@ -17,7 +17,7 @@ import {refreshState} from '../utils/navFunctions';
 var avatar = require('../../assets/avatar.png');
 import Avatar from "./Avatar";
 import DefisLong from "./DefisLong";
-
+import * as RNLocalize from "react-native-localize";
 
 export default function Accueil(props) {
   const [state, setState] = useContext(Context);
@@ -40,9 +40,9 @@ export default function Accueil(props) {
           setDatacumul([energie[0],e2[0],dist[0]])
           break;
         case "2":
-          e2 = formatEnergie(state.user.totalEnergie, "co2")
+          e2 = formatEnergie(state.user.totalEnergie, "$")
           setDatacumul([energie[0],e2[0],dist[0]])
-          setIndices([[energie[0],"produits"],[e2[1],"économisées"],[dist[1],"cumulés"]])
+          setIndices([[energie[1],"produits"],[e2[1],"économisées"],[dist[1],"cumulés"]])
           break;
         case "3":
           e2 = formatEnergie(state.user.totalEnergie, "co2")
@@ -92,7 +92,31 @@ export default function Accueil(props) {
       energie/860.8321 < 1000 ? resp = [Math.round(energie/860.8321),"CALS"] : resp = [Math.round(energie/860.8321)*Math.pow(10,-3),"KCALS"]
     }
     if (unit === "co2"){
-      energie*Math.pow(10,-3)/72 < 1000 ? resp = [ Number.parseFloat(energie*Math.pow(10,-3)/72).toFixed(2),"gCO2"] : resp = [Math.round(energie*Math.pow(10,-3)/72*Math.pow(10,-3)),"kgCO2"]
+      var co2 = 0
+      switch (RNLocalize.getCountry()) {
+        case "FR":
+          co2 = 72
+          break;
+        case "GB":
+          co2 = 457
+          break;
+        case "US":
+          co2 = 522
+          break;
+      }
+      energie*Math.pow(10,-3)*co2 < 1000 ? resp = [ Number.parseFloat(energie*Math.pow(10,-3)*co2).toFixed(2),"gCO2"] : resp = [Math.round(energie*Math.pow(10,-3)*co2*Math.pow(10,-3)),"kgCO2"]
+    }
+    if ( unit === "$"){
+     switch (RNLocalize.getCountry()){
+       case "FR":
+         resp = [ Math.round(energie * 0.1546), "€"]
+        break;
+       case "US":
+         resp = [ Math.round(energie * 0.1189), "$"]
+        break;
+       case "GB":
+         resp = [ Math.round(energie * 0.16633), "£"]
+     }
     }
     return resp
   }
