@@ -38,17 +38,17 @@ export const ModalError = (props) => {
                         </TouchableOpacity>
                     </>
                     :
-                    props.styleModal.backgroundColor == styles.endingModal.backgroundColor ?
+                    props.styleModal.backgroundColor === styles.endingModal.backgroundColor ?
                         <>
-                            <Text style={[styles.midText,{fontSize:25,marginTop:35, height:25}]}>{props.erreur[0]}</Text>
-                            <Text style={[styles.midText,{fontSize:15, textAlign:"justify",marginLeft:"5%", marginRight:"5%", textTransform:"none", height:50, padding:5}]}>{props.erreur[1]}</Text>
+                            <Text style={[styles.midText,{fontSize:25, height:25, top: -15}]}>{props.erreur[0]}</Text>
+                            <Text style={[styles.midText,{fontSize:15, top: -10,textAlign:"justify",marginLeft:"5%", marginRight:"5%", textTransform:"none", height:50, }]}>{props.erreur[1]}</Text>
                             <TouchableOpacity onPress={() => {
                                 props.setModal(false)
                             }}
                             >
                                 <View>
-                                    <View style={{borderColor: "white", width: 180, height: 20,borderWidth:2, borderRadius:10}}/>
-                                    <View style={{ backgroundColor:"white",width: 180*(props.t/15), height: 20,position:"absolute", borderRadius:10 }}/>
+                                    <View style={{borderColor: "white", width: 180, height: 20,borderWidth:2, borderRadius:10, top: -20}}/>
+                                    <View style={{ backgroundColor:"white",width: 180*(props.t/15),  top: -20,height: 20,position:"absolute", borderRadius:10 }}/>
                                 </View>
                             </TouchableOpacity>
                         </>
@@ -95,7 +95,9 @@ const styles = StyleSheet.create({
         width:"75%",
         backgroundColor:"#5FCDFAAA",
         justifyContent:"center",
-        alignItems:"center"
+        alignItems:"center",
+        borderWidth: 3,
+        borderColor : "white"
     },
     midText: {
         color: 'white',

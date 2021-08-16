@@ -506,7 +506,7 @@ export default function Compteur(props) {
         goTo(props)*/
          setModal(true)
          console.log(erreur[0])
-         const timer = setInterval(showWarning, 1250)
+        /* const timer = setInterval(showWarning, 1250)
          setTimeModal(timer)
             let t = setInterval(()=>{
               if (w <= 2){
@@ -527,7 +527,7 @@ export default function Compteur(props) {
             sendMessage(5, cons,0,inc )
             console.log(w)
           }
-        },1000)
+        },1000)*/
     }
 
     /**
@@ -1030,11 +1030,11 @@ const styles = StyleSheet.create({
         marginTop: Platform.OS === "ios" ? "60%" : "30%",
         marginLeft: "10%",
         paddingTop: "5%",
-        height: 170,
+        height: 120,
         width: "75%",
         backgroundColor: "#5FCDFAAA",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
     },
     header: {
         flex: 2,
