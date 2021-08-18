@@ -441,8 +441,7 @@ export default function Compteur(props) {
         if (contenu.length > 0 ) {
             head.fill(contenu, 12, 12 + contenu.length)
             head.writeUInt16LE(crc16(head, 12, 12 + contenu.length-1 ), head.length - 3)
-            //setLastmessage(head)
-            //console.log(head)
+
             server.write("")
             server.write(head)
         } else {
@@ -457,11 +456,8 @@ export default function Compteur(props) {
      * @param w puissance de consigne actuelle
      */
     function stopSession(w) {
-        //setWatts(watts - 50 )
         setErreur(["Fin de Session", "Ralentissez progressivement avant la fin de la session."])
         setStyleModal(styles.endingModal)
-        /*server.destroy()
-        goTo(props)*/
          setModal(true)
          console.log(erreur[0])
          const timer = setInterval(showWarning, 1250)
