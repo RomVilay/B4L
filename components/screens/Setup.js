@@ -19,7 +19,7 @@ import DeviceInfo from "react-native-device-info";
 import moment from "moment";
 export default function Setup(props){
     const [server,setServer] = useState(new TcpSocket.Socket())
-    const [ip,setIp] = useState('127.0.0.1')//'192.168.1.200')
+    const [ip,setIp] = useState('127.0.0.1')//'192.168.1.200')////
     const [port,setPort] = useState(8080)//333)
     const [connect,setConnect] = useState(false)
     const [lastmessage,setLastmessage] = useState()
@@ -36,6 +36,8 @@ export default function Setup(props){
     const [led3,setLed3] = useState(0)
     const [buzzer,setBuzz] = useState(0)
     const [spare,setSpare] = useState(0)
+    const [router,setRouter] = useState("Netgear66")
+    const [krouter,setKrouter] = useState("Curlylotus66")
     require('node-libs-react-native/globals');
     const r = new Buffer.from('a55a00000002003a0001a14c000000007fc0000000000000c1fa00000000000000000000c148000000000000000000000000000001010100010000000000000000000000b8fb', 'hex')
     var t = ["tempAux",                 //température auxilliaire
@@ -67,14 +69,14 @@ export default function Setup(props){
     ]
     var consigne = Buffer.from([
         0xFF,0xFF,0xFF,0xFF, //consigne
-        0x01,       //force charge
-        0x00,       //shutdown amp
-        0x00,       //alimentation usb
-        0x00,       //led 1
-        0x00,       //led 2
-        0x00,       //led 3
-        0x00,       //buzzer
-        0x00       //spare
+        0x00,                //force charge
+        0x00,                //shutdown amp
+        0x00,                //alimentation usb
+        0x00,                //led 1
+        0x00,                //led 2
+        0x00,                //led 3
+        0x00,                //buzzer
+        0x00                 //spare
     ])
     consigne.writeFloatBE(0,0)
     var releves = new Buffer.from([
@@ -312,6 +314,7 @@ export default function Setup(props){
                     setDonnees(Object.entries(data).map(item => `${item} \n`))
                     break;
                 case 5: //consigne du mobile vers la carte
+                    consigne = contenu
                     console.log(`consigne: ${contenu.readFloatBE(0)} - force charge : ${contenu.toString('hex',4,5)} 
                     - shutdown :${contenu.toString('hex',5,6)} - etat usb :${contenu.toString('hex',6,7)} 
                     - led 1: ${contenu.toString('hex',7,8)} - led 2: ${contenu.toString('hex',8,9)} - led 3 : ${contenu.toString('hex',9,10)} 
@@ -347,18 +350,49 @@ export default function Setup(props){
             <Image style={styles.fond} source={require('../../assets/fond.png')} resizeMode="stretch" />
             <ScrollView contentContainerStyle={styles.container}>
                 <LogoMin style={{alignSelf:"center", marginTop:"15%"}}/>
-                <Text style={{color:"white", textAlign:"center", marginBottom:"20%"}}>Setup Screen</Text>
+                <Text style={{color:"white", textAlign:"center", margin:"5%", fontSize:25}}>Setup Screen</Text>
                 <View style={{ color:"white", alignItems:"center"}}>
-                    <Text style={{color:"white"}}>IP serveur</Text>
+                    <Text style={{color:"white"}}>IP carte embarquée</Text>
                     <TextInput value={ip} style={[ styles.inputContainer,{color:"white"}]} onChangeText={val => setIp(val)} placeholder={"192.168.1.200"} />
                     <Text style={{color:"white"}}>port</Text>
                     <TextInput value={port.toString()} style={[ styles.inputContainer,{color:"white"}]} onChangeText={val => setPort(val)} />
                 </View>
-                <Button title={"Connection"} onPress={() => socketServer() } />
-                <Text style={{color:"white"}} onPress={() => { props.navigation.navigate("Demarrage")}}>Retour</Text>
+                <Button title={"Connection"} onPress={() => socketServer() }  color="#5FCDFA" />
+                <View style={[{alignItems:"center", width: 195}, styles.inputContainer]}>
+                    <Text style={{ color:"white"}}>nouveau SSID</Text>
+                    <TextInput value={ip} style={[ styles.inputContainer,{color:"white"}]} placeholder={"velocnx"} />
+                    <Text style={{ color:"white"}}>clé</Text>
+                    <TextInput value={ip} style={[ styles.inputContainer,{color:"white"}]}   />
+                    <Button title={"modifier le ssid"}  color="#5FCDFA" />
+                </View>
+                <View style={[{alignItems:"center", width: 195}, styles.inputContainer]}>
+                    <Text style={{ color:"white"}}>connexion au routeur local</Text>
+                    <TextInput value={router} style={[ styles.inputContainer,{color:"white"}]} placeholder={"ssid"} />
+                    <Text style={{ color:"white"}}>clé</Text>
+                    <TextInput secureTextEntry={true} value={krouter} style={[ styles.inputContainer,{color:"white"}]}   />
+                    <Button title={"se connecter"}  color="#5FCDFA" onPress={ () => {
+                        //sendMessage(6,"ssid",1,inc)
+                    }}/>
+                </View>
+                <View style={[{alignItems:"center", width: 195}, styles.inputContainer]}>
+                    <Text style={{ color:"white", fontSize:15, borderBottomWidth: 3, borderBottomColor:"#5FCDFA"}}>configuration réseau</Text>
+                    <Text style={{ color:"white"}}>Adresse IP</Text>
+                    <TextInput  style={[ styles.inputContainer,{color:"white", width:100}]} placeholder={"ip"} />
+                    <Text style={{ color:"white"}}>Masque réseau</Text>
+                    <TextInput   style={[ styles.inputContainer,{color:"white", width:100}]}   />
+                    <Text style={{ color:"white"}}>Passerelle</Text>
+                    <TextInput   style={[ styles.inputContainer,{color:"white", width:100}]}   />
+                    <Text style={{ color:"white"}}>Adresse MAC</Text>
+                    <TextInput   style={[ styles.inputContainer,{color:"white", width:100}]}   />
+                    <Button title={"mettre à jour"}  color="#5FCDFA" onPress={ () => {
+                        //sendMessage(11,"config réseau",1,inc)
+                    }}/>
+                </View>
                 { connect ? <View >
                     <Text style={{color:"green", alignSelf:"center"}}> Connecté </Text>
-                    <TextInput value={consigne} style={styles.input} onChangeText={val => { Number.isNaN(parseFloat(val)) ? consigne.writeFloatBE(0,0) : consigne.writeFloatBE(parseFloat(val),0)}} placeholder="consigne" placeholderTextColor="white" />
+                    <Button title={"100"} onPress={()=> consigne.writeFloatLE(100.0,0)} />
+                    <Button title={"0"} onPress={()=> consigne.writeFloatLE(0,0)} />
+                    <TextInput value={consigne.readFloatLE(0)} style={styles.input} onChangeText={val => { consigne.writeFloatLE(val,0)}}/*Number.isNaN(parseFloat(val)) ? consigne.writeFloatBE(0,0) : consigne.writeFloatBE(parseFloat(val),0)}}*/ placeholder="consigne" placeholderTextColor="white" />
                     <TextInput value={fc} style={styles.input} onChangeText={val => consigne.writeUInt8(val,4)} placeholder="force charge" placeholderTextColor="white" />
                     <TextInput value={shutdown} style={styles.input} onChangeText={val => consigne.writeUInt8(val,5)} placeholder="shutdown" placeholderTextColor="white" />
                     <TextInput value={usb} style={styles.input} onChangeText={val => consigne.writeUInt8(val,6)} placeholder="etat usb" placeholderTextColor="white" />
@@ -366,21 +400,21 @@ export default function Setup(props){
                     <TextInput value={led2} style={styles.input} onChangeText={val => consigne.writeUInt8(val,8)} placeholder="led2" placeholderTextColor="white" />
                     <TextInput value={led3} style={styles.input} onChangeText={val => consigne.writeUInt8(val,9)} placeholder="led3" placeholderTextColor="white" />
                     <TextInput value={buzzer} style={styles.input} onChangeText={val => consigne.writeUInt8(val,10)} placeholder="etat buzzer" placeholderTextColor="white" />
-                    <Button title={'envoyer consigne'} onPress={ () => sendMessage(5, consigne/*Buffer.from(cons,fc,shutdown,usb,led1,led2,led3,buzzer,spare)*/,0,inc ) } />
+                    <Button title={'envoyer consigne'} onPress={ () =>{
+                        //consigne.writeFloatLE(750,0)
+                        console.log("consigne envoyée:"+consigne.readFloatLE(0))
+                        sendMessage(5, consigne,0,inc )
+                    } }/>
                     <Button title={'message relevés'} onPress={ () => server.write(sendMessage(1, releves,0, inc ))}   />
                     <Text style={{ color:"white"}}> Données Reçues:</Text>
                     <Text style={{ color:"white"}}> {typeMessage}</Text>
                     <Text style={{ color:"white"}}>{donnees !== undefined ? donnees.tempAux : 0}</Text>
                     <Text style={{ backgroundColor:"#FFFFFFAA"}}> {donnees} </Text>
-                    <View style={[{alignItems:"center"}, styles.inputContainer]}>
-                        <Text style={{ color:"white"}}>nouveau SSID</Text>
-                        <TextInput value={ip} style={[ styles.inputContainer,{color:"white"}]} placeholder={"velocnx"} />
-                        <Text style={{ color:"white"}}>clé</Text>
-                        <TextInput value={ip} style={[ styles.inputContainer,{color:"white"}]}   />
-                        <Button title={"modifier le ssid"}  />
-                    </View>
                     <Text style={{color:"white"}} onPress={() => {server.destroy()} }> Déconnexion </Text>
                 </View> : <></>}
+                <View style={{borderWidth:2, borderColor:"#5FCDFA",  marginTop: "5%", borderRadius: 10}}>
+                    <Text style={{color:"#5FCDFA", padding: "2%"}} onPress={() => { props.navigation.navigate("Demarrage")}}>Retour</Text>
+                </View>
             </ScrollView>
         </SafeAreaView>
     )
