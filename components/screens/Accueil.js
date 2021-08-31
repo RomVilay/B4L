@@ -26,21 +26,21 @@ export default function Accueil(props) {
   const [datacumul,setDatacumul] = useState([0,0,0])
   React.useEffect(()=>{
     if (Object.keys(state.user).length !== 0){
-      let dist = formatDistance(state.user.totalDistance)
-      let energie = formatEnergie(state.user.totalEnergie, "wh")
-      switch (state.user.objectifs[0]){
-        case "0":
-          let e2 = formatEnergie(state.user.totalEnergie, "cals")
+      let dist = state.user.totalDistance !== undefined ? formatDistance(state.user.totalDistance) : formatDistance(0)
+      let energie = state.user.totalEnergie !== undefined ? formatEnergie(state.user.totalEnergie, "wh") : formatEnergie(0, "wh")
+      switch (state.user.goals[0]){
+        case "1bf5d297-5ff1-42a1-9f48-98d45ad113f0":
+          let e2 = state.user.totalEnergie !== undefined ? formatEnergie(state.user.totalEnergie, "cals") : formatEnergie(0, "cals")
           setIndices([[e2[1],"dépensés"],[energie[1],"produits"],[dist[1],"cumulés"]])
           setDatacumul([e2[0],energie[0],dist[0]])
           break;
-        case "1":
-          e2 = formatEnergie(state.user.totalEnergie, "cals")
+        case "42098d44-1ad3-4a25-9272-c957d1800797":
+          e2 = state.user.totalEnergie !== undefined ? formatEnergie(state.user.totalEnergie, "cals") : formatEnergie(0, "cals")
           setIndices([[energie[1],"produits"],[e2[1],"brulées"],[dist[1],"cumulés"]])
           setDatacumul([energie[0],e2[0],dist[0]])
           break;
-        case "2":
-          e2 = formatEnergie(state.user.totalEnergie, "$")
+        /*case "2":
+          e2 = state.user.totalEnergie !== undefined ? formatEnergie(state.user.totalEnergie, "$") : : formatEnergie(0, "$")
           setDatacumul([energie[0],e2[0],dist[0]])
           setIndices([[energie[1],"produits"],[e2[1],"économisées"],[dist[1],"cumulés"]])
           break;
@@ -54,7 +54,12 @@ export default function Accueil(props) {
           e2 = formatEnergie(state.user.totalEnergie, "cals")
           setDatacumul([e2[0],energie[0],dist[0]])
           setIndices([[e2[1],"dépensés"],[energie[1],"générés"],[dist[1],"cumulés"]])
-          break;
+          break;*/
+        default :
+          //e2 = state.user.totalEnergie !== undefined ? formatEnergie(state.user.totalEnergie, "cals") : formatEnergie(0, "cals")
+          //setIndices([0,"dépensés"],[0,"produits"],[0,"cumulés"])
+          //setDatacumul([0,0,0])
+              break;
       }
     }
   },[state.user])
@@ -69,7 +74,8 @@ export default function Accueil(props) {
     if(state.user.unitDistance === "m" ){
       if (distance < 1000){
         return [distance, 'm']
-      } else {
+      }
+      else {
         return [Number.parseFloat(distance*Math.pow(10,-3)).toFixed(2), "km"]
       }
     }
@@ -124,7 +130,7 @@ export default function Accueil(props) {
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />
       {
-        Object.keys(state.user).length === 0 || Object.keys(state.user.defisLongs).length !== 0 ? <></> : <DefisLong visible={state.user.defisLongs.length == 0} />
+        Object.keys(state.user).length === 0 || Object.keys(state.user.challenges).length !== 0 ? <></> : <DefisLong visible={state.user.challenges.length == 0} />
       }
       {/* HEADER */}
       <View style={styles.header}>

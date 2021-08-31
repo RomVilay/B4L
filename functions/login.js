@@ -29,20 +29,23 @@ async function register(data, appToken = APP_TOKEN) {
  */
 async function login(data, appToken = APP_TOKEN) {
   let body;
+  console.log(data)
   if (data.username) {
     body = {username: data.username, password: data.password};
   } else {
     body = {mail: data.mail, password: data.password};
   }
+
   let post = await fetchWithTimeout(
     `${BASE_URL}/auth/login/`,
     {
       method: 'POST',
       body: JSON.stringify(body),
-      headers: {'Content-Type': 'application/json', 'auth-token': appToken},
+      headers: {'Content-Type': 'application/json', 'accept':'*/*'},
     },
     serverTimeout,
   );
+  console.log(post)
   return post;
 }
 

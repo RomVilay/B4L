@@ -10,11 +10,11 @@ import {fetchWithTimeout} from './fetchWithTimeout';
  * @param {String} authToken Le token d'authentification
  * @returns L'user correspondant à l'username | Un message d'erreur si pas autorisé
  */
-async function getUser(username, authToken) {
+async function getUser(iduser, authToken) {
   let get = await fetchWithTimeout(
-    `${BASE_URL}/users/${username}`,
+    `${BASE_URL}/users/${iduser}`,
     {
-      headers: {'auth-token': authToken},
+      headers: {Authorization: `Bearer ${authToken}` },
     },
     serverTimeout,
   );

@@ -11,7 +11,7 @@ import LogoMin from '../../assets/logoMin';
 
 export default function Objectifs(props) {
   const [state, setState] = useContext(Context);
-  const [defis] = useState([
+  /*const [defis] = useState([
     {id: '0', nom: "Faire du sport"},
     {id: '1', nom: 'Brûler des Calories'},
     {id: '2', nom: "Faire des économies en produisant de l'énergie"},
@@ -22,7 +22,8 @@ export default function Objectifs(props) {
     state.user.objectifs.includes('1') || false,
     state.user.objectifs.includes('2') || false,
     state.user.objectifs.includes('3') || false,
-  ]);
+  ]);*/
+  const goals = []
   const [isLoading, setIsLoading] = useState(false);
 
   const sendSelection = async () => {

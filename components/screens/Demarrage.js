@@ -5,6 +5,8 @@ import {Context} from '../utils/Store';
 import goTo from '../utils/navFunctions';
 import Logo from '../../assets/logo';
 import {login} from '../../functions/login';
+import jwt_decode from "jwt-decode";
+import {getUser} from "../../functions/user";
 
 export default function Demarrage(props) {
   const [state, setState] = useContext(Context);
@@ -27,12 +29,14 @@ export default function Demarrage(props) {
           Alert.alert('Erreur', `${myLogin.message}`);
           props.navigation.navigate('Connexion');
         } else {
-          setState({user: myLogin.user, token: myLogin.token});
-          if (myLogin.user.objectifs && myLogin.user.objectifs.length > 0) {
+          let usrid =(jwt_decode(myLogin["auth-token"]).id)
+          const user = await getUser(usrid,myLogin["auth-token"])
+          setState({user: user, token: myLogin["auth-token"]});
+         // if (user.goals && user.goals > 0) {
             goTo(props);
-          } else {
+          /*} else {
             goTo(props, 'Objectifs');
-          }
+          }*/
         }
       } else {
         props.navigation.navigate('Connexion');
