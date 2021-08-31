@@ -26,14 +26,14 @@ import {getUser} from "../../functions/user";
 *     */
 const Item1 = ({ item, onPress }) => (
   <TouchableOpacity onPress={onPress} style={styles.defi}>
-       <Text style={[styles.titreBlanc, { fontSize:30, textAlign:"center"}]}>{item.nomDefi}</Text>
-      {item.descriptionDefi !== undefined ? <Text style={[styles.description,{textAlign:"center"}]}>{item.descriptionDefi}</Text> : <></> }
+       <Text style={[styles.titreBlanc, { fontSize:30, textAlign:"center"}]}>{item.name}</Text>
+      {item.description !== undefined ? <Text style={[styles.description,{textAlign:"center"}]}>{item.description}</Text> : <></> }
    </TouchableOpacity>
 );
 const Item2 = ({ item, onPress, style }) => (
     <TouchableOpacity onPress={onPress} style={styles.defi2}>
-        <Text style={[styles.titreBlanc, { fontSize:30,textAlign:"center"}]}>{item.nomDefi}</Text>
-        {item.descriptionDefi !== undefined ? <Text style={[styles.description,{textAlign:"center"}]}>{item.descriptionDefi}</Text> : <></> }
+        <Text style={[styles.titreBlanc, { fontSize:30,textAlign:"center"}]}>{item.name}</Text>
+        {item.description !== undefined ? <Text style={[styles.description,{textAlign:"center"}]}>{item.description}</Text> : <></> }
     </TouchableOpacity>
 );
 
@@ -45,7 +45,8 @@ export default function  ListeDefis(props) {
     const opacity = useRef(new Animated.Value(0)).current;
     const getList = async () => {
         setIsLoading(true)
-        let list = await listeDefis(state.token,state.user.objectifs);
+        let list = await listeDefis(state.token,state.user.goals[0].id);
+        console.log(list)
         if (list.message) {
              Alert.alert('Erreur serveur', list.message);
              setListeDefs([{
@@ -67,7 +68,7 @@ export default function  ListeDefis(props) {
                  ],
              }])
         } else {
-            await setListeDefs(list.filter(defi => defi.long == undefined ).sort((defi1,defi2) => defi1.butNumber - defi2.butNumber))//setState({user, token: state.token});
+            await setListeDefs(list)//list.filter(defi => defi.long == undefined ).sort((defi1,defi2) => defi1.butNumber - defi2.butNumber))//setState({user, token: state.token});
         }
         setIsLoading(false)
     };
@@ -90,7 +91,7 @@ export default function  ListeDefis(props) {
         if (defisSelect.includes(item)){
             return (
                 <Item2
-                    key={item._id}
+                    key={item.id}
                     item={item}
                     onPress={() => {
                         setDefiSelect(defisSelect.filter( defi => defi !== item))
@@ -105,7 +106,7 @@ export default function  ListeDefis(props) {
                 item={item}
                 onPress={() => {
                     setDefiSelect([...defisSelect,item])
-                    if (item.butUnit == "%"){ showWarn()}
+                    //if (item.butUnit == "%"){ showWarn()}
                 }}
                 style={{ }}
             />
@@ -132,7 +133,7 @@ export default function  ListeDefis(props) {
                         <FlatList
                             data={ListeDefs}
                             renderItem={render_item}
-                            keyExtractor={item => item._id}
+                            keyExtractor={item => item.id}
                             extraData={defisSelect}/>
                     </View>
                         )}
