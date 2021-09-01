@@ -130,7 +130,7 @@ export default function Accueil(props) {
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />
       {
-        Object.keys(state.user).length === 0 || Object.keys(state.user.challenges).length !== 0 ? <></> : <DefisLong visible={state.user.challenges.length == 0} />
+        //Object.keys(state.user).length === 0 || Object.keys(state.user.challenges).length !== 0 ? <></> : <DefisLong visible={state.user.challenges.length == 0} />
       }
       {/* HEADER */}
       <View style={styles.header}>

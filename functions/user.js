@@ -95,16 +95,18 @@ async function isValidPassword(username, password, authToken) {
  * @param {String} authToken Le token d'authentification
  * @returns Les informations de l'utilisateur concené | Un message d'erreur si pas autorisé
  */
-async function editUser(username, body, authToken) {
+async function editUser(userId, body, authToken) {
+    console.log(body)
   let patch = await fetchWithTimeout(
-    `${BASE_URL}/users/${username}`,
+    `${BASE_URL}/users/${userId}`,
     {
       method: 'PATCH',
       body: JSON.stringify(body),
-      headers: {'Content-Type': 'application/json', 'auth-token': authToken},
+      headers: {'Content-Type': 'application/json', Authorization: `Bearer ${authToken}`},
     },
     serverTimeout,
   );
+  console.log(patch)
   return patch;
 }
 

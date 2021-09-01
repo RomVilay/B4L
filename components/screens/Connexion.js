@@ -62,11 +62,10 @@ export default function Connexion(props) {
         }
         let usrid =(jwt_decode(myLogin["auth-token"]).id)
         const user = await getUser(usrid,myLogin["auth-token"])
-        console.log(user)
-        await setState({user: myLogin.user, token: myLogin['auth-token']});
+        await setState({user: user, token: myLogin['auth-token']});
         setIsLoading(false);
         // Si nouveau compte, on renvoie vers la page des objectifs
-        if (myLogin.user.goals && myLogin.user.goals.length > 0) {
+        if (user.goals && user.goals.length > 0) {
           goTo(props);
         } else {
           goTo(props, 'Objectifs');

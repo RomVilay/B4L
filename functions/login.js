@@ -29,7 +29,6 @@ async function register(data, appToken = APP_TOKEN) {
  */
 async function login(data, appToken = APP_TOKEN) {
   let body;
-  console.log(data)
   if (data.username) {
     body = {username: data.username, password: data.password};
   } else {
@@ -45,7 +44,6 @@ async function login(data, appToken = APP_TOKEN) {
     },
     serverTimeout,
   );
-  console.log(post)
   return post;
 }
 

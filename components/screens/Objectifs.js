@@ -5,9 +5,11 @@ import NetInfo from '@react-native-community/netinfo';
 
 import goTo from '../utils/navFunctions';
 import {editUser} from '../../functions/user';
+import {listeObjectifs} from '../../functions/objectif'
 import {Context} from '../utils/Store';
 
 import LogoMin from '../../assets/logoMin';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Objectifs(props) {
   const [state, setState] = useContext(Context);
@@ -23,15 +25,26 @@ export default function Objectifs(props) {
     state.user.objectifs.includes('2') || false,
     state.user.objectifs.includes('3') || false,
   ]);*/
-  const goals = []
+  const [goals,setGoals] = useState([])
+  const [selection,setSelection] = useState(state.user.goals)
   const [isLoading, setIsLoading] = useState(false);
+  const getList = async () => {
+    setIsLoading(true)
+    let list = await listeObjectifs(state.token)
+    list = list.map(item =>{
+      var goal = {id:item.id,description:item.description,name:item.name}
+      return goal
+    })
+    await setGoals(list)
+    setIsLoading(false)
+  }
+  React.useEffect( () => {
+    getList()
+  },[])
 
   const sendSelection = async () => {
-    let select = [];
-    status.map((defi, index) => {
-      defi == true ? select.push(defis[index].id) : null;
-    });
-    if (select.length == 0) {
+    let storedPassword = await AsyncStorage.getItem('@bikeforlifepassword');
+    if (selection.length === 0) {
       return Alert.alert('Erreur', 'Veuillez préciser au moins un objectif');
     }
     setIsLoading(true);
@@ -41,7 +54,7 @@ export default function Objectifs(props) {
     if (!isConnected) {
       Alert.alert('Erreur', 'Vérifiez votre connexion Internet et réessayez');
     } else {
-      const updated = await editUser(state.user.username, {objectifs: select}, state.token);
+      const updated = await editUser(state.user.id, {"goals": selection, "password": storedPassword, "currentPassword": storedPassword}, state.token);
       setIsLoading(false);
       if (updated.message) {
         Alert.alert('Erreur', `${updated.message}`);
@@ -50,12 +63,12 @@ export default function Objectifs(props) {
         if (
           props.route.params &&
           props.route.params.previousRoute &&
-          props.route.params.previousRoute == 'Parametres'
+          props.route.params.previousRoute === 'Parametres'
         ) {
           props.navigation.goBack();
         }
         if (
-          state.user.poids == undefined ||state.user.taille == undefined
+          state.user.poids === undefined ||state.user.taille === undefined
         ) {
           props.navigation.navigate('Parametres');
         }else {
@@ -73,21 +86,24 @@ export default function Objectifs(props) {
           <Text style={[styles.textTitle, {fontSize: 100}]}>Objectif</Text>
           <Text style={[styles.whiteTitle]}>L'</Text>
         </View>
+        {isLoading ? (
+            <ActivityIndicator size="large" color="#5FCDFA" style={{top: '10%'}} />
+        ) : (
         <View style={styles.middle}>
           <Text style={styles.linesw}> J'ai envie de :</Text>
           <View style={styles.midItem}>
-            {defis.map(defi => {
+            {goals.map(goal => {
               return (
-                  <View style={styles.listItem}  key={defi.id}>
+                  <View style={styles.listItem}  key={goal.id}>
                     <CheckBox
-                        onValueChange={() =>
-                            setStatus(previousState => {
-                              const newArray = [...previousState];
-                              newArray[defi.id] = !status[defi.id];
-                              return newArray;
-                            })
+                        onValueChange={() => {selection.findIndex(item => item.id === goal.id) > -1 ?
+                            selection.filter(item => item !== goal.id) :  selection.push(goal)
+                          //console.log(selection)
+                             setSelection(selection)
+                             console.log(selection)
+                          }
                         }
-                        value={status[defi.id]}
+                        value={selection.findIndex(item => item.id === goal.id) > -1}
                         boxType={'square'}
                         onFillColor={"white"}
                         onCheckColor={"#1D4465"}
@@ -99,17 +115,18 @@ export default function Objectifs(props) {
                         onPress={() => {
                           setStatus(previousState => {
                             const newArray = [...previousState];
-                            newArray[defi.id] = !status[defi.id];
+                            newArray[goal.id] = !status[goal.id];
                             return newArray;
                           });
                         }}>
-                      <Text style={[styles.whiteText,{marginLeft:'5%'}]}>{defi.nom}</Text>
+                      <Text style={[styles.whiteText,{marginLeft:'5%'}]}>{goal.name}</Text>
                     </TouchableOpacity>
                   </View>
               );
             })}
           </View>
         </View>
+            )}
         <View style={styles.footer}>
           {isLoading ? (
             <ActivityIndicator size="large" color="#5FCDFA" />
