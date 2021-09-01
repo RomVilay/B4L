@@ -106,7 +106,6 @@ async function editUser(userId, body, authToken) {
     },
     serverTimeout,
   );
-  console.log(patch)
   return patch;
 }
 

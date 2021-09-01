@@ -24,6 +24,7 @@ export default function Accueil(props) {
   const [defisL,setDefisL] = useState(true)
   const [indices,setIndices] = useState([["KCAL","dépensés"],["WH","produits"],["KM","cumulés"]])
   const [datacumul,setDatacumul] = useState([0,0,0])
+  console.log(state.user.goals)
   React.useEffect(()=>{
     if (Object.keys(state.user).length !== 0){
       let dist = state.user.totalDistance !== undefined ? formatDistance(state.user.totalDistance) : formatDistance(0)
