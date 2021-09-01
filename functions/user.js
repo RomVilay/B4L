@@ -75,13 +75,13 @@ async function usersCount(authToken) {
  * @param {String} authToken Le token d'authentification
  * @returns true si password valide, false sinon | Un message d'erreur si pas autorisé
  */
-async function isValidPassword(username, password, authToken) {
+async function isValidPassword(userId, password, authToken) {
   let isValid = await fetchWithTimeout(
-    `${BASE_URL}/users/${username}/checkPassword`,
+    `${BASE_URL}/users/${userId}`,
     {
-      method: 'POST',
-      body: JSON.stringify({password: password}),
-      headers: {'Content-Type': 'application/json', 'auth-token': authToken},
+      method: 'PATCH',
+      body: JSON.stringify({password: password, currentPassword:password}),
+        headers: {Authorization: `Bearer ${authToken}` },
     },
     serverTimeout,
   );
@@ -96,7 +96,6 @@ async function isValidPassword(username, password, authToken) {
  * @returns Les informations de l'utilisateur concené | Un message d'erreur si pas autorisé
  */
 async function editUser(userId, body, authToken) {
-    console.log(body)
   let patch = await fetchWithTimeout(
     `${BASE_URL}/users/${userId}`,
     {
