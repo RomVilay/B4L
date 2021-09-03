@@ -9,7 +9,6 @@ const serverTimeout = 5000;
 
 async function listeDefis( authToken, goalId) {
    // if( objectifs.length == 2){
-        console.log(`${BASE_URL}/challenges?goalId=${goalId}`)
         let liste = await fetchWithTimeout(
             `${BASE_URL}/challenges?goalId=${goalId}`,
             {
@@ -55,11 +54,22 @@ async function listeDefisLongs( authToken, objectifs) {
 }
 async function getDefi(authToken,id) {
     let defi = await fetchWithTimeout(
-        `${BASE_URL}/defis/${id}`,
+        `${BASE_URL}/challenges/${id}`,
         {
-            headers:{'auth-token':authToken,'Content-Type':'application/json'}
+            headers: {Authorization: `Bearer ${authToken}`}
         }
     )
+    let cibles = []
+    for (let aims of defi.aims) {
+        let cible = await fetchWithTimeout(
+            `${BASE_URL}/aims/${aims}`,
+            {
+                headers: {Authorization: `Bearer ${authToken}`},
+            }
+        )
+        cibles.push(cible)
+    }
+    defi.aims = cibles
     return defi
 }
 module.exports={

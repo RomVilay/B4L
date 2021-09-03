@@ -11,13 +11,13 @@ import {
  * @returns Le nouvel utilisateur | Un message d'erreur si les champs sont invalides
  */
 async function createSession(data, authToken) {
-  let post = await fetch(`${BASE_URL}/sessions/`, {
+  let post = await fetch(`${BASE_URL}/sessions`, {
     method: "post",
     body: JSON.stringify(data),
-    headers: { "Content-Type": "application/json", "auth-token": authToken },
-  }).then((res) => {
-    return res.json();
-  });
+    headers: { "Content-Type": "application/json",
+      "Authorization": `Bearer ${authToken}` },
+  })
+  console.log(post)
   return post;
 }
 
@@ -28,7 +28,7 @@ async function createSession(data, authToken) {
  */
 async function getAllSessions(authToken) {
   let get = await fetch(`${BASE_URL}/sessions`, {
-    headers: { "auth-token": authToken },
+    headers: { "Authorization": `Bearer ${authToken}` },
   }).then((res) => {
     return res.json();
   });
@@ -43,7 +43,7 @@ async function getAllSessions(authToken) {
  */
 async function getSession(idSession, authToken) {
   let get = await fetch(`${BASE_URL}/sessions/${idSession}`, {
-    headers: { "auth-token": authToken },
+    headers: { "Authorization": `Bearer ${authToken}` },
   }).then((res) => {
     return res.json();
   });
@@ -57,8 +57,8 @@ async function getSession(idSession, authToken) {
  * @returns les sessions correspondantes | un message d'erreur si mauvaise authentification
  */
 async function getSessionsByUsername(id, authToken) {
-  let get = await fetch(`${BASE_URL}/sessions/user/${id}`, {
-    headers: { "auth-token": authToken },
+  let get = await fetch(`${BASE_URL}/sessions?userId=${id}`, {
+    headers: { "Authorization": `Bearer ${authToken}` },
   }).then((res) => {
     return res.json();
   });
@@ -72,7 +72,7 @@ async function getSessionsByUsername(id, authToken) {
  */
 async function sessionsCount(authToken) {
   let count = await fetch(`${BASE_URL}/count/sessions`, {
-    headers: { "auth-token": authToken },
+    headers: { "Authorization": `Bearer ${authToken}`  },
   }).then((res) => {
     return res.json();
   });
@@ -105,7 +105,8 @@ async function editSession(id, body, authToken) {
   let patch = await fetch(`${BASE_URL}/sessions/${id}`, {
     method: "patch",
     body: JSON.stringify(body),
-    headers: { "Content-Type": "application/json", "auth-token": authToken },
+    headers: {  "Content-Type": "application/json",
+      "Authorization": `Bearer ${authToken}` },
   }).then((res) => {
     return res.json();
   });
@@ -150,6 +151,19 @@ async function deleteSessionByUsername(username, authToken) {
  * @returns toutes les sessions de l'utilisateur
  */
 
+async function  createSequence(authToken,data){
+  let createSequence = await fetch(`${BASE_URL}/sequences`, {
+    method: "post",
+    body: JSON.stringify(data),
+    headers: { "Content-Type": "application/json",
+      "Authorization": `Bearer ${authToken}` },
+  })
+  //console.log(createSequence)
+  return createSequence;
+}
+
+
+
 module.exports = {
   createSession,
   getAllSessions,
@@ -160,4 +174,5 @@ module.exports = {
   editSession,
   deleteSession,
   deleteSessionByUsername,
+  createSequence
 };

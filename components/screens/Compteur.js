@@ -37,6 +37,7 @@ import RNLocalize from 'react-native-localize'
 import DeviceInfo from "react-native-device-info";
 
 import NotificationSounds, {playSampleSound} from 'react-native-notification-sounds'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Compteur(props) {
     const [state, setState] = useContext(Context);
@@ -75,6 +76,7 @@ export default function Compteur(props) {
     const [lastMessage, setLastMessage] = React.useState('')
     const [tmsg,setTmsg] = React.useState()
     const [rpm,setRpm] = React.useState(0)
+    const [sequences,setSequences] = React.useState([])
     require('node-libs-react-native/globals');
     var cons =new Buffer.from([
         0xFF,0xFF,0xFF,0xFF, //consigne
@@ -162,8 +164,9 @@ export default function Compteur(props) {
      * @param : defis, vitesse, inclinaison, idUtilisateur,dateSession,dureeSession,distance,energie
      */
     const saveSession = async () => {
+        console.log("save session")
         if (defisValid.length >= 0) {
-            const data = {
+            /*const data = {
                 "defis": defisValid.map(defi => defi._id),
                 "vitesse": vitesses,
                 "inclinaison": inclinaison,
@@ -172,43 +175,48 @@ export default function Compteur(props) {
                 "dureeSession": moment.duration(currentTime).asSeconds(),
                 "distance": distance * 1000,
                 "energie": energie.reduce((a, b) => a + b),
-            }
-            if (session == undefined) { //initialisation de la session
-                const s = await createSession(data, state.token)
-                if (s.message) {
-                    Alert.alert('Erreur création session', s.message);
-                    console.log(s.message)
+            }*/
+            if (session === undefined) { //initialisation de la session
+                let data = {"userId": state.user.id, "date":moment()}
+                console.log(data)
+                let newsession = await createSession(data, state.token)
+                if (newsession.message) {
+                    Alert.alert('Erreur création session', newsession.message);
+                    console.log(newsession.message)
                 } else {
-                    setSession(s)
+                    setSession(newsession)
                 }
             } else { //mise à jour de la session
-                const s = await editSession(session._id, data, state.token)
-                if (s.message) {
-                    Alert.alert('Erreur session', s.message);
-                    console.log(s.message)
+                let data = {
+                    "userId":state.user.id,
+                    "date":session.date,
+                    "sequence":sequence,
+                    "challenges":defisValid
+                }
+                let updatesession = await editSession(session.id, data, state.token)
+                if (updatesession.message) {
+                    Alert.alert('Erreur session', updatesession.message);
+                    console.log(updatesession.message)
                 } else {
-                    setSession(s)
+                    setSession(updatesession)
                 }
             }
-            let tab = defisValid.filter(defi => defi.long !== undefined).map(defi => defi._id) //copie des id des défis longs validés
+            let tab = defisValid.filter(defi => defi.islong).map(defi => defi.id) //copie des id des défis longs validés
+            let storedPassword = await AsyncStorage.getItem('@bikeforlifepassword');
             const userdata = {
-                "totalDuree": state.user.totalDuree + moment.duration(currentTime).asSeconds(),
-                "totalEnergie": isNaN(state.user.totalEnergie + energie.reduce((a, b) => a + b)) ? 1 : state.user.totalEnergie + energie.reduce((a, b) => a + b),
-                "totalDistance": state.user.totalDistance + distance,
-                "totalPoints": defisValid.length > 0 ?
-                    Math.round(defisValid.map(defi => defi.points).reduce((a, b) => a + b) + state.user.totalPoints) : state.user.totalPoints,
-                "pma": state.user.pma ? Math.round((energie.reduce((a, b) => a + b) / energie.length) + state.user.pma / 2 ): ((energie.reduce((a, b) => a + b) / energie.length) + 250) / 2,
-                "defis longs" : tab.length > 0 ? defisValid.filter(defi => defi.long !== undefined).map(defi=>defi._id) : state.user.defisLongs
+               "challenges":tab,
+               "password": storedPassword,
+               "currentPassword":storedPassword
             }
             // defis longs : console.log(tab.length+" - "+tab.length > 0 ? defisValid.filter(defi => defi.long !== undefined).map(defi=>defi._id) : state.user.defisLongs)
             //mise à jour de l'utilisateur ( distance parcourue, points, energie produite, temps passé )
-            const updated = await editUser(state.user.username, userdata, state.token)
+           /* const updated = await editUser(state.user.id, userdata, state.token)
             if (updated.message) {
                 Alert.alert('Erreur update', updated.message);
                 console.log(updated.message)
             } else {
                 setState({user: updated, token: state.token})
-            }
+            }*/
         }
     }
     /***
@@ -325,29 +333,31 @@ export default function Compteur(props) {
         //var incli = (energie.reduce((a,b) => a+b) / energie.length) / (state.user.poids * 9.81 * vitesses[vitesses.length-1])
         var bvalid = 0
         if (defi !== undefined) {
-            if (energie.length > 0) {
+            /*if (energie.length > 0) {
                 var ratioEffort = state.user.pma ? (energie.reduce((a, b) => a + b) / energie.length) / state.user.pma : (energie.reduce((a, b) => a + b) / energie.length) / 250 //bonus d'effort
                 if (ratioEffort > 0.5) {
                     ratioEffort > 0.75 ? defi.points = defi.points + defi.points * (ratioEffort - 0.5) : defi.points = defi.points + defi.points * (ratioEffort - 0.25)
                 }
-            }
-            for (var i = 0; i < defi.buts.length; i++) {
-                var but = defi.buts[i]
-                if (defi.long === undefined) {
-                    if ((but.unit === "m" && distance * 1000 >= but.number)
-                        || (but.unit === "watts" && energie.length > 0 && energie.reduce((a, b) => a + b) >= but.number)
-                        || (but.unit === "secondes" && moment.duration(currentTime).asSeconds() - defi.startTime === but.number)
-                        || (but.unit === "%" && energie.length > 0 && energiep.length > 0 && defi.startE !== null && (energie.reduce((a, b) => a + b) - defi.startE >= energiep.reduce((a, b) => a + b) - defi.startE))
+            }*/
+            for (var i = 0; i < defi.aims.length; i++) {
+                var but = defi.aims[i]
+                console.log(defi)
+                if (!defi.islong) {
+                    console.log("défis valide: "+(but.type === "distance" && distance * 1000 >= but.number) +" "+ distance*1000 +" - "+ but.number)
+                    if ((but.type === "distance" && distance * 1000 >= but.number)
+                        || (but.type === "power" && energie.length > 0 && energie.reduce((a, b) => a + b) >= but.number)
+                        || (but.type === "duration" && moment.duration(currentTime).asSeconds() - defi.startTime === but.number)
+                        || (but.type === "%" && energie.length > 0 && energiep.length > 0 && defi.startE !== null && (energie.reduce((a, b) => a + b) - defi.startE >= energiep.reduce((a, b) => a + b) - defi.startE))
                     ) {
                         bvalid = bvalid + 1
                     }
-                    if (but.unit === "%") {                                              //cas des défis de pentes an fonction de la durée écoulée
+                    if (but.type === "%") {                                              //cas des défis de pentes an fonction de la durée écoulée
                         var v = vitesses[vitesses.length - 1]//vitesses.reduce((sum,item)=>sum+item) / vitesses.length
                         if (defi.startE === undefined) {
                             defis[defic].startE = energie.reduce((a, b) => a + b)
                             setDefis(defis)
                         } else {
-                            var pth = v * state.user.poids * 9.81 * but.number * 0.6           //calcul de la force à demander à l'utilisateur, en fonction de sa vitesse actuelle
+                            var pth = v * state.user.weight * 9.81 * but.number * 0.6           //calcul de la force à demander à l'utilisateur, en fonction de sa vitesse actuelle
                             console.log(v + " - " + pth)
                             //sendMessage(3,`{"watts":${pth}}`)
                             setWatts(Math.round(pth))
@@ -356,15 +366,15 @@ export default function Compteur(props) {
                     }
                 } else {
                     //validation des défis longs
-                    if ((but.unit === "m" && state.user.totalDistance + distance >= but.number)
-                        || (but.unit === "watts" && state.user.totalEnergie + energie >= but.number)
-                        || (but.unit === "secondes" && moment.duration(currentTime).asSeconds())) {
+                    if ((but.type === "distance" && /*state.user.totalDistance +*/ distance >= but.number)
+                        || (but.type === "power" &&/* state.user.totalEnergie +*/ energie >= but.number)
+                        || (but.type === "duration" && moment.duration(currentTime).asSeconds())) {
                         bvalid = bvalid + 1
 
                     }
                 }
             }
-            if (bvalid === defis[defic].buts.length) {
+            if (bvalid === defis[defic].aims.length) {
                 setDefisValid([...defisValid, defi])
                 if (defis.length > defic) {
                     setDefic(defic => defic + 1)
@@ -381,16 +391,7 @@ export default function Compteur(props) {
      * @returns {Promise<void>} ajoute la liste des défis long aux défis de la session
      */
     async function getDefiLong() {
-        let tab = []
-        for (let i = 0; i < state.user.defisLongs.length; i++) {
-            const defi = await getDefi(state.token, state.user.defisLongs[i])
-            if (defi.message) {
-                Alert.alert('Erreur serveur', defi.message);
-            } else {
-                tab.push(defi.defi)
-            }
-        }
-        setDefis([...defis, ...tab])
+        setDefis([...defis, ...state.user.challenges])
     }
 
     /**
@@ -459,7 +460,7 @@ export default function Compteur(props) {
         setErreur(["Fin de Session", "Ralentissez progressivement avant la fin de la session."])
         setStyleModal(styles.endingModal)
          setModal(true)
-         console.log(erreur[0])
+         //console.log(erreur[0])
          const timer = setInterval(showWarning, 1250)
          setTimeModal(timer)
             let t = setInterval(()=>{
@@ -470,7 +471,7 @@ export default function Compteur(props) {
                 cons.writeUInt8(0,8) // led 2 éteinte
                 cons.writeUInt8(0,9) // led 3 éteinte
                 sendMessage(5, cons,0,inc )
-                console.log("end")
+               // console.log("end")
                 clearInterval(t)
                 server.destroy()
                 goTo(props)
@@ -479,7 +480,7 @@ export default function Compteur(props) {
             w=w-Math.round(w*0.20)
             cons.writeFloatBE(w,0)
             sendMessage(5, cons,0,inc )
-            console.log(w)
+            //console.log(w)
           }
         },1000)
     }
@@ -542,7 +543,7 @@ export default function Compteur(props) {
             });
             server.on('error', (error) => {
                 // traitement des erreurs en provenance du socket, affichage dans la console et sur le mobile
-                console.log("server error: " + error)
+               // console.log("server error: " + error)
                 setErreur(["erreur de connexion", error + ". Veuillez réessayer."])
                 setStyleModal(styles.dangerModal)
                 setModal(true)
@@ -565,6 +566,7 @@ export default function Compteur(props) {
         socketServer()
         defis[defic].startTime = 0
         setDefis(defis)
+        saveSession()
     }, [])
     React.useEffect(() => {
         if (defis[defic] !== undefined) {
@@ -609,26 +611,26 @@ export default function Compteur(props) {
             var contenu = message.subarray(12,message.length-3)
         }
         var type = header.readUInt16BE(4)
-        console.log(header.readUInt16BE(4))
+        //console.log(header.readUInt16BE(4))
         //setDonnees(message)
         //relevés de la carte vers le mobile
            switch (type) {
                case 1:
                     var frequ = contenu.readFloatBE(8)
                     var vitesse = Math.PI*0.0007*(frequ*3600/18)// 36 = nb bobines
-                    console.log( `vitesse : ${vitesse} - distance parcourue${(vitesse/3600)}`)
+                    //console.log( `vitesse : ${vitesse} - distance parcourue${(vitesse/3600)}`)
                     setDistance(dist => distance + (vitesse/3600) )
                     setRpm(Math.round((frequ*60)/(18*5)))
                     var puiss =  releves.readFloatBE(12) * releves.readFloatBE(16)
                     setEnergie([...energie, puiss])
-                    console.log(`energie : ${puiss} - calories : ${puiss*0.239}`)
+                    //console.log(`energie : ${puiss} - calories : ${puiss*0.239}`)
                     //console.log(`vitesse : ${vitesse}  - rpm: ${rpm}`)
                     setTimeout(() => {setVitesses([...vitesses,vitesse])}, 900)
-                    console.log("type message: "+contenu.readFloatBE(8))
+                    /*console.log("type message: "+contenu.readFloatBE(8))
                     console.log(`tension génératrice = ${contenu.readFloatBE(16)}`)
                     console.log("angle: "+( ((vitesses[vitesses.length-2] - vitesses[vitesses.length-1])/100)*360 - 160 ) +" - "+ endPosition )
                     console.log("seg:"+( (vitesses[vitesses.length-2] - vitesses[vitesses.length-1])/100 * 200 )+" - "+seg )
-                    console.log(`alerte surt : ${contenu.readUInt8(46)} - temp aux : ${contenu.readFloatBE(0)} - temp gene: ${contenu.readFloatBE(4)}`)
+                    console.log(`alerte surt : ${contenu.readUInt8(46)} - temp aux : ${contenu.readFloatBE(0)} - temp gene: ${contenu.readFloatBE(4)}`)*/
                    if (contenu.readFloatBE(0) >= 30 || contenu.readFloatBE(4) >= 40  )
                    {
                        setStyleModal(styles.dangerModal)
@@ -656,18 +658,18 @@ export default function Compteur(props) {
                 case 2:
                    var frequ = contenu.readFloatBE(8)
                    var vitesse = Math.PI*0.0007*(frequ*3600/18)// 36 = nb bobines
-                   console.log( `vitesse : ${vitesse} - distance parcourue${(vitesse/3600)}`)
+                   //console.log( `vitesse : ${vitesse} - distance parcourue${(vitesse/3600)}`)
                    setDistance(dist => distance + (vitesse/3600) )
                    setRpm(Math.round((frequ*60)/(18*5)))
                    var puiss =  releves.readFloatBE(12) * releves.readFloatBE(16)
                    setEnergie([...energie, puiss])
-                   console.log(`energie : ${puiss} - calories : ${puiss*0.239}`)
+                   //console.log(`energie : ${puiss} - calories : ${puiss*0.239}`)
                    //console.log(`vitesse : ${vitesse}  - rpm: ${rpm}`)
                    setVitesses([...vitesses,vitesse])
-                   console.log(contenu.readFloatBE(8))
+                   /*console.log(contenu.readFloatBE(8))
                    console.log("angle: "+( ((vitesses[vitesses.length-2] - vitesses[vitesses.length-1])/120)*360 - 160 ) +" - "+ endPosition )
                    console.log("seg:"+( (vitesses[vitesses.length-2] - vitesses[vitesses.length-1])/120 * 200 )+" - "+seg )
-                   console.log(`alerte surt : ${contenu.readUInt8(46)} - temp aux : ${contenu.readFloatBE(0)} - temp gene: ${contenu.readFloatBE(4)}`)
+                   console.log(`alerte surt : ${contenu.readUInt8(46)} - temp aux : ${contenu.readFloatBE(0)} - temp gene: ${contenu.readFloatBE(4)}`)*/
                    if (contenu.readFloatBE(0) >= 30 || contenu.readFloatBE(4) >= 40  )
                    {
                        //saveSession()
@@ -806,7 +808,7 @@ export default function Compteur(props) {
                         />
                         <AfficheurCompteur style={styles.graph} i={seg}/>
                         <AfficheurDonnees kmh={vitesses[vitesses.length - 1]} rpm={rpm} energie={energie[energie.length - 1]}
-                                          distance={distance} cumulD={state.user.totalDistance}/>
+                                          distance={distance} cumulD={state.user.totalDistance !== undefined ? state.user.totalDistance : 0}/>
                     </ImageBackground>
                     <View style={[{
                         flex: 1,
