@@ -56,8 +56,8 @@ async function getSession(idSession, authToken) {
  * @param {String} authToken Le token d'identification
  * @returns les sessions correspondantes | un message d'erreur si mauvaise authentification
  */
-async function getSessionsByUsername(id, authToken) {
-  let get = await fetchWithTimeout(`${BASE_URL}/sessions?userId=${id}`, {
+async function getSessionsByUser(id, authToken) {
+  let get = await fetchWithTimeout(`${BASE_URL}/sessions?userId=${id}&limit=10&offset=0&orderByDate=true`, {
     headers: { "Authorization": `Bearer ${authToken}` },
   },
       serverTimeout)
@@ -168,7 +168,7 @@ module.exports = {
   createSession,
   getAllSessions,
   getSession,
-  getSessionsByUsername,
+  getSessionsByUser,
   sessionsCount,
   sessionsCountByUsername,
   editSession,
