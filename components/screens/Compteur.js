@@ -24,7 +24,7 @@ import AfficheurCompteur from './afficheurCompteur';
 import AfficheurDonnees from "./afficheurDonnees";
 
 import SliderDefis from "./sliderDefis";
-import {createSession, editSession} from '../../functions/session';
+import {createSequence, createSession, editSession, getSession} from '../../functions/session';
 import {editUser} from '../../functions/user';
 import {getDefi} from '../../functions/defis';
 
@@ -178,28 +178,47 @@ export default function Compteur(props) {
             }*/
             if (session === undefined) { //initialisation de la session
                 let data = {"userId": state.user.id, "date":moment()}
-                console.log(data)
                 let newsession = await createSession(data, state.token)
                 if (newsession.message) {
                     Alert.alert('Erreur création session', newsession.message);
                     console.log(newsession.message)
                 } else {
+                    //console.log(newsession)
                     setSession(newsession)
                 }
             } else { //mise à jour de la session
-                let data = {
-                    "userId":state.user.id,
-                    "date":session.date,
-                    "sequence":sequence,
-                    "challenges":defisValid
+                console.log(sequences)
+                if (sequences.length > 0) {
+                    console.log(sequences)
+                    for (var sequence of sequences) {
+                        console.log(sequence)
+                        let s = await createSequence(sequence,state.token)
+                        if (s.message) {
+                            Alert.alert('Erreur update sequences', s.message);
+                            console.log(s.message)
+                        }
+                         console.log(s)
+                    }
                 }
-                let updatesession = await editSession(session.id, data, state.token)
-                if (updatesession.message) {
-                    Alert.alert('Erreur session', updatesession.message);
-                    console.log(updatesession.message)
-                } else {
-                    setSession(updatesession)
+                setSequences([])
+                if (defisValid.length > 0) {
+                    let data = {
+                        "challenges":defisValid
+                    }
+                    let updatesession = await editSession(session.id, data, state.token)
+                    if (updatesession.message) {
+                        Alert.alert('Erreur update session', updatesession.message);
+                        console.log(updatesession.message)
+                    }
                 }
+               // console.log(state.token)
+                    let updatedSession = await getSession(session.id,state.token)
+                    if (updatedSession.message) {
+                        Alert.alert('Erreur get updated session', updatedSession.message);
+                        console.log(updatedSession.message)
+                    }
+                    console.log(updatedSession)
+                    setSession(updatedSession)
             }
             let tab = defisValid.filter(defi => defi.islong).map(defi => defi.id) //copie des id des défis longs validés
             let storedPassword = await AsyncStorage.getItem('@bikeforlifepassword');
@@ -341,9 +360,9 @@ export default function Compteur(props) {
             }*/
             for (var i = 0; i < defi.aims.length; i++) {
                 var but = defi.aims[i]
-                console.log(defi)
+                //console.log(defi)
                 if (!defi.islong) {
-                    console.log("défis valide: "+(but.type === "distance" && distance * 1000 >= but.number) +" "+ distance*1000 +" - "+ but.number)
+                    //console.log("défis valide: "+(but.type === "distance" && distance * 1000 >= but.number) +" "+ distance*1000 +" - "+ but.number)
                     if ((but.type === "distance" && distance * 1000 >= but.number)
                         || (but.type === "power" && energie.length > 0 && energie.reduce((a, b) => a + b) >= but.number)
                         || (but.type === "duration" && moment.duration(currentTime).asSeconds() - defi.startTime === but.number)
@@ -557,7 +576,7 @@ export default function Compteur(props) {
     // validation et mise à jour des défis sélectionnés
     React.useEffect(() => {
         ValiderDefis()
-        //saveSession()
+        saveSession()
     }, [distance, energie, defis])
     // réccupération des défis longs
     React.useEffect(() => {
@@ -626,11 +645,14 @@ export default function Compteur(props) {
                     //console.log(`energie : ${puiss} - calories : ${puiss*0.239}`)
                     //console.log(`vitesse : ${vitesse}  - rpm: ${rpm}`)
                     setTimeout(() => {setVitesses([...vitesses,vitesse])}, 900)
+                   let s = {time:moment.duration(currentTime).asSeconds(),speed:Number.parseInt(vitesse),power:puiss,sessionId:session.id}
+                   setSequences(sequences => [...sequences,s])
                     /*console.log("type message: "+contenu.readFloatBE(8))
                     console.log(`tension génératrice = ${contenu.readFloatBE(16)}`)
                     console.log("angle: "+( ((vitesses[vitesses.length-2] - vitesses[vitesses.length-1])/100)*360 - 160 ) +" - "+ endPosition )
                     console.log("seg:"+( (vitesses[vitesses.length-2] - vitesses[vitesses.length-1])/100 * 200 )+" - "+seg )
                     console.log(`alerte surt : ${contenu.readUInt8(46)} - temp aux : ${contenu.readFloatBE(0)} - temp gene: ${contenu.readFloatBE(4)}`)*/
+
                    if (contenu.readFloatBE(0) >= 30 || contenu.readFloatBE(4) >= 40  )
                    {
                        setStyleModal(styles.dangerModal)
@@ -666,6 +688,8 @@ export default function Compteur(props) {
                    //console.log(`energie : ${puiss} - calories : ${puiss*0.239}`)
                    //console.log(`vitesse : ${vitesse}  - rpm: ${rpm}`)
                    setVitesses([...vitesses,vitesse])
+                    s = {time:currentTime,speed:vitesse,power:puiss,sessionId:session.id}
+                    setSequences(sequences.push(s))
                    /*console.log(contenu.readFloatBE(8))
                    console.log("angle: "+( ((vitesses[vitesses.length-2] - vitesses[vitesses.length-1])/120)*360 - 160 ) +" - "+ endPosition )
                    console.log("seg:"+( (vitesses[vitesses.length-2] - vitesses[vitesses.length-1])/120 * 200 )+" - "+seg )
