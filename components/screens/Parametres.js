@@ -45,8 +45,8 @@ export default function Parametres(props) {
   const [tempDateNaissance, setTempDateNaissance] = useState(
     state.user.birthdate ? new Date(state.user.birthdate) : '',
   );
-  const [tempTaille, setTempTaille] = useState(state.user.height.toString() || '');
-  const [tempPoids, setTempPoids] = useState(state.user.weight.toString() || '');
+  const [tempTaille, setTempTaille] = useState(state.user.height !== null ? state.user.height.toString() : '');
+  const [tempPoids, setTempPoids] = useState(state.user.weight !== null ? state.user.weight.toString() : '');
   const [avatar, setAvatar] = useState(state.user.avatar || '03940');
   const [tempUnitTaille, setTempUnitTaille] = useState(state.user.heightUnit || 'cm');
   const [tempUnitPoids, setTempUnitPoids] = useState(state.user.weightUnit || 'kg');

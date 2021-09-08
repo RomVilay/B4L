@@ -10,7 +10,7 @@ import {APP_TOKEN} from '@env';
  */
 async function register(data, appToken = APP_TOKEN) {
   let post = await fetchWithTimeout(
-    `${BASE_URL}/login/register`,
+    `${BASE_URL}/auth/register`,
     {
       method: 'POST',
       body: JSON.stringify(data),

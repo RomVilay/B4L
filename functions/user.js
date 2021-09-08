@@ -114,10 +114,10 @@ async function editUser(userId, body, authToken) {
  * @param {String} authToken Le token d'authentification
  * @returns L'utilisateur supprimé | Un message d'erreur si pas autorisé
  */
-async function deleteUser(username, authToken) {
-  let deletedUser = await fetchWithTimeout(`${BASE_URL}/users/${username}`, {
+async function deleteUser(userid, authToken) {
+  let deletedUser = await fetchWithTimeout(`${BASE_URL}/users/${userid}`, {
     method: 'DELETE',
-    headers: {'Content-Type': 'application/json','auth-token': authToken},
+    headers: {'Authorization':`Bearer ${authToken}`},
     serverTimeout,
   });
   return deletedUser;

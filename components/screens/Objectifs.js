@@ -76,7 +76,6 @@ export default function Objectifs(props) {
       }
     }
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />
@@ -93,34 +92,35 @@ export default function Objectifs(props) {
           <Text style={styles.linesw}> J'ai envie de :</Text>
           <View style={styles.midItem}>
             {goals.map(goal => {
+             // console.log("sélection :"+selection.filter(item => item !== goal.id))
               return (
                   <View style={styles.listItem}  key={goal.id}>
-                    <CheckBox
-                        onValueChange={() => {selection.findIndex(item => item.id === goal.id) > -1 ?
-                            selection.filter(item => item !== goal.id) :  selection.push(goal)
-                          //console.log(selection)
-                             setSelection(selection)
-                             console.log(selection)
+                    <View style={{ "flexDirection":"row"}}>
+                      <CheckBox
+                          onValueChange={() => {selection.findIndex(item => item.id === goal.id) > -1 ?
+                              selection.splice(selection.findIndex(item => item.id === goal.id),1) :  selection.push(goal)
+                            //console.log(selection)
+                            setSelection(selection)
+                            console.log(selection)
                           }
-                        }
-                        value={selection.findIndex(item => item.id === goal.id) > -1}
-                        boxType={'square'}
-                        onFillColor={"white"}
-                        onCheckColor={"#1D4465"}
-                        onTintColor={"white"}
-                        tintColor={"grey"}
-                        tintColors={{true:"white"}}
-                    />
-                    <TouchableOpacity
-                        onPress={() => {
-                          setStatus(previousState => {
-                            const newArray = [...previousState];
-                            newArray[goal.id] = !status[goal.id];
-                            return newArray;
-                          });
-                        }}>
-                      <Text style={[styles.whiteText,{marginLeft:'5%'}]}>{goal.name}</Text>
-                    </TouchableOpacity>
+                          }
+                          value={selection.findIndex(item => item.id === goal.id) > -1}
+                          boxType={'square'}
+                          onFillColor={"white"}
+                          onCheckColor={"#1D4465"}
+                          onTintColor={"white"}
+                          tintColor={"grey"}
+                          tintColors={{true:"white"}}
+                      />
+                      <TouchableOpacity
+                          onPress={() => {
+                            selection.findIndex(item => item.id === goal.id) > -1 ?
+                                selection.splice(selection.findIndex(item => item.id === goal.id),1) :  selection.push(goal)
+                          }}>
+                        <Text style={[styles.whiteText,{marginLeft:'5%'}]}>{goal.name}</Text>
+                      </TouchableOpacity>
+                    </View>
+                  <Text style={styles.textDescri}>{goal.description}</Text>
                   </View>
               );
             })}
@@ -169,6 +169,9 @@ const styles = StyleSheet.create({
     top: '55%',
     right: '66%',
   },
+  textDescri:{
+    fontFamily: 'GnuolaneRG-Regular', fontSize:17, color: '#5FCDFA',
+  },
   linesb: {
     color: '#5FCDFA',
     fontSize: 25,
@@ -194,8 +197,7 @@ const styles = StyleSheet.create({
   },
   listItem: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     zIndex: 100,
     width: '93%',
     marginBottom: '5%',

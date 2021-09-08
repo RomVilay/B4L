@@ -172,19 +172,20 @@ export default function Parametres2(props) {
 
   const deleteAccount = async () => {
     setIsLoading(true);
-    let res = await isValidPassword(state.user.username, tempPassword, state.token);
+    let res = await isValidPassword(state.user.id, tempPassword, state.token);
     if (res.message) {
-      Alert.alert('Erreur', `${res.message}`);
+      Alert.alert('Erreur Authentification', `${res.message}`);
       setIsLoading(false);
     } else if (!res) {
       setIsLoading(false);
-      Alert.alert('Erreur', `Mot de passe incorrect`);
+      Alert.alert('Erreur Authentification', `Mot de passe incorrect`);
       refPwd.focus();
     } else {
       await deleteLocalStorage();
-      let res = await deleteUser(state.user.username, state.token);
-      if (res.message) {
-        Alert.alert('Erreur', "Quelque chose s'est mal passé, contactez BikeForLife. Erreur : " + res.message);
+      let res = await deleteUser(state.user.id, state.token);
+      console.log(res)
+      if (res.error) {
+        Alert.alert('Erreur suppression', "Quelque chose s'est mal passé, contactez BikeForLife. Erreur : " + res.message);
         setIsLoading(false);
       } else {
         setState({user: {}, token: ''});
