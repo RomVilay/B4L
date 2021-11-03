@@ -177,7 +177,8 @@ export default function Compteur(props) {
                 "energie": energie.reduce((a, b) => a + b),
             }*/
             if (session === undefined) { //initialisation de la session
-                let data = {"userId": state.user.id, "date":moment()}
+                console.log("userid: "+state.user.id)
+                let data = {"user": {id:state.user.id}, "date":moment()}
                 let newsession = await createSession(data, state.token)
                 if (newsession.message) {
                     Alert.alert('Erreur création session', newsession.message);
@@ -645,7 +646,7 @@ export default function Compteur(props) {
                     //console.log(`energie : ${puiss} - calories : ${puiss*0.239}`)
                     //console.log(`vitesse : ${vitesse}  - rpm: ${rpm}`)
                     setTimeout(() => {setVitesses([...vitesses,vitesse])}, 900)
-                   let s = {time:moment.duration(currentTime).asSeconds(),speed:Number.parseInt(vitesse),power:puiss,sessionId:session.id}
+                   let s = {time:moment.duration(currentTime).asSeconds(),speed:Number.parseInt(vitesse),power:puiss,session:{id:session.id}}
                    setSequences(sequences => [...sequences,s])
                     /*console.log("type message: "+contenu.readFloatBE(8))
                     console.log(`tension génératrice = ${contenu.readFloatBE(16)}`)
@@ -688,7 +689,8 @@ export default function Compteur(props) {
                    //console.log(`energie : ${puiss} - calories : ${puiss*0.239}`)
                    //console.log(`vitesse : ${vitesse}  - rpm: ${rpm}`)
                    setVitesses([...vitesses,vitesse])
-                    s = {time:currentTime,speed:vitesse,power:puiss,sessionId:session.id}
+                    s = {time:currentTime,speed:vitesse,power:puiss,session:{id:session.id}}
+                    console.log(s)
                     setSequences(sequences.push(s))
                    /*console.log(contenu.readFloatBE(8))
                    console.log("angle: "+( ((vitesses[vitesses.length-2] - vitesses[vitesses.length-1])/120)*360 - 160 ) +" - "+ endPosition )
