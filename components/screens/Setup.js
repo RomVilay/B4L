@@ -19,8 +19,8 @@ import DeviceInfo from "react-native-device-info";
 import moment from "moment";
 export default function Setup(props){
     const [server,setServer] = useState(new TcpSocket.Socket())
-    const [ip,setIp] = useState('127.0.0.1')//'192.168.1.200')////
-    const [port,setPort] = useState(8080)//333)
+    const [ip,setIp] = useState('192.168.1.200')///'127.0.0.1')///
+    const [port,setPort] = useState(333)//  8080)
     const [connect,setConnect] = useState(false)
     const [lastmessage,setLastmessage] = useState()
     const [donnees,setDonnees] = useState()
@@ -78,7 +78,7 @@ export default function Setup(props){
         0x00,                //buzzer
         0x00                 //spare
     ])
-    consigne.writeFloatBE(0,0)
+    consigne.writeUInt32BE(20,0)
     var releves = new Buffer.from([
         0x00,0x00,0x00,0x01,                     //température auxilliaire 4 octets 32
         0x00,0x00,0x00,0x01,                     //température puissance
@@ -243,7 +243,7 @@ export default function Setup(props){
                     for (let i = 0; i < t.length; i++){
                         if (i < 10){
                             data[t[i]] = contenu[i]
-                            data[t[i]]=contenu.readFloatBE(i*4)
+                            data[t[i]]=contenu.readUInt32BE(i*4)
                             //console.log(` ${t[i]} ${data[t[i]]} - ${contenu[i]} ${i*2}`)
                         } else {
                             data[t[i]]=contenu.readUInt8(i+29)
@@ -279,7 +279,7 @@ export default function Setup(props){
                     for (let i = 0; i < t.length; i++){
                         if (i < 10){
                             data[t[i]] = contenu[i]
-                            data[t[i]]=contenu.readFloatBE(i*4)
+                            data[t[i]]=contenu.readUInt32BE(i*4)
                             //console.log(` ${t[i]} ${data[t[i]]} - ${contenu[i]} ${i*2}`)
                         } else {
                             data[t[i]]=contenu.readUInt8(i+29)
@@ -329,7 +329,7 @@ export default function Setup(props){
                         'led 3 ': contenu.toString('hex', 9, 10),
                         'buzzer': contenu.toString('hex', 10, 11)
                     }
-                    setDonnees(Object.entries(d).map(item => `${item} \n`))
+                    //setDonnees(Object.entries(d).map(item => `${item} \n`))
                     break;
                 case 6: //nouveau ssid émis par le vélo
                     //console.log(message.toString('hex'))
@@ -358,6 +358,33 @@ export default function Setup(props){
                     <TextInput value={port.toString()} style={[ styles.inputContainer,{color:"white"}]} onChangeText={val => setPort(val)} />
                 </View>
                 <Button title={"Connection"} onPress={() => socketServer() }  color="#5FCDFA" />
+                { connect ? <View >
+                    <Text style={{color:"green", alignSelf:"center"}}> Connecté </Text>
+                    <Button title={"100"} onPress={()=> consigne.writeUInt32LE(100.0,0)} />
+                    <Button title={"20"} onPress={()=> consigne.writeUInt32BE(20,0)} />
+                    <TextInput value={consigne.readFloatBE(0)} style={styles.input} onChangeText={val => { consigne.writeUInt32BE(val,0)}}/*Number.isNaN(parseFloat(val)) ? consigne.writeFloatBE(0,0) : consigne.writeFloatBE(parseFloat(val),0)}}*/ placeholder="consigne" placeholderTextColor="white" />
+                    <TextInput value={fc} style={styles.input} onChangeText={val => consigne.writeUInt8(val,4)} placeholder="force charge" placeholderTextColor="white" />
+                    <TextInput value={shutdown} style={styles.input} onChangeText={val => consigne.writeUInt8(val,5)} placeholder="shutdown" placeholderTextColor="white" />
+                    <TextInput value={usb} style={styles.input} onChangeText={val => consigne.writeUInt8(val,6)} placeholder="etat usb" placeholderTextColor="white" />
+                    <TextInput value={led1} style={styles.input} onChangeText={val => consigne.writeUInt8(val,7)} placeholder="couleur led 1" placeholderTextColor="white" />
+                    <TextInput value={led2} style={styles.input} onChangeText={val => consigne.writeUInt8(val,8)} placeholder="led2" placeholderTextColor="white" />
+                    <TextInput value={led3} style={styles.input} onChangeText={val => consigne.writeUInt8(val,9)} placeholder="led3" placeholderTextColor="white" />
+                    <TextInput value={buzzer} style={styles.input} onChangeText={val => consigne.writeUInt8(val,10)} placeholder="etat buzzer" placeholderTextColor="white" />
+                    <Button title={'envoyer consigne'} onPress={ () =>{
+                        //consigne.writeFloatLE(750,0)
+                        console.log(`consigne: ${consigne.toString('hex',0,4)} - force charge : ${consigne.toString('hex',4,5)} 
+                    - shutdown :${consigne.toString('hex',5,6)} - etat usb :${consigne.toString('hex',6,7)} 
+                    - led 1: ${consigne.toString('hex',7,8)} - led 2: ${consigne.toString('hex',8,9)} - led 3 : ${consigne.toString('hex',9,10)} 
+                    - buzzer: ${consigne.toString('hex',10,11)} - spare: ${consigne.toString('hex',11,consigne.length)} length : ${consigne.length}`)
+                        sendMessage(5, consigne,0,inc )
+                    } }/>
+                    <Button title={'message relevés'} onPress={ () => server.write(sendMessage(1, releves,0, inc ))}   />
+                    <Text style={{ color:"white"}}> Données Reçues:</Text>
+                    <Text style={{ color:"white"}}> {typeMessage}</Text>
+                    <Text style={{ color:"white"}}>{donnees !== undefined ? donnees.tempAux : 0}</Text>
+                    <Text style={{ backgroundColor:"#FFFFFFAA"}}> {donnees} </Text>
+                </View> : <></>}
+                <Button title={"Déconnexion"} onPress={() => server.destroy() }  color="#5FCDFA" />
                 <View style={[{alignItems:"center", width: 195}, styles.inputContainer]}>
                     <Text style={{ color:"white"}}>nouveau SSID</Text>
                     <TextInput value={ip} style={[ styles.inputContainer,{color:"white"}]} placeholder={"velocnx"} />
@@ -388,30 +415,6 @@ export default function Setup(props){
                         //sendMessage(11,"config réseau",1,inc)
                     }}/>
                 </View>
-                { connect ? <View >
-                    <Text style={{color:"green", alignSelf:"center"}}> Connecté </Text>
-                    <Button title={"100"} onPress={()=> consigne.writeFloatLE(100.0,0)} />
-                    <Button title={"0"} onPress={()=> consigne.writeFloatLE(0,0)} />
-                    <TextInput value={consigne.readFloatLE(0)} style={styles.input} onChangeText={val => { consigne.writeFloatLE(val,0)}}/*Number.isNaN(parseFloat(val)) ? consigne.writeFloatBE(0,0) : consigne.writeFloatBE(parseFloat(val),0)}}*/ placeholder="consigne" placeholderTextColor="white" />
-                    <TextInput value={fc} style={styles.input} onChangeText={val => consigne.writeUInt8(val,4)} placeholder="force charge" placeholderTextColor="white" />
-                    <TextInput value={shutdown} style={styles.input} onChangeText={val => consigne.writeUInt8(val,5)} placeholder="shutdown" placeholderTextColor="white" />
-                    <TextInput value={usb} style={styles.input} onChangeText={val => consigne.writeUInt8(val,6)} placeholder="etat usb" placeholderTextColor="white" />
-                    <TextInput value={led1} style={styles.input} onChangeText={val => consigne.writeUInt8(val,7)} placeholder="couleur led 1" placeholderTextColor="white" />
-                    <TextInput value={led2} style={styles.input} onChangeText={val => consigne.writeUInt8(val,8)} placeholder="led2" placeholderTextColor="white" />
-                    <TextInput value={led3} style={styles.input} onChangeText={val => consigne.writeUInt8(val,9)} placeholder="led3" placeholderTextColor="white" />
-                    <TextInput value={buzzer} style={styles.input} onChangeText={val => consigne.writeUInt8(val,10)} placeholder="etat buzzer" placeholderTextColor="white" />
-                    <Button title={'envoyer consigne'} onPress={ () =>{
-                        //consigne.writeFloatLE(750,0)
-                        console.log("consigne envoyée:"+consigne.readFloatLE(0))
-                        sendMessage(5, consigne,0,inc )
-                    } }/>
-                    <Button title={'message relevés'} onPress={ () => server.write(sendMessage(1, releves,0, inc ))}   />
-                    <Text style={{ color:"white"}}> Données Reçues:</Text>
-                    <Text style={{ color:"white"}}> {typeMessage}</Text>
-                    <Text style={{ color:"white"}}>{donnees !== undefined ? donnees.tempAux : 0}</Text>
-                    <Text style={{ backgroundColor:"#FFFFFFAA"}}> {donnees} </Text>
-                    <Text style={{color:"white"}} onPress={() => {server.destroy()} }> Déconnexion </Text>
-                </View> : <></>}
                 <View style={{borderWidth:2, borderColor:"#5FCDFA",  marginTop: "5%", borderRadius: 10}}>
                     <Text style={{color:"#5FCDFA", padding: "2%"}} onPress={() => { props.navigation.navigate("Demarrage")}}>Retour</Text>
                 </View>
