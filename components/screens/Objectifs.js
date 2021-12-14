@@ -54,7 +54,7 @@ export default function Objectifs(props) {
     if (!isConnected) {
       Alert.alert('Erreur', 'Vérifiez votre connexion Internet et réessayez');
     } else {
-      const updated = await editUser(state.user.id, {"goals": selection}, state.token);
+      const updated = await editUser(state.user.id, {"goals": selection, "password": storedPassword, "currentPassword": storedPassword}, state.token);
       setIsLoading(false);
       if (updated.message) {
         Alert.alert('Erreur', `${updated.message}`);

@@ -19,8 +19,8 @@ import DeviceInfo from "react-native-device-info";
 import moment from "moment";
 export default function Setup(props){
     const [server,setServer] = useState(new TcpSocket.Socket())
-    const [ip,setIp] = useState('192.168.1.200')///'127.0.0.1')///
-    const [port,setPort] = useState(333)//  8080)
+    const [ip,setIp] = useState('192.168.1.200') // '127.0.0.1') /
+    const [port,setPort] = useState(333)//   )8080
     const [connect,setConnect] = useState(false)
     const [lastmessage,setLastmessage] = useState()
     const [donnees,setDonnees] = useState()
@@ -150,7 +150,6 @@ export default function Setup(props){
                         config = {
                             port: port,
                             host: ip,
-                            //localAddress: ip,
                             reuseAddress: true
                         }
                     } else {                                //configuration android device
@@ -360,9 +359,9 @@ export default function Setup(props){
                 <Button title={"Connection"} onPress={() => socketServer() }  color="#5FCDFA" />
                 { connect ? <View >
                     <Text style={{color:"green", alignSelf:"center"}}> Connecté </Text>
-                    <Button title={"100"} onPress={()=> consigne.writeUInt32LE(100.0,0)} />
-                    <Button title={"20"} onPress={()=> consigne.writeUInt32BE(20,0)} />
-                    <TextInput value={consigne.readFloatBE(0)} style={styles.input} onChangeText={val => { consigne.writeUInt32BE(val,0)}}/*Number.isNaN(parseFloat(val)) ? consigne.writeFloatBE(0,0) : consigne.writeFloatBE(parseFloat(val),0)}}*/ placeholder="consigne" placeholderTextColor="white" />
+                    <Button title={"eq 750w"} onPress={()=> consigne.writeUInt32BE(4095,0)} />
+                    <Button title={"eq 0w "} onPress={()=> consigne.writeUInt32BE(20,0)} />
+                    <TextInput value={consigne.readUInt32BE(0)} style={styles.input} onChangeText={val => { consigne.writeUInt32BE(val,0)}}/*Number.isNaN(parseFloat(val)) ? consigne.writeFloatBE(0,0) : consigne.writeFloatBE(parseFloat(val),0)}}*/ placeholder="consigne" placeholderTextColor="white" />
                     <TextInput value={fc} style={styles.input} onChangeText={val => consigne.writeUInt8(val,4)} placeholder="force charge" placeholderTextColor="white" />
                     <TextInput value={shutdown} style={styles.input} onChangeText={val => consigne.writeUInt8(val,5)} placeholder="shutdown" placeholderTextColor="white" />
                     <TextInput value={usb} style={styles.input} onChangeText={val => consigne.writeUInt8(val,6)} placeholder="etat usb" placeholderTextColor="white" />

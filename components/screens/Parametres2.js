@@ -134,8 +134,8 @@ export default function Parametres2(props) {
           lastName: tempNom,
           firstname: tempPrenom,
           email: tempMail,
-          /*password: tempPassword1 !== "" ? tempPassword1 : tempPassword,
-          currentPassword:tempPassword*/
+          password: tempPassword1 !== "" ? tempPassword1 : tempPassword,
+          currentPassword:tempPassword
         },
         state.token,
       );

@@ -99,7 +99,9 @@ export default function Parametres(props) {
           heightUnit: tempUnitTaille,
           weigthUnit: tempUnitPoids,
           distanceUnit: tempUnitDistance,
-          gender:genre
+          gender:genre,
+          password: storedPassword,
+          currentPassword: storedPassword
         },
         state.token,
       );
