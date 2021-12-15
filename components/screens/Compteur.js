@@ -60,6 +60,7 @@ export default function Compteur(props) {
     const [defisValid, setDefisValid] = React.useState([])                     // tableaux des défis réalisés
     const [defic, setDefic] = React.useState(0)                                // numéro du défis courant
     const [watts, setWatts] = React.useState(200)                              // puissance demandée
+
     const [vitesses, setVitesses] = React.useState([0])                        // relevés de vitesse
     const [inclinaison, setInclinaison] = React.useState([])                   // relevés inclinaison
     const [energie, setEnergie] = React.useState([0])                          // relevés énergie produite
@@ -77,6 +78,8 @@ export default function Compteur(props) {
     const [tmsg,setTmsg] = React.useState()
     const [rpm,setRpm] = React.useState(0)
     const [sequences,setSequences] = React.useState([])
+    const wattConverter = (nber) => {
+        return (nber/750)*4095 }
     require('node-libs-react-native/globals');
     var cons =new Buffer.from([
         0xFF,0xFF,0xFF,0xFF, //consigne
@@ -121,19 +124,19 @@ export default function Compteur(props) {
         0x00,                          //erreur à définir
         0x00,                          //spare 1
         0x00])                        //spare2
-    releves.writeFloatBE(20, 0) //température auxilliaire 4 octets 32
-    releves.writeFloatBE(20, 4)
+    releves.writeUInt32BE(20, 0) //température auxilliaire 4 octets 32
+    releves.writeUInt32BE(20, 4)
 
-    releves.writeFloatBE(0, 8)
-    releves.writeFloatBE(1, 12)
-    releves.writeFloatBE(1, 16)
+    releves.writeUInt32BE(0, 8)
+    releves.writeUInt32BE(1, 12)
+    releves.writeUInt32BE(1, 16)
 
-    releves.writeFloatBE(40, 20)
-    releves.writeFloatBE(0, 24)
-    releves.writeFloatBE(0, 28)
+    releves.writeUInt32BE(40, 20)
+    releves.writeUInt32BE(0, 24)
+    releves.writeUInt32BE(0, 28)
 
-    releves.writeFloatBE(0, 32)
-    releves.writeFloatBE(1, 36)
+    releves.writeUInt32BE(0, 32)
+    releves.writeUInt32BE(1, 36)
     releves.writeUInt8(0,46) // alerte surtensions
 
     React.useEffect(() => {
@@ -177,7 +180,6 @@ export default function Compteur(props) {
                 "energie": energie.reduce((a, b) => a + b),
             }*/
             if (session === undefined) { //initialisation de la session
-                console.log("userid: "+state.user.id)
                 let data = {"user": {id:state.user.id}, "date":moment()}
                 let newsession = await createSession(data, state.token)
                 if (newsession.message) {
@@ -188,7 +190,6 @@ export default function Compteur(props) {
                     setSession(newsession)
                 }
             } else { //mise à jour de la session
-                console.log(sequences)
                 if (sequences.length > 0) {
                     console.log(sequences)
                     for (var sequence of sequences) {
@@ -260,9 +261,9 @@ export default function Compteur(props) {
             //définition des segments pour une vitesse supérieur à celle précédente
 
             setSeg(seg => Math.round(nseg > 200 ? 200 : isNaN(nseg)? seg : nseg < 0 ? seg: nseg) )
-            releves.writeFloatBE( freqRotation /*40 +seg*/ , 8) //freqence de rotation de la géné
-            releves.writeFloatBE(10, 12)
-            releves.writeFloatBE(25, 16) // tension génératrice
+            releves.writeUInt32BE( freqRotation /*40 +seg*/ , 8) //freqence de rotation de la géné
+            releves.writeUInt32BE(10, 12)
+            releves.writeUInt32BE(25, 16) // tension génératrice
             sendMessage(1, releves,0,inc )
             /*setInclinaison([...inclinaison,1])*/
         } else {
@@ -274,9 +275,9 @@ export default function Compteur(props) {
             setEPosition(nend)
             setAngle(nend)
             setSeg(seg => Math.round(nseg < 0 || isNaN(nseg)  ? 0 : nseg))//- 7) //
-            releves.writeFloatBE(freqRotation , 8)
-            releves.writeFloatBE(10, 12)
-            releves.writeFloatBE(25 , 16) //
+            releves.writeUInt32BE(freqRotation , 8)
+            releves.writeUInt32BE(10, 12)
+            releves.writeUInt32BE(25 , 16) //
             sendMessage(1, releves,0,inc )
         }
     }
@@ -486,7 +487,7 @@ export default function Compteur(props) {
             let t = setInterval(()=>{
               if (w <= 2){
                 w=0
-                cons.writeFloatBE(w,0)
+                cons.writeUInt32BE(w,0)
                 cons.writeUInt8(0,7) //led 1 éteinte
                 cons.writeUInt8(0,8) // led 2 éteinte
                 cons.writeUInt8(0,9) // led 3 éteinte
@@ -498,7 +499,7 @@ export default function Compteur(props) {
           }
           else{
             w=w-Math.round(w*0.20)
-            cons.writeFloatBE(w,0)
+            cons.writeUInt32BE(w,0)
             sendMessage(5, cons,0,inc )
             //console.log(w)
           }
@@ -514,10 +515,10 @@ export default function Compteur(props) {
             if (status) {                                //configuration simulateur
                 if (Platform.OS == 'ios') {              //configuration iphone
                     return  config = {
-                        port: 8080,
-                        host: '127.0.0.1',
-                        localAddress: '127.0.0.1',
+                        port: 333,
+                        host: '192.168.1.200',
                         reuseAddress: true,
+                        interface:'wifi'
                     }
                 } else {                                //configuration android device
                     return config = {
@@ -546,12 +547,13 @@ export default function Compteur(props) {
                 }
             }
         })
-        console.log(config)
+        //console.log(config)
         try {
             server.connect(config,
                 () => {
+                    console.log("connecté")
                     //envoi d'une première consigne
-                    cons.writeFloatBE(watts,0)
+                    cons.writeUInt32BE(wattConverter(500),0)
                     cons.writeUInt8(2,7) //led 1 vert
                     cons.writeUInt8(2,8) // led 2 vert
                     cons.writeUInt8(2,9) // led 3 vert
@@ -636,25 +638,25 @@ export default function Compteur(props) {
         //relevés de la carte vers le mobile
            switch (type) {
                case 1:
-                    var frequ = contenu.readFloatBE(8)
+                    var frequ = contenu.readUInt32BE(8)
                     var vitesse = Math.PI*0.0007*(frequ*3600/18)// 36 = nb bobines
                     //console.log( `vitesse : ${vitesse} - distance parcourue${(vitesse/3600)}`)
                     setDistance(dist => distance + (vitesse/3600) )
                     setRpm(Math.round((frequ*60)/(18*5)))
-                    var puiss =  releves.readFloatBE(12) * releves.readFloatBE(16)
+                    var puiss =  releves.readUInt32BE(12) * releves.readUInt32BE(16)
                     setEnergie([...energie, puiss])
                     //console.log(`energie : ${puiss} - calories : ${puiss*0.239}`)
                     //console.log(`vitesse : ${vitesse}  - rpm: ${rpm}`)
                     setTimeout(() => {setVitesses([...vitesses,vitesse])}, 900)
                    let s = {time:moment.duration(currentTime).asSeconds(),speed:Number.parseInt(vitesse),power:puiss,session:{id:session.id}}
                    setSequences(sequences => [...sequences,s])
-                    /*console.log("type message: "+contenu.readFloatBE(8))
-                    console.log(`tension génératrice = ${contenu.readFloatBE(16)}`)
+                    /*console.log("type message: "+contenu.readUInt32BE(8))
+                    console.log(`tension génératrice = ${contenu.readUInt32BE(16)}`)
                     console.log("angle: "+( ((vitesses[vitesses.length-2] - vitesses[vitesses.length-1])/100)*360 - 160 ) +" - "+ endPosition )
                     console.log("seg:"+( (vitesses[vitesses.length-2] - vitesses[vitesses.length-1])/100 * 200 )+" - "+seg )
-                    console.log(`alerte surt : ${contenu.readUInt8(46)} - temp aux : ${contenu.readFloatBE(0)} - temp gene: ${contenu.readFloatBE(4)}`)*/
+                    console.log(`alerte surt : ${contenu.readUInt8(46)} - temp aux : ${contenu.readUInt32BE(0)} - temp gene: ${contenu.readUInt32BE(4)}`)*/
 
-                   if (contenu.readFloatBE(0) >= 30 || contenu.readFloatBE(4) >= 40  )
+                   if (contenu.readUInt32BE(0) >= 30 || contenu.readUInt32BE(4) >= 40  )
                    {
                        setStyleModal(styles.dangerModal)
                        setErreur(["Erreur", "Attention surchauffe détectée, veuillez cesser de pédaler"])
@@ -665,26 +667,26 @@ export default function Compteur(props) {
                        setErreur(["Erreur", "Attention surtension dans le système, veuillez cesser de pédaler"])
                        setModal(true)
                    }
-                   if (contenu.readFloatBE(8) < 20 ){
+                   if (contenu.readUInt32BE(8) < 20 ){
                        setErreur(["Attention", "Votre rythme ne permet pas de produire la puissance que vous demandez. Adaptez votre allure ou réduisez la puissance demandée."])
                        setStyleModal(styles.warningModal)
                        setModal(true)
                        const timer = setInterval(showWarning, 500)
                        setTimeModal(timer)
                    }
-                   /*if (contenu.readFloatBE(20) >+ contenu.readFloatBE(8) +0.05 || contenu.readFloatBE(20) <= contenu.readFloatBE(8)+ 0.05){
+                   /*if (contenu.readUInt32BE(20) >+ contenu.readUInt32BE(8) +0.05 || contenu.readUInt32BE(20) <= contenu.readUInt32BE(8)+ 0.05){
                        setStyleModal(styles.dangerModal)
                        setErreur(["Erreur", "Attention une différence de fréquence a été détectée dans le réseau électrique, veuillez cesser de pédaler"])
                        setModal(true)
                    }*/
                     break;
                 case 2:
-                   var frequ = contenu.readFloatBE(8)
+                   var frequ = contenu.readUInt32BE(8)
                    var vitesse = Math.PI*0.0007*(frequ*3600/18)// 36 = nb bobines
                    //console.log( `vitesse : ${vitesse} - distance parcourue${(vitesse/3600)}`)
                    setDistance(dist => distance + (vitesse/3600) )
                    setRpm(Math.round((frequ*60)/(18*5)))
-                   var puiss =  releves.readFloatBE(12) * releves.readFloatBE(16)
+                   var puiss =  releves.readUInt32BE(12) * releves.readUInt32BE(16)
                    setEnergie([...energie, puiss])
                    //console.log(`energie : ${puiss} - calories : ${puiss*0.239}`)
                    //console.log(`vitesse : ${vitesse}  - rpm: ${rpm}`)
@@ -692,15 +694,15 @@ export default function Compteur(props) {
                     s = {time:currentTime,speed:vitesse,power:puiss,session:{id:session.id}}
                     console.log(s)
                     setSequences(sequences.push(s))
-                   /*console.log(contenu.readFloatBE(8))
+                   /*console.log(contenu.readUInt32BE(8))
                    console.log("angle: "+( ((vitesses[vitesses.length-2] - vitesses[vitesses.length-1])/120)*360 - 160 ) +" - "+ endPosition )
                    console.log("seg:"+( (vitesses[vitesses.length-2] - vitesses[vitesses.length-1])/120 * 200 )+" - "+seg )
-                   console.log(`alerte surt : ${contenu.readUInt8(46)} - temp aux : ${contenu.readFloatBE(0)} - temp gene: ${contenu.readFloatBE(4)}`)*/
-                   if (contenu.readFloatBE(0) >= 30 || contenu.readFloatBE(4) >= 40  )
+                   console.log(`alerte surt : ${contenu.readUInt8(46)} - temp aux : ${contenu.readUInt32BE(0)} - temp gene: ${contenu.readUInt32BE(4)}`)*/
+                   if (contenu.readUInt32BE(0) >= 30 || contenu.readUInt32BE(4) >= 40  )
                    {
                        //saveSession()
                        //stopSession(watts)
-                       cons.writeFloatBE(watts,0)
+                       cons.writeUInt32BE(watts,0)
                        cons.writeUInt8(4,7) //led 1 rouge
                        cons.writeUInt8(4,8) // led 2 rouge
                        cons.writeUInt8(4,9) // led 3 éteinte
@@ -715,7 +717,7 @@ export default function Compteur(props) {
                    if (contenu.readUInt8(46) === 1) {
                        //saveSession()
                        stopSession(watts)
-                       cons.writeFloatBE(watts,0)
+                       cons.writeUInt32BE(watts,0)
                        cons.writeUInt8(4,7) //led 1 rouge
                        cons.writeUInt8(4,8) // led 2 rouge
                        cons.writeUInt8(0,9) // led 3 éteinte
@@ -725,8 +727,8 @@ export default function Compteur(props) {
                        setModal(true)
                        //console.log("alerte surtention - alerte surt"+ contenu.readUInt8(46))
                    }
-                   if (contenu.readFloatBE(8) < 20 ){
-                       cons.writeFloatBE(watts,0)
+                   if (contenu.readUInt32BE(8) < 20 ){
+                       cons.writeUInt32BE(watts,0)
                        cons.writeUInt8(3,7) //led 1 jaune
                        cons.writeUInt8(0,8) // led 2 éteinte
                        cons.writeUInt8(0,9) // led 3 éteinte
@@ -736,20 +738,20 @@ export default function Compteur(props) {
                        setModal(true)
                        const timer = setInterval(showWarning, 500)
                        setTimeModal(timer)
-                       cons.writeFloatBE(watts,0)
+                       cons.writeUInt32BE(watts,0)
                        cons.writeUInt8(2,7) // led 1 vert
                        cons.writeUInt8(2,8) // led 2 vert
                        cons.writeUInt8(2,9) // led 3 vert
                        sendMessage(5, cons,0,inc )
                    }
-                   /*if (contenu.readFloatBE(20) >+ contenu.readFloatBE(8) +0.05 || contenu.readFloatBE(20) <= contenu.readFloatBE(8)+ 0.05){
+                   /*if (contenu.readUInt32BE(20) >+ contenu.readUInt32BE(8) +0.05 || contenu.readUInt32BE(20) <= contenu.readUInt32BE(8)+ 0.05){
                        setStyleModal(styles.dangerModal)
                        setErreur(["Erreur", "Attention une différence de fréquence a été détectée dans le réseau électrique, veuillez cesser de pédaler"])
                        setModal(true)
                    }*/
                    break;
                 case 5: //consigne du mobile vers la carte
-                   console.log(`consigne: ${contenu.readFloatBE(0)} 
+                   console.log(`consigne: ${contenu.readUInt32BE(0)} 
                     - force charge : ${contenu.toString('hex',4,5)} 
                     - shutdown :${contenu.toString('hex',5,6)} 
                     - etat usb :${contenu.toString('hex',6,7)} 
@@ -845,7 +847,7 @@ export default function Compteur(props) {
                         <TouchableOpacity onPress={() => {
                             if (watts > 0) {
                                 setWatts(watts - 5)
-                                cons.writeFloatBE(watts-5,0)
+                                cons.writeUInt32BE(wattConverter(watts-5),0)
                                 sendMessage(5, cons,0,inc )
                             }
                         }}>
@@ -862,7 +864,7 @@ export default function Compteur(props) {
                             onPress={() => {
                                 if (watts < 750) {
                                     setWatts(watts + 5)
-                                    cons.writeFloatBE(watts+5,0)
+                                    cons.writeUInt32BE(wattConverter(watts+5),0)
                                     sendMessage(5, cons,0,inc )
                                 }
                             }}>
