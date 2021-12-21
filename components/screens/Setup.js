@@ -150,13 +150,15 @@ export default function Setup(props){
                         config = {
                             port: port,
                             host: ip,
-                            reuseAddress: true
+                            reuseAddress: true,
+                            interface:"wifi"
                         }
                     } else {                                //configuration android device
                         config = {
                             port: port,
                             host: ip,
-                            reuseAddress: true
+                            reuseAddress: true,
+                            interface:"wifi"
                         }
                     }
         //console.log(config)

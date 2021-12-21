@@ -487,7 +487,7 @@ export default function Compteur(props) {
             let t = setInterval(()=>{
               if (w <= 2){
                 w=0
-                cons.writeUInt32BE(w,0)
+                cons.writeUInt32BE(wattConverter(w),0)
                 cons.writeUInt8(0,7) //led 1 éteinte
                 cons.writeUInt8(0,8) // led 2 éteinte
                 cons.writeUInt8(0,9) // led 3 éteinte
@@ -499,7 +499,10 @@ export default function Compteur(props) {
           }
           else{
             w=w-Math.round(w*0.20)
-            cons.writeUInt32BE(w,0)
+            cons.writeUInt32BE(wattConverter(w),0)
+            cons.readUInt8(7) === 0 ? cons.writeUInt8(2,7)  : cons.writeUInt8(0,7)
+            cons.readUInt8(8) === 0 ? cons.writeUInt8(2,8) : cons.writeUInt8(0,8)
+            cons.writeUInt8(0,9) === 0 ? cons.writeUInt8(2,9) : cons.writeUInt8(0,9)// led 3 éteinte
             sendMessage(5, cons,0,inc )
             //console.log(w)
           }
@@ -522,25 +525,24 @@ export default function Compteur(props) {
                     }
                 } else {                                //configuration android device
                     return config = {
-                        port: 8080,
-                        host: '10.0.2.2',
-                        reuseAddress: true
+                        port: 333,
+                        host:  '192.168.1.200',
+                        reuseAddress: true,
+                        interface:'wifi'
                     }
                 }
             } else {
                 if (Platform.OS == 'ios') {             //configuration iphone
                     return config = {
-                        port: 8080,
-                        host: '192.168.5.2',
-                        localAddress: '127.0.0.1',
+                        port: 333,
+                        host: '192.168.1.200',
                         reuseAddress: true,
                         interface:'wifi'
                     }
                 } else {                                //configuration android device
                     return config = {
-                        port: 8080,
-                        host:  '127.0.0.1',
-                        localAddress:'192.168.5.11',
+                        port: 333,
+                        host:  '192.168.1.200',
                         reuseAddress: true,
                         interface:'wifi'
                     }
@@ -553,7 +555,7 @@ export default function Compteur(props) {
                 () => {
                     console.log("connecté")
                     //envoi d'une première consigne
-                    cons.writeUInt32BE(wattConverter(500),0)
+                    cons.writeUInt32BE(wattConverter(watts),0)
                     cons.writeUInt8(2,7) //led 1 vert
                     cons.writeUInt8(2,8) // led 2 vert
                     cons.writeUInt8(2,9) // led 3 vert
@@ -702,7 +704,7 @@ export default function Compteur(props) {
                    {
                        //saveSession()
                        //stopSession(watts)
-                       cons.writeUInt32BE(watts,0)
+                       cons.writeUInt32BE(wattConverter(watts),0)
                        cons.writeUInt8(4,7) //led 1 rouge
                        cons.writeUInt8(4,8) // led 2 rouge
                        cons.writeUInt8(4,9) // led 3 éteinte
@@ -717,7 +719,7 @@ export default function Compteur(props) {
                    if (contenu.readUInt8(46) === 1) {
                        //saveSession()
                        stopSession(watts)
-                       cons.writeUInt32BE(watts,0)
+                       cons.writeUInt32BE(wattConverter(watts),0)
                        cons.writeUInt8(4,7) //led 1 rouge
                        cons.writeUInt8(4,8) // led 2 rouge
                        cons.writeUInt8(0,9) // led 3 éteinte
@@ -728,7 +730,7 @@ export default function Compteur(props) {
                        //console.log("alerte surtention - alerte surt"+ contenu.readUInt8(46))
                    }
                    if (contenu.readUInt32BE(8) < 20 ){
-                       cons.writeUInt32BE(watts,0)
+                       cons.writeUInt32BE(wattConverter(watts),0)
                        cons.writeUInt8(3,7) //led 1 jaune
                        cons.writeUInt8(0,8) // led 2 éteinte
                        cons.writeUInt8(0,9) // led 3 éteinte
@@ -738,7 +740,7 @@ export default function Compteur(props) {
                        setModal(true)
                        const timer = setInterval(showWarning, 500)
                        setTimeModal(timer)
-                       cons.writeUInt32BE(watts,0)
+                       cons.writeUInt32BE(wattConverter(watts),0)
                        cons.writeUInt8(2,7) // led 1 vert
                        cons.writeUInt8(2,8) // led 2 vert
                        cons.writeUInt8(2,9) // led 3 vert
@@ -848,6 +850,9 @@ export default function Compteur(props) {
                             if (watts > 0) {
                                 setWatts(watts - 5)
                                 cons.writeUInt32BE(wattConverter(watts-5),0)
+                                cons.writeUInt8(2,7)
+                                cons.writeUInt8(2,8)
+                                cons.writeUInt8(2,9)
                                 sendMessage(5, cons,0,inc )
                             }
                         }}>
@@ -865,6 +870,9 @@ export default function Compteur(props) {
                                 if (watts < 750) {
                                     setWatts(watts + 5)
                                     cons.writeUInt32BE(wattConverter(watts+5),0)
+                                    cons.writeUInt8(2,7)
+                                    cons.writeUInt8(2,8)
+                                    cons.writeUInt8(2,9)
                                     sendMessage(5, cons,0,inc )
                                 }
                             }}>
