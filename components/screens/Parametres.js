@@ -322,8 +322,7 @@ export default function Parametres(props) {
                             display="compact"
                             textColor="white"
                             locale="fr-FR"
-                            style={{width: 120,  alignSelf:"center", zIndex:600, position:"absolute", textColor:"white"}}
-
+                            style={{width: 120,  alignSelf:"center", zIndex:600, position:"absolute", color:"orange"}}
                         />
                   :
                     <DateTimePicker
