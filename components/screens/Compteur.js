@@ -288,14 +288,16 @@ export default function Compteur(props) {
      */
     React.useEffect(() => {
         StartImageRotateFunction()
-        const interval = setInterval(() => {
-            randomRotation()
-        }, 1000); //mise à jour du tableau d'interpolation de la rotation
-        if (modal == true || start == false) {
-            clearInterval(interval)
-        }
-        return () => {
-            clearInterval(interval)
+        if (defis[defic].id !== "2187ed70-a005-4ae2-8fa6-5db2c2db907e") {
+            const interval = setInterval(() => {
+                randomRotation()
+            }, 1000); //mise à jour du tableau d'interpolation de la rotation
+            if (modal == true || start == false) {
+                clearInterval(interval)
+            }
+            return () => {
+                clearInterval(interval)
+            }
         }
     }, [seg, endPosition, startPosition, angle, up, modal,vitesses])
 
