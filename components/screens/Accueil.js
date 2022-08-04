@@ -18,34 +18,40 @@ var avatar = require('../../assets/avatar.png');
 import Avatar from "./Avatar";
 import DefisLong from "./DefisLong";
 import * as RNLocalize from "react-native-localize";
-
+/***
+ * écran d'accueil de l'application
+ */
 export default function Accueil(props) {
   const [state, setState] = useContext(Context);
-  const [defisL,setDefisL] = useState(true)
-  const [indices,setIndices] = useState([["KCAL","dépensés"],["WH","produits"],["KM","cumulés"]])
-  const [datacumul,setDatacumul] = useState([0,0,0])
+  const [defisL,setDefisL] = useState(true) // liste dess défis longs de l'utilisateur
+  const [indices,setIndices] = useState([["KCAL","dépensés"],["WH","produits"],["KM","cumulés"]]) // indices disponibles
+  const [datacumul,setDatacumul] = useState([0,0,0]) // données cumulées de l'utilisateur depuis sa première connexion
   console.log(state.user.goals)
+  /**
+   * Sélection de l'affichage en focntion du profil utilisateur
+   *  
+   */
   React.useEffect(()=>{
     if (Object.keys(state.user).length !== 0){
       let dist = state.user.totalDistance !== undefined ? formatDistance(state.user.totalDistance) : formatDistance(0)
       let energie = state.user.totalEnergie !== undefined ? formatEnergie(state.user.totalEnergie, "wh") : formatEnergie(0, "wh")
       switch (state.user.goals[0]){
-        case "1bf5d297-5ff1-42a1-9f48-98d45ad113f0":
+        case "8476fdcc-c1f8-4055-90fd-af3aa2cca35f": // profil "faire du sport"
           let e2 = state.user.totalEnergie !== undefined ? formatEnergie(state.user.totalEnergie, "cals") : formatEnergie(0, "cals")
           setIndices([[e2[1],"dépensés"],[energie[1],"produits"],[dist[1],"cumulés"]])
           setDatacumul([e2[0],energie[0],dist[0]])
           break;
-        case "42098d44-1ad3-4a25-9272-c957d1800797":
+        case "421ebac1-8ad8-4f16-ad17-dd03511fad58": // profil "Brûler des calories"
           e2 = state.user.totalEnergie !== undefined ? formatEnergie(state.user.totalEnergie, "cals") : formatEnergie(0, "cals")
           setIndices([[energie[1],"produits"],[e2[1],"brulées"],[dist[1],"cumulés"]])
           setDatacumul([energie[0],e2[0],dist[0]])
           break;
-        /*case "2":
+        /*case "2": profil réduire la facture d'électricité
           e2 = state.user.totalEnergie !== undefined ? formatEnergie(state.user.totalEnergie, "$") : : formatEnergie(0, "$")
           setDatacumul([energie[0],e2[0],dist[0]])
           setIndices([[energie[1],"produits"],[e2[1],"économisées"],[dist[1],"cumulés"]])
           break;
-        case "3":
+        case "3": profil réduire son impact sur l'environnement
           e2 = formatEnergie(state.user.totalEnergie, "co2")
           setDatacumul([e2[0],energie[0],dist[0]])
           setIndices([[e2[1],"économisées"],[energie[1],"produits"],[dist[1],"cumulés"]])
@@ -64,13 +70,10 @@ export default function Accueil(props) {
       }
     }
   },[state.user])
-
-  // const [name, setName]= useState('Gaston')
-  // const [kcal, setKcal]= useState('5400')
-  // const [km, setKm] = useState('234.0')
-  // const [watts,setWatts] = useState('4000')
   refreshState(state, setState);
-
+ /**
+  * conversion des unités de distance et des monnaies affichées 
+  */
   function formatDistance (distance){
     if(state.user.unitDistance === "m" ){
       if (distance < 1000){
@@ -90,6 +93,7 @@ export default function Accueil(props) {
       return [Math.round(distance/1609.3472), "mi"]
     }
   }
+  //formate l'énergie dans la valeur demandée
   function formatEnergie (energie,unit) {
     let resp = []
     if (unit === "wh"){
@@ -131,7 +135,7 @@ export default function Accueil(props) {
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />
       {
-        //Object.keys(state.user).length === 0 || Object.keys(state.user.challenges).length !== 0 ? <></> : <DefisLong visible={state.user.challenges.length == 0} />
+        //Object.keys(state.user).length === 0 || Object.keys(state.user.challenges).length !== 0 ? <></> : <DefisLong visible={state.user.challenges.length == 0} /> affichage du choix du défis mensuel
       }
       {/* HEADER */}
       <View style={styles.header}>

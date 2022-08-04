@@ -520,17 +520,16 @@ export default function Compteur(props) {
             if (status) {                                //configuration simulateur
                 if (Platform.OS == 'ios') {              //configuration iphone
                     return  config = {
-                        port: 333,
-                        host: '192.168.1.200',
-                        reuseAddress: true,
-                        interface:'wifi'
+                        port: 8080,
+                        host: '127.0.0.1',
+                        reuseAddress: true
                     }
                 } else {                                //configuration android device
                     return config = {
-                        port: 333,
-                        host:  '192.168.1.200',
-                        reuseAddress: true,
-                        interface:'wifi'
+                        port: 8080 ,
+                        host:  '127.0.0.1',
+                        localAddress:'10.0.2.2',
+                        reuseAddress: true
                     }
                 }
             } else {

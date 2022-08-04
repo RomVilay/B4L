@@ -1,6 +1,11 @@
 import React from "react";
 import {View, ImageBackground, Animated, Text, StyleSheet, TouchableOpacity, Platform} from "react-native";
 import Fleche from "../../assets/fleche";
+/**
+ * affichage des données dans l'écran compteur
+ * @param {} props 
+ * @returns 
+ */
 
 export default function AfficheurDonnees (props) {
     const [state,setState] = React.useState({
@@ -72,6 +77,7 @@ export default function AfficheurDonnees (props) {
         }
         setTab([tab[2], tab[0], tab[1]]);
     };
+    // animation de déplacement à l'envers
    const ReverseSlider = () => {
         if (tab[0] === 'kmh') {
             Animated.parallel([
@@ -162,7 +168,8 @@ export default function AfficheurDonnees (props) {
                 <Animated.View
                     style={[styles.textbloc, {width:25, height:35}, trans2.getLayout()]}>
                     <Text style={[styles.midText, {fontSize: 30, width:25}]}>
-                        {Math.round(props.kmh)}
+                        {Math.round(props.kmh) // affichage de la vitesse théorique
+                        }
                     </Text>
                     <Text style={[styles.midText2,{fontSize:20}]}>kmh</Text>
                 </Animated.View>
@@ -174,7 +181,8 @@ export default function AfficheurDonnees (props) {
                 <View style={[styles.textbloc,{paddingTop:Platform.OS =="android" ? 18 : 15} ]}>
                     <View style={{flexDirection: 'column'}}>
                         <Text style={[styles.midText, {fontSize: 20}]}>
-                            {props.distance < 1 ? Math.round(props.distance * 1000) : Number.parseFloat(props.distance).toFixed(2)}
+                            {props.distance < 1 ? Math.round(props.distance * 1000) : Number.parseFloat(props.distance).toFixed(2) // distance théorique parcourue 
+                            }
                             <Text
                                 style={[
                                     styles.midText2,
