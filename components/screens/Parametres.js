@@ -32,6 +32,11 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import SelectIOS from "./SelectIos";
 import Colors from "react-native/Libraries/NewAppScreen/components/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+/**
+ * Définition du profil utilisateur
+ * @param {*} props 
+ * @returns 
+ */
 
 export default function Parametres(props) {
   const [state, setState] = useContext(Context);

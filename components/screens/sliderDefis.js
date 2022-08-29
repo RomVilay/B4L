@@ -1,6 +1,10 @@
 import React, {useRef} from "react";
 import {SafeAreaView, View, FlatList, Text, StyleSheet, TouchableWithoutFeedback, TouchableOpacity} from "react-native";
-
+/**
+ * Slider d'affichage des défis
+ * @param {*} props 
+ * @returns 
+ */
 const SliderDefis = (props) => {
     const flist = useRef()
     const[currentDefis,setCurent] = React.useState(props.defis[props.current])

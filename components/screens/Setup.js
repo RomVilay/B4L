@@ -17,10 +17,15 @@ import LogoMin from '../../assets/logoMin';
 import TcpSocket from 'react-native-tcp-socket';
 import DeviceInfo from "react-native-device-info";
 import moment from "moment";
+/**
+ * Page de test des fonctionalités de la carte
+ * @param {*} props 
+ * @returns 
+ */
 export default function Setup(props){
     const [server,setServer] = useState(new TcpSocket.Socket())
-    const [ip,setIp] = useState('192.168.1.200') // '127.0.0.1') /
-    const [port,setPort] = useState(333)//   )8080
+    const [ip,setIp] = useState('192.168.1.200') // ip localhost '127.0.0.1') /
+    const [port,setPort] = useState(333)// port localhost:  )8080
     const [connect,setConnect] = useState(false)
     const [lastmessage,setLastmessage] = useState()
     const [donnees,setDonnees] = useState()

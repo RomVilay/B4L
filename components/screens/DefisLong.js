@@ -6,6 +6,11 @@ import {editUser} from "../../functions/user";
 import NetInfo from "@react-native-community/netinfo";
 import goTo from "../utils/navFunctions";
 
+/**
+ * Affichage des défis long 
+ * @param {} props 
+ * @returns 
+ */
 const DefisLong = (props) => {
     const [state, setState] = useContext(Context);
     const [isLoading, setIsLoading] = useState(false);

@@ -36,7 +36,11 @@ const Item2 = ({ item, onPress, style }) => (
         {item.description !== undefined ? <Text style={[styles.description,{textAlign:"center"}]}>{item.description}</Text> : <></> }
     </TouchableOpacity>
 );
-
+/**
+ * affichage des défis pour la future session à partir du profil de l'utilisateur
+ * @param {*} props 
+ * @returns 
+ */
 export default function  ListeDefis(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [state, setState] = useContext(Context);

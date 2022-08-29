@@ -12,6 +12,11 @@ import { getUser } from '../../functions/user'
 import LogoMed from '../../assets/logoMed';
 import jwt_decode from "jwt-decode";
 
+/**
+ * composant de connexion
+ * @param {} props 
+ * @returns 
+ */
 export default function Connexion(props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

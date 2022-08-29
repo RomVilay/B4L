@@ -22,7 +22,11 @@ import {editUser, isValidPassword, deleteUser} from '../../functions/user';
 
 import LogoMin from '../../assets/logoMin';
 import NavApp from '../navigation/NavApp';
-
+/**
+ * écran de changement du mot de passe, mail, nom d'utilisateur et déconnexion
+ * @param {*} props 
+ * @returns 
+ */
 export default function Parametres2(props) {
   const [state, setState] = useContext(Context);
   const [isLoading, setIsLoading] = useState(false);

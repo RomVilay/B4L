@@ -24,7 +24,11 @@ import NavApp from "../navigation/NavApp";
 import {height} from "react-native-daterange-picker/src/modules";
 // Imports Components
 import WifiManager from "react-native-wifi-reborn"
-
+/**
+ * écran d'appairage de la carte embarquée
+ * @param {*} props 
+ * @returns 
+ */
 export default function Jumelage (props) {
     //fonction en cas de réussite de scan du qrcode
     const requestLocationPermission = async (ssid,psw) => {
@@ -49,7 +53,7 @@ export default function Jumelage (props) {
             console.warn(err);
         }
     };
-
+    // connexion en wifi à la carte
     const connect = async (ssid,psw) => {
         try{
             const data = await WifiManager.connectToProtectedSSID(ssid, psw, false);

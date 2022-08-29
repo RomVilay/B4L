@@ -11,7 +11,13 @@ import {
 } from "react-native";
 import goTo from "../utils/navFunctions";
 
-
+/**
+ * Modal d'affichage des erreur de la carte
+ * jaune: peu important
+ * rouge: important et arrêt du système
+ * @param {*} props 
+ * @returns 
+ */
 export const ModalError = (props) => {
     useEffect(()=>{
         //console.log(props)

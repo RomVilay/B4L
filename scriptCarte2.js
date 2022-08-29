@@ -90,16 +90,47 @@ net.createServer(function(sock) {
     releves.writeFloatBE(1, 36)
 
     console.log('Connection établie avec le mobile @' + HOST +':'+ PORT);
+    var routine = setInterval(() => { sendMessage(1, releves,0, 1 , sock) }, 1000)
     sock.on( "data", (data) =>{
         console.log(data.readUInt16BE(8))
         
-        /*if (data.readUInt16BE(8) === 1) {
+        if (data.readUInt16BE(8) === 1) {
+            var sens = false
+            if (releves.readFloatBE(12) <= 20) {
+                sens = true
+            } if (releves.readFloatBE(12) >= 70) {
+                sens = false
+            }
+            sens ? releves.writeFloatBE(releves.readFloatBE(12) + 25, 8) : releves.writeFloatBE(releves.readFloatBE() - 25, 8)
+    releves.writeFloatBE(20, 0) 
+    releves.writeFloatBE(20, 4)
 
-        } else {*/
+    releves.writeFloatBE(20, 8)
+    releves.writeFloatBE(10, 16)
+
+    releves.writeFloatBE(10, 20)
+    releves.writeFloatBE(10, 24)
+    releves.writeFloatBE(10, 28)
+
+    releves.writeFloatBE(0, 32)
+    releves.writeFloatBE(data.readFloatBE(46),46)
+    if (data.readFloatBE(46) !== 0)console.log(`alarme surtention : ${data.readFloatBE(46)}`)
+    releves.writeFloatBE(data.readFloatBE(47),47)
+    if (data.readFloatBE(47) !== 0)console.log(`état amp : ${data.readFloatBE(47)}`)
+    releves.writeFloatBE(data.readFloatBE(48),48)
+    if (data.readFloatBE(48) !== 0 )console.log(`état buzzer: ${data.readFloatBE(48)}`)
+    if (data.readFloatBE(49) !== 0)console.log(`couleur led 1 : ${data.readFloatBE(49)}`)
+    releves.writeFloatBE(data.readFloatBE(50))
+    if (data.readFloatBE(50) !== 0)console.log(`couleur led 2 : ${data.readFloatBE(50)}`)
+    releves.writeFloatBE(data.readFloatBE(51),50)
+    if (data.readFloatBE(51),51)console.log(`couleur led 3 : ${data.readFloatBE(51)}`)
+    releves.writeFloatBE(data.readFloatBE(52),48)
+    if (data.readFloatBE(52),52) console.log(`état buzzer: ${data.readFloatBE(52)}`)
+    } else {
+            clearInterval(routine)    
             sock.pipe(sock)
-        //}
+    }
     })
-    //setInterval(() => { sendMessage(1, releves,0, 1 , sock) }, 1000)
 
 
 }).listen(PORT, HOST);

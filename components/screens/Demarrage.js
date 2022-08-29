@@ -7,7 +7,11 @@ import Logo from '../../assets/logo';
 import {login} from '../../functions/login';
 import jwt_decode from "jwt-decode";
 import {getUser} from "../../functions/user";
-
+/**
+ * Ecran de démarrage de l'application
+ * @param {*} props 
+ * @returns 
+ */
 export default function Demarrage(props) {
   const [state, setState] = useContext(Context);
 
