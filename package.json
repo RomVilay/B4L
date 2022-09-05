@@ -31,7 +31,7 @@
     "react-native-keyboard-aware-scroll-view": "^0.9.4",
     "react-native-localize": "^2.1.0",
     "react-native-modalbox": "^2.0.2",
-    "react-native-notification-sounds": "^0.5.3",
+    "react-native-notification-sounds": "^0.5.4",
     "react-native-permissions": "^3.0.4",
     "react-native-push-notification": "^8.1.1",
     "react-native-qrcode-scanner": "^1.6.0",
