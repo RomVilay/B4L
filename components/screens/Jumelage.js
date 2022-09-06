@@ -18,8 +18,6 @@ import {
 // Imports Assets
 import LogoMin from '../../assets/logoMin'
 import Navigation from '../../assets/navigation'
-import QRCodeScanner from 'react-native-qrcode-scanner';
-import { RNCamera } from 'react-native-camera';
 import NavApp from "../navigation/NavApp";
 import {height} from "react-native-daterange-picker/src/modules";
 // Imports Components
@@ -29,6 +27,31 @@ import WifiManager from "react-native-wifi-reborn"
  * @param {*} props 
  * @returns 
  */
+
+/**
+ *     <QRCodeScanner
+                                    onRead={onSuccess}
+                                    containerStyle={styles.cameracontainer}
+                                    topContent={  <View style={{alignItems:"center"}}>
+                                        <LogoMin /><Text style={[styles.textTitle, {fontSize:70, marginTop:5}]}>Jumelage</Text>
+                                        <Text style={[styles.midText,{marginBottom:20}]}>
+                                            Commencez à pédaler pour allumer la machine, puis scannez le qrcode.
+                                        </Text>
+                                    </View>
+                                        }
+                                    topViewStyle={styles.header}
+                                    cameraStyle={styles.middle}
+                                    bottomContent={
+                                        <View style={{alignItems:'center'}}>
+                                            <Text style={[styles.midText, {marginBottom:'10%'}]}>Scannez le qrcode pour associer l'appareil.</Text>
+                                            <NavApp navigation={props.navigation} />
+                                        </View>
+                                       }
+                                    bottomViewStyle={styles.footer}
+                                />
+ */
+
+
 export default function Jumelage (props) {
     //fonction en cas de réussite de scan du qrcode
     const requestLocationPermission = async (ssid,psw) => {
@@ -78,26 +101,7 @@ export default function Jumelage (props) {
         return (
             <SafeAreaView style={styles.container}>
                 <Image source={require('../../assets/fond.png')} style={styles.fond} />
-                            <QRCodeScanner
-                                    onRead={onSuccess}
-                                    containerStyle={styles.cameracontainer}
-                                    topContent={  <View style={{alignItems:"center"}}>
-                                        <LogoMin /><Text style={[styles.textTitle, {fontSize:70, marginTop:5}]}>Jumelage</Text>
-                                        <Text style={[styles.midText,{marginBottom:20}]}>
-                                            Commencez à pédaler pour allumer la machine, puis scannez le qrcode.
-                                        </Text>
-                                    </View>
-                                        }
-                                    topViewStyle={styles.header}
-                                    cameraStyle={styles.middle}
-                                    bottomContent={
-                                        <View style={{alignItems:'center'}}>
-                                            <Text style={[styles.midText, {marginBottom:'10%'}]}>Scannez le qrcode pour associer l'appareil.</Text>
-                                            <NavApp navigation={props.navigation} />
-                                        </View>
-                                       }
-                                    bottomViewStyle={styles.footer}
-                                />
+                        
 
             </SafeAreaView>
         )

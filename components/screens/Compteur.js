@@ -36,7 +36,7 @@ import {LogBox} from 'react-native';
 import RNLocalize from 'react-native-localize'
 import DeviceInfo from "react-native-device-info";
 
-import NotificationSounds, {playSampleSound} from 'react-native-notification-sounds'
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Compteur(props) {
