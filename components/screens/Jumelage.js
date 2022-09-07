@@ -1,5 +1,5 @@
 // Imports Modules
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -23,6 +23,9 @@ import {height} from 'react-native-daterange-picker/src/modules';
 import {Camera, CameraCaptureError, useCameraDevices} from 'react-native-vision-camera';
 // Imports Components
 import WifiManager from 'react-native-wifi-reborn';
+import { useScanBarcodes, BarcodeFormat } from 'vision-camera-code-scanner';
+
+import 'react-native-reanimated'
 
 /**
  * écran d'appairage de la carte embarquée
@@ -68,6 +71,16 @@ export default function Jumelage(props) {
   React.useEffect(() => {
     checkCameraPermission();
   }, []);
+
+  const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE], {
+    checkInverted: true,
+  });
+  React.useEffect(() => {
+    if (barcodes.length > 0 && barcodes[0].rawValue !== undefined){
+     // console.log(`ssid: ${barcodes[0].rawValue.slice(7, 10)} - password ${barcodes[0].rawValue.slice(19, barcodes[0].rawValue.length - 2)}`)
+      requestLocationPermission(barcodes[0].rawValue.slice(7, 10), barcodes[0].rawValue.slice(19, barcodes[0].rawValue.length - 2));
+    }  
+  }, [barcodes]);
   //console.log(devices);
   //fonction en cas de réussite de scan du qrcode
   const requestLocationPermission = async (ssid, psw) => {
@@ -123,7 +136,7 @@ export default function Jumelage(props) {
       {'authorized' !== hasPermission ? (
         <Text>Please allow the app to access your camera.</Text>
       ) : device ? (
-        <Camera style={{flex: 2, marginBottom:"25%"}} device={device} isActive={true} />
+        <Camera style={{flex: 2, marginBottom:"25%"}} device={device} isActive={true} frameProcessor={frameProcessor} frameProcessorFps={5}/>
       ) : (
         <></>
       )}
