@@ -58,7 +58,7 @@ export default function Demarrage(props) {
         <Text style={styles.text} onPress={() => navigate('Connexion')}>
           Start
         </Text>
-        <Text style={{color:"white", position:"absolute" ,bottom:30, fontSize:20}} onPress={() => props.navigation.navigate("Jumelage")}>
+        <Text style={{color:"white", position:"absolute" ,bottom:30, fontSize:20}} onPress={() => props.navigation.navigate("Setup")}>
           Setup
         </Text>
       </View>
