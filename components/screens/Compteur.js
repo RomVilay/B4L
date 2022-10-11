@@ -369,7 +369,7 @@ export default function Compteur(props) {
                     //console.log("défis valide: "+(but.type === "distance" && distance * 1000 >= but.number) +" "+ distance*1000 +" - "+ but.number)
                     if ((but.type === "distance" && distance * 1000 >= but.number)
                         || (but.type === "power" && energie.length > 0 && energie.reduce((a, b) => a + b) >= but.number)
-                        || (but.type === "duration" && moment.duration(currentTime).asSeconds() - defi.startTime === but.number)
+                        || (but.type === "duration" && moment.duration(currentTime).asSeconds() - defi.startTime <= but.number)
                         || (but.type === "%" && energie.length > 0 && energiep.length > 0 && defi.startE !== null && (energie.reduce((a, b) => a + b) - defi.startE >= energiep.reduce((a, b) => a + b) - defi.startE))
                     ) {
                         bvalid = bvalid + 1
