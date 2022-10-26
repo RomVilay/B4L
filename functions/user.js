@@ -10,11 +10,11 @@ import {fetchWithTimeout} from './fetchWithTimeout';
  * @param {String} authToken Le token d'authentification
  * @returns L'user correspondant à l'username | Un message d'erreur si pas autorisé
  */
-async function getUser(username, authToken) {
+async function getUser(iduser, authToken) {
   let get = await fetchWithTimeout(
-    `${BASE_URL}/users/${username}`,
+    `${BASE_URL}/users/${iduser}`,
     {
-      headers: {'auth-token': authToken},
+      headers: {Authorization: `Bearer ${authToken}` },
     },
     serverTimeout,
   );
@@ -75,13 +75,13 @@ async function usersCount(authToken) {
  * @param {String} authToken Le token d'authentification
  * @returns true si password valide, false sinon | Un message d'erreur si pas autorisé
  */
-async function isValidPassword(username, password, authToken) {
+async function isValidPassword(userId, password, authToken) {
   let isValid = await fetchWithTimeout(
-    `${BASE_URL}/users/${username}/checkPassword`,
+    `${BASE_URL}/users/${userId}`,
     {
-      method: 'POST',
-      body: JSON.stringify({password: password}),
-      headers: {'Content-Type': 'application/json', 'auth-token': authToken},
+      method: 'PATCH',
+      body: JSON.stringify({password: password, currentPassword:password}),
+        headers: {Authorization: `Bearer ${authToken}` },
     },
     serverTimeout,
   );
@@ -95,13 +95,13 @@ async function isValidPassword(username, password, authToken) {
  * @param {String} authToken Le token d'authentification
  * @returns Les informations de l'utilisateur concené | Un message d'erreur si pas autorisé
  */
-async function editUser(username, body, authToken) {
+async function editUser(userId, body, authToken) {
   let patch = await fetchWithTimeout(
-    `${BASE_URL}/users/${username}`,
+    `${BASE_URL}/users/${userId}`,
     {
       method: 'PATCH',
       body: JSON.stringify(body),
-      headers: {'Content-Type': 'application/json', 'auth-token': authToken},
+      headers: {'Content-Type': 'application/json', Authorization: `Bearer ${authToken}`},
     },
     serverTimeout,
   );
@@ -114,10 +114,10 @@ async function editUser(username, body, authToken) {
  * @param {String} authToken Le token d'authentification
  * @returns L'utilisateur supprimé | Un message d'erreur si pas autorisé
  */
-async function deleteUser(username, authToken) {
-  let deletedUser = await fetchWithTimeout(`${BASE_URL}/users/${username}`, {
+async function deleteUser(userid, authToken) {
+  let deletedUser = await fetchWithTimeout(`${BASE_URL}/users/${userid}`, {
     method: 'DELETE',
-    headers: {'Content-Type': 'application/json','auth-token': authToken},
+    headers: {'Authorization':`Bearer ${authToken}`},
     serverTimeout,
   });
   return deletedUser;

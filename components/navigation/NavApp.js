@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   },
   main: {
     position: 'absolute',
-    bottom: 0
+    bottom: 30
   },
   navAppContainer: {
     alignItems: 'center',

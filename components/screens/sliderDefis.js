@@ -1,6 +1,10 @@
 import React, {useRef} from "react";
 import {SafeAreaView, View, FlatList, Text, StyleSheet, TouchableWithoutFeedback, TouchableOpacity} from "react-native";
-
+/**
+ * Slider d'affichage des défis
+ * @param {*} props 
+ * @returns 
+ */
 const SliderDefis = (props) => {
     const flist = useRef()
     const[currentDefis,setCurent] = React.useState(props.defis[props.current])
@@ -10,7 +14,7 @@ const SliderDefis = (props) => {
            return(
                <TouchableWithoutFeedback onPress={()=>{}}>
                <View style={[styles.defisCardBlue,{marginLeft:index === 0 ? 100:0, marginRight:index === props.defis.length-1 ? 200:0}]}>
-                   <Text style={styles.text}>{item.nomDefi}</Text>
+                   <Text style={styles.text}>{item.name}</Text>
                </View>
                </TouchableWithoutFeedback>
            )
@@ -18,7 +22,7 @@ const SliderDefis = (props) => {
        if (props.defisV.includes(item)){
            return(
                <View style={[styles.defisCardGreen,{marginRight:index === props.defis.length-1 ? 200:0}]}>
-                   <Text style={styles.text}>{item.nomDefi}</Text>
+                   <Text style={styles.text}>{item.name}</Text>
                </View>
            )
        }
@@ -26,7 +30,7 @@ const SliderDefis = (props) => {
            return(
                <TouchableWithoutFeedback onPress={()=>{}}>
                <View style={styles.defisCardYellow}>
-                   <Text style={styles.text}>{item.nomDefi}</Text>
+                   <Text style={styles.text}>{item.name}</Text>
                </View>
                </TouchableWithoutFeedback>
            )

@@ -5,13 +5,15 @@ import NetInfo from '@react-native-community/netinfo';
 
 import goTo from '../utils/navFunctions';
 import {editUser} from '../../functions/user';
+import {listeObjectifs} from '../../functions/objectif'
 import {Context} from '../utils/Store';
 
 import LogoMin from '../../assets/logoMin';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Objectifs(props) {
   const [state, setState] = useContext(Context);
-  const [defis] = useState([
+  /*const [defis] = useState([
     {id: '0', nom: "Faire du sport"},
     {id: '1', nom: 'Brûler des Calories'},
     {id: '2', nom: "Faire des économies en produisant de l'énergie"},
@@ -22,15 +24,27 @@ export default function Objectifs(props) {
     state.user.objectifs.includes('1') || false,
     state.user.objectifs.includes('2') || false,
     state.user.objectifs.includes('3') || false,
-  ]);
+  ]);*/
+  const [goals,setGoals] = useState([])
+  const [selection,setSelection] = useState(state.user.goals)
   const [isLoading, setIsLoading] = useState(false);
+  const getList = async () => {
+    setIsLoading(true)
+    let list = await listeObjectifs(state.token)
+    list = list.map(item =>{
+      var goal = {id:item.id,description:item.description,name:item.name}
+      return goal
+    })
+    await setGoals(list)
+    setIsLoading(false)
+  }
+  React.useEffect( () => {
+    getList()
+  },[])
 
   const sendSelection = async () => {
-    let select = [];
-    status.map((defi, index) => {
-      defi == true ? select.push(defis[index].id) : null;
-    });
-    if (select.length == 0) {
+    let storedPassword = await AsyncStorage.getItem('@bikeforlifepassword');
+    if (selection.length === 0) {
       return Alert.alert('Erreur', 'Veuillez préciser au moins un objectif');
     }
     setIsLoading(true);
@@ -40,7 +54,7 @@ export default function Objectifs(props) {
     if (!isConnected) {
       Alert.alert('Erreur', 'Vérifiez votre connexion Internet et réessayez');
     } else {
-      const updated = await editUser(state.user.username, {objectifs: select}, state.token);
+      const updated = await editUser(state.user.id, {"goals": selection, "password": storedPassword, "currentPassword": storedPassword}, state.token);
       setIsLoading(false);
       if (updated.message) {
         Alert.alert('Erreur', `${updated.message}`);
@@ -49,12 +63,12 @@ export default function Objectifs(props) {
         if (
           props.route.params &&
           props.route.params.previousRoute &&
-          props.route.params.previousRoute == 'Parametres'
+          props.route.params.previousRoute === 'Parametres'
         ) {
           props.navigation.goBack();
         }
         if (
-          state.user.poids == undefined ||state.user.taille == undefined
+          state.user.poids === undefined ||state.user.taille === undefined
         ) {
           props.navigation.navigate('Parametres');
         }else {
@@ -62,7 +76,6 @@ export default function Objectifs(props) {
       }
     }
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />
@@ -72,43 +85,48 @@ export default function Objectifs(props) {
           <Text style={[styles.textTitle, {fontSize: 100}]}>Objectif</Text>
           <Text style={[styles.whiteTitle]}>L'</Text>
         </View>
+        {isLoading ? (
+            <ActivityIndicator size="large" color="#5FCDFA" style={{top: '10%'}} />
+        ) : (
         <View style={styles.middle}>
           <Text style={styles.linesw}> J'ai envie de :</Text>
           <View style={styles.midItem}>
-            {defis.map(defi => {
+            {goals.map(goal => {
+             // console.log("sélection :"+selection.filter(item => item !== goal.id))
               return (
-                  <View style={styles.listItem}  key={defi.id}>
-                    <CheckBox
-                        onValueChange={() =>
-                            setStatus(previousState => {
-                              const newArray = [...previousState];
-                              newArray[defi.id] = !status[defi.id];
-                              return newArray;
-                            })
-                        }
-                        value={status[defi.id]}
-                        boxType={'square'}
-                        onFillColor={"white"}
-                        onCheckColor={"#1D4465"}
-                        onTintColor={"white"}
-                        tintColor={"grey"}
-                        tintColors={{true:"white"}}
-                    />
-                    <TouchableOpacity
-                        onPress={() => {
-                          setStatus(previousState => {
-                            const newArray = [...previousState];
-                            newArray[defi.id] = !status[defi.id];
-                            return newArray;
-                          });
-                        }}>
-                      <Text style={[styles.whiteText,{marginLeft:'5%'}]}>{defi.nom}</Text>
-                    </TouchableOpacity>
+                  <View style={styles.listItem}  key={goal.id}>
+                    <View style={{ "flexDirection":"row"}}>
+                      <CheckBox
+                          onValueChange={() => {selection.findIndex(item => item.id === goal.id) > -1 ?
+                              selection.splice(selection.findIndex(item => item.id === goal.id),1) :  selection.push(goal)
+                            //console.log(selection)
+                            setSelection(selection)
+                            console.log(selection)
+                          }
+                          }
+                          value={selection.findIndex(item => item.id === goal.id) > -1}
+                          boxType={'square'}
+                          onFillColor={"white"}
+                          onCheckColor={"#1D4465"}
+                          onTintColor={"white"}
+                          tintColor={"grey"}
+                          tintColors={{true:"white"}}
+                      />
+                      <TouchableOpacity
+                          onPress={() => {
+                            selection.findIndex(item => item.id === goal.id) > -1 ?
+                                selection.splice(selection.findIndex(item => item.id === goal.id),1) :  selection.push(goal)
+                          }}>
+                        <Text style={[styles.whiteText,{marginLeft:'5%'}]}>{goal.name}</Text>
+                      </TouchableOpacity>
+                    </View>
+                  <Text style={styles.textDescri}>{goal.description}</Text>
                   </View>
               );
             })}
           </View>
         </View>
+            )}
         <View style={styles.footer}>
           {isLoading ? (
             <ActivityIndicator size="large" color="#5FCDFA" />
@@ -151,6 +169,9 @@ const styles = StyleSheet.create({
     top: '55%',
     right: '66%',
   },
+  textDescri:{
+    fontFamily: 'GnuolaneRG-Regular', fontSize:17, color: '#5FCDFA',
+  },
   linesb: {
     color: '#5FCDFA',
     fontSize: 25,
@@ -176,8 +197,7 @@ const styles = StyleSheet.create({
   },
   listItem: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     zIndex: 100,
     width: '93%',
     marginBottom: '5%',

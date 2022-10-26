@@ -24,6 +24,11 @@ import SegmentedRoundDisplay from "react-native-segmented-round-display";
 const fondBulleUri = RNimage.resolveAssetSource(fondBulle);
 import { AnimatedSVGPath } from "react-native-svg-animations";
 
+/**
+ * composant d'affichage du segment proportionnel à la vitesse théorique
+ * @param {*} props 
+ * @returns 
+ */
 export default function  AfficheurCompteur (props){
         const canvas = React.createRef();
     const [anim,setAnim] = React.useState("")

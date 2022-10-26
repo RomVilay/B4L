@@ -23,7 +23,11 @@ import { Picker } from '@react-native-picker/picker';
 import {Context} from '../utils/Store';
 import {listeDefisLongs} from "../../functions/defis";
 import {getSessionsByUsername} from "../../functions/session";
-
+/**
+ * écran des statistiques de l'application
+ * @param {*} props 
+ * @returns 
+ */
 export default function Statistiques(props) {
   const [state,setState] = useContext(Context)
   const [isLoading, setIsLoading] = useState(false);

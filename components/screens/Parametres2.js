@@ -22,14 +22,18 @@ import {editUser, isValidPassword, deleteUser} from '../../functions/user';
 
 import LogoMin from '../../assets/logoMin';
 import NavApp from '../navigation/NavApp';
-
+/**
+ * écran de changement du mot de passe, mail, nom d'utilisateur et déconnexion
+ * @param {*} props 
+ * @returns 
+ */
 export default function Parametres2(props) {
   const [state, setState] = useContext(Context);
   const [isLoading, setIsLoading] = useState(false);
   const [isEditPwd, setIsEditPwd] = useState(false);
-  const [tempPrenom, setTempPrenom] = useState(state.user.prenom || '');
-  const [tempNom, setTempNom] = useState(state.user.nom || '');
-  const [tempMail, setTempMail] = useState(state.user.mail || '');
+  const [tempPrenom, setTempPrenom] = useState(state.user.firstName || '');
+  const [tempNom, setTempNom] = useState(state.user.lastName || '');
+  const [tempMail, setTempMail] = useState(state.user.email || '');
   const [tempPassword, setTempPassword] = useState('');
   const [tempPassword1, setTempPassword1] = useState('');
   const [tempPassword2, setTempPassword2] = useState('');
@@ -105,17 +109,17 @@ export default function Parametres2(props) {
       refPwd.focus();
     } else {
       setIsLoading(true);
-      let res = await isValidPassword(state.user.username, tempPassword, state.token);
+      /*let res = await isValidPassword(state.user.id, tempPassword, state.token);
       if (res.message) {
         Alert.alert('Erreur', `${res.message}`);
         setIsLoading(false);
-      } else if (res) {
+      } else if (res) {*/
         updateUser();
-      } else {
+      /*} else {
         setIsLoading(false);
         Alert.alert('Erreur', `Mot de passe incorrect`);
         refPwd.focus();
-      }
+      }*/
     }
   };
 
@@ -127,13 +131,15 @@ export default function Parametres2(props) {
       setIsLoading(false);
       Alert.alert('Erreur', 'Vérifiez votre connexion Internet et réessayez');
     } else {
+      console.log(tempPassword)
       const updated = await editUser(
-        state.user.username,
+        state.user.id,
         {
-          nom: tempNom,
-          prenom: tempPrenom,
-          tempMail: tempMail,
-          password: tempPassword1,
+          lastName: tempNom,
+          firstname: tempPrenom,
+          email: tempMail,
+          password: tempPassword1 !== "" ? tempPassword1 : tempPassword,
+          currentPassword:tempPassword
         },
         state.token,
       );
@@ -151,6 +157,8 @@ export default function Parametres2(props) {
         if (tempPassword1 !== '') {
           await AsyncStorage.setItem('@bikeforlifepassword', tempPassword1);
         }
+        updated.goals = state.user.goals
+        updated.challenges = state.user.challenges
         setState({user: updated, token: state.token});
         setIsLoading(false);
         goTo(props);
@@ -168,19 +176,20 @@ export default function Parametres2(props) {
 
   const deleteAccount = async () => {
     setIsLoading(true);
-    let res = await isValidPassword(state.user.username, tempPassword, state.token);
+    let res = await isValidPassword(state.user.id, tempPassword, state.token);
     if (res.message) {
-      Alert.alert('Erreur', `${res.message}`);
+      Alert.alert('Erreur Authentification', `${res.message}`);
       setIsLoading(false);
     } else if (!res) {
       setIsLoading(false);
-      Alert.alert('Erreur', `Mot de passe incorrect`);
+      Alert.alert('Erreur Authentification', `Mot de passe incorrect`);
       refPwd.focus();
     } else {
       await deleteLocalStorage();
-      let res = await deleteUser(state.user.username, state.token);
-      if (res.message) {
-        Alert.alert('Erreur', "Quelque chose s'est mal passé, contactez BikeForLife. Erreur : " + res.message);
+      let res = await deleteUser(state.user.id, state.token);
+      console.log(res)
+      if (res.error) {
+        Alert.alert('Erreur suppression', "Quelque chose s'est mal passé, contactez BikeForLife. Erreur : " + res.message);
         setIsLoading(false);
       } else {
         setState({user: {}, token: ''});

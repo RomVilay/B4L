@@ -1,9 +1,9 @@
-const fetch = require("node-fetch");
+import {fetchWithTimeout} from './fetchWithTimeout';
 import {
-  BASE_URL,
-  TIMEOUTDELAY_DEFAULT as serverTimeout,
+  URL,PORT,
 } from '../components/utils/constants';
-
+const BASE_URL = `${URL}${PORT}`;
+const serverTimeout = 5000;
 /**
  * Apppelle la route /sessions/ pour créer un nouvel user
  * @param {Object} data Les informations
@@ -11,13 +11,15 @@ import {
  * @returns Le nouvel utilisateur | Un message d'erreur si les champs sont invalides
  */
 async function createSession(data, authToken) {
-  let post = await fetch(`${BASE_URL}/sessions/`, {
+  console.log(data)
+  let post = await fetchWithTimeout(`${BASE_URL}/sessions`, {
     method: "post",
     body: JSON.stringify(data),
-    headers: { "Content-Type": "application/json", "auth-token": authToken },
-  }).then((res) => {
-    return res.json();
-  });
+    headers: { "Content-Type": "application/json",
+      "Authorization": `Bearer ${authToken}` },
+  },
+      serverTimeout)
+  console.log(post)
   return post;
 }
 
@@ -27,11 +29,10 @@ async function createSession(data, authToken) {
  * @returns La liste des sessions | Un message d'erreur si pas admin
  */
 async function getAllSessions(authToken) {
-  let get = await fetch(`${BASE_URL}/sessions`, {
-    headers: { "auth-token": authToken },
-  }).then((res) => {
-    return res.json();
-  });
+  let get = await fetchWithTimeout(`${BASE_URL}/sessions`, {
+    headers: { "Authorization": `Bearer ${authToken}` },
+    serverTimeout
+  })
   return get;
 }
 
@@ -42,11 +43,10 @@ async function getAllSessions(authToken) {
  * @returns la session correspondante | un message d'erreur si mauvaise authentification
  */
 async function getSession(idSession, authToken) {
-  let get = await fetch(`${BASE_URL}/sessions/${idSession}`, {
-    headers: { "auth-token": authToken },
-  }).then((res) => {
-    return res.json();
-  });
+  let get = await fetchWithTimeout(`${BASE_URL}/sessions/${idSession}?sequences=true`, {
+    headers: { "Authorization": `Bearer ${authToken}` },
+    },
+    serverTimeout)
   return get;
 }
 
@@ -56,12 +56,11 @@ async function getSession(idSession, authToken) {
  * @param {String} authToken Le token d'identification
  * @returns les sessions correspondantes | un message d'erreur si mauvaise authentification
  */
-async function getSessionsByUsername(id, authToken) {
-  let get = await fetch(`${BASE_URL}/sessions/user/${id}`, {
-    headers: { "auth-token": authToken },
-  }).then((res) => {
-    return res.json();
-  });
+async function getSessionsByUser(id, authToken) {
+  let get = await fetchWithTimeout(`${BASE_URL}/sessions?userId=${id}&limit=10&offset=0&orderByDate=true`, {
+    headers: { "Authorization": `Bearer ${authToken}` },
+  },
+      serverTimeout)
   return get;
 }
 
@@ -72,7 +71,7 @@ async function getSessionsByUsername(id, authToken) {
  */
 async function sessionsCount(authToken) {
   let count = await fetch(`${BASE_URL}/count/sessions`, {
-    headers: { "auth-token": authToken },
+    headers: { "Authorization": `Bearer ${authToken}`  },
   }).then((res) => {
     return res.json();
   });
@@ -102,13 +101,13 @@ async function sessionsCountByUsername(username, authToken) {
  * @returns Les informations de la session concenée | Un message d'erreur si pas autorisé
  */
 async function editSession(id, body, authToken) {
-  let patch = await fetch(`${BASE_URL}/sessions/${id}`, {
+  let patch = await fetchWithTimeout(`${BASE_URL}/sessions/${id}`, {
     method: "patch",
     body: JSON.stringify(body),
-    headers: { "Content-Type": "application/json", "auth-token": authToken },
-  }).then((res) => {
-    return res.json();
-  });
+    headers: {  "Content-Type": "application/json",
+      "Authorization": `Bearer ${authToken}` },
+  },
+  serverTimeout)
   return patch;
 }
 
@@ -150,14 +149,30 @@ async function deleteSessionByUsername(username, authToken) {
  * @returns toutes les sessions de l'utilisateur
  */
 
+async function  createSequence(data,authToken){
+  console.log("data: "+JSON.stringify(data))
+  let createSequence = await fetchWithTimeout(`${BASE_URL}/sequences`, {
+    method: "post",
+    body: JSON.stringify(data),
+    headers: { "Content-Type": "application/json",
+      "Authorization": `Bearer ${authToken}` },
+    },
+    serverTimeout)
+  //console.log(createSequence)
+  return createSequence;
+}
+
+
+
 module.exports = {
   createSession,
   getAllSessions,
   getSession,
-  getSessionsByUsername,
+  getSessionsByUser,
   sessionsCount,
   sessionsCountByUsername,
   editSession,
   deleteSession,
   deleteSessionByUsername,
+  createSequence
 };

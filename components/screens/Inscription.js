@@ -10,16 +10,16 @@ import {register} from '../../functions/login';
 import LogoMed from '../../assets/logoMed';
 
 export default function Inscription(props) {
-  const [username, setUsername] = useState('titi31');
-  const [mail, setMail] = useState('romainvilayleck@gmail.com');
-  const [password, setPassword] = useState('titi');
-  const [password2, setPassword2] = useState('titi');
+  const [username, setUsername] = useState('User18');
+  const [email, setEmail] = useState('romain.vilayleck@alf-environnement.com');
+  const [password, setPassword] = useState('user');
+  const [password2, setPassword2] = useState('user');
   const [isLoading, setIsLoading] = useState(false);
 
   const checkFields = () => {
     if (!username.match(regexUsername) || username == 'undefined') {
       Alert.alert('Erreur', `Le nom d'utilisateur doit contenir au moins 5 caractères`);
-    } else if (!mail.match(regexEmail) || mail == 'undefined') {
+    } else if (!email.match(regexEmail) || email == 'undefined') {
       Alert.alert('Erreur', `L'adresse e-mail n'est pas valide`);
     } else if (!password.match(regexPassword) || password == 'undefined') {
       Alert.alert('Erreur', `Le mot de passe doit contenir au moins 3 caractères`);
@@ -39,14 +39,14 @@ export default function Inscription(props) {
       Alert.alert('Erreur', 'Vérifiez votre connexion Internet et réessayez');
       setIsLoading(false);
     } else {
-      const myRegister = await register({username, password, mail});
+      const myRegister = await register({username, password, email});
       // console.log('myRegister : ', myRegister);
       if (myRegister.message) {
         setIsLoading(false);
         Alert.alert('Erreur', `${myRegister.message}`);
       } else {
         setIsLoading(false);
-        Alert.alert('Email de confirmation envoyé', `Un email de confirmation a été envoyé à ${mail}`);
+        Alert.alert('Email de confirmation envoyé', `Un email de confirmation a été envoyé à ${email}`);
         props.navigation.navigate('Connexion', {
           username: username,
           password: password,
@@ -75,10 +75,10 @@ export default function Inscription(props) {
             </View>
             <View style={styles.inputContainer}>
               <TextInput
-                value={mail}
+                value={email}
                 style={styles.input}
                 keyboardType="email-address"
-                onChangeText={mail => setMail(mail)}
+                onChangeText={mail => setEmail(mail)}
                 placeholder="Adresse mail"
                 placeholderTextColor="#FFFFFF"
               />

@@ -24,7 +24,7 @@ import AfficheurCompteur from './afficheurCompteur';
 import AfficheurDonnees from "./afficheurDonnees";
 
 import SliderDefis from "./sliderDefis";
-import {createSession, editSession} from '../../functions/session';
+import {createSequence, createSession, editSession, getSession} from '../../functions/session';
 import {editUser} from '../../functions/user';
 import {getDefi} from '../../functions/defis';
 
@@ -36,7 +36,8 @@ import {LogBox} from 'react-native';
 import RNLocalize from 'react-native-localize'
 import DeviceInfo from "react-native-device-info";
 
-import NotificationSounds, {playSampleSound} from 'react-native-notification-sounds'
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Compteur(props) {
     const [state, setState] = useContext(Context);
@@ -59,6 +60,7 @@ export default function Compteur(props) {
     const [defisValid, setDefisValid] = React.useState([])                     // tableaux des défis réalisés
     const [defic, setDefic] = React.useState(0)                                // numéro du défis courant
     const [watts, setWatts] = React.useState(200)                              // puissance demandée
+
     const [vitesses, setVitesses] = React.useState([0])                        // relevés de vitesse
     const [inclinaison, setInclinaison] = React.useState([])                   // relevés inclinaison
     const [energie, setEnergie] = React.useState([0])                          // relevés énergie produite
@@ -75,6 +77,9 @@ export default function Compteur(props) {
     const [lastMessage, setLastMessage] = React.useState('')
     const [tmsg,setTmsg] = React.useState()
     const [rpm,setRpm] = React.useState(0)
+    const [sequences,setSequences] = React.useState([])
+    const wattConverter = (nber) => {
+        return (nber/750)*4095 }
     require('node-libs-react-native/globals');
     var cons =new Buffer.from([
         0xFF,0xFF,0xFF,0xFF, //consigne
@@ -119,19 +124,19 @@ export default function Compteur(props) {
         0x00,                          //erreur à définir
         0x00,                          //spare 1
         0x00])                        //spare2
-    releves.writeFloatBE(20, 0) //température auxilliaire 4 octets 32
-    releves.writeFloatBE(20, 4)
+    releves.writeUInt32BE(20, 0) //température auxilliaire 4 octets 32
+    releves.writeUInt32BE(20, 4)
 
-    releves.writeFloatBE(0, 8)
-    releves.writeFloatBE(1, 12)
-    releves.writeFloatBE(1, 16)
+    releves.writeUInt32BE(0, 8)
+    releves.writeUInt32BE(1, 12)
+    releves.writeUInt32BE(1, 16)
 
-    releves.writeFloatBE(40, 20)
-    releves.writeFloatBE(0, 24)
-    releves.writeFloatBE(0, 28)
+    releves.writeUInt32BE(40, 20)
+    releves.writeUInt32BE(0, 24)
+    releves.writeUInt32BE(0, 28)
 
-    releves.writeFloatBE(0, 32)
-    releves.writeFloatBE(1, 36)
+    releves.writeUInt32BE(0, 32)
+    releves.writeUInt32BE(1, 36)
     releves.writeUInt8(0,46) // alerte surtensions
 
     React.useEffect(() => {
@@ -162,8 +167,9 @@ export default function Compteur(props) {
      * @param : defis, vitesse, inclinaison, idUtilisateur,dateSession,dureeSession,distance,energie
      */
     const saveSession = async () => {
+        console.log("save session")
         if (defisValid.length >= 0) {
-            const data = {
+            /*const data = {
                 "defis": defisValid.map(defi => defi._id),
                 "vitesse": vitesses,
                 "inclinaison": inclinaison,
@@ -172,43 +178,66 @@ export default function Compteur(props) {
                 "dureeSession": moment.duration(currentTime).asSeconds(),
                 "distance": distance * 1000,
                 "energie": energie.reduce((a, b) => a + b),
-            }
-            if (session == undefined) { //initialisation de la session
-                const s = await createSession(data, state.token)
-                if (s.message) {
-                    Alert.alert('Erreur création session', s.message);
-                    console.log(s.message)
+            }*/
+            if (session === undefined) { //initialisation de la session
+                let data = {"user": {id:state.user.id}, "date":moment()}
+                let newsession = await createSession(data, state.token)
+                if (newsession.message) {
+                    Alert.alert('Erreur création session', newsession.message);
+                    console.log(newsession.message)
                 } else {
-                    setSession(s)
+                    //console.log(newsession)
+                    setSession(newsession)
                 }
             } else { //mise à jour de la session
-                const s = await editSession(session._id, data, state.token)
-                if (s.message) {
-                    Alert.alert('Erreur session', s.message);
-                    console.log(s.message)
-                } else {
-                    setSession(s)
+                if (sequences.length > 0) {
+                    console.log(sequences)
+                    for (var sequence of sequences) {
+                        console.log(sequence)
+                        let s = await createSequence(sequence,state.token)
+                        if (s.message) {
+                            Alert.alert('Erreur update sequences', s.message);
+                            console.log(s.message)
+                        }
+                         console.log(s)
+                    }
                 }
+                setSequences([])
+                if (defisValid.length > 0) {
+                    let data = {
+                        "challenges":defisValid
+                    }
+                    let updatesession = await editSession(session.id, data, state.token)
+                    if (updatesession.message) {
+                        Alert.alert('Erreur update session', updatesession.message);
+                        console.log(updatesession.message)
+                    }
+                }
+               // console.log(state.token)
+                    let updatedSession = await getSession(session.id,state.token)
+                    if (updatedSession.message) {
+                        Alert.alert('Erreur get updated session', updatedSession.message);
+                        console.log(updatedSession.message)
+                    }
+                    console.log(updatedSession)
+                    setSession(updatedSession)
             }
-            let tab = defisValid.filter(defi => defi.long !== undefined).map(defi => defi._id) //copie des id des défis longs validés
+            let tab = defisValid.filter(defi => defi.islong).map(defi => defi.id) //copie des id des défis longs validés
+            let storedPassword = await AsyncStorage.getItem('@bikeforlifepassword');
             const userdata = {
-                "totalDuree": state.user.totalDuree + moment.duration(currentTime).asSeconds(),
-                "totalEnergie": isNaN(state.user.totalEnergie + energie.reduce((a, b) => a + b)) ? 1 : state.user.totalEnergie + energie.reduce((a, b) => a + b),
-                "totalDistance": state.user.totalDistance + distance,
-                "totalPoints": defisValid.length > 0 ?
-                    Math.round(defisValid.map(defi => defi.points).reduce((a, b) => a + b) + state.user.totalPoints) : state.user.totalPoints,
-                "pma": state.user.pma ? Math.round((energie.reduce((a, b) => a + b) / energie.length) + state.user.pma / 2 ): ((energie.reduce((a, b) => a + b) / energie.length) + 250) / 2,
-                "defis longs" : tab.length > 0 ? defisValid.filter(defi => defi.long !== undefined).map(defi=>defi._id) : state.user.defisLongs
+               "challenges":tab,
+               "password": storedPassword,
+               "currentPassword":storedPassword
             }
             // defis longs : console.log(tab.length+" - "+tab.length > 0 ? defisValid.filter(defi => defi.long !== undefined).map(defi=>defi._id) : state.user.defisLongs)
             //mise à jour de l'utilisateur ( distance parcourue, points, energie produite, temps passé )
-            const updated = await editUser(state.user.username, userdata, state.token)
+           /* const updated = await editUser(state.user.id, userdata, state.token)
             if (updated.message) {
                 Alert.alert('Erreur update', updated.message);
                 console.log(updated.message)
             } else {
                 setState({user: updated, token: state.token})
-            }
+            }*/
         }
     }
     /***
@@ -232,9 +261,9 @@ export default function Compteur(props) {
             //définition des segments pour une vitesse supérieur à celle précédente
 
             setSeg(seg => Math.round(nseg > 200 ? 200 : isNaN(nseg)? seg : nseg < 0 ? seg: nseg) )
-            releves.writeFloatBE( freqRotation /*40 +seg*/ , 8) //freqence de rotation de la géné
-            releves.writeFloatBE(10, 12)
-            releves.writeFloatBE(25, 16) // tension génératrice
+            releves.writeUInt32BE( freqRotation /*40 +seg*/ , 8) //freqence de rotation de la géné
+            releves.writeUInt32BE(10, 12)
+            releves.writeUInt32BE(25, 16) // tension génératrice
             sendMessage(1, releves,0,inc )
             /*setInclinaison([...inclinaison,1])*/
         } else {
@@ -246,9 +275,9 @@ export default function Compteur(props) {
             setEPosition(nend)
             setAngle(nend)
             setSeg(seg => Math.round(nseg < 0 || isNaN(nseg)  ? 0 : nseg))//- 7) //
-            releves.writeFloatBE(freqRotation , 8)
-            releves.writeFloatBE(10, 12)
-            releves.writeFloatBE(25 , 16) //
+            releves.writeUInt32BE(freqRotation , 8)
+            releves.writeUInt32BE(10, 12)
+            releves.writeUInt32BE(25 , 16) //
             sendMessage(1, releves,0,inc )
         }
     }
@@ -259,14 +288,16 @@ export default function Compteur(props) {
      */
     React.useEffect(() => {
         StartImageRotateFunction()
-        const interval = setInterval(() => {
-            randomRotation()
-        }, 1000); //mise à jour du tableau d'interpolation de la rotation
-        if (modal == true || start == false) {
-            clearInterval(interval)
-        }
-        return () => {
-            clearInterval(interval)
+        if (defis[defic].id !== "2187ed70-a005-4ae2-8fa6-5db2c2db907e") {
+            const interval = setInterval(() => {
+                randomRotation()
+            }, 1000); //mise à jour du tableau d'interpolation de la rotation
+            if (modal == true || start == false) {
+                clearInterval(interval)
+            }
+            return () => {
+                clearInterval(interval)
+            }
         }
     }, [seg, endPosition, startPosition, angle, up, modal,vitesses])
 
@@ -325,29 +356,31 @@ export default function Compteur(props) {
         //var incli = (energie.reduce((a,b) => a+b) / energie.length) / (state.user.poids * 9.81 * vitesses[vitesses.length-1])
         var bvalid = 0
         if (defi !== undefined) {
-            if (energie.length > 0) {
+            /*if (energie.length > 0) {
                 var ratioEffort = state.user.pma ? (energie.reduce((a, b) => a + b) / energie.length) / state.user.pma : (energie.reduce((a, b) => a + b) / energie.length) / 250 //bonus d'effort
                 if (ratioEffort > 0.5) {
                     ratioEffort > 0.75 ? defi.points = defi.points + defi.points * (ratioEffort - 0.5) : defi.points = defi.points + defi.points * (ratioEffort - 0.25)
                 }
-            }
-            for (var i = 0; i < defi.buts.length; i++) {
-                var but = defi.buts[i]
-                if (defi.long === undefined) {
-                    if ((but.unit === "m" && distance * 1000 >= but.number)
-                        || (but.unit === "watts" && energie.length > 0 && energie.reduce((a, b) => a + b) >= but.number)
-                        || (but.unit === "secondes" && moment.duration(currentTime).asSeconds() - defi.startTime === but.number)
-                        || (but.unit === "%" && energie.length > 0 && energiep.length > 0 && defi.startE !== null && (energie.reduce((a, b) => a + b) - defi.startE >= energiep.reduce((a, b) => a + b) - defi.startE))
+            }*/
+            for (var i = 0; i < defi.aims.length; i++) {
+                var but = defi.aims[i]
+                //console.log(defi)
+                if (!defi.islong) {
+                    //console.log("défis valide: "+(but.type === "distance" && distance * 1000 >= but.number) +" "+ distance*1000 +" - "+ but.number)
+                    if ((but.type === "distance" && distance * 1000 >= but.number)
+                        || (but.type === "power" && energie.length > 0 && energie.reduce((a, b) => a + b) >= but.number)
+                        || (but.type === "duration" && moment.duration(currentTime).asSeconds() - defi.startTime <= but.number)
+                        || (but.type === "%" && energie.length > 0 && energiep.length > 0 && defi.startE !== null && (energie.reduce((a, b) => a + b) - defi.startE >= energiep.reduce((a, b) => a + b) - defi.startE))
                     ) {
                         bvalid = bvalid + 1
                     }
-                    if (but.unit === "%") {                                              //cas des défis de pentes an fonction de la durée écoulée
+                    if (but.type === "%") {                                              //cas des défis de pentes an fonction de la durée écoulée
                         var v = vitesses[vitesses.length - 1]//vitesses.reduce((sum,item)=>sum+item) / vitesses.length
                         if (defi.startE === undefined) {
                             defis[defic].startE = energie.reduce((a, b) => a + b)
                             setDefis(defis)
                         } else {
-                            var pth = v * state.user.poids * 9.81 * but.number * 0.6           //calcul de la force à demander à l'utilisateur, en fonction de sa vitesse actuelle
+                            var pth = v * state.user.weight * 9.81 * but.number * 0.6           //calcul de la force à demander à l'utilisateur, en fonction de sa vitesse actuelle
                             console.log(v + " - " + pth)
                             //sendMessage(3,`{"watts":${pth}}`)
                             setWatts(Math.round(pth))
@@ -356,15 +389,15 @@ export default function Compteur(props) {
                     }
                 } else {
                     //validation des défis longs
-                    if ((but.unit === "m" && state.user.totalDistance + distance >= but.number)
-                        || (but.unit === "watts" && state.user.totalEnergie + energie >= but.number)
-                        || (but.unit === "secondes" && moment.duration(currentTime).asSeconds())) {
+                    if ((but.type === "distance" && /*state.user.totalDistance +*/ distance >= but.number)
+                        || (but.type === "power" &&/* state.user.totalEnergie +*/ energie >= but.number)
+                        || (but.type === "duration" && moment.duration(currentTime).asSeconds())) {
                         bvalid = bvalid + 1
 
                     }
                 }
             }
-            if (bvalid === defis[defic].buts.length) {
+            if (bvalid === defis[defic].aims.length) {
                 setDefisValid([...defisValid, defi])
                 if (defis.length > defic) {
                     setDefic(defic => defic + 1)
@@ -381,16 +414,7 @@ export default function Compteur(props) {
      * @returns {Promise<void>} ajoute la liste des défis long aux défis de la session
      */
     async function getDefiLong() {
-        let tab = []
-        for (let i = 0; i < state.user.defisLongs.length; i++) {
-            const defi = await getDefi(state.token, state.user.defisLongs[i])
-            if (defi.message) {
-                Alert.alert('Erreur serveur', defi.message);
-            } else {
-                tab.push(defi.defi)
-            }
-        }
-        setDefis([...defis, ...tab])
+        setDefis([...defis, ...state.user.challenges])
     }
 
     /**
@@ -459,27 +483,30 @@ export default function Compteur(props) {
         setErreur(["Fin de Session", "Ralentissez progressivement avant la fin de la session."])
         setStyleModal(styles.endingModal)
          setModal(true)
-         console.log(erreur[0])
+         //console.log(erreur[0])
          const timer = setInterval(showWarning, 1250)
          setTimeModal(timer)
             let t = setInterval(()=>{
               if (w <= 2){
                 w=0
-                cons.writeFloatBE(w,0)
+                cons.writeUInt32BE(wattConverter(w),0)
                 cons.writeUInt8(0,7) //led 1 éteinte
                 cons.writeUInt8(0,8) // led 2 éteinte
                 cons.writeUInt8(0,9) // led 3 éteinte
                 sendMessage(5, cons,0,inc )
-                console.log("end")
+               // console.log("end")
                 clearInterval(t)
                 server.destroy()
                 goTo(props)
           }
           else{
             w=w-Math.round(w*0.20)
-            cons.writeFloatBE(w,0)
+            cons.writeUInt32BE(wattConverter(w),0)
+            cons.readUInt8(7) === 0 ? cons.writeUInt8(2,7)  : cons.writeUInt8(0,7)
+            cons.readUInt8(8) === 0 ? cons.writeUInt8(2,8) : cons.writeUInt8(0,8)
+            cons.writeUInt8(0,9) === 0 ? cons.writeUInt8(2,9) : cons.writeUInt8(0,9)// led 3 éteinte
             sendMessage(5, cons,0,inc )
-            console.log(w)
+            //console.log(w)
           }
         },1000)
     }
@@ -490,47 +517,46 @@ export default function Compteur(props) {
     async function socketServer() {
         let config = await DeviceInfo.isEmulator()
             .then((status) => {
-            if (status) {                                //configuration simulateur
-                if (Platform.OS == 'ios') {              //configuration iphone
+            if (status) {                               
+                if (Platform.OS == 'ios') {              //configuration xcode
                     return  config = {
                         port: 8080,
                         host: '127.0.0.1',
-                        localAddress: '127.0.0.1',
-                        reuseAddress: true,
-                    }
-                } else {                                //configuration android device
-                    return config = {
-                        port: 8080,
-                        host: '10.0.2.2',
                         reuseAddress: true
+                    }
+                } else {                                //configuration android studio
+                    return config = {
+                        port: 8080 ,
+                        host:  '127.0.0.1',
+                        localAddress:'10.0.2.2',
+                        reuseAddress: false
                     }
                 }
             } else {
                 if (Platform.OS == 'ios') {             //configuration iphone
                     return config = {
-                        port: 8080,
-                        host: '192.168.5.2',
-                        localAddress: '127.0.0.1',
+                        port: 333,
+                        host: '192.168.1.200',
                         reuseAddress: true,
                         interface:'wifi'
                     }
-                } else {                                //configuration android device
+                } else {                                //configuration android 
                     return config = {
-                        port: 8080,
-                        host:  '127.0.0.1',
-                        localAddress:'192.168.5.11',
+                        port: 333,
+                        host:  '192.168.1.200',
                         reuseAddress: true,
                         interface:'wifi'
                     }
                 }
             }
         })
-        console.log(config)
+        //console.log(config)
         try {
             server.connect(config,
                 () => {
+                    console.log("connecté")
                     //envoi d'une première consigne
-                    cons.writeFloatBE(watts,0)
+                    cons.writeUInt32BE(wattConverter(watts),0)
                     cons.writeUInt8(2,7) //led 1 vert
                     cons.writeUInt8(2,8) // led 2 vert
                     cons.writeUInt8(2,9) // led 3 vert
@@ -542,7 +568,7 @@ export default function Compteur(props) {
             });
             server.on('error', (error) => {
                 // traitement des erreurs en provenance du socket, affichage dans la console et sur le mobile
-                console.log("server error: " + error)
+               // console.log("server error: " + error)
                 setErreur(["erreur de connexion", error + ". Veuillez réessayer."])
                 setStyleModal(styles.dangerModal)
                 setModal(true)
@@ -556,7 +582,7 @@ export default function Compteur(props) {
     // validation et mise à jour des défis sélectionnés
     React.useEffect(() => {
         ValiderDefis()
-        //saveSession()
+        saveSession()
     }, [distance, energie, defis])
     // réccupération des défis longs
     React.useEffect(() => {
@@ -565,6 +591,7 @@ export default function Compteur(props) {
         socketServer()
         defis[defic].startTime = 0
         setDefis(defis)
+        saveSession()
     }, [])
     React.useEffect(() => {
         if (defis[defic] !== undefined) {
@@ -609,27 +636,30 @@ export default function Compteur(props) {
             var contenu = message.subarray(12,message.length-3)
         }
         var type = header.readUInt16BE(4)
-        console.log(header.readUInt16BE(4))
+        //console.log(header.readUInt16BE(4))
         //setDonnees(message)
         //relevés de la carte vers le mobile
            switch (type) {
                case 1:
-                    var frequ = contenu.readFloatBE(8)
+                    var frequ = contenu.readUInt32BE(8)
                     var vitesse = Math.PI*0.0007*(frequ*3600/18)// 36 = nb bobines
-                    console.log( `vitesse : ${vitesse} - distance parcourue${(vitesse/3600)}`)
+                    //console.log( `vitesse : ${vitesse} - distance parcourue${(vitesse/3600)}`)
                     setDistance(dist => distance + (vitesse/3600) )
                     setRpm(Math.round((frequ*60)/(18*5)))
-                    var puiss =  releves.readFloatBE(12) * releves.readFloatBE(16)
+                    var puiss =  releves.readUInt32BE(12) * releves.readUInt32BE(16)
                     setEnergie([...energie, puiss])
-                    console.log(`energie : ${puiss} - calories : ${puiss*0.239}`)
+                    //console.log(`energie : ${puiss} - calories : ${puiss*0.239}`)
                     //console.log(`vitesse : ${vitesse}  - rpm: ${rpm}`)
                     setTimeout(() => {setVitesses([...vitesses,vitesse])}, 900)
-                    console.log("type message: "+contenu.readFloatBE(8))
-                    console.log(`tension génératrice = ${contenu.readFloatBE(16)}`)
+                   let s = {time:moment.duration(currentTime).asSeconds(),speed:Number.parseInt(vitesse),power:puiss,session:{id:session.id}}
+                   setSequences(sequences => [...sequences,s])
+                    /*console.log("type message: "+contenu.readUInt32BE(8))
+                    console.log(`tension génératrice = ${contenu.readUInt32BE(16)}`)
                     console.log("angle: "+( ((vitesses[vitesses.length-2] - vitesses[vitesses.length-1])/100)*360 - 160 ) +" - "+ endPosition )
                     console.log("seg:"+( (vitesses[vitesses.length-2] - vitesses[vitesses.length-1])/100 * 200 )+" - "+seg )
-                    console.log(`alerte surt : ${contenu.readUInt8(46)} - temp aux : ${contenu.readFloatBE(0)} - temp gene: ${contenu.readFloatBE(4)}`)
-                   if (contenu.readFloatBE(0) >= 30 || contenu.readFloatBE(4) >= 40  )
+                    console.log(`alerte surt : ${contenu.readUInt8(46)} - temp aux : ${contenu.readUInt32BE(0)} - temp gene: ${contenu.readUInt32BE(4)}`)*/
+
+                   if (contenu.readUInt32BE(0) >= 30 || contenu.readUInt32BE(4) >= 40  )
                    {
                        setStyleModal(styles.dangerModal)
                        setErreur(["Erreur", "Attention surchauffe détectée, veuillez cesser de pédaler"])
@@ -640,39 +670,42 @@ export default function Compteur(props) {
                        setErreur(["Erreur", "Attention surtension dans le système, veuillez cesser de pédaler"])
                        setModal(true)
                    }
-                   if (contenu.readFloatBE(8) < 20 ){
+                   if (contenu.readUInt32BE(8) < 20 ){
                        setErreur(["Attention", "Votre rythme ne permet pas de produire la puissance que vous demandez. Adaptez votre allure ou réduisez la puissance demandée."])
                        setStyleModal(styles.warningModal)
                        setModal(true)
                        const timer = setInterval(showWarning, 500)
                        setTimeModal(timer)
                    }
-                   /*if (contenu.readFloatBE(20) >+ contenu.readFloatBE(8) +0.05 || contenu.readFloatBE(20) <= contenu.readFloatBE(8)+ 0.05){
+                   /*if (contenu.readUInt32BE(20) >+ contenu.readUInt32BE(8) +0.05 || contenu.readUInt32BE(20) <= contenu.readUInt32BE(8)+ 0.05){
                        setStyleModal(styles.dangerModal)
                        setErreur(["Erreur", "Attention une différence de fréquence a été détectée dans le réseau électrique, veuillez cesser de pédaler"])
                        setModal(true)
                    }*/
                     break;
                 case 2:
-                   var frequ = contenu.readFloatBE(8)
+                   var frequ = contenu.readUInt32BE(8)
                    var vitesse = Math.PI*0.0007*(frequ*3600/18)// 36 = nb bobines
-                   console.log( `vitesse : ${vitesse} - distance parcourue${(vitesse/3600)}`)
+                   //console.log( `vitesse : ${vitesse} - distance parcourue${(vitesse/3600)}`)
                    setDistance(dist => distance + (vitesse/3600) )
                    setRpm(Math.round((frequ*60)/(18*5)))
-                   var puiss =  releves.readFloatBE(12) * releves.readFloatBE(16)
+                   var puiss =  releves.readUInt32BE(12) * releves.readUInt32BE(16)
                    setEnergie([...energie, puiss])
-                   console.log(`energie : ${puiss} - calories : ${puiss*0.239}`)
+                   //console.log(`energie : ${puiss} - calories : ${puiss*0.239}`)
                    //console.log(`vitesse : ${vitesse}  - rpm: ${rpm}`)
                    setVitesses([...vitesses,vitesse])
-                   console.log(contenu.readFloatBE(8))
+                    s = {time:currentTime,speed:vitesse,power:puiss,session:{id:session.id}}
+                    console.log(s)
+                    setSequences(sequences.push(s))
+                   /*console.log(contenu.readUInt32BE(8))
                    console.log("angle: "+( ((vitesses[vitesses.length-2] - vitesses[vitesses.length-1])/120)*360 - 160 ) +" - "+ endPosition )
                    console.log("seg:"+( (vitesses[vitesses.length-2] - vitesses[vitesses.length-1])/120 * 200 )+" - "+seg )
-                   console.log(`alerte surt : ${contenu.readUInt8(46)} - temp aux : ${contenu.readFloatBE(0)} - temp gene: ${contenu.readFloatBE(4)}`)
-                   if (contenu.readFloatBE(0) >= 30 || contenu.readFloatBE(4) >= 40  )
+                   console.log(`alerte surt : ${contenu.readUInt8(46)} - temp aux : ${contenu.readUInt32BE(0)} - temp gene: ${contenu.readUInt32BE(4)}`)*/
+                   if (contenu.readUInt32BE(0) >= 30 || contenu.readUInt32BE(4) >= 40  )
                    {
                        //saveSession()
                        //stopSession(watts)
-                       cons.writeFloatBE(watts,0)
+                       cons.writeUInt32BE(wattConverter(watts),0)
                        cons.writeUInt8(4,7) //led 1 rouge
                        cons.writeUInt8(4,8) // led 2 rouge
                        cons.writeUInt8(4,9) // led 3 éteinte
@@ -687,7 +720,7 @@ export default function Compteur(props) {
                    if (contenu.readUInt8(46) === 1) {
                        //saveSession()
                        stopSession(watts)
-                       cons.writeFloatBE(watts,0)
+                       cons.writeUInt32BE(wattConverter(watts),0)
                        cons.writeUInt8(4,7) //led 1 rouge
                        cons.writeUInt8(4,8) // led 2 rouge
                        cons.writeUInt8(0,9) // led 3 éteinte
@@ -697,8 +730,8 @@ export default function Compteur(props) {
                        setModal(true)
                        //console.log("alerte surtention - alerte surt"+ contenu.readUInt8(46))
                    }
-                   if (contenu.readFloatBE(8) < 20 ){
-                       cons.writeFloatBE(watts,0)
+                   if (contenu.readUInt32BE(8) < 20 ){
+                       cons.writeUInt32BE(wattConverter(watts),0)
                        cons.writeUInt8(3,7) //led 1 jaune
                        cons.writeUInt8(0,8) // led 2 éteinte
                        cons.writeUInt8(0,9) // led 3 éteinte
@@ -708,20 +741,20 @@ export default function Compteur(props) {
                        setModal(true)
                        const timer = setInterval(showWarning, 500)
                        setTimeModal(timer)
-                       cons.writeFloatBE(watts,0)
+                       cons.writeUInt32BE(wattConverter(watts),0)
                        cons.writeUInt8(2,7) // led 1 vert
                        cons.writeUInt8(2,8) // led 2 vert
                        cons.writeUInt8(2,9) // led 3 vert
                        sendMessage(5, cons,0,inc )
                    }
-                   /*if (contenu.readFloatBE(20) >+ contenu.readFloatBE(8) +0.05 || contenu.readFloatBE(20) <= contenu.readFloatBE(8)+ 0.05){
+                   /*if (contenu.readUInt32BE(20) >+ contenu.readUInt32BE(8) +0.05 || contenu.readUInt32BE(20) <= contenu.readUInt32BE(8)+ 0.05){
                        setStyleModal(styles.dangerModal)
                        setErreur(["Erreur", "Attention une différence de fréquence a été détectée dans le réseau électrique, veuillez cesser de pédaler"])
                        setModal(true)
                    }*/
                    break;
                 case 5: //consigne du mobile vers la carte
-                   console.log(`consigne: ${contenu.readFloatBE(0)} 
+                   console.log(`consigne: ${contenu.readUInt32BE(0)} 
                     - force charge : ${contenu.toString('hex',4,5)} 
                     - shutdown :${contenu.toString('hex',5,6)} 
                     - etat usb :${contenu.toString('hex',6,7)} 
@@ -806,7 +839,7 @@ export default function Compteur(props) {
                         />
                         <AfficheurCompteur style={styles.graph} i={seg}/>
                         <AfficheurDonnees kmh={vitesses[vitesses.length - 1]} rpm={rpm} energie={energie[energie.length - 1]}
-                                          distance={distance} cumulD={state.user.totalDistance}/>
+                                          distance={distance} cumulD={state.user.totalDistance !== undefined ? state.user.totalDistance : 0}/>
                     </ImageBackground>
                     <View style={[{
                         flex: 1,
@@ -817,7 +850,10 @@ export default function Compteur(props) {
                         <TouchableOpacity onPress={() => {
                             if (watts > 0) {
                                 setWatts(watts - 5)
-                                cons.writeFloatBE(watts-5,0)
+                                cons.writeUInt32BE(wattConverter(watts-5),0)
+                                cons.writeUInt8(2,7)
+                                cons.writeUInt8(2,8)
+                                cons.writeUInt8(2,9)
                                 sendMessage(5, cons,0,inc )
                             }
                         }}>
@@ -834,7 +870,10 @@ export default function Compteur(props) {
                             onPress={() => {
                                 if (watts < 750) {
                                     setWatts(watts + 5)
-                                    cons.writeFloatBE(watts+5,0)
+                                    cons.writeUInt32BE(wattConverter(watts+5),0)
+                                    cons.writeUInt8(2,7)
+                                    cons.writeUInt8(2,8)
+                                    cons.writeUInt8(2,9)
                                     sendMessage(5, cons,0,inc )
                                 }
                             }}>

@@ -7,9 +7,16 @@ import {regexUsername, regexEmail, regexPassword} from '../utils/constants';
 import {Context} from '../utils/Store';
 import goTo from '../utils/navFunctions';
 import {login} from '../../functions/login';
+import { getUser } from '../../functions/user'
 
 import LogoMed from '../../assets/logoMed';
+import jwt_decode from "jwt-decode";
 
+/**
+ * composant de connexion
+ * @param {} props 
+ * @returns 
+ */
 export default function Connexion(props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -48,22 +55,22 @@ export default function Connexion(props) {
       Alert.alert('Erreur', 'Vérifiez votre connexion Internet et réessayez');
     } else {
       const myLogin = await login({username, password});
-      // console.log('mylogin : ', myLogin);
       if (myLogin.message) {
         Alert.alert('Erreur', `${myLogin.message}`);
         setIsLoading(false);
       } else {
         try {
-          await AsyncStorage.setItem('@bikeforlifeusername', myLogin.user.username);
+          await AsyncStorage.setItem('@bikeforlifeusername', username);
           await AsyncStorage.setItem('@bikeforlifepassword', password);
         } catch (e) {
           Alert.alert('Erreur', `${e}`);
         }
-        await setState({user: myLogin.user, token: myLogin.token});
+        let usrid =(jwt_decode(myLogin["auth-token"]).id)
+        const user = await getUser(usrid,myLogin["auth-token"])
+        await setState({user: user, token: myLogin['auth-token']});
         setIsLoading(false);
-
         // Si nouveau compte, on renvoie vers la page des objectifs
-        if (myLogin.user.objectifs && myLogin.user.objectifs.length > 0) {
+        if (user.goals && user.goals.length > 0) {
           goTo(props);
         } else {
           goTo(props, 'Objectifs');

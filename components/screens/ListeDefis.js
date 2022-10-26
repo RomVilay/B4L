@@ -17,7 +17,7 @@ import CheckBox from '@react-native-community/checkbox'
 import LogoMin from '../../assets/logoMin'
 import Fleche from "../../assets/fleche";
 import NavApp from "../navigation/NavApp";
-import {listeDefis} from "../../functions/defis";
+import {listeDefis, getDefi} from "../../functions/defis";
 import {Context} from '../utils/Store';
 import {ModalHelp} from "./ModalHelp";
 import {getUser} from "../../functions/user";
@@ -26,17 +26,21 @@ import {getUser} from "../../functions/user";
 *     */
 const Item1 = ({ item, onPress }) => (
   <TouchableOpacity onPress={onPress} style={styles.defi}>
-       <Text style={[styles.titreBlanc, { fontSize:30, textAlign:"center"}]}>{item.nomDefi}</Text>
-      {item.descriptionDefi !== undefined ? <Text style={[styles.description,{textAlign:"center"}]}>{item.descriptionDefi}</Text> : <></> }
+       <Text style={[styles.titreBlanc, { fontSize:30, textAlign:"center"}]}>{item.name}</Text>
+      {item.description !== undefined ? <Text style={[styles.description,{textAlign:"center"}]}>{item.description}</Text> : <></> }
    </TouchableOpacity>
 );
 const Item2 = ({ item, onPress, style }) => (
     <TouchableOpacity onPress={onPress} style={styles.defi2}>
-        <Text style={[styles.titreBlanc, { fontSize:30,textAlign:"center"}]}>{item.nomDefi}</Text>
-        {item.descriptionDefi !== undefined ? <Text style={[styles.description,{textAlign:"center"}]}>{item.descriptionDefi}</Text> : <></> }
+        <Text style={[styles.titreBlanc, { fontSize:30,textAlign:"center"}]}>{item.name}</Text>
+        {item.description !== undefined ? <Text style={[styles.description,{textAlign:"center"}]}>{item.description}</Text> : <></> }
     </TouchableOpacity>
 );
-
+/**
+ * affichage des défis pour la future session à partir du profil de l'utilisateur
+ * @param {*} props 
+ * @returns 
+ */
 export default function  ListeDefis(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [state, setState] = useContext(Context);
@@ -45,32 +49,42 @@ export default function  ListeDefis(props) {
     const opacity = useRef(new Animated.Value(0)).current;
     const getList = async () => {
         setIsLoading(true)
-        let list = await listeDefis(state.token,state.user.objectifs);
+        let list = await listeDefis(state.token,state.user.goals[0].id);
         if (list.message) {
              Alert.alert('Erreur serveur', list.message);
              setListeDefs([{
-                 "objectifs": [
-                     "1","2","3","4"
+                 "id": "9c692c03-5dd5-4ea7-a6da-d3666b6bd7a2",
+                 "name": "100 km - 1h",
+                 "description": "Faire 100 km en 1h",
+                 "points": 10000,
+                 "isLong": false,
+                 "goals": [
+                     "1bf5d297-5ff1-42a1-9f48-98d45ad113f0"
                  ],
-                 "_id": "602a81dd8e7a4103f8366c59",
-                 "nomDefi": "Faire 50 mètres",
-                 "points": 200,
-                 "butNumber": 50,
-                 "butUnit": "m",
-                 "buts": [
-                     {
-                         "_id": "60acc575a9ed427566d526af",
-                         "unit": "m",
-                         "number": 50,
-                         "type": "distance"
-                     }
-                 ],
+                 "sessions": [],
+                 "users": [],
+                 "aims": [
+                     "4a942b06-eaab-4787-9952-e8bf4034cd03",
+                     "a8d33bab-caa3-44b5-b208-90f8b3c2a108"
+                 ]
              }])
         } else {
-            await setListeDefs(list.filter(defi => defi.long == undefined ).sort((defi1,defi2) => defi1.butNumber - defi2.butNumber))//setState({user, token: state.token});
+            await setListeDefs(list)//list.filter(defi => defi.long == undefined ).sort((defi1,defi2) => defi1.butNumber - defi2.butNumber))//setState({user, token: state.token});
         }
         setIsLoading(false)
     };
+
+    const getCibles = async () => {
+        let tab = []
+        for (let defi of defisSelect) {
+            //console.log("item: "+defi.id)
+            let item = await getDefi(state.token,defi.id)
+            //console.log(item.aims)
+            tab.push(item)
+        }
+        //console.log(tab)
+        props.navigation.navigate("Compteur",{defis:tab})
+    }
     const showWarn = () => {
         opacity.setValue(1)
         setTimeout(() =>{fadeOut()},3000)
@@ -90,7 +104,7 @@ export default function  ListeDefis(props) {
         if (defisSelect.includes(item)){
             return (
                 <Item2
-                    key={item._id}
+                    key={item.id}
                     item={item}
                     onPress={() => {
                         setDefiSelect(defisSelect.filter( defi => defi !== item))
@@ -105,7 +119,7 @@ export default function  ListeDefis(props) {
                 item={item}
                 onPress={() => {
                     setDefiSelect([...defisSelect,item])
-                    if (item.butUnit == "%"){ showWarn()}
+                    //if (item.butUnit == "%"){ showWarn()}
                 }}
                 style={{ }}
             />
@@ -132,7 +146,7 @@ export default function  ListeDefis(props) {
                         <FlatList
                             data={ListeDefs}
                             renderItem={render_item}
-                            keyExtractor={item => item._id}
+                            keyExtractor={item => item.id}
                             extraData={defisSelect}/>
                     </View>
                         )}
@@ -144,7 +158,8 @@ export default function  ListeDefis(props) {
                 </View>
                 <View style={styles.footer}>
                     {defisSelect.length > 0 ? <TouchableOpacity style={{marginBottom:'10%'}} onPress={()=> {
-                        props.navigation.navigate("Compteur",{defis:defisSelect})
+                        getCibles()
+                        //props.navigation.navigate("Compteur",{defis:defisSelect})
                     }} color={'white'}>
                         <Text style={styles.titreBleu}>appuyez pour continuer</Text>
                     </TouchableOpacity> : <></>}

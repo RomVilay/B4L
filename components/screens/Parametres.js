@@ -31,6 +31,12 @@ import Avatar from './Avatar';
 import Icon from "react-native-vector-icons/FontAwesome5";
 import SelectIOS from "./SelectIos";
 import Colors from "react-native/Libraries/NewAppScreen/components/Colors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+/**
+ * Définition du profil utilisateur
+ * @param {*} props 
+ * @returns 
+ */
 
 export default function Parametres(props) {
   const [state, setState] = useContext(Context);
@@ -42,16 +48,16 @@ export default function Parametres(props) {
   const [selection, setSelection] = useState('Visage');
   const [isLoading, setIsLoading] = useState(false);
   const [tempDateNaissance, setTempDateNaissance] = useState(
-    state.user.dateNaissance ? new Date(state.user.dateNaissance) : '',
+    state.user.birthdate ? new Date(state.user.birthdate) : '',
   );
-  const [tempTaille, setTempTaille] = useState(state.user.taille || '');
-  const [tempPoids, setTempPoids] = useState(state.user.poids || '');
+  const [tempTaille, setTempTaille] = useState(state.user.height !== null ? state.user.height.toString() : '');
+  const [tempPoids, setTempPoids] = useState(state.user.weight !== null ? state.user.weight.toString() : '');
   const [avatar, setAvatar] = useState(state.user.avatar || '03940');
-  const [tempUnitTaille, setTempUnitTaille] = useState(state.user.unitTaille || 'cm');
-  const [tempUnitPoids, setTempUnitPoids] = useState(state.user.unitPoids || 'kg');
-  const [tempUnitDistance, setTempUnitDistance] = useState(state.user.unitDistance || 'm');
+  const [tempUnitTaille, setTempUnitTaille] = useState(state.user.heightUnit || 'cm');
+  const [tempUnitPoids, setTempUnitPoids] = useState(state.user.weightUnit || 'kg');
+  const [tempUnitDistance, setTempUnitDistance] = useState(state.user.distanceUnit || 'm');
   const [showCalendar, setShowCalendar] = useState(Platform.OS === 'ios');
-  const [genre, setGenre] = useState(state.user.genre)
+  const [genre, setGenre] = useState(state.user.gender)
 
   const checkFields = () => {
     if (!tempTaille.match(regexTaille) || tempTaille.length <= 0) {
@@ -86,17 +92,21 @@ export default function Parametres(props) {
     if (!isConnected) {
       Alert.alert('Erreur', 'Vérifiez votre connexion Internet et réessayez');
     } else {
+      let storedPassword = await AsyncStorage.getItem('@bikeforlifepassword');
+      console.log(typeof tempTaille)
       const updated = await editUser(
-        state.user.username,
+        state.user.id,
         {
-          dateNaissance: tempDateNaissance,
-          poids: tempPoids,
-          taille: tempTaille,
+          birthdate: tempDateNaissance,
+          weight: Number.parseInt(tempPoids),
+          height: Number.parseInt(tempTaille),
           avatar: avatar,
-          unitTaille: tempUnitTaille,
-          unitPoids: tempUnitPoids,
-          unitDistance: tempUnitDistance,
-          genre:genre
+          heightUnit: tempUnitTaille,
+          weigthUnit: tempUnitPoids,
+          distanceUnit: tempUnitDistance,
+          gender:genre,
+          password: storedPassword,
+          currentPassword: storedPassword
         },
         state.token,
       );
@@ -105,12 +115,13 @@ export default function Parametres(props) {
       if (updated.message) {
         Alert.alert('Erreur', `${updated.message}`);
       } else {
+        updated.challenges = state.user.challenges
+        updated.goals = state.user.goals
         setState({user: updated, token: state.token});
         goTo(props);
       }
     }
   };
-  console.log()
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />
@@ -196,7 +207,6 @@ export default function Parametres(props) {
               <Fleche />
             </TouchableOpacity>
             <Avatar avatar={avatar} />
-            {/*<Image source={avatar} flèche drouate />*/}
             <TouchableOpacity
               onPress={() => {
                 switch (selection) {
@@ -295,8 +305,8 @@ export default function Parametres(props) {
           </View>
           <View style={styles.midBot}>
             <Text style={styles.inputTitle}>{'Date de naissance'}</Text>
-            <View style={[styles.inputContainer,{borderWidth:3, zIndex:600}]}>
-              <TouchableOpacity onPress={() => setShowCalendar(true)}>
+            <View style={[styles.inputContainer,{ zIndex:600, justifyContent:"center"}]}>
+              <TouchableOpacity onPress={() => setShowCalendar(true)} >
                 <TextInput
                   value={tempDateNaissance && Platform.OS === 'android'  ? moment(tempDateNaissance).format('DD/MM/YYYY') : ''}
                   style={styles.input}
@@ -305,10 +315,8 @@ export default function Parametres(props) {
                   placeholderTextColor="#b8b8b8"
                 />
               </TouchableOpacity>
-            </View>
             {showCalendar && (
                   Platform.OS === 'ios' ?
-                      <View style={{ justifyContent:"center", width:"100%",height:50, position:"absolute",left:"35%", top:'8%', zIndex:600}}>
                         <DateTimePicker
                             value={tempDateNaissance || new Date()}
                             onChange={(event, selectedDate) => {
@@ -319,13 +327,8 @@ export default function Parametres(props) {
                             display="compact"
                             textColor="white"
                             locale="fr-FR"
-                            style={{
-                                flex:1,
-                                color:"white"
-                            }}
-
+                            style={{width: 120,  alignSelf:"center", zIndex:600, position:"absolute", color:"orange"}}
                         />
-                      </View>
                   :
                     <DateTimePicker
                         value={tempDateNaissance || new Date()}
@@ -337,6 +340,7 @@ export default function Parametres(props) {
                         maximumDate={new Date()}
                     />
             )}
+            </View>
             <View style={[styles.horizontal,{justifyContent:"space-around"}]}>
               <Text style={styles.linesb}>Femme</Text>
               <Switch

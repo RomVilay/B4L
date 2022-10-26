@@ -133,7 +133,7 @@ export default function Classements(props) {
       );
   React.useEffect(()=>{
   //  getClassement()
-    classement(categorie == "general" ? "":categorie)
+    //classement(categorie == "general" ? "":categorie) route à intégrer dans le nouveau backend
   },[categorie])
 
   function renderTable(item,index) {

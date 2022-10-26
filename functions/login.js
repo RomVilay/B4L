@@ -10,7 +10,7 @@ import {APP_TOKEN} from '@env';
  */
 async function register(data, appToken = APP_TOKEN) {
   let post = await fetchWithTimeout(
-    `${BASE_URL}/login/register`,
+    `${BASE_URL}/auth/register`,
     {
       method: 'POST',
       body: JSON.stringify(data),
@@ -34,12 +34,13 @@ async function login(data, appToken = APP_TOKEN) {
   } else {
     body = {mail: data.mail, password: data.password};
   }
+
   let post = await fetchWithTimeout(
-    `${BASE_URL}/login/`,
+    `${BASE_URL}/auth/login/`,
     {
       method: 'POST',
       body: JSON.stringify(body),
-      headers: {'Content-Type': 'application/json', 'app-token': appToken},
+      headers: {'Content-Type': 'application/json', 'accept':'*/*'},
     },
     serverTimeout,
   );

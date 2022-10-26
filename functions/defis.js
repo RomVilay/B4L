@@ -1,25 +1,24 @@
-import {URL, PORT} from '@env';
+import {URL, PORT} from '../components/utils/constants';
 import {fetchWithTimeout} from './fetchWithTimeout';
 
-const BASE_URL = `${URL}:${PORT}`;
+const BASE_URL = `${URL}${PORT}`;
 const serverTimeout = 5000;
 /**
  * réccupération des défis dans la base de données
  */
 
-async function listeDefis( authToken, objectifs) {
-    if( objectifs.length == 2){
-        console.log(`${BASE_URL}/defis/objectif/${objectifs[0]}/${objectifs[1]}`)
+async function listeDefis( authToken, goalId) {
+   // if( objectifs.length == 2){
         let liste = await fetchWithTimeout(
-            `${BASE_URL}/defis/objectif/${objectifs[0]}/${objectifs[1]}`,
+            `${BASE_URL}/challenges?goalId=${goalId}`,
             {
-                headers: {'auth-token': authToken},
+                headers: {Authorization: `Bearer ${authToken}`},
             },
             serverTimeout,
         );
         return liste;
-    }
-    if (objectifs.length == 1){
+    //}
+ /*   if (objectifs.length == 1){
         let liste = await fetchWithTimeout(
             `${BASE_URL}/defis/objectif/${objectifs[0]}`,
             {
@@ -28,7 +27,7 @@ async function listeDefis( authToken, objectifs) {
             serverTimeout,
         );
         return liste;
-    }
+   // }*/
 }
 async function listeDefisLongs( authToken, objectifs) {
     if( objectifs.length == 2){
@@ -55,11 +54,22 @@ async function listeDefisLongs( authToken, objectifs) {
 }
 async function getDefi(authToken,id) {
     let defi = await fetchWithTimeout(
-        `${BASE_URL}/defis/${id}`,
+        `${BASE_URL}/challenges/${id}`,
         {
-            headers:{'auth-token':authToken,'Content-Type':'application/json'}
+            headers: {Authorization: `Bearer ${authToken}`}
         }
     )
+    let cibles = []
+    for (let aims of defi.aims) {
+        let cible = await fetchWithTimeout(
+            `${BASE_URL}/aims/${aims}`,
+            {
+                headers: {Authorization: `Bearer ${authToken}`},
+            }
+        )
+        cibles.push(cible)
+    }
+    defi.aims = cibles
     return defi
 }
 module.exports={

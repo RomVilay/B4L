@@ -43,7 +43,9 @@ import coupe6 from '../../assets/img-avatar/coupe6.png'
 import coupe7 from '../../assets/img-avatar/coupe7.png'
 import coupe8 from '../../assets/img-avatar/coupe8.png'
 import {Context} from '../utils/Store';
-
+/***
+ * composant d'affichage de l'avatar utilisateur
+ */
 const Avatar = (props) => {
     const [state,setState] = useContext(Context);
     const couleurs = [color0, color1, color2]
