@@ -369,7 +369,7 @@ export default function Compteur(props) {
                     //console.log("défis valide: "+(but.type === "distance" && distance * 1000 >= but.number) +" "+ distance*1000 +" - "+ but.number)
                     if ((but.type === "distance" && distance * 1000 >= but.number)
                         || (but.type === "power" && energie.length > 0 && energie.reduce((a, b) => a + b) >= but.number)
-                        || (but.type === "duration" && moment.duration(currentTime).asSeconds() - defi.startTime === but.number)
+                        || (but.type === "duration" && moment.duration(currentTime).asSeconds() - defi.startTime <= but.number)
                         || (but.type === "%" && energie.length > 0 && energiep.length > 0 && defi.startE !== null && (energie.reduce((a, b) => a + b) - defi.startE >= energiep.reduce((a, b) => a + b) - defi.startE))
                     ) {
                         bvalid = bvalid + 1
@@ -517,19 +517,19 @@ export default function Compteur(props) {
     async function socketServer() {
         let config = await DeviceInfo.isEmulator()
             .then((status) => {
-            if (status) {                                //configuration simulateur
-                if (Platform.OS == 'ios') {              //configuration iphone
+            if (status) {                               
+                if (Platform.OS == 'ios') {              //configuration xcode
                     return  config = {
                         port: 8080,
                         host: '127.0.0.1',
                         reuseAddress: true
                     }
-                } else {                                //configuration android device
+                } else {                                //configuration android studio
                     return config = {
                         port: 8080 ,
                         host:  '127.0.0.1',
                         localAddress:'10.0.2.2',
-                        reuseAddress: true
+                        reuseAddress: false
                     }
                 }
             } else {
@@ -540,7 +540,7 @@ export default function Compteur(props) {
                         reuseAddress: true,
                         interface:'wifi'
                     }
-                } else {                                //configuration android device
+                } else {                                //configuration android 
                     return config = {
                         port: 333,
                         host:  '192.168.1.200',
