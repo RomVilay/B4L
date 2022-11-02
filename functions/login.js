@@ -34,7 +34,7 @@ async function login(data, appToken = APP_TOKEN) {
   } else {
     body = {mail: data.mail, password: data.password};
   }
-
+  console.log(BASE_URL)
   let post = await fetchWithTimeout(
     `${BASE_URL}/auth/login/`,
     {

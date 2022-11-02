@@ -31,7 +31,9 @@ export default function Objectifs(props) {
   const getList = async () => {
     setIsLoading(true)
     let list = await listeObjectifs(state.token)
+    console.log(state.token);
     list = list.map(item =>{
+      console.log(`objectif ${item.name}`);
       var goal = {id:item.id,description:item.description,name:item.name}
       return goal
     })
@@ -76,6 +78,7 @@ export default function Objectifs(props) {
       }
     }
   };
+  console.log(goals);
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.fond} source={require('../../assets/fond.png')} />

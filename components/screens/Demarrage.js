@@ -7,7 +7,6 @@ import Logo from '../../assets/logo';
 import {login} from '../../functions/login';
 import jwt_decode from "jwt-decode";
 import {getUser} from "../../functions/user";
-import {URL} from '../utils/constants';
 
 /**
  * Ecran de démarrage de l'application
