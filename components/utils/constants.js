@@ -1,3 +1,5 @@
+import { REACT_APP_URL_PROD,REACT_APP_URL_DEV } from '@env';
+
 export const regexEmail = /^([\w-.]+)@(?:[\w-.]+)([a-zA-Z]{2,4})$/;
 export const regexUsername = /^[\w-.@]{5,30}$/;
 export const regexPassword = /^[\w\-éèàùç@.,:!%&#]{3,30}$/;
@@ -7,8 +9,8 @@ export const regexDateNaissance = /^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/;
 export const regexTaille = /^([0-9]{1,4})$/;
 export const regexPoids = /^([0-9]{1,3})(\,[0-9]{1,2}){0,1}$/;
 
- export const URL = 'http://195.154.107.195';
-//export const URL = 'http://176.141.253.12';
+ export const URL =  process.env["API_KEY"] == "prod" ? REACT_APP_URL_PROD : REACT_APP_URL_DEV;
+//export const URL = 'http://176.141.253.12'; url tablette url backend = 'http://195.154.107.195';
 //export const PORT = ':3000';
 export const PORT = ':5000';
 export const BASE_URL = URL + PORT;
