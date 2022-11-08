@@ -1,7 +1,6 @@
 import {URL, PORT} from '../components/utils/constants';
 import {fetchWithTimeout} from './fetchWithTimeout';
 
-const BASE_URL = `${URL}${PORT}`;
 const serverTimeout = 5000;
 /**
  * réccupération des défis dans la base de données
@@ -10,7 +9,7 @@ const serverTimeout = 5000;
 async function listeDefis( authToken, goalId) {
    // if( objectifs.length == 2){
         let liste = await fetchWithTimeout(
-            `${BASE_URL}/challenges?goalId=${goalId}`,
+            `${URL}/challenges?goalId=${goalId}`,
             {
                 headers: {Authorization: `Bearer ${authToken}`},
             },
@@ -32,7 +31,7 @@ async function listeDefis( authToken, goalId) {
 async function listeDefisLongs( authToken, objectifs) {
     if( objectifs.length == 2){
         let liste = await fetchWithTimeout(
-            `${BASE_URL}/defis/objectif/${objectifs[0]}/${objectifs[1]}`,
+            `${URL}/defis/objectif/${objectifs[0]}/${objectifs[1]}`,
             {
                 headers: {'auth-token': authToken, 'long':true},
 
@@ -43,7 +42,7 @@ async function listeDefisLongs( authToken, objectifs) {
     }
     if (objectifs.length == 1){
         let liste = await fetchWithTimeout(
-            `${BASE_URL}/defis/objectif/${objectifs[0]}`,
+            `${URL}/defis/objectif/${objectifs[0]}`,
             {
                 headers: {'auth-token': authToken,'long':true},
             },
@@ -54,7 +53,7 @@ async function listeDefisLongs( authToken, objectifs) {
 }
 async function getDefi(authToken,id) {
     let defi = await fetchWithTimeout(
-        `${BASE_URL}/challenges/${id}`,
+        `${URL}/challenges/${id}`,
         {
             headers: {Authorization: `Bearer ${authToken}`}
         }
@@ -62,7 +61,7 @@ async function getDefi(authToken,id) {
     let cibles = []
     for (let aims of defi.aims) {
         let cible = await fetchWithTimeout(
-            `${BASE_URL}/aims/${aims}`,
+            `${URL}/aims/${aims}`,
             {
                 headers: {Authorization: `Bearer ${authToken}`},
             }

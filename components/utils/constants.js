@@ -13,7 +13,7 @@ export const regexPoids = /^([0-9]{1,3})(\,[0-9]{1,2}){0,1}$/;
 //export const URL = 'http://176.141.253.12'; url tablette url backend = 'http://195.154.107.195';
 //export const PORT = ':3000';
 export const PORT = ':5000';
-export const BASE_URL = URL + PORT;
+export const BASE_URL = URL ;
 export const TIMEOUTDELAY_DEFAULT = 10000;
 export const TIMEOUTDELAY_LOGIN = 10000;
 export const TIMEOUTDELAY_USER = 10000;
