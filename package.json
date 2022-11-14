@@ -69,7 +69,7 @@
   "private": true,
   "scripts": {
     "postinstall": "patch-package",
-    "android": "react-native run-android",
+    "android": "react-native run-android ",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
