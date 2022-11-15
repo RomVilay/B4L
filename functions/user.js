@@ -1,5 +1,5 @@
 import {
-  BASE_URL,
+  URL,
   TIMEOUTDELAY_USER as serverTimeout,
 } from '../components/utils/constants';
 import {fetchWithTimeout} from './fetchWithTimeout';
@@ -12,7 +12,7 @@ import {fetchWithTimeout} from './fetchWithTimeout';
  */
 async function getUser(iduser, authToken) {
   let get = await fetchWithTimeout(
-    `${BASE_URL}/users/${iduser}`,
+    `${URL}/users/${iduser}`,
     {
       headers: {Authorization: `Bearer ${authToken}` },
     },
@@ -28,7 +28,7 @@ async function getUser(iduser, authToken) {
  */
 async function getAllUsers(authToken) {
   let get = await fetchWithTimeout(
-      `${BASE_URL}/users`,
+      `${URL}/users`,
       {
          headers: {'auth-token': authToken},
     },
@@ -44,7 +44,7 @@ async function getAllUsers(authToken) {
  */
 async function getClassement(username,authToken,categorie){
    let get = await fetchWithTimeout(
-       `${BASE_URL}/users/${username}/classement/${categorie}`,
+       `${URL}/users/${username}/classement/${categorie}`,
        {
          headers:{'auth-token':authToken,
                 'Content-Type':'application/json',
@@ -77,7 +77,7 @@ async function usersCount(authToken) {
  */
 async function isValidPassword(userId, password, authToken) {
   let isValid = await fetchWithTimeout(
-    `${BASE_URL}/users/${userId}`,
+    `${URL}/users/${userId}`,
     {
       method: 'PATCH',
       body: JSON.stringify({password: password, currentPassword:password}),
@@ -97,7 +97,7 @@ async function isValidPassword(userId, password, authToken) {
  */
 async function editUser(userId, body, authToken) {
   let patch = await fetchWithTimeout(
-    `${BASE_URL}/users/${userId}`,
+    `${URL}/users/${userId}`,
     {
       method: 'PATCH',
       body: JSON.stringify(body),

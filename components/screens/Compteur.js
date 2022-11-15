@@ -527,8 +527,7 @@ export default function Compteur(props) {
                 } else {                                //configuration android studio
                     return config = {
                         port: 8080 ,
-                        host:  '127.0.0.1',
-                        localAddress:'10.0.2.2',
+                        host:  '10.0.2.2',
                         reuseAddress: false
                     }
                 }

@@ -24,6 +24,7 @@
     "react-native-collapsible": "^1.6.0",
     "react-native-daterange-picker": "^1.2.0",
     "react-native-device-info": "^8.1.3",
+    "react-native-dotenv": "^3.3.1",
     "react-native-dropdown-picker": "^5.1.19",
     "react-native-elements": "^3.4.1",
     "react-native-gesture-handler": "^1.10.3",
@@ -32,7 +33,7 @@
     "react-native-modalbox": "^2.0.2",
     "react-native-permissions": "^3.0.4",
     "react-native-push-notification": "^8.1.1",
-    "react-native-reanimated": "^2.10.0",
+    "react-native-reanimated": "^2.12.0",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^3.3.0",
     "react-native-segmented-round-display": "^1.0.0",
@@ -55,6 +56,7 @@
     "@react-native-community/eslint-config": "^2.0.0",
     "@svgr/cli": "^6.3.1",
     "babel-jest": "^27.0.1",
+    "babel-plugin-transform-inline-environment-variables": "^0.4.4",
     "eslint": "^7.32.0",
     "jest": "^27.0.1",
     "metro-react-native-babel-preset": "^0.66.0",
@@ -67,11 +69,13 @@
   "private": true,
   "scripts": {
     "postinstall": "patch-package",
-    "android": "react-native run-android",
+    "android": "react-native run-android ",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "dev": "API_KEY=dev react-native start --reset-cache",
+    "prod": "API_KEY=prod react-native start --reset-cache "
   },
   "version": "0.0.1"
 }

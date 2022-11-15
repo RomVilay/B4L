@@ -1,8 +1,7 @@
 import {fetchWithTimeout} from './fetchWithTimeout';
 import {
-  URL,PORT,
+  URL
 } from '../components/utils/constants';
-const BASE_URL = `${URL}${PORT}`;
 const serverTimeout = 5000;
 /**
  * Apppelle la route /sessions/ pour créer un nouvel user
@@ -12,7 +11,7 @@ const serverTimeout = 5000;
  */
 async function createSession(data, authToken) {
   console.log(data)
-  let post = await fetchWithTimeout(`${BASE_URL}/sessions`, {
+  let post = await fetchWithTimeout(`${URL}/sessions`, {
     method: "post",
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json",
@@ -29,7 +28,7 @@ async function createSession(data, authToken) {
  * @returns La liste des sessions | Un message d'erreur si pas admin
  */
 async function getAllSessions(authToken) {
-  let get = await fetchWithTimeout(`${BASE_URL}/sessions`, {
+  let get = await fetchWithTimeout(`${URL}/sessions`, {
     headers: { "Authorization": `Bearer ${authToken}` },
     serverTimeout
   })
@@ -43,7 +42,7 @@ async function getAllSessions(authToken) {
  * @returns la session correspondante | un message d'erreur si mauvaise authentification
  */
 async function getSession(idSession, authToken) {
-  let get = await fetchWithTimeout(`${BASE_URL}/sessions/${idSession}?sequences=true`, {
+  let get = await fetchWithTimeout(`${URL}/sessions/${idSession}?sequences=true`, {
     headers: { "Authorization": `Bearer ${authToken}` },
     },
     serverTimeout)
@@ -57,7 +56,7 @@ async function getSession(idSession, authToken) {
  * @returns les sessions correspondantes | un message d'erreur si mauvaise authentification
  */
 async function getSessionsByUser(id, authToken) {
-  let get = await fetchWithTimeout(`${BASE_URL}/sessions?userId=${id}&limit=10&offset=0&orderByDate=true`, {
+  let get = await fetchWithTimeout(`${URL}/sessions?userId=${id}&limit=10&offset=0&orderByDate=true`, {
     headers: { "Authorization": `Bearer ${authToken}` },
   },
       serverTimeout)
@@ -70,7 +69,7 @@ async function getSessionsByUser(id, authToken) {
  * @returns Le nombre de sessions | Un message d'erreur si pas admin
  */
 async function sessionsCount(authToken) {
-  let count = await fetch(`${BASE_URL}/count/sessions`, {
+  let count = await fetch(`${URL}/count/sessions`, {
     headers: { "Authorization": `Bearer ${authToken}`  },
   }).then((res) => {
     return res.json();
@@ -85,7 +84,7 @@ async function sessionsCount(authToken) {
  * @returns Le nombre de sessions | Un message d'erreur si pas autorisé
  */
 async function sessionsCountByUsername(username, authToken) {
-  let count = await fetch(`${BASE_URL}/count/sessions/${username}`, {
+  let count = await fetch(`${URL}/count/sessions/${username}`, {
     headers: { "auth-token": authToken },
   }).then((res) => {
     return res.json();
@@ -101,7 +100,7 @@ async function sessionsCountByUsername(username, authToken) {
  * @returns Les informations de la session concenée | Un message d'erreur si pas autorisé
  */
 async function editSession(id, body, authToken) {
-  let patch = await fetchWithTimeout(`${BASE_URL}/sessions/${id}`, {
+  let patch = await fetchWithTimeout(`${URL}/sessions/${id}`, {
     method: "patch",
     body: JSON.stringify(body),
     headers: {  "Content-Type": "application/json",
@@ -118,7 +117,7 @@ async function editSession(id, body, authToken) {
  * @returns La session supprimée | Un message d'erreur si pas admin
  */
 async function deleteSession(id, authToken) {
-  let deletedSession = await fetch(`${BASE_URL}/sessions/${id}`, {
+  let deletedSession = await fetch(`${URL}/sessions/${id}`, {
     method: "DELETE",
     headers: { "auth-token": authToken },
   }).then((res) => {
@@ -134,7 +133,7 @@ async function deleteSession(id, authToken) {
  * @returns Un message : suppression ok | Un message d'erreur si pas autorisé
  */
 async function deleteSessionByUsername(username, authToken) {
-  let deletedSession = await fetch(`${BASE_URL}/sessions/user/${username}`, {
+  let deletedSession = await fetch(`${URL}/sessions/user/${username}`, {
     method: "DELETE",
     headers: { "auth-token": authToken },
   }).then((res) => {
@@ -151,7 +150,7 @@ async function deleteSessionByUsername(username, authToken) {
 
 async function  createSequence(data,authToken){
   console.log("data: "+JSON.stringify(data))
-  let createSequence = await fetchWithTimeout(`${BASE_URL}/sequences`, {
+  let createSequence = await fetchWithTimeout(`${URL}/sequences`, {
     method: "post",
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json",

@@ -1,4 +1,4 @@
-import {BASE_URL, TIMEOUTDELAY_LOGIN as serverTimeout} from '../components/utils/constants';
+import {URL, TIMEOUTDELAY_LOGIN as serverTimeout} from '../components/utils/constants';
 import {fetchWithTimeout} from './fetchWithTimeout';
 import {APP_TOKEN} from '@env';
 
@@ -10,7 +10,7 @@ import {APP_TOKEN} from '@env';
  */
 async function register(data, appToken = APP_TOKEN) {
   let post = await fetchWithTimeout(
-    `${BASE_URL}/auth/register`,
+    `${URL}/auth/register`,
     {
       method: 'POST',
       body: JSON.stringify(data),
@@ -34,9 +34,8 @@ async function login(data, appToken = APP_TOKEN) {
   } else {
     body = {mail: data.mail, password: data.password};
   }
-
   let post = await fetchWithTimeout(
-    `${BASE_URL}/auth/login/`,
+    `${URL}/auth/login/`,
     {
       method: 'POST',
       body: JSON.stringify(body),
@@ -55,7 +54,7 @@ async function login(data, appToken = APP_TOKEN) {
  */
 async function forgottenPassword(data, appToken = APP_TOKEN) {
   let post = await fetchWithTimeout(
-    `${BASE_URL}/login/forgottenPassword`,
+    `${URL}/login/forgottenPassword`,
     {
       method: 'POST',
       body: JSON.stringify(data),

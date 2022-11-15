@@ -55,6 +55,7 @@ export default function Connexion(props) {
       Alert.alert('Erreur', 'Vérifiez votre connexion Internet et réessayez');
     } else {
       const myLogin = await login({username, password});
+      console.log(myLogin);
       if (myLogin.message) {
         Alert.alert('Erreur', `${myLogin.message}`);
         setIsLoading(false);

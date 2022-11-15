@@ -7,6 +7,7 @@ import Logo from '../../assets/logo';
 import {login} from '../../functions/login';
 import jwt_decode from "jwt-decode";
 import {getUser} from "../../functions/user";
+
 /**
  * Ecran de démarrage de l'application
  * @param {*} props 
@@ -49,7 +50,6 @@ export default function Demarrage(props) {
       Alert.alert('Erreur', `${e}`);
     }
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>

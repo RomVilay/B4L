@@ -26,7 +26,7 @@ export default function Accueil(props) {
   const [defisL,setDefisL] = useState(true) // liste dess défis longs de l'utilisateur
   const [indices,setIndices] = useState([["KCAL","dépensés"],["WH","produits"],["KM","cumulés"]]) // indices disponibles
   const [datacumul,setDatacumul] = useState([0,0,0]) // données cumulées de l'utilisateur depuis sa première connexion
-  console.log(state.user.goals)
+  console.log(state.user)
   /**
    * Sélection de l'affichage en focntion du profil utilisateur
    *  
