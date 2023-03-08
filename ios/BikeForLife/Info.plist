@@ -32,9 +32,11 @@
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>localhost</key>
+			<key>New Exception Domain</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
 				<true/>
 			</dict>
 			<key>dev.alf-environnement.net</key>
@@ -44,12 +46,17 @@
 				<key>NSIncludesSubdomains</key>
 				<true/>
 			</dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Scan QRcode</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Yes</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>TallFilms.ttf</string>

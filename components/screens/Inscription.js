@@ -10,10 +10,10 @@ import {register} from '../../functions/login';
 import LogoMed from '../../assets/logoMed';
 
 export default function Inscription(props) {
-  const [username, setUsername] = useState('User18');
-  const [email, setEmail] = useState('romain.vilayleck@alf-environnement.com');
-  const [password, setPassword] = useState('user');
-  const [password2, setPassword2] = useState('user');
+  const [username, setUsername] = useState('username');
+  const [email, setEmail] = useState('username@example.com');
+  const [password, setPassword] = useState('password');
+  const [password2, setPassword2] = useState('password');
   const [isLoading, setIsLoading] = useState(false);
 
   const checkFields = () => {

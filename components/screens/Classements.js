@@ -439,8 +439,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: "15%",
-    paddingBottom:"5%"
+    marginTop: "25%",
+    paddingBottom:"15%"
   },
   fond: {
     position: 'absolute',

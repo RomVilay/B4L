@@ -33,23 +33,6 @@ import 'react-native-reanimated'
  * @returns
  */
 
-/**
- *     <QRCodeScanner
-                                    onRead={onSuccess}
-                                    containerStyle={styles.cameracontainer}
-                                    topContent={ 
-                                        }
-                                    topViewStyle={styles.header}
-                                    cameraStyle={styles.middle}
-                                    bottomContent={
-                                        <View style={{alignItems:'center'}}>
-                                            <Text style={[styles.midText, {marginBottom:'10%'}]}>Scannez le qrcode pour associer l'appareil.</Text>
-                                            <NavApp navigation={props.navigation} />
-                                        </View>
-                                       }
-                                    bottomViewStyle={styles.footer}
-                                />
- */
 
 export default function Jumelage(props) {
   // const newCameraPermission = await Camera.requestCameraPermission()
@@ -77,13 +60,15 @@ export default function Jumelage(props) {
   });
   React.useEffect(() => {
     if (barcodes.length > 0 && barcodes[0].rawValue !== undefined){
-     // console.log(`ssid: ${barcodes[0].rawValue.slice(7, 10)} - password ${barcodes[0].rawValue.slice(19, barcodes[0].rawValue.length - 2)}`)
+      //console.log(barcodes[0].rawValue.slice(7, 19))
+      //console.log(`ssid: ${barcodes[0].rawValue.slice(7, 10)} - password ${barcodes[0].rawValue.slice(19, barcodes[0].rawValue.length - 2)}`)
       requestLocationPermission(barcodes[0].rawValue.slice(7, 10), barcodes[0].rawValue.slice(19, barcodes[0].rawValue.length - 2));
     }  
   }, [barcodes]);
   //console.log(devices);
   //fonction en cas de réussite de scan du qrcode
   const requestLocationPermission = async (ssid, psw) => {
+   if ( Platform.OS === 'android' ) {
     try {
       const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
         title: 'Bike For Life app permission',
@@ -100,15 +85,25 @@ export default function Jumelage(props) {
     } catch (err) {
       console.warn(err);
     }
+   }
+   if (Platform.OS === 'ios') {
+    try {
+      //console.log(barcodes[0].rawValue.slice(7, 19)+" - "+barcodes[0].rawValue.slice(28, barcodes[0].rawValue.length - 2))
+        connect(barcodes[0].rawValue.slice(7, 19), barcodes[0].rawValue.slice(28, barcodes[0].rawValue.length - 2));
+    } catch (err) {
+      console.warn(err);
+    }
+   }
+    
   };
   // connexion en wifi à la carte
   const connect = async (ssid, psw) => {
     try {
       const data = await WifiManager.connectToProtectedSSID(ssid, psw, false);
-      console.log('Connected successfully!');
+      console.log('Connection réussite!');
       props.navigation.navigate('Compteur', {defis: props.route.params.defis});
     } catch (error) {
-      console.log('Connection failed!', {error});
+      console.log('Connection échouée!', error);
     }
   };
   const onSuccess = e => {

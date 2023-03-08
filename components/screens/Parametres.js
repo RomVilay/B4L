@@ -483,8 +483,10 @@ export default function Parametres(props) {
           )}
         </View>
         {/* FIN FOOTER */}
+        <View style={{marginTop:30}}>
+          <NavApp style={styles.navApp} navigation={props.navigation} />
+        </View>
       </KeyboardAwareScrollView>
-      <NavApp style={styles.navApp} navigation={props.navigation} />
     </SafeAreaView>
   );
 }
