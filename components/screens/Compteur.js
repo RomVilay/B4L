@@ -38,6 +38,7 @@ import DeviceInfo from "react-native-device-info";
 
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Timer from './Timer';
 
 export default function Compteur(props) {
     const [state, setState] = useContext(Context);
@@ -47,7 +48,6 @@ export default function Compteur(props) {
     const [start, setStart] = React.useState(true)
     const [reset, setReset] = React.useState(false)
     const [pause, setPause] = React.useState('')
-    const [currentTime, setCTime] = React.useState('')
     //variables animation
     const rotateValueHolder = React.useRef(new Animated.Value(0)).current;         //initalisation de la valeur de rotation
     const [startPosition, setSPosition] = React.useState(0)//-160)             //position initiale de l'image
@@ -60,7 +60,7 @@ export default function Compteur(props) {
     const [defisValid, setDefisValid] = React.useState([])                     // tableaux des défis réalisés
     const [defic, setDefic] = React.useState(0)                                // numéro du défis courant
     const [watts, setWatts] = React.useState(200)                              // puissance demandée
-
+    const [currentTime, setCTime] = React.useState('')
     const [vitesses, setVitesses] = React.useState([0])                        // relevés de vitesse
     const [inclinaison, setInclinaison] = React.useState([])                   // relevés inclinaison
     const [energie, setEnergie] = React.useState([0])                          // relevés énergie produite
@@ -288,7 +288,8 @@ export default function Compteur(props) {
      */
     React.useEffect(() => {
         StartImageRotateFunction()
-        if (defis[defic].id !== "2187ed70-a005-4ae2-8fa6-5db2c2db907e") {
+        ///check defis[defic].id
+        //if (defis[defic].id !== "2187ed70-a005-4ae2-8fa6-5db2c2db907e") {
             const interval = setInterval(() => {
                 randomRotation()
             }, 1000); //mise à jour du tableau d'interpolation de la rotation
@@ -298,7 +299,7 @@ export default function Compteur(props) {
             return () => {
                 clearInterval(interval)
             }
-        }
+        //}
     }, [seg, endPosition, startPosition, angle, up, modal,vitesses])
 
     //fonction animation aiguille
@@ -497,6 +498,7 @@ export default function Compteur(props) {
                // console.log("end")
                 clearInterval(t)
                 server.destroy()
+                toggleStopwatch()
                 goTo(props)
           }
           else{
@@ -773,12 +775,9 @@ export default function Compteur(props) {
                         setT={setT} server={server}/>
             <View style={styles.header}>
                 <LogoMin/>
-                <Stopwatch
+                <Timer 
                     start={start}
                     reset={reset}
-                    options={options}
-                    getTime={(time) => setCTime(time)}
-                    msec={true}
                 />
                 <Text
                     style={{color: '#5FCDFA', fontSize: 30, fontFamily: 'TallFilms'}}>

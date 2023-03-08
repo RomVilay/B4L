@@ -75,7 +75,8 @@
     "test": "jest",
     "lint": "eslint .",
     "dev": "API_KEY=dev react-native start --reset-cache",
-    "prod": "API_KEY=prod react-native start --reset-cache "
+    "prod": "API_KEY=prod react-native start --reset-cache ",
+    "local":"API_KEY=local react-native start --reset-cache"
   },
   "version": "0.0.1"
 }

@@ -49,28 +49,32 @@ export default function  ListeDefis(props) {
     const opacity = useRef(new Animated.Value(0)).current;
     const getList = async () => {
         setIsLoading(true)
-        let list = await listeDefis(state.token,state.user.goals[0].id);
-        if (list.message) {
-             Alert.alert('Erreur serveur', list.message);
-             setListeDefs([{
-                 "id": "9c692c03-5dd5-4ea7-a6da-d3666b6bd7a2",
-                 "name": "100 km - 1h",
-                 "description": "Faire 100 km en 1h",
-                 "points": 10000,
-                 "isLong": false,
-                 "goals": [
-                     "1bf5d297-5ff1-42a1-9f48-98d45ad113f0"
-                 ],
-                 "sessions": [],
-                 "users": [],
-                 "aims": [
-                     "4a942b06-eaab-4787-9952-e8bf4034cd03",
-                     "a8d33bab-caa3-44b5-b208-90f8b3c2a108"
-                 ]
-             }])
-        } else {
-            await setListeDefs(list)//list.filter(defi => defi.long == undefined ).sort((defi1,defi2) => defi1.butNumber - defi2.butNumber))//setState({user, token: state.token});
-        }
+        //console.log(state.user.goals)
+        state.user.goals.forEach(async (goal) => {
+            let list = await listeDefis(state.token,goal.id);
+            if (list.message) {
+                 Alert.alert('Erreur serveur', list.message);
+                 setListeDefs([{
+                     "id": "9c692c03-5dd5-4ea7-a6da-d3666b6bd7a2",
+                     "name": "100 km - 1h",
+                     "description": "Faire 100 km en 1h",
+                     "points": 10000,
+                     "isLong": false,
+                     "goals": [
+                         "1bf5d297-5ff1-42a1-9f48-98d45ad113f0"
+                     ],
+                     "sessions": [],
+                     "users": [],
+                     "aims": [
+                         "4a942b06-eaab-4787-9952-e8bf4034cd03",
+                         "a8d33bab-caa3-44b5-b208-90f8b3c2a108"
+                     ]
+                 }])
+            } else {
+                await setListeDefs(list)//list.filter(defi => defi.long == undefined ).sort((defi1,defi2) => defi1.butNumber - defi2.butNumber))//setState({user, token: state.token});
+            }
+        });
+       
         setIsLoading(false)
     };
 
@@ -83,6 +87,7 @@ export default function  ListeDefis(props) {
             tab.push(item)
         }
         //console.log(tab)
+        //props.navigation.navigate("Jumelage",{defis:tab})
         props.navigation.navigate("Compteur",{defis:tab})
     }
     const showWarn = () => {
@@ -157,15 +162,14 @@ export default function  ListeDefis(props) {
                     </Animated.View>
                 </View>
                 <View style={styles.footer}>
-                    {defisSelect.length > 0 ? <TouchableOpacity style={{marginBottom:'10%'}} onPress={()=> {
+                    {defisSelect.length > 0 ? <TouchableOpacity style={{marginBottom:'5%'}} onPress={()=> {
                         getCibles()
                         //props.navigation.navigate("Compteur",{defis:defisSelect})
                     }} color={'white'}>
                         <Text style={styles.titreBleu}>appuyez pour continuer</Text>
                     </TouchableOpacity> : <></>}
-
-                    <NavApp  navigation={props.navigation}/>
                 </View>
+                <NavApp  navigation={props.navigation}/>
         </SafeAreaView>
     )
 }
@@ -174,7 +178,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     header:{
         flex:1,

@@ -52,8 +52,10 @@ class BottomPopup extends React.Component {
           <View style={styles.main}>
             <View>
               {!show ? (
-                <TouchableWithoutFeedback onPress={() => this.show()}>
+                <TouchableWithoutFeedback onPress={() => this.show()} >
+                  <View style={{height:50}}>
                   <Navigation />
+                  </View>
                 </TouchableWithoutFeedback>
               ) : null}
               <Modal
@@ -65,6 +67,7 @@ class BottomPopup extends React.Component {
                   style={{
                     flex: 1,
                     justifyContent: 'flex-end',
+                    paddingBottom:10
                   }}>
                   {this.renderOutsideTouchable(onTouchOutside)}
                   <View style={styles.navAppContainer}>
@@ -150,7 +153,8 @@ const styles = StyleSheet.create({
   },
   main: {
     position: 'absolute',
-    bottom: 30
+    bottom: 10,
+    height:50,
   },
   navAppContainer: {
     alignItems: 'center',
@@ -168,8 +172,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'space-around',
     // zIndex: 100,
-    // marginBottom: 55,
-    marginTop: 5,
+    marginBottom: 5,
+    marginTop: 10,
   },
   item: {
     width: 80,

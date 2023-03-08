@@ -56,21 +56,27 @@ const SliderDefis = (props) => {
 }
 const styles = StyleSheet.create({
     defisCardBlue:{
+        minWidth:'16%',
         backgroundColor: "#5FCDFA22",
         borderWidth:1,
         borderColor:"#5FCDFA",
         borderRadius:10,
-        padding:"3%"
+        padding:"3%",
+        textAlign:'center'
     },
     defisCardGreen:{
+        minWidth:'20%',
         backgroundColor: "#229418",
         borderRadius:10,
-        padding:"3%"
+        padding:"3%",
+        textAlign:'center'
     },
     defisCardYellow:{
+        minWidth:'16%',
         backgroundColor: "#edc600",
         borderRadius:10,
-        padding:"3%"
+        padding:"3%",
+        textAlign:'center'
     },
     textBlue:{
         color: '#5FCDFA',

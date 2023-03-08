@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import {
   View,
   Image,
@@ -12,13 +12,13 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {Context} from '../utils/Store';
-import {regexPrenom, regexNom, regexEmail, regexPassword} from '../utils/constants';
+import { Context } from '../utils/Store';
+import { regexPrenom, regexNom, regexEmail, regexPassword } from '../utils/constants';
 import goTo from '../utils/navFunctions';
-import {editUser, isValidPassword, deleteUser} from '../../functions/user';
+import { editUser, isValidPassword, deleteUser } from '../../functions/user';
 
 import LogoMin from '../../assets/logoMin';
 import NavApp from '../navigation/NavApp';
@@ -114,7 +114,7 @@ export default function Parametres2(props) {
         Alert.alert('Erreur', `${res.message}`);
         setIsLoading(false);
       } else if (res) {*/
-        updateUser();
+      updateUser();
       /*} else {
         setIsLoading(false);
         Alert.alert('Erreur', `Mot de passe incorrect`);
@@ -139,7 +139,7 @@ export default function Parametres2(props) {
           firstname: tempPrenom,
           email: tempMail,
           password: tempPassword1 !== "" ? tempPassword1 : tempPassword,
-          currentPassword:tempPassword
+          currentPassword: tempPassword
         },
         state.token,
       );
@@ -159,7 +159,7 @@ export default function Parametres2(props) {
         }
         updated.goals = state.user.goals
         updated.challenges = state.user.challenges
-        setState({user: updated, token: state.token});
+        setState({ user: updated, token: state.token });
         setIsLoading(false);
         goTo(props);
       }
@@ -169,7 +169,7 @@ export default function Parametres2(props) {
   const logout = async () => {
     setIsLoading(true);
     await deleteLocalStorage();
-    setState({user: {}, token: ''});
+    setState({ user: {}, token: '' });
     setIsLoading(false);
     goTo(props, 'Demarrage');
   };
@@ -192,7 +192,7 @@ export default function Parametres2(props) {
         Alert.alert('Erreur suppression', "Quelque chose s'est mal passé, contactez BikeForLife. Erreur : " + res.message);
         setIsLoading(false);
       } else {
-        setState({user: {}, token: ''});
+        setState({ user: {}, token: '' });
         setIsLoading(false);
         goTo(props, 'Demarrage');
       }
@@ -220,7 +220,7 @@ export default function Parametres2(props) {
         {/* FIN HEADER */}
 
         {/* MID */}
-        <View style={[styles.middle, isEditPwd ? null : {paddingBottom: '10%'}]}>
+        <View style={[styles.middle, isEditPwd ? null : { paddingBottom: '10%' }]}>
           {Object.keys(inputs).map((item, index) =>
             (item != 'pwd1' && item != 'pwd2') || ((item == 'pwd1' || item == 'pwd2') && isEditPwd) ? (
               <View style={styles.items} key={index}>
@@ -254,7 +254,7 @@ export default function Parametres2(props) {
         <View style={styles.footer}>
           <View style={styles.loading}>
             {isLoading ? (
-              <ActivityIndicator size="large" color="#5FCDFA" style={{top: '10%'}} />
+              <ActivityIndicator size="large" color="#5FCDFA" style={{ top: '10%' }} />
             ) : (
               <TouchableOpacity onPress={() => checkFields()}>
                 <Text style={styles.textBottom}>Enregistrer</Text>
@@ -267,46 +267,46 @@ export default function Parametres2(props) {
                 isLoading
                   ? null
                   : Alert.alert('Déconnexion', 'Êtes-vous sûr de vouloir vous déconnecter ?', [
+                    {
+                      text: 'Oui',
+                      onPress: () => logout(),
+                    },
+                    {
+                      text: 'Annuler',
+                      style: 'cancel',
+                    },
+                  ]);
+              }}>
+              <Text style={styles.textBottom}>Déconnexion</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ alignItems: 'center' }}
+              onPress={() => {
+                isLoading
+                  ? null
+                  : Alert.alert(
+                    'Suppression du compte',
+                    'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est définitive',
+                    [
                       {
                         text: 'Oui',
-                        onPress: () => logout(),
+                        onPress: () => {
+                          if (tempPassword == '') {
+                            Alert.alert(
+                              'Erreur',
+                              'Veuillez renseigner votre mot de passe pour supprimer votre compte.',
+                            );
+                          } else {
+                            deleteAccount();
+                          }
+                        },
                       },
                       {
                         text: 'Annuler',
                         style: 'cancel',
                       },
-                    ]);
-              }}>
-              <Text style={styles.textBottom}>Déconnexion</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{alignItems: 'center'}}
-              onPress={() => {
-                isLoading
-                  ? null
-                  : Alert.alert(
-                      'Suppression du compte',
-                      'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est définitive',
-                      [
-                        {
-                          text: 'Oui',
-                          onPress: () => {
-                            if (tempPassword == '') {
-                              Alert.alert(
-                                'Erreur',
-                                'Veuillez renseigner votre mot de passe pour supprimer votre compte.',
-                              );
-                            } else {
-                              deleteAccount();
-                            }
-                          },
-                        },
-                        {
-                          text: 'Annuler',
-                          style: 'cancel',
-                        },
-                      ],
-                    );
+                    ],
+                  );
               }}>
               <Text style={styles.textBottom}>Supprimer</Text>
               <Text style={styles.textBottom}>mon compte</Text>
@@ -314,8 +314,10 @@ export default function Parametres2(props) {
           </View>
         </View>
         {/* FIN FOOTER */}
+        <View style={{ marginTop: 30 }}>
+          <NavApp style={styles.navApp} navigation={props.navigation} />
+        </View>
       </KeyboardAwareScrollView>
-      <NavApp style={styles.navApp} navigation={props.navigation} />
     </SafeAreaView>
   );
 }
