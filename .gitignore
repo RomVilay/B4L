@@ -69,3 +69,5 @@ buck-out/
 /test/serverTestC
 /test/clientC
 /test/clientC.c
+
+*.hprof
